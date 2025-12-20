@@ -11,6 +11,15 @@ async function getBlobsModule() {
   return blobsModule;
 }
 
+async function initBlobsContext(event) {
+  if (!event || !event.blobs) return;
+  const mod = await getBlobsModule();
+  const connectFn = mod.connectLambda || (mod.default && mod.default.connectLambda);
+  if (connectFn) {
+    connectFn(event);
+  }
+}
+
 async function getStoreClient() {
   const mod = await getBlobsModule();
   const getStoreFn = mod.getStore || (mod.default && mod.default.getStore);
@@ -138,7 +147,8 @@ function getWeekStartKey(date = new Date()) {
   return `${startParts.year}-${String(startParts.month).padStart(2, "0")}-${String(startParts.day).padStart(2, "0")}`;
 }
 
-async function loadState() {
+async function loadState(event) {
+  await initBlobsContext(event);
   const store = await getStoreClient();
   const data = await store.get(LEADERBOARD_KEY, { type: "json" });
   if (!data) {
