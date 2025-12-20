@@ -17,7 +17,8 @@
   const form = root.querySelector("[data-form]");
   const formNote = root.querySelector("[data-form-note]");
   const leaderboardList = root.querySelector("[data-leaderboard]");
-  const weekEl = root.querySelector("[data-week]");
+  const periodLabelEl = root.querySelector("[data-period-label]");
+  const filterButtons = Array.from(root.querySelectorAll("[data-period]"));
   const rankEl = root.querySelector("[data-rank]");
   const jumpBtn = root.querySelector(".droppy__jump");
   const connectionEl = root.querySelector("[data-connection]");
@@ -80,6 +81,7 @@
   const droppyImage = new Image();
   let droppyReady = false;
   let droppyAspect = 1;
+  let currentPeriod = "weekly";
 
   droppyImage.onload = () => {
     droppyReady = true;
@@ -103,11 +105,6 @@
 
   function rand(min, max) {
     return min + (max - min) * rng();
-  }
-
-  function noise(seed) {
-    const x = Math.sin(seed * 12.9898) * 43758.5453;
-    return x - Math.floor(x);
   }
 
   function resizeCanvas() {
@@ -249,20 +246,18 @@
 
   function spawnObstacle() {
     const typeRoll = rng();
-    let type = "box";
-    if (typeRoll > 0.66) type = "cone";
-    if (typeRoll > 0.9) type = "bean";
+    const type = typeRoll > 0.7 ? "mushroom" : "bean";
 
     const baseSize = clamp(world.width * 0.1, 26, 50);
     let width = baseSize;
     let height = baseSize;
-    if (type === "cone") {
-      width = baseSize * 0.88;
-      height = baseSize * 1.05;
+    if (type === "mushroom") {
+      width = baseSize * 1.05;
+      height = baseSize * 1.1;
     }
     if (type === "bean") {
-      width = baseSize * 1.15;
-      height = baseSize * 0.85;
+      width = baseSize * 1.2;
+      height = baseSize * 0.9;
     }
 
     obstacles.push({
@@ -419,7 +414,7 @@
     drawMountains(bgOffset * 0.25, world.height * 0.52, world.width * 0.18, "#cdd7e8");
     drawMountains(bgOffset * 0.45, world.height * 0.62, world.width * 0.2, "#b6c6dc");
 
-    drawCity(midOffset * 0.6, world.height * 0.7);
+    drawCoffeeFields(midOffset * 0.6, world.height * 0.68);
 
     drawClouds();
   }
@@ -438,30 +433,40 @@
     }
   }
 
-  function drawCity(offset, baseY) {
-    const block = 76;
-    const shift = offset % block;
-    const startIndex = Math.floor(offset / block);
-    const count = Math.ceil(world.width / block) + 3;
-    const palette = ["#9cadc3", "#8fa2b8", "#a1b3c8"];
+  function drawCoffeeFields(offset, baseY) {
+    const rowCount = 6;
+    const rowHeight = world.height * 0.045;
+    const fieldColors = ["#d7c7a1", "#ccb88f", "#c4ad83"];
 
-    for (let i = -1; i < count; i += 1) {
-      const idx = startIndex + i;
-      const width = block * (0.55 + noise(idx * 2.1) * 0.4);
-      const height = 32 + noise(idx * 3.4) * 70;
-      const x = i * block - shift;
-      const y = baseY - height;
-      const shade = palette[Math.floor(noise(idx * 1.3) * palette.length)];
+    for (let row = 0; row < rowCount; row += 1) {
+      const y = baseY + row * rowHeight;
+      ctx.fillStyle = fieldColors[row % fieldColors.length];
+      ctx.fillRect(0, y, world.width, rowHeight + 1);
 
-      ctx.fillStyle = shade;
-      ctx.fillRect(x, y, width, height);
+      const spacing = Math.max(36, 70 - row * 6);
+      const shift = (offset * (0.4 + row * 0.08)) % spacing;
+      const stemH = rowHeight * 0.7;
+      const stemY = y + rowHeight * 0.15;
+      const leafSize = Math.max(4, 10 - row);
 
-      ctx.fillStyle = "rgba(35, 31, 32, 0.12)";
-      ctx.fillRect(x, y, width, 3);
+      ctx.strokeStyle = "#56743a";
+      ctx.lineWidth = 2;
+      for (let x = -shift; x < world.width + spacing; x += spacing) {
+        ctx.beginPath();
+        ctx.moveTo(x, stemY + stemH);
+        ctx.lineTo(x, stemY);
+        ctx.moveTo(x, stemY + stemH * 0.6);
+        ctx.lineTo(x - leafSize, stemY + stemH * 0.35);
+        ctx.moveTo(x, stemY + stemH * 0.6);
+        ctx.lineTo(x + leafSize, stemY + stemH * 0.35);
+        ctx.stroke();
 
-      ctx.fillStyle = "rgba(255, 255, 255, 0.28)";
-      ctx.fillRect(x + width * 0.18, y + 10, width * 0.12, height * 0.45);
-      ctx.fillRect(x + width * 0.62, y + 14, width * 0.1, height * 0.32);
+        ctx.fillStyle = "#ba2d2f";
+        ctx.beginPath();
+        ctx.arc(x + leafSize * 0.2, stemY + stemH * 0.5, 2, 0, Math.PI * 2);
+        ctx.arc(x - leafSize * 0.2, stemY + stemH * 0.45, 2, 0, Math.PI * 2);
+        ctx.fill();
+      }
     }
   }
 
@@ -480,9 +485,9 @@
   }
 
   function drawGround() {
-    ctx.fillStyle = "#f5efe3";
+    ctx.fillStyle = "#e9d7b4";
     ctx.fillRect(0, world.groundY, world.width, world.height - world.groundY);
-    ctx.fillStyle = "rgba(35, 31, 32, 0.08)";
+    ctx.fillStyle = "rgba(90, 70, 40, 0.18)";
     for (let x = 0; x < world.width; x += 24) {
       ctx.fillRect(x, world.groundY + 12, 10, 4);
     }
@@ -530,25 +535,25 @@
 
   function drawObstacle(obs) {
     ctx.save();
-    if (obs.type === "box") {
-      ctx.fillStyle = "#2e2a2d";
-      ctx.fillRect(obs.x, obs.y, obs.w, obs.h);
-      ctx.fillStyle = "#3b3539";
-      ctx.fillRect(obs.x + 4, obs.y + 4, obs.w - 8, obs.h * 0.4);
-    } else if (obs.type === "cone") {
-      ctx.fillStyle = "#f08a5d";
+    if (obs.type === "mushroom") {
+      const stemW = obs.w * 0.35;
+      const stemH = obs.h * 0.5;
+      const stemX = obs.x + obs.w * 0.5 - stemW / 2;
+      const stemY = obs.y + obs.h * 0.45;
+
+      ctx.fillStyle = "#e5d3b2";
+      ctx.fillRect(stemX, stemY, stemW, stemH);
+
+      ctx.fillStyle = "#b6805c";
       ctx.beginPath();
-      ctx.moveTo(obs.x, obs.y + obs.h);
-      ctx.lineTo(obs.x + obs.w * 0.5, obs.y);
-      ctx.lineTo(obs.x + obs.w, obs.y + obs.h);
-      ctx.closePath();
+      ctx.ellipse(obs.x + obs.w * 0.5, obs.y + obs.h * 0.5, obs.w * 0.5, obs.h * 0.45, 0, Math.PI, Math.PI * 2);
       ctx.fill();
-      ctx.strokeStyle = "#f4b089";
-      ctx.lineWidth = 2;
+
+      ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
       ctx.beginPath();
-      ctx.moveTo(obs.x + obs.w * 0.2, obs.y + obs.h * 0.65);
-      ctx.lineTo(obs.x + obs.w * 0.8, obs.y + obs.h * 0.65);
-      ctx.stroke();
+      ctx.arc(obs.x + obs.w * 0.38, obs.y + obs.h * 0.48, obs.w * 0.08, 0, Math.PI * 2);
+      ctx.arc(obs.x + obs.w * 0.62, obs.y + obs.h * 0.42, obs.w * 0.06, 0, Math.PI * 2);
+      ctx.fill();
     } else {
       ctx.fillStyle = "#5c3a2f";
       ctx.beginPath();
@@ -625,12 +630,22 @@
     return data;
   }
 
-  async function fetchLeaderboard(focusId) {
+  function setActivePeriod(period) {
+    currentPeriod = period;
+    filterButtons.forEach((button) => {
+      const isActive = button.dataset.period === period;
+      button.classList.toggle("is-active", isActive);
+      button.setAttribute("aria-pressed", String(isActive));
+    });
+  }
+
+  async function fetchLeaderboard(period = currentPeriod, focusId) {
     if (!leaderboardList) return;
     leaderboardList.innerHTML = '<li class="droppy__leaderboard-empty">Cargando leaderboard...</li>';
 
     try {
       const url = new URL(`${API_BASE}/leaderboard`, window.location.origin);
+      if (period) url.searchParams.set("period", period);
       if (focusId) url.searchParams.set("entryId", focusId);
       const res = await fetch(url.toString());
       if (!res.ok) throw new Error("leaderboard");
@@ -645,9 +660,17 @@
     if (!leaderboardList) return;
     const entries = Array.isArray(data.entries) ? data.entries : [];
     leaderboardList.innerHTML = "";
+    const period = data.period || currentPeriod;
+    const periodStart = data.periodStart || "";
 
     if (!entries.length) {
-      leaderboardList.innerHTML = '<li class="droppy__leaderboard-empty">Aún no hay scores esta semana.</li>';
+      const emptyText =
+        period === "monthly"
+          ? "Aún no hay scores este mes."
+          : period === "all"
+          ? "Aún no hay scores registrados."
+          : "Aún no hay scores esta semana.";
+      leaderboardList.innerHTML = `<li class="droppy__leaderboard-empty">${emptyText}</li>`;
     } else {
       entries.forEach((entry, index) => {
         const li = document.createElement("li");
@@ -661,8 +684,14 @@
       });
     }
 
-    if (weekEl) {
-      weekEl.textContent = data.weekStart ? `Semana del ${data.weekStart}` : "Semana en curso";
+    if (periodLabelEl) {
+      if (period === "monthly") {
+        periodLabelEl.textContent = periodStart ? `Mes de ${periodStart.slice(0, 7)}` : "Mes en curso";
+      } else if (period === "all") {
+        periodLabelEl.textContent = "Histórico";
+      } else {
+        periodLabelEl.textContent = periodStart ? `Semana del ${periodStart}` : "Semana en curso";
+      }
     }
 
     if (rankEl) {
@@ -710,7 +739,7 @@
         entryId = data.entryId || null;
         showForm("Puntaje guardado. ¡Suerte!", "neutral");
         if (form) form.reset();
-        fetchLeaderboard(entryId);
+        fetchLeaderboard(currentPeriod, entryId);
       })
       .catch((err) => {
         showForm(err.message || "No se pudo guardar el puntaje.", "error");
@@ -732,6 +761,14 @@
     });
     form?.addEventListener("submit", onFormSubmit);
     jumpBtn?.addEventListener("click", jump);
+    filterButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const period = button.dataset.period || "weekly";
+        if (period === currentPeriod) return;
+        setActivePeriod(period);
+        fetchLeaderboard(currentPeriod);
+      });
+    });
     canvas.addEventListener("pointerdown", (event) => {
       if (state === "playing") {
         event.preventDefault();
@@ -758,5 +795,6 @@
   resizeCanvas();
   initEvents();
   setOverlay("start");
-  fetchLeaderboard();
+  setActivePeriod("weekly");
+  fetchLeaderboard("weekly");
 })();
