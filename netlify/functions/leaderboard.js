@@ -8,7 +8,7 @@ exports.handler = async (event) => {
   const entryId = event.queryStringParameters ? event.queryStringParameters.entryId : null;
   let state = null;
   try {
-    state = await loadState();
+    state = await loadState(event);
   } catch (err) {
     console.error("[droppy] storage error", err);
     return json(500, { error: "Storage no disponible. Reintenta más tarde." });
