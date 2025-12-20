@@ -18,7 +18,7 @@ exports.handler = async (event) => {
 
   let state = null;
   try {
-    state = await loadState();
+    state = await loadState(event);
   } catch (err) {
     return json(500, { error: "Storage no disponible." });
   }
