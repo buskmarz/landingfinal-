@@ -1,0 +1,9 @@
+{
+  "name": "better-mood-landing",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Better Mood Coffee landing page with Droppy Dash",
+  "dependencies": {
+    "@netlify/blobs": "*"
+  }
+}
