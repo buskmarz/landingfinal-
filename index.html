@@ -116,6 +116,7 @@
           <span class="nav-toggle__bar"></span>
           <span class="nav-toggle__bar"></span>
           <span class="nav-toggle__bar"></span>
+          <span class="nav-toggle__label" aria-hidden="true">Menú</span>
           <span class="sr-only">Abrir menú</span>
         </button>
 
@@ -573,14 +574,19 @@
 
             <div class="droppy__leaderboard" aria-live="polite">
               <div class="droppy__leaderboard-head">
-                <h3>Leaderboard semanal</h3>
-                <span class="droppy__week" data-week>Semana en curso</span>
+                <h3>Leaderboard</h3>
+                <span class="droppy__week" data-period-label>Semana en curso</span>
+              </div>
+              <div class="droppy__leaderboard-filters" role="tablist" aria-label="Filtrar leaderboard">
+                <button class="droppy__filter is-active" type="button" data-period="weekly" aria-pressed="true">Semanal</button>
+                <button class="droppy__filter" type="button" data-period="monthly" aria-pressed="false">Mensual</button>
+                <button class="droppy__filter" type="button" data-period="all" aria-pressed="false">Histórico</button>
               </div>
               <ol class="droppy__leaderboard-list" data-leaderboard>
                 <li class="droppy__leaderboard-empty">Cargando leaderboard...</li>
               </ol>
               <p class="droppy__leaderboard-rank" data-rank></p>
-              <p class="droppy__leaderboard-note">Se reinicia cada lunes 00:00 (CDMX).</p>
+              <p class="droppy__leaderboard-note">Semanal: lunes 00:00. Mensual: día 1. Histórico: todos los tiempos (CDMX).</p>
             </div>
           </div>
 
