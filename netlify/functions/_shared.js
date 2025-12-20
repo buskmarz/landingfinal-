@@ -35,7 +35,7 @@ const WEEK_TZ = process.env.DROPPY_WEEK_TZ || "America/Mexico_City";
 const SESSION_TTL_MS = Number.parseInt(process.env.DROPPY_SESSION_TTL_MS || "900000", 10);
 const COOLDOWN_SECONDS = Number.parseInt(process.env.DROPPY_COOLDOWN_SECONDS || "12", 10);
 const MAX_PER_MINUTE = Number.parseInt(process.env.DROPPY_MAX_PER_MINUTE || "6", 10);
-const MAX_ENTRIES = Number.parseInt(process.env.DROPPY_MAX_ENTRIES || "2000", 10);
+const MAX_ENTRIES = Number.parseInt(process.env.DROPPY_MAX_ENTRIES || "10000", 10);
 
 const MAX_DISTANCE_PER_SEC = Number.parseInt(process.env.DROPPY_MAX_DISTANCE_PER_SEC || "70", 10);
 const MAX_SCORE_PER_SEC = Number.parseInt(process.env.DROPPY_MAX_SCORE_PER_SEC || "180", 10);
@@ -136,15 +136,45 @@ function getZonedParts(date, timeZone) {
   };
 }
 
-function getWeekStartKey(date = new Date()) {
-  const parts = getZonedParts(date, WEEK_TZ);
-  const zoned = new Date(Date.UTC(parts.year, parts.month - 1, parts.day, parts.hour, parts.minute, parts.second));
+function getZonedDate(date, timeZone) {
+  const parts = getZonedParts(date, timeZone);
+  return new Date(Date.UTC(parts.year, parts.month - 1, parts.day, parts.hour, parts.minute, parts.second));
+}
+
+function formatDateKey(date, timeZone) {
+  const parts = getZonedParts(date, timeZone);
+  return `${parts.year}-${String(parts.month).padStart(2, "0")}-${String(parts.day).padStart(2, "0")}`;
+}
+
+function formatMonthKey(date, timeZone) {
+  const parts = getZonedParts(date, timeZone);
+  return `${parts.year}-${String(parts.month).padStart(2, "0")}`;
+}
+
+function getWeekStartDate(date = new Date()) {
+  const zoned = getZonedDate(date, WEEK_TZ);
   const weekday = zoned.getUTCDay();
   const diff = (weekday + 6) % 7;
   zoned.setUTCDate(zoned.getUTCDate() - diff);
   zoned.setUTCHours(0, 0, 0, 0);
-  const startParts = getZonedParts(zoned, WEEK_TZ);
-  return `${startParts.year}-${String(startParts.month).padStart(2, "0")}-${String(startParts.day).padStart(2, "0")}`;
+  return zoned;
+}
+
+function getMonthStartDate(date = new Date()) {
+  const parts = getZonedParts(date, WEEK_TZ);
+  return new Date(Date.UTC(parts.year, parts.month - 1, 1, 0, 0, 0));
+}
+
+function getPeriodMeta(period, date = new Date()) {
+  if (period === "monthly") {
+    const start = getMonthStartDate(date);
+    return { startMs: start.getTime(), label: formatMonthKey(start, WEEK_TZ) };
+  }
+  if (period === "weekly") {
+    const start = getWeekStartDate(date);
+    return { startMs: start.getTime(), label: formatDateKey(start, WEEK_TZ) };
+  }
+  return { startMs: 0, label: "Histórico" };
 }
 
 async function loadState(event) {
@@ -153,29 +183,22 @@ async function loadState(event) {
   const data = await store.get(LEADERBOARD_KEY, { type: "json" });
   if (!data) {
     return {
-      weekStart: getWeekStartKey(),
       entries: [],
       rate: {},
       usedSessions: {},
     };
   }
-  return data;
+  return {
+    ...data,
+    entries: Array.isArray(data.entries) ? data.entries : [],
+    rate: data.rate || {},
+    usedSessions: data.usedSessions || {},
+  };
 }
 
 async function saveState(state) {
   const store = await getStoreClient();
   await store.set(LEADERBOARD_KEY, JSON.stringify(state), { contentType: "application/json" });
-}
-
-function ensureCurrentWeek(state) {
-  const current = getWeekStartKey();
-  if (state.weekStart !== current) {
-    state.weekStart = current;
-    state.entries = [];
-    state.rate = {};
-    state.usedSessions = {};
-  }
-  return state;
 }
 
 function pruneRateMap(rate, now) {
@@ -249,10 +272,9 @@ module.exports = {
   hashValue,
   getClientIp,
   getUserAgent,
-  getWeekStartKey,
+  getPeriodMeta,
   loadState,
   saveState,
-  ensureCurrentWeek,
   applyRateLimit,
   markSessionUsed,
   isSessionUsed,
