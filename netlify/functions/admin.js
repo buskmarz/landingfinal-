@@ -1,4 +1,4 @@
-const { json, loadState, ensureCurrentWeek } = require("./_shared");
+const { json, loadState, getPeriodMeta } = require("./_shared");
 
 exports.handler = async (event) => {
   if (event.httpMethod !== "GET") {
@@ -22,15 +22,19 @@ exports.handler = async (event) => {
   } catch (err) {
     return json(500, { error: "Storage no disponible." });
   }
-  state = ensureCurrentWeek(state);
+
+  const periodParam = event.queryStringParameters ? event.queryStringParameters.period : null;
+  const period = ["weekly", "monthly", "all"].includes(periodParam) ? periodParam : "all";
+  const { startMs, label } = getPeriodMeta(period);
 
   const limitRaw = event.queryStringParameters ? event.queryStringParameters.limit : null;
   const limit = Math.min(Math.max(Number.parseInt(limitRaw || "10", 10) || 10, 1), 50);
 
   state.entries = Array.isArray(state.entries) ? state.entries : [];
-  state.entries.sort((a, b) => b.score - a.score || a.createdAt - b.createdAt);
+  const filtered = period === "all" ? state.entries : state.entries.filter((entry) => entry.createdAt >= startMs);
+  filtered.sort((a, b) => b.score - a.score || a.createdAt - b.createdAt);
 
-  const entries = state.entries.slice(0, limit).map((entry) => ({
+  const entries = filtered.slice(0, limit).map((entry) => ({
     name: entry.name,
     phone: entry.phone,
     score: entry.score,
@@ -38,7 +42,8 @@ exports.handler = async (event) => {
   }));
 
   return json(200, {
-    weekStart: state.weekStart,
+    period,
+    periodStart: label,
     entries,
   });
 };
