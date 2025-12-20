@@ -50,8 +50,12 @@
   let obstacles = [];
   let collectibles = [];
   let clouds = [];
+  let skyLights = [];
   let bgOffset = 0;
   let midOffset = 0;
+  let forestOffset = 0;
+  let fieldOffset = 0;
+  let groundOffset = 0;
 
   let state = "idle";
   let running = false;
@@ -134,6 +138,7 @@
     skyGradient.addColorStop(1, "#fff4da");
 
     buildClouds();
+    buildSkyLights();
   }
 
   function buildClouds() {
@@ -143,6 +148,15 @@
       scale: rand(0.6, 1.2),
       speed: rand(6, 14),
       id: i,
+    }));
+  }
+
+  function buildSkyLights() {
+    skyLights = Array.from({ length: 12 }).map(() => ({
+      x: Math.random() * world.width,
+      y: Math.random() * world.height * 0.35 + 16,
+      r: 1.2 + Math.random() * 2.4,
+      phase: Math.random() * Math.PI * 2,
     }));
   }
 
@@ -163,6 +177,9 @@
     collectibleTimer = 1.2;
     bgOffset = 0;
     midOffset = 0;
+    forestOffset = 0;
+    fieldOffset = 0;
+    groundOffset = 0;
     buildClouds();
 
     world.runner.y = world.groundY - world.runner.height;
@@ -245,27 +262,25 @@
   }
 
   function spawnObstacle() {
-    const typeRoll = rng();
-    const type = typeRoll > 0.7 ? "mushroom" : "bean";
-
-    const baseSize = clamp(world.width * 0.1, 26, 50);
-    let width = baseSize;
-    let height = baseSize;
-    if (type === "mushroom") {
-      width = baseSize * 1.05;
-      height = baseSize * 1.1;
-    }
-    if (type === "bean") {
-      width = baseSize * 1.2;
-      height = baseSize * 0.9;
-    }
+    const baseSize = clamp(world.width * 0.12, 30, 58);
+    const width = baseSize * rand(0.9, 1.2);
+    const height = baseSize * rand(0.85, 1.35);
+    const capColor = rng() > 0.6 ? "#e5533c" : "#d4472b";
+    const spots = Array.from({ length: Math.round(rand(2, 4)) }).map(() => ({
+      x: rand(0.22, 0.78),
+      y: rand(0.12, 0.45),
+      r: rand(0.06, 0.12),
+    }));
 
     obstacles.push({
       x: world.width + rand(0, world.width * 0.3),
       y: world.groundY - height,
       w: width,
       h: height,
-      type,
+      type: "mushroom",
+      capColor,
+      spots,
+      tilt: rand(-0.08, 0.08),
     });
 
     const minGap = clamp(1.2 - gameTime * 0.02, 0.7, 1.2);
@@ -276,10 +291,15 @@
   function spawnCollectible() {
     const size = clamp(world.width * 0.06, 16, 26);
     const lift = rand(90, 180);
+    const baseY = world.groundY - lift;
     collectibles.push({
       x: world.width + rand(40, world.width * 0.4),
-      y: world.groundY - lift,
+      y: baseY,
+      baseY,
       r: size * 0.5,
+      bob: rand(6, 12),
+      phase: rand(0, Math.PI * 2),
+      tilt: rand(-0.3, 0.3),
     });
 
     const minGap = clamp(1.2 - gameTime * 0.015, 0.7, 1.2);
@@ -303,8 +323,16 @@
     }
     if (comboEl && combo !== lastComboRendered) {
       comboEl.textContent = `x${combo}`;
+      pulseElement(comboEl);
       lastComboRendered = combo;
     }
+  }
+
+  function pulseElement(el) {
+    if (!el) return;
+    el.classList.remove("is-pulse");
+    void el.offsetWidth;
+    el.classList.add("is-pulse");
   }
 
   function updateGame(dt, now) {
@@ -322,8 +350,11 @@
       runner.jumpCount = 0;
     }
 
-    bgOffset += speed * dt * 0.08;
-    midOffset += speed * dt * 0.18;
+    bgOffset += speed * dt * 0.05;
+    midOffset += speed * dt * 0.1;
+    forestOffset += speed * dt * 0.14;
+    fieldOffset += speed * dt * 0.2;
+    groundOffset += speed * dt * 0.3;
 
     obstacleTimer -= dt;
     if (obstacleTimer <= 0) spawnObstacle();
@@ -336,6 +367,7 @@
     });
     collectibles.forEach((bean) => {
       bean.x -= speed * dt;
+      bean.y = bean.baseY + Math.sin(gameTime * 3 + bean.phase) * bean.bob;
     });
     clouds.forEach((cloud) => {
       cloud.x -= cloud.speed * dt;
@@ -403,75 +435,121 @@
   }
 
   function drawBackground() {
-    ctx.fillStyle = skyGradient || "#f7fbff";
-    ctx.fillRect(0, 0, world.width, world.height);
-
-    ctx.fillStyle = "rgba(255, 215, 75, 0.9)";
-    ctx.beginPath();
-    ctx.arc(world.width * 0.8, world.height * 0.15, world.width * 0.08, 0, Math.PI * 2);
-    ctx.fill();
-
-    drawMountains(bgOffset * 0.25, world.height * 0.52, world.width * 0.18, "#cdd7e8");
-    drawMountains(bgOffset * 0.45, world.height * 0.62, world.width * 0.2, "#b6c6dc");
-
-    drawCoffeeFields(midOffset * 0.6, world.height * 0.68);
-
+    drawSky();
+    drawSun();
+    drawSkyLights();
     drawClouds();
+    drawMountains(bgOffset * 0.18, world.height * 0.52, world.width * 0.22, "#b9cbe4", 3.5);
+    drawMountains(bgOffset * 0.32, world.height * 0.6, world.width * 0.2, "#a9bedc", 1.8);
+    drawForest(forestOffset * 0.6, world.height * 0.68);
+    drawCoffeeFields(fieldOffset * 0.8, world.height * 0.75);
   }
 
-  function drawMountains(offset, baseY, size, color) {
+  function drawSky() {
+    const gradient = ctx.createLinearGradient(0, 0, 0, world.height);
+    gradient.addColorStop(0, "#86d0ff");
+    gradient.addColorStop(0.45, "#dff5ff");
+    gradient.addColorStop(1, "#fff2c4");
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, world.width, world.height);
+  }
+
+  function drawSun() {
+    const x = world.width * 0.78;
+    const y = world.height * 0.16;
+    const radius = world.width * 0.1;
+    const glow = ctx.createRadialGradient(x, y, radius * 0.2, x, y, radius * 2.4);
+    glow.addColorStop(0, "rgba(255, 236, 167, 0.9)");
+    glow.addColorStop(0.5, "rgba(255, 226, 140, 0.38)");
+    glow.addColorStop(1, "rgba(255, 221, 128, 0)");
+    ctx.fillStyle = glow;
+    ctx.beginPath();
+    ctx.arc(x, y, radius * 2.4, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = "#ffe7a2";
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  function drawSkyLights() {
+    const t = gameTime;
+    skyLights.forEach((light) => {
+      const twinkle = 0.5 + 0.5 * Math.sin(t * 2 + light.phase);
+      ctx.fillStyle = `rgba(255, 255, 255, ${0.35 + twinkle * 0.4})`;
+      ctx.beginPath();
+      ctx.arc(light.x, light.y, light.r * (0.7 + twinkle * 0.6), 0, Math.PI * 2);
+      ctx.fill();
+    });
+  }
+
+  function drawMountains(offset, baseY, size, color, blur = 0) {
+    ctx.save();
+    if (blur) ctx.filter = `blur(${blur}px)`;
     ctx.fillStyle = color;
-    const step = size * 1.2;
+    const step = size * 1.1;
     const startX = -step + (offset % step);
-    for (let x = startX; x < world.width + step; x += step) {
+    for (let x = startX, index = 0; x < world.width + step; x += step, index += 1) {
+      const peak = size * (0.65 + 0.25 * Math.sin(index * 0.8));
       ctx.beginPath();
       ctx.moveTo(x, baseY);
-      ctx.lineTo(x + step * 0.5, baseY - size);
+      ctx.lineTo(x + step * 0.5, baseY - peak);
       ctx.lineTo(x + step, baseY);
+      ctx.closePath();
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  function drawForest(offset, baseY) {
+    const spacing = 34;
+    const startX = -spacing + (offset % spacing);
+    for (let x = startX, index = 0; x < world.width + spacing; x += spacing, index += 1) {
+      const treeH = world.height * (0.12 + 0.02 * Math.sin(index * 0.6));
+      const treeW = treeH * 0.6;
+      const y = baseY - treeH;
+      ctx.fillStyle = index % 2 === 0 ? "#2f6b3a" : "#3a7a46";
+      ctx.beginPath();
+      ctx.moveTo(x, baseY + 4);
+      ctx.lineTo(x + treeW * 0.5, y);
+      ctx.lineTo(x + treeW, baseY + 4);
       ctx.closePath();
       ctx.fill();
     }
   }
 
   function drawCoffeeFields(offset, baseY) {
-    const rowCount = 6;
-    const rowHeight = world.height * 0.045;
-    const fieldColors = ["#d7c7a1", "#ccb88f", "#c4ad83"];
+    const rowCount = 4;
+    const rowHeight = world.height * 0.055;
+    const fieldColors = ["#7fc46c", "#6bb45f", "#5aa652", "#4f9948"];
 
     for (let row = 0; row < rowCount; row += 1) {
       const y = baseY + row * rowHeight;
       ctx.fillStyle = fieldColors[row % fieldColors.length];
       ctx.fillRect(0, y, world.width, rowHeight + 1);
 
-      const spacing = Math.max(36, 70 - row * 6);
-      const shift = (offset * (0.4 + row * 0.08)) % spacing;
-      const stemH = rowHeight * 0.7;
-      const stemY = y + rowHeight * 0.15;
-      const leafSize = Math.max(4, 10 - row);
+      const spacing = Math.max(30, 70 - row * 8);
+      const shift = (offset * (0.5 + row * 0.12)) % spacing;
+      const bushY = y + rowHeight * 0.52;
+      const bushR = Math.max(3, 8 - row);
 
-      ctx.strokeStyle = "#56743a";
-      ctx.lineWidth = 2;
       for (let x = -shift; x < world.width + spacing; x += spacing) {
+        ctx.fillStyle = "#2f6b3a";
         ctx.beginPath();
-        ctx.moveTo(x, stemY + stemH);
-        ctx.lineTo(x, stemY);
-        ctx.moveTo(x, stemY + stemH * 0.6);
-        ctx.lineTo(x - leafSize, stemY + stemH * 0.35);
-        ctx.moveTo(x, stemY + stemH * 0.6);
-        ctx.lineTo(x + leafSize, stemY + stemH * 0.35);
-        ctx.stroke();
-
-        ctx.fillStyle = "#ba2d2f";
+        ctx.arc(x, bushY, bushR, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#b5332c";
         ctx.beginPath();
-        ctx.arc(x + leafSize * 0.2, stemY + stemH * 0.5, 2, 0, Math.PI * 2);
-        ctx.arc(x - leafSize * 0.2, stemY + stemH * 0.45, 2, 0, Math.PI * 2);
+        ctx.arc(x + bushR * 0.4, bushY - bushR * 0.2, bushR * 0.3, 0, Math.PI * 2);
+        ctx.arc(x - bushR * 0.2, bushY + bushR * 0.1, bushR * 0.25, 0, Math.PI * 2);
         ctx.fill();
       }
     }
   }
 
   function drawClouds() {
-    ctx.fillStyle = "rgba(255,255,255,0.85)";
+    ctx.fillStyle = "rgba(255,255,255,0.9)";
     clouds.forEach((cloud) => {
       const x = cloud.x;
       const y = cloud.y;
@@ -485,11 +563,19 @@
   }
 
   function drawGround() {
-    ctx.fillStyle = "#e9d7b4";
+    ctx.fillStyle = "#7fca6f";
+    ctx.fillRect(0, world.groundY - 10, world.width, 12);
+    ctx.fillStyle = "#6ab15b";
+    for (let x = -groundOffset % 24; x < world.width + 24; x += 24) {
+      ctx.fillRect(x, world.groundY - 6, 12, 3);
+    }
+
+    ctx.fillStyle = "#d7b385";
     ctx.fillRect(0, world.groundY, world.width, world.height - world.groundY);
-    ctx.fillStyle = "rgba(90, 70, 40, 0.18)";
-    for (let x = 0; x < world.width; x += 24) {
-      ctx.fillRect(x, world.groundY + 12, 10, 4);
+
+    ctx.fillStyle = "rgba(120, 84, 46, 0.22)";
+    for (let x = -groundOffset % 32; x < world.width + 32; x += 32) {
+      ctx.fillRect(x, world.groundY + 12, 12, 4);
     }
   }
 
@@ -500,6 +586,26 @@
     const w = runner.width;
     const h = runner.height;
 
+    const onGround = runner.y >= world.groundY - runner.height - 0.5;
+    const vel = runner.velY;
+    const stretch = vel < -80 ? 1.1 : vel > 120 ? 0.92 : 1;
+    const squash = vel > 120 ? 1.12 : vel < -80 ? 0.95 : 1;
+    const bounce = onGround ? Math.sin(gameTime * 12) * 0.03 : 0;
+    const scaleY = stretch + bounce;
+    const scaleX = squash - bounce * 0.6;
+
+    ctx.save();
+    ctx.fillStyle = "rgba(0, 0, 0, 0.16)";
+    ctx.beginPath();
+    ctx.ellipse(x + w * 0.5, world.groundY + 6, w * 0.32, w * 0.12, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    const originX = x + w * 0.5;
+    const originY = y + h * 0.82;
+    ctx.translate(originX, originY);
+    ctx.scale(scaleX, scaleY);
+    ctx.translate(-originX, -originY);
+
     if (droppyReady) {
       const scale = 1.22;
       const drawHeight = h * scale;
@@ -509,10 +615,22 @@
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = "high";
       ctx.drawImage(droppyImage, drawX, drawY, drawWidth, drawHeight);
+      ctx.restore();
       return;
     }
 
-    ctx.fillStyle = "#ffd74b";
+    const bodyGrad = ctx.createRadialGradient(
+      x + w * 0.4,
+      y + h * 0.2,
+      w * 0.12,
+      x + w * 0.5,
+      y + h * 0.55,
+      w * 0.6
+    );
+    bodyGrad.addColorStop(0, "#fff0a0");
+    bodyGrad.addColorStop(0.55, "#ffd54d");
+    bodyGrad.addColorStop(1, "#f2a41b");
+    ctx.fillStyle = bodyGrad;
     ctx.beginPath();
     ctx.moveTo(x + w * 0.5, y);
     ctx.quadraticCurveTo(x + w, y + h * 0.45, x + w * 0.6, y + h);
@@ -521,65 +639,114 @@
     ctx.closePath();
     ctx.fill();
 
-    ctx.fillStyle = "rgba(255,255,255,0.6)";
+    ctx.fillStyle = "rgba(255,255,255,0.75)";
     ctx.beginPath();
     ctx.ellipse(x + w * 0.68, y + h * 0.32, w * 0.15, h * 0.2, 0, 0, Math.PI * 2);
     ctx.fill();
 
+    ctx.fillStyle = "#ffffff";
+    ctx.beginPath();
+    ctx.arc(x + w * 0.42, y + h * 0.5, w * 0.11, 0, Math.PI * 2);
+    ctx.arc(x + w * 0.62, y + h * 0.5, w * 0.11, 0, Math.PI * 2);
+    ctx.fill();
+
     ctx.fillStyle = "#231f20";
     ctx.beginPath();
-    ctx.arc(x + w * 0.45, y + h * 0.5, w * 0.06, 0, Math.PI * 2);
-    ctx.arc(x + w * 0.62, y + h * 0.5, w * 0.06, 0, Math.PI * 2);
+    ctx.arc(x + w * 0.44, y + h * 0.52, w * 0.05, 0, Math.PI * 2);
+    ctx.arc(x + w * 0.64, y + h * 0.52, w * 0.05, 0, Math.PI * 2);
     ctx.fill();
+
+    ctx.fillStyle = "#e24a3b";
+    ctx.beginPath();
+    ctx.arc(x + w * 0.53, y + h * 0.66, w * 0.07, 0, Math.PI);
+    ctx.fill();
+
+    ctx.strokeStyle = "#231f20";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(x + w * 0.37, y + h * 0.8);
+    ctx.lineTo(x + w * 0.28, y + h * 0.95);
+    ctx.moveTo(x + w * 0.63, y + h * 0.82);
+    ctx.lineTo(x + w * 0.75, y + h * 0.96);
+    ctx.stroke();
+
+    ctx.restore();
   }
 
   function drawObstacle(obs) {
     ctx.save();
-    if (obs.type === "mushroom") {
-      const stemW = obs.w * 0.35;
-      const stemH = obs.h * 0.5;
-      const stemX = obs.x + obs.w * 0.5 - stemW / 2;
-      const stemY = obs.y + obs.h * 0.45;
+    const stemW = obs.w * 0.36;
+    const stemH = obs.h * 0.5;
+    const stemX = obs.x + obs.w * 0.5 - stemW / 2;
+    const stemY = obs.y + obs.h * 0.45;
 
-      ctx.fillStyle = "#e5d3b2";
-      ctx.fillRect(stemX, stemY, stemW, stemH);
+    ctx.fillStyle = "rgba(0, 0, 0, 0.14)";
+    ctx.beginPath();
+    ctx.ellipse(obs.x + obs.w * 0.5, world.groundY + 4, obs.w * 0.35, obs.w * 0.12, 0, 0, Math.PI * 2);
+    ctx.fill();
 
-      ctx.fillStyle = "#b6805c";
-      ctx.beginPath();
-      ctx.ellipse(obs.x + obs.w * 0.5, obs.y + obs.h * 0.5, obs.w * 0.5, obs.h * 0.45, 0, Math.PI, Math.PI * 2);
-      ctx.fill();
+    ctx.fillStyle = "#f1dfc2";
+    ctx.fillRect(stemX, stemY, stemW, stemH);
 
-      ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
+    const capGrad = ctx.createRadialGradient(
+      obs.x + obs.w * 0.35,
+      obs.y + obs.h * 0.22,
+      2,
+      obs.x + obs.w * 0.55,
+      obs.y + obs.h * 0.55,
+      obs.w
+    );
+    capGrad.addColorStop(0, "#ff8366");
+    capGrad.addColorStop(1, obs.capColor || "#d4472b");
+    ctx.fillStyle = capGrad;
+    ctx.beginPath();
+    ctx.ellipse(obs.x + obs.w * 0.5, obs.y + obs.h * 0.48, obs.w * 0.52, obs.h * 0.45, obs.tilt || 0, Math.PI, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+    (obs.spots || []).forEach((spot) => {
       ctx.beginPath();
-      ctx.arc(obs.x + obs.w * 0.38, obs.y + obs.h * 0.48, obs.w * 0.08, 0, Math.PI * 2);
-      ctx.arc(obs.x + obs.w * 0.62, obs.y + obs.h * 0.42, obs.w * 0.06, 0, Math.PI * 2);
+      ctx.arc(obs.x + obs.w * spot.x, obs.y + obs.h * spot.y, obs.w * spot.r, 0, Math.PI * 2);
       ctx.fill();
-    } else {
-      ctx.fillStyle = "#5c3a2f";
-      ctx.beginPath();
-      ctx.ellipse(obs.x + obs.w * 0.5, obs.y + obs.h * 0.6, obs.w * 0.5, obs.h * 0.45, -0.1, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.4)";
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(obs.x + obs.w * 0.4, obs.y + obs.h * 0.3);
-      ctx.lineTo(obs.x + obs.w * 0.6, obs.y + obs.h * 0.85);
-      ctx.stroke();
-    }
+    });
+
+    ctx.strokeStyle = "rgba(92, 44, 34, 0.35)";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(obs.x + obs.w * 0.35, stemY + stemH * 0.15);
+    ctx.lineTo(obs.x + obs.w * 0.45, stemY + stemH * 0.85);
+    ctx.stroke();
     ctx.restore();
   }
 
   function drawCollectible(bean) {
-    ctx.fillStyle = "#f7b500";
+    const tilt = Math.sin(gameTime * 3 + bean.phase) * 0.25 + (bean.tilt || 0);
+    const grad = ctx.createRadialGradient(
+      bean.x - bean.r * 0.3,
+      bean.y - bean.r * 0.3,
+      2,
+      bean.x,
+      bean.y,
+      bean.r * 1.2
+    );
+    grad.addColorStop(0, "#ffe3a1");
+    grad.addColorStop(0.55, "#f1a82e");
+    grad.addColorStop(1, "#a65b17");
+    ctx.save();
+    ctx.translate(bean.x, bean.y);
+    ctx.rotate(tilt);
+    ctx.fillStyle = grad;
     ctx.beginPath();
-    ctx.ellipse(bean.x, bean.y, bean.r, bean.r * 0.8, 0.2, 0, Math.PI * 2);
+    ctx.ellipse(0, 0, bean.r, bean.r * 0.72, 0, 0, Math.PI * 2);
     ctx.fill();
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.55)";
+
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.7)";
     ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.moveTo(bean.x - bean.r * 0.15, bean.y - bean.r * 0.5);
-    ctx.lineTo(bean.x + bean.r * 0.2, bean.y + bean.r * 0.5);
+    ctx.moveTo(-bean.r * 0.15, -bean.r * 0.5);
+    ctx.lineTo(bean.r * 0.25, bean.r * 0.5);
     ctx.stroke();
+    ctx.restore();
   }
 
   function draw() {
