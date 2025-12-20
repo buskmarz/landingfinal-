@@ -10,6 +10,7 @@ exports.handler = async (event) => {
   try {
     state = await loadState();
   } catch (err) {
+    console.error("[droppy] storage error", err);
     return json(500, { error: "Storage no disponible. Reintenta más tarde." });
   }
   state = ensureCurrentWeek(state);
