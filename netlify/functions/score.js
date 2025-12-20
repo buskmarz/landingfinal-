@@ -7,7 +7,6 @@ const {
   getUserAgent,
   loadState,
   saveState,
-  ensureCurrentWeek,
   applyRateLimit,
   markSessionUsed,
   isSessionUsed,
@@ -87,7 +86,6 @@ exports.handler = async (event) => {
     console.error("[droppy] storage error", err);
     return json(500, { error: "Storage no disponible. Reintenta más tarde." });
   }
-  state = ensureCurrentWeek(state);
   pruneSessions(state, now);
 
   if (isSessionUsed(state, session.sid)) {
@@ -140,11 +138,11 @@ exports.handler = async (event) => {
 
   state.entries = Array.isArray(state.entries) ? state.entries : [];
   state.entries.push(entry);
-  state.entries.sort((a, b) => b.score - a.score || a.createdAt - b.createdAt);
-
-  if (state.entries.length > MAX_ENTRIES) {
+  if (MAX_ENTRIES > 0 && state.entries.length > MAX_ENTRIES) {
+    state.entries.sort((a, b) => b.createdAt - a.createdAt);
     state.entries = state.entries.slice(0, MAX_ENTRIES);
   }
+  state.entries.sort((a, b) => b.score - a.score || a.createdAt - b.createdAt);
 
   markSessionUsed(state, session.sid, now);
 
