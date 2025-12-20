@@ -1403,8 +1403,9 @@ p {
   gap: 8px;
   padding: 8px 14px;
   border-radius: 999px;
-  background: rgba(255, 215, 75, 0.35);
-  border: 1px solid rgba(35, 31, 32, 0.08);
+  background: linear-gradient(120deg, rgba(255, 215, 75, 0.6), rgba(255, 241, 188, 0.8));
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 8px 18px rgba(35, 31, 32, 0.12);
   font-weight: 700;
   margin: 12px 0 20px;
 }
@@ -1433,10 +1434,10 @@ p {
 }
 .droppy__leaderboard {
   padding: 18px;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.75);
-  border: 1px solid rgba(35, 31, 32, 0.08);
-  box-shadow: var(--shadow-sm);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  box-shadow: 0 12px 26px rgba(35, 31, 32, 0.12);
 }
 .droppy__leaderboard-head {
   display: flex;
@@ -1457,22 +1458,25 @@ p {
 }
 .droppy__filter {
   border: 1px solid rgba(35, 31, 32, 0.16);
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.85);
   color: var(--black);
   padding: 6px 12px;
   border-radius: 999px;
   font-weight: 700;
   font-size: 0.85rem;
   cursor: pointer;
-  transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+  box-shadow: 0 6px 12px rgba(35, 31, 32, 0.08);
+  transition: background 160ms ease, border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
 }
 .droppy__filter:hover {
   background: rgba(255, 215, 75, 0.25);
   border-color: rgba(35, 31, 32, 0.2);
+  box-shadow: 0 10px 16px rgba(35, 31, 32, 0.12);
 }
 .droppy__filter.is-active {
   background: var(--yellow);
   border-color: rgba(35, 31, 32, 0.3);
+  box-shadow: 0 10px 18px rgba(35, 31, 32, 0.18);
 }
 .droppy__leaderboard-list {
   list-style: none;
@@ -1521,16 +1525,38 @@ p {
   position: relative;
   width: min(100%, 420px);
   aspect-ratio: 9 / 16;
-  border-radius: 24px;
-  background: #f8fbff;
-  border: 1px solid rgba(35, 31, 32, 0.12);
-  box-shadow: 0 16px 40px rgba(35, 31, 32, 0.14);
+  border-radius: 26px;
+  background: linear-gradient(180deg, #f9fdff 0%, #fff2d6 100%);
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 20px 44px rgba(35, 31, 32, 0.18), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
   overflow: hidden;
+}
+.droppy__canvas-frame::before {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  pointer-events: none;
+  z-index: 0;
+}
+.droppy__canvas-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 12% 12%, rgba(255, 255, 255, 0.6), transparent 42%),
+    radial-gradient(circle at 85% 18%, rgba(255, 245, 215, 0.5), transparent 46%);
+  opacity: 0.55;
+  pointer-events: none;
+  z-index: 0;
 }
 .droppy__canvas {
   width: 100%;
   height: 100%;
   display: block;
+  position: relative;
+  z-index: 1;
   touch-action: none;
   cursor: pointer;
 }
@@ -1543,11 +1569,12 @@ p {
   z-index: 2;
 }
 .droppy__hud-block {
-  padding: 6px 10px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.75);
-  border: 1px solid rgba(35, 31, 32, 0.1);
-  box-shadow: 0 6px 18px rgba(35, 31, 32, 0.08);
+  padding: 7px 12px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.6));
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  box-shadow: 0 8px 18px rgba(35, 31, 32, 0.12);
+  backdrop-filter: blur(6px);
 }
 .droppy__hud-label {
   font-size: 0.7rem;
@@ -1558,6 +1585,10 @@ p {
 .droppy__hud-value {
   font-weight: 800;
   font-size: 1.05rem;
+  text-shadow: 0 2px 6px rgba(35, 31, 32, 0.18);
+}
+.droppy__hud-value.is-pulse {
+  animation: droppyPulse 260ms ease;
 }
 .droppy__overlay {
   position: absolute;
@@ -1569,8 +1600,9 @@ p {
   gap: 12px;
   padding: 24px;
   text-align: center;
-  background: rgba(255, 253, 246, 0.78);
-  backdrop-filter: blur(4px);
+  background: linear-gradient(180deg, rgba(255, 253, 246, 0.9), rgba(255, 240, 204, 0.9));
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
   z-index: 3;
 }
 .droppy__overlay[hidden] {
@@ -1638,6 +1670,23 @@ p {
   margin: 0;
   font-size: 0.85rem;
   color: rgba(35, 31, 32, 0.7);
+}
+
+.droppy .btn {
+  box-shadow: 0 12px 20px rgba(35, 31, 32, 0.12);
+  border-width: 2px;
+}
+
+@keyframes droppyPulse {
+  0% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1.18);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 @media (min-width: 900px) {
