@@ -5,7 +5,6 @@ const {
   hashValue,
   getClientIp,
   getUserAgent,
-  getWeekStartKey,
   SESSION_TTL_MS,
 } = require("./_shared");
 
@@ -33,6 +32,5 @@ exports.handler = async (event) => {
     token,
     seed: payload.seed,
     expiresAt: payload.exp,
-    weekStart: getWeekStartKey(),
   });
 };
