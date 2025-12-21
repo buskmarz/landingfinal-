@@ -13,7 +13,6 @@
   const overlayGameover = root.querySelector('[data-overlay="gameover"]');
   const playBtn = root.querySelector("[data-play]");
   const retryBtn = root.querySelector(".droppy__retry");
-  const saveBtn = root.querySelector(".droppy__save");
   const form = root.querySelector("[data-form]");
   const formNote = root.querySelector("[data-form-note]");
   const leaderboardList = root.querySelector("[data-leaderboard]");
@@ -240,7 +239,6 @@
       if (overlayStart) overlayStart.hidden = true;
       if (overlayGameover) overlayGameover.hidden = true;
       if (form) form.hidden = true;
-      if (saveBtn) saveBtn.disabled = false;
       entryId = null;
       requestAnimationFrame(loop);
     });
@@ -251,6 +249,7 @@
     running = false;
     setOverlay("gameover");
     if (finalScoreEl) finalScoreEl.textContent = String(score);
+    showForm("Ingresa tu nombre y tu Instagram o teléfono.");
   }
 
   function jump() {
@@ -879,10 +878,14 @@
     }
     const formData = new FormData(form);
     const name = String(formData.get("name") || "").trim();
-    const phone = String(formData.get("phone") || "").trim();
+    const contact = String(formData.get("contact") || "").trim();
 
     if (!name) {
-      showForm("Ingresa tu nombre o @instagram.", "error");
+      showForm("Ingresa tu nombre.", "error");
+      return;
+    }
+    if (!contact) {
+      showForm("Ingresa tu Instagram o teléfono.", "error");
       return;
     }
 
@@ -890,7 +893,7 @@
     const payload = {
       token: sessionToken,
       name,
-      phone,
+      contact,
       score,
       distance: Math.round(distance),
       collectibles: collected,
@@ -898,7 +901,6 @@
       durationMs,
     };
 
-    if (saveBtn) saveBtn.disabled = true;
     showForm("Enviando puntaje...");
 
     submitScore(payload)
@@ -911,21 +913,12 @@
       .catch((err) => {
         showForm(err.message || "No se pudo guardar el puntaje.", "error");
       })
-      .finally(() => {
-        if (saveBtn) saveBtn.disabled = false;
-      });
+      .finally(() => {});
   }
 
   function initEvents() {
     playBtn?.addEventListener("click", startGame);
     retryBtn?.addEventListener("click", startGame);
-    saveBtn?.addEventListener("click", () => {
-      if (form?.hidden) {
-        showForm("Ingresa tus datos para el leaderboard.");
-      } else {
-        hideForm();
-      }
-    });
     form?.addEventListener("submit", onFormSubmit);
     jumpBtn?.addEventListener("click", jump);
     filterButtons.forEach((button) => {
