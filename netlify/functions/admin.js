@@ -36,7 +36,8 @@ exports.handler = async (event) => {
 
   const entries = filtered.slice(0, limit).map((entry) => ({
     name: entry.name,
-    phone: entry.phone,
+    contact: entry.contact || entry.phone || null,
+    phone: entry.phone || null,
     score: entry.score,
     createdAt: entry.createdAt,
   }));
