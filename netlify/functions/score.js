@@ -12,7 +12,7 @@ const {
   isSessionUsed,
   pruneSessions,
   sanitizeName,
-  sanitizePhone,
+  sanitizeContact,
   MAX_DISTANCE_PER_SEC,
   MAX_SCORE_PER_SEC,
   MAX_COLLECTIBLES_PER_SEC,
@@ -55,9 +55,10 @@ exports.handler = async (event) => {
   const score = Number.parseInt(body.score || "0", 10);
 
   const name = sanitizeName(body.name, 24);
-  const phone = sanitizePhone(body.phone, 18);
+  const contact = sanitizeContact(body.contact || body.phone, 32);
 
   if (!name) return json(400, { error: "Nombre requerido." });
+  if (!contact) return json(400, { error: "Instagram o teléfono requerido." });
   if (!Number.isFinite(durationSec) || durationSec < 1 || durationSec > 600) {
     return json(400, { error: "Duración inválida." });
   }
@@ -102,18 +103,11 @@ exports.handler = async (event) => {
     );
   }
 
-  if (phone) {
-    const phoneKey = `phone:${hashValue(phone)}`;
-    const phoneLimit = applyRateLimit(state, phoneKey, now);
-    if (!phoneLimit.ok) {
-      return json(
-        429,
-        { error: "Demasiados intentos para este teléfono.", retryAfter: phoneLimit.retryAfter },
-        { "Retry-After": String(phoneLimit.retryAfter) }
-      );
-    }
-  } else if (name.startsWith("@")) {
-    const handleKey = `ig:${hashValue(name.toLowerCase())}`;
+  const contactHasLetters = /[a-zA-Z]/.test(contact);
+  const isHandle = contact.startsWith("@") || contactHasLetters;
+
+  if (isHandle) {
+    const handleKey = `ig:${hashValue(contact.toLowerCase())}`;
     const handleLimit = applyRateLimit(state, handleKey, now);
     if (!handleLimit.ok) {
       return json(
@@ -122,12 +116,23 @@ exports.handler = async (event) => {
         { "Retry-After": String(handleLimit.retryAfter) }
       );
     }
+  } else {
+    const phoneKey = `phone:${hashValue(contact)}`;
+    const phoneLimit = applyRateLimit(state, phoneKey, now);
+    if (!phoneLimit.ok) {
+      return json(
+        429,
+        { error: "Demasiados intentos para este teléfono.", retryAfter: phoneLimit.retryAfter },
+        { "Retry-After": String(phoneLimit.retryAfter) }
+      );
+    }
   }
 
   const entry = {
     id: crypto.randomUUID ? crypto.randomUUID() : crypto.randomBytes(16).toString("hex"),
     name,
-    phone: phone || null,
+    contact,
+    phone: isHandle ? null : contact,
     score,
     distance,
     collectibles,
