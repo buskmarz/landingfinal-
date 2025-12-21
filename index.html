@@ -553,7 +553,7 @@
               Droppy corre sin parar: tú decides cada salto. Esquiva obstáculos, atrapa granos y
               mantén el combo para subir el puntaje. Hecho para jugar en vertical, rápido y con estilo.
             </p>
-            <div class="droppy__prize">🏆 Premio semanal: 1 bebida gratis al #1</div>
+            <div class="droppy__prize">🏆 Top 3 semanal: bebida gratis sin adiciones</div>
 
             <div class="droppy__stats" role="list">
               <div class="droppy__stat">
@@ -584,7 +584,7 @@
                 <li class="droppy__leaderboard-empty">Cargando leaderboard...</li>
               </ol>
               <p class="droppy__leaderboard-rank" data-rank></p>
-              <p class="droppy__leaderboard-note">Semanal: lunes 00:00. Mensual: día 1. Histórico: todos los tiempos (CDMX).</p>
+              <p class="droppy__leaderboard-note">Semanal: lunes 00:00. Mensual: día 1. Histórico: todos los tiempos (CDMX). Top 3 semanal gana bebida gratis sin adiciones.</p>
             </div>
           </div>
 
@@ -616,16 +616,15 @@
                 <p class="droppy__final">Tu puntaje: <strong data-final-score>0</strong></p>
                 <div class="droppy__actions">
                   <button class="btn btn--secondary droppy__retry" type="button">Reintentar</button>
-                  <button class="btn btn--primary droppy__save" type="button">Guardar puntaje</button>
                 </div>
                 <form class="droppy__form" data-form hidden>
                   <label class="droppy__label">
-                    Nombre o @instagram
+                    Nombre
                     <input class="droppy__input" name="name" autocomplete="nickname" maxlength="24" required />
                   </label>
                   <label class="droppy__label">
-                    Teléfono (opcional)
-                    <input class="droppy__input" name="phone" autocomplete="tel" inputmode="tel" maxlength="18" />
+                    Instagram o teléfono
+                    <input class="droppy__input" name="contact" autocomplete="username" maxlength="32" required />
                   </label>
                   <button class="btn btn--primary droppy__submit" type="submit">Enviar puntaje</button>
                   <p class="droppy__form-note" data-form-note></p>
