@@ -7,7 +7,7 @@
     <title>Better Mood Coffee Puebla | Café de especialidad con CBD y adaptógenos</title>
     <meta
       name="description"
-      content="Café de especialidad en Puebla (La Paz) con CBD de amplio espectro y adaptógenos. Bebidas responsables, sabor impecable, baristas expertos y transparencia."
+      content="Café de especialidad en Puebla con CBD de amplio espectro y adaptógenos. Dosis visibles, baristas entrenados y trazabilidad."
     />
     <meta name="robots" content="index,follow" />
     <link rel="canonical" href="{{SITE_URL}}" />
@@ -22,7 +22,7 @@
     <meta property="og:title" content="Better Mood Coffee Puebla | Café de especialidad con CBD y adaptógenos" />
     <meta
       property="og:description"
-      content="Café de especialidad en Puebla (La Paz) con CBD de amplio espectro y adaptógenos. Bebidas responsables, sabor impecable, baristas expertos y transparencia."
+      content="Café de especialidad en Puebla con CBD de amplio espectro y adaptógenos. Dosis visibles, baristas entrenados y trazabilidad."
     />
     <meta property="og:url" content="{{SITE_URL}}" />
     <meta property="og:image" content="{{OG_IMAGE_URL}}" />
@@ -32,7 +32,7 @@
     <meta name="twitter:title" content="Better Mood Coffee Puebla | Café de especialidad con CBD y adaptógenos" />
     <meta
       name="twitter:description"
-      content="Café de especialidad en Puebla (La Paz) con CBD de amplio espectro y adaptógenos. Bebidas responsables, sabor impecable, baristas expertos y transparencia."
+      content="Café de especialidad en Puebla con CBD de amplio espectro y adaptógenos. Dosis visibles, baristas entrenados y trazabilidad."
     />
     <meta name="twitter:url" content="{{SITE_URL}}" />
     <meta name="twitter:image" content="{{OG_IMAGE_URL}}" />
@@ -119,14 +119,16 @@
         </button>
 
         <nav class="nav" id="primary-nav">
-          <a href="#droppy-dash">Juega Droppy Dash</a>
+          <a class="nav__game" href="#droppy-dash">
+            <span>Juega y gana</span>
+            <small>Top 3 semanal = bebida gratis</small>
+          </a>
           <a class="nav__tag" href="https://drive.google.com/drive/folders/17h4TmJz7SYwpuY8gR-75qDLrflPmosqd?usp=share_link" target="_blank" rel="noopener noreferrer" title="Catálogo de CBD + adaptógenos">Catálogo</a>
           <a href="#ingredients">Ingredientes</a>
           <a href="#science">Ciencia</a>
           <a href="#community">Comunidad</a>
           <a href="#location">Ubicación</a>
           <a href="#contacto">Contacto</a>
-          <a class="btn btn--sm btn--secondary" href="#menu">Ver menú</a>
           <details class="order-dropdown">
             <summary class="btn btn--sm btn--primary" aria-label="Pedir ahora">
               Pedir ahora
@@ -164,45 +166,49 @@
             <p class="eyebrow">Better Mood Coffee · Puebla</p>
             <h1 id="hero-title">Bienestar real en taza.</h1>
             <p class="hero__subtitle">
-              Café de especialidad + ingredientes funcionales para acompañar tu día.
+              Café de especialidad + CBD + adaptógenos, con dosis claras.
             </p>
 
-            <p class="hero__text hero__text--long">
-              En Better Mood Coffee unimos café de origen, tueste preciso y extracción cuidada con
-              ingredientes funcionales seleccionados. Usamos CBD de amplio espectro y adaptógenos en
-              dosis responsables, con trazabilidad y transparencia total. Un lugar para disfrutar gran
-              sabor y sumar bienestar real, sin exageraciones.
-            </p>
-            <p class="hero__text hero__text--short">
-              Café de origen con CBD no psicoactivo y adaptógenos, en un espacio cálido y profesional.
-            </p>
+            <ul class="hero__bullets" role="list">
+              <li>CBD amplio espectro (sin THC)</li>
+              <li>Dosis visibles en menú</li>
+              <li>Baristas entrenados + origen trazable</li>
+            </ul>
 
-            <div class="hero__actions">
-              <a class="btn btn--primary" href="#menu">Ver menú</a>
-              <a class="btn btn--secondary" href="#location">Visítanos</a>
-              <a class="btn btn--ghost" href="#community">Únete a la comunidad</a>
+            <div class="hero__trust">
+              <p class="hero__trust-title">Seguridad y transparencia</p>
+              <ul class="hero__trust-list" role="list">
+                <li>COA/Labs disponibles</li>
+                <li>No es medicamento</li>
+                <li>No recomendado: embarazo/lactancia/menores</li>
+              </ul>
+              <a class="btn btn--ghost btn--sm" href="#certificados">Ver certificados</a>
             </div>
 
-            <ul class="badges" role="list">
-              <li>CBD no psicoactivo</li>
-              <li>Adaptógenos de grado alimenticio</li>
-              <li>Café de especialidad</li>
-              <li>Dosis claras y responsables</li>
-            </ul>
+            <div class="hero__actions">
+              <a class="btn btn--primary" href="#order">Pedir ahora</a>
+              <a class="btn btn--secondary" href="https://take.cards/7pgmg" target="_blank" rel="noopener">
+                Instalar wallet
+              </a>
+            </div>
           </div>
 
           <div class="hero__media" aria-hidden="true">
             <div class="hero__card">
               <img
-                src="assets/hero-coffee.jpg"
+                src="assets/hero-coffee-1200.jpg"
+                srcset="assets/hero-coffee-600.jpg 600w, assets/hero-coffee-1200.jpg 1200w"
+                sizes="(max-width: 720px) 80vw, 520px"
                 alt=""
-                loading="lazy"
+                loading="eager"
+                decoding="async"
+                fetchpriority="high"
                 width="640"
                 height="720"
               />
               <div class="hero__overlay">
-                <p class="hero__overlay-title">Especialidad + Funcionales</p>
-                <p class="hero__overlay-text">Rituales honestos, sabor impecable.</p>
+                <p class="hero__overlay-title">Especialidad + funcionales</p>
+                <p class="hero__overlay-text">Perfil sensorial + soporte suave.</p>
               </div>
             </div>
           </div>
@@ -213,8 +219,8 @@
       <section class="order-strip" id="order" aria-labelledby="order-title">
         <div class="container order-strip__inner">
           <div>
-            <h2 id="order-title">Pide en Uber Eats o Rappi</h2>
-            <p>Entrega a domicilio o para llevar, en minutos.</p>
+            <h2 id="order-title">Pedir ahora</h2>
+            <p>Uber Eats o Rappi.</p>
           </div>
           <div class="order-strip__actions" aria-label="Plataformas de entrega">
             <a class="btn btn--primary" href="https://www.ubereats.com/store/better-mood-coffee/hPA2fzGUX9WLGGvkeNwCrg?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer">
@@ -231,17 +237,9 @@
       <section class="section section--alt" id="about">
         <div class="container section__grid">
           <div>
-            <h2>Café de especialidad con bienestar responsable.</h2>
-            <p>
-              Somos una cafetería de especialidad en Puebla. Aquí el café es protagonista:
-              granos seleccionados, perfiles claros y baristas expertos. A esa base le sumamos
-              ingredientes funcionales como CBD y adaptógenos para acompañar tu rutina con equilibrio,
-              claridad y calma.
-            </p>
-            <p>
-              Nuestra promesa es simple: sabor impecable, ciencia accesible y uso responsable.
-            </p>
-            <a class="link-arrow" href="#science">Conoce nuestra filosofía</a>
+            <h2>Café de especialidad + funcionales.</h2>
+            <p>Café de origen, baristas expertos y dosis responsables.</p>
+            <a class="link-arrow" href="#science">Ver enfoque</a>
           </div>
 
           <div class="about__stats" role="list">
@@ -270,15 +268,7 @@
         <div class="container section__grid">
           <div>
             <h2>Del origen a tu taza.</h2>
-            <p>
-              Para nosotros el café empieza en el trabajo de los productores: cultivo, cosecha,
-              beneficio, secado y tueste. Por eso elegimos orígenes con trazabilidad y cuidamos cada
-              paso para lograr una taza limpia, honesta y consistente.
-            </p>
-            <p>
-              Si quieres ver el recorrido completo y por qué lo defendemos, lo contamos paso a paso en
-              nuestra guía del proceso del café.
-            </p>
+            <p>Origen trazable y extracción precisa.</p>
             <div class="hero__actions">
               <a
                 class="btn btn--secondary"
@@ -286,18 +276,17 @@
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Conoce el proceso del café
+                Proceso del café
               </a>
-              <a class="btn btn--ghost" href="#menu">Ver menú</a>
             </div>
           </div>
 
           <div class="origin-card">
             <h3>Nuestro estándar</h3>
             <ul class="checklist">
-              <li>Productores y procesos con trazabilidad.</li>
-              <li>Beneficio, secado y tueste pensados para resaltar el perfil.</li>
-              <li>Extracción cuidada por baristas, sin quemar ni ocultar sabores.</li>
+              <li>Productores con trazabilidad.</li>
+              <li>Tueste y extracción precisos.</li>
+              <li>Perfil claro y consistente.</li>
             </ul>
             <a
               class="link-arrow"
@@ -315,46 +304,22 @@
       <section class="section" id="benefits">
         <div class="container">
           <div class="section__header">
-            <h2>Cómo se siente una taza Better Mood.</h2>
-            <p>Beneficios percibidos, sin promesas médicas.</p>
+            <h2>Cómo se siente.</h2>
+            <p>Sin promesas médicas.</p>
           </div>
 
           <div class="cards">
             <article class="card">
-              <h3>Calma consciente</h3>
-              <p>
-                Sensación de tranquilidad ligera, sin desconectarte de tu día.
-              </p>
+              <h3>Calma</h3>
+              <p>Tranquilidad ligera, sin sedación.</p>
             </article>
             <article class="card">
-              <h3>Enfoque limpio</h3>
-              <p>
-                Claridad mental estable, sin picos ni nervios.
-              </p>
+              <h3>Enfoque</h3>
+              <p>Claridad estable, sin picos.</p>
             </article>
             <article class="card">
-              <h3>Energía balanceada</h3>
-              <p>
-                Impulso suave que acompaña tu ritmo, no lo acelera.
-              </p>
-            </article>
-            <article class="card">
-              <h3>Ritual de bienestar</h3>
-              <p>
-                Un momento para pausar, disfrutar y seguir mejor.
-              </p>
-            </article>
-            <article class="card">
-              <h3>Bienestar sin exagerar</h3>
-              <p>
-                Funcionalidad real, sin promesas irreales ni efectos invasivos.
-              </p>
-            </article>
-            <article class="card">
-              <h3>Confianza informada</h3>
-              <p>
-                Sabes qué tomas, por qué funciona y cómo se siente.
-              </p>
+              <h3>Energía</h3>
+              <p>Impulso suave y sostenido.</p>
             </article>
           </div>
 
@@ -492,30 +457,90 @@
           <div class="featured-drinks">
             <h3>Bebidas estrella</h3>
             <div class="featured-drinks__grid">
-              <div class="drink">
-                <h4>Dragon’s Blood</h4>
-                <p>Fusión exótica de mango, fresa y CBD. El relax nunca se vio tan bien.</p>
-              </div>
-              <div class="drink">
-                <h4>Brain Taro</h4>
-                <p>Taro latte con melena de león para enfoque equilibrado.</p>
-              </div>
-              <div class="drink">
-                <h4>Cold brew tonic</h4>
-                <p>Larga extracción en frío servida sobre tónica. Sofisticado, cítrico y cero amargura.</p>
-              </div>
-              <div class="drink">
-                <h4>Spaceman</h4>
-                <p>Lavanda, limón y un blend botánico funcional. Refrescante y relajante.</p>
-              </div>
-              <div class="drink">
-                <h4>Cold Berry Days </h4>
-                <p>Macerado de frutos rojos, CBD y burbujas. Frescura total con gomita incluida.</p>
-              </div>
-              <div class="drink">
-                <h4>Strawberry matcha</h4>
-                <p>Tu Matcha, tu regla: Elige grado Ceremonial puro o Endulzado. Energía viral y deliciosa.</p>
-              </div>
+              <article class="drink">
+                <img class="drink__image" src="assets/hero-coffee-600.jpg" alt="Dragon’s Blood" loading="lazy" decoding="async" width="300" height="220" />
+                <div class="drink__body">
+                  <h4>Dragon’s Blood</h4>
+                  <p>Perfil frutal + soporte funcional suave.</p>
+                  <div class="drink__meta">
+                    <span class="drink__price">Desde $85</span>
+                    <span class="drink__chip">Frío</span>
+                    <span class="drink__chip">Cafeína: Sí</span>
+                    <span class="drink__chip">Efecto: energía</span>
+                  </div>
+                  <a class="btn btn--primary btn--sm" href="https://www.ubereats.com/store/better-mood-coffee/hPA2fzGUX9WLGGvkeNwCrg?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer">Pedir esta bebida</a>
+                </div>
+              </article>
+              <article class="drink">
+                <img class="drink__image" src="assets/hero-coffee-600.jpg" alt="Brain Taro" loading="lazy" decoding="async" width="300" height="220" />
+                <div class="drink__body">
+                  <h4>Brain Taro</h4>
+                  <p>Textura cremosa + enfoque estable.</p>
+                  <div class="drink__meta">
+                    <span class="drink__price">Desde $90</span>
+                    <span class="drink__chip">Caliente</span>
+                    <span class="drink__chip">Cafeína: Sí</span>
+                    <span class="drink__chip">Efecto: enfoque</span>
+                  </div>
+                  <a class="btn btn--primary btn--sm" href="https://www.ubereats.com/store/better-mood-coffee/hPA2fzGUX9WLGGvkeNwCrg?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer">Pedir esta bebida</a>
+                </div>
+              </article>
+              <article class="drink">
+                <img class="drink__image" src="assets/hero-coffee-600.jpg" alt="Cold brew tonic" loading="lazy" decoding="async" width="300" height="220" />
+                <div class="drink__body">
+                  <h4>Cold brew tonic</h4>
+                  <p>Frío, limpio y cítrico.</p>
+                  <div class="drink__meta">
+                    <span class="drink__price">Desde $78</span>
+                    <span class="drink__chip">Frío</span>
+                    <span class="drink__chip">Cafeína: Sí</span>
+                    <span class="drink__chip">Efecto: energía</span>
+                  </div>
+                  <a class="btn btn--primary btn--sm" href="https://www.ubereats.com/store/better-mood-coffee/hPA2fzGUX9WLGGvkeNwCrg?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer">Pedir esta bebida</a>
+                </div>
+              </article>
+              <article class="drink">
+                <img class="drink__image" src="assets/hero-coffee-600.jpg" alt="Spaceman" loading="lazy" decoding="async" width="300" height="220" />
+                <div class="drink__body">
+                  <h4>Spaceman</h4>
+                  <p>Botánico fresco + calma ligera.</p>
+                  <div class="drink__meta">
+                    <span class="drink__price">Desde $82</span>
+                    <span class="drink__chip">Frío</span>
+                    <span class="drink__chip">Cafeína: No</span>
+                    <span class="drink__chip">Efecto: calma</span>
+                  </div>
+                  <a class="btn btn--primary btn--sm" href="https://www.ubereats.com/store/better-mood-coffee/hPA2fzGUX9WLGGvkeNwCrg?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer">Pedir esta bebida</a>
+                </div>
+              </article>
+              <article class="drink">
+                <img class="drink__image" src="assets/hero-coffee-600.jpg" alt="Cold Berry Days" loading="lazy" decoding="async" width="300" height="220" />
+                <div class="drink__body">
+                  <h4>Cold Berry Days</h4>
+                  <p>Frutos rojos + CBD, burbuja suave.</p>
+                  <div class="drink__meta">
+                    <span class="drink__price">Desde $85</span>
+                    <span class="drink__chip">Frío</span>
+                    <span class="drink__chip">Cafeína: No</span>
+                    <span class="drink__chip">Efecto: calma</span>
+                  </div>
+                  <a class="btn btn--primary btn--sm" href="https://www.ubereats.com/store/better-mood-coffee/hPA2fzGUX9WLGGvkeNwCrg?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer">Pedir esta bebida</a>
+                </div>
+              </article>
+              <article class="drink">
+                <img class="drink__image" src="assets/hero-coffee-600.jpg" alt="Strawberry matcha" loading="lazy" decoding="async" width="300" height="220" />
+                <div class="drink__body">
+                  <h4>Strawberry matcha</h4>
+                  <p>Matcha limpio + perfil frutal.</p>
+                  <div class="drink__meta">
+                    <span class="drink__price">Desde $92</span>
+                    <span class="drink__chip">Caliente</span>
+                    <span class="drink__chip">Cafeína: Sí</span>
+                    <span class="drink__chip">Efecto: enfoque</span>
+                  </div>
+                  <a class="btn btn--primary btn--sm" href="https://www.ubereats.com/store/better-mood-coffee/hPA2fzGUX9WLGGvkeNwCrg?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer">Pedir esta bebida</a>
+                </div>
+              </article>
             </div>
           </div>
 
@@ -548,12 +573,18 @@
         <div class="container droppy__grid">
           <div class="droppy__intro">
             <p class="eyebrow">Arcade premium · Better Mood</p>
-            <h2>Droppy Dash</h2>
+            <h2>Juega y gana</h2>
             <p>
-              Droppy corre sin parar: tú decides cada salto. Esquiva obstáculos, atrapa granos y
-              mantén el combo para subir el puntaje. Hecho para jugar en vertical, rápido y con estilo.
+              Droppy corre sin parar. Salta, suma granos y sube tu score.
             </p>
-            <div class="droppy__prize">🏆 Top 3 semanal: bebida gratis sin adiciones</div>
+            <div class="droppy__hook">
+              <div>
+                <p class="droppy__hook-title">Ranking semanal</p>
+                <p class="droppy__hook-line">Premio: bebida gratis (Top 3)</p>
+                <p class="droppy__hook-line">Cómo: juega y guarda tu score</p>
+              </div>
+              <div class="droppy__prize">🏆 Top 3 semanal: bebida gratis sin adiciones</div>
+            </div>
 
             <div class="droppy__stats" role="list">
               <div class="droppy__stat">
@@ -565,7 +596,7 @@
                 <p class="droppy__stat-value">Tap + doble salto</p>
               </div>
               <div class="droppy__stat">
-                <p class="droppy__stat-label">Reset</p>
+                <p class="droppy__stat-label">Corte</p>
                 <p class="droppy__stat-value">Lunes 00:00 CDMX</p>
               </div>
             </div>
@@ -586,6 +617,12 @@
               <p class="droppy__leaderboard-rank" data-rank></p>
               <p class="droppy__leaderboard-note">Semanal: lunes 00:00. Mensual: día 1. Histórico: todos los tiempos (CDMX). Top 3 semanal gana bebida gratis sin adiciones.</p>
             </div>
+
+            <div class="droppy__cta">
+              <a class="btn btn--secondary" href="https://take.cards/7pgmg" target="_blank" rel="noopener">
+                Instalar wallet
+              </a>
+            </div>
           </div>
 
           <div class="droppy__game">
@@ -603,10 +640,8 @@
               </div>
 
               <div class="droppy__overlay droppy__overlay--start" data-overlay="start">
-                <p class="droppy__overlay-title">Toca o presiona espacio para saltar. Doble salto activo.</p>
-                <p class="droppy__overlay-text">
-                  Esquiva obstáculos, colecciona granos y sube tu combo.
-                </p>
+                <p class="droppy__overlay-title">Toca para saltar. Doble salto activo.</p>
+                <p class="droppy__overlay-text">Esquiva hongos y suma granos.</p>
                 <button class="btn btn--primary droppy__play" type="button" data-play>Jugar</button>
                 <p class="droppy__overlay-note" data-connection>Listo para jugar.</p>
               </div>
@@ -623,17 +658,19 @@
                     <input class="droppy__input" name="name" autocomplete="nickname" maxlength="24" required />
                   </label>
                   <label class="droppy__label">
-                    Instagram o teléfono
+                    Instagram o teléfono (si ganas)
                     <input class="droppy__input" name="contact" autocomplete="username" maxlength="32" required />
                   </label>
+                  <p class="droppy__consent">Solo para avisarte si ganas.</p>
                   <button class="btn btn--primary droppy__submit" type="submit">Enviar puntaje</button>
+                  <button class="btn btn--secondary droppy__share" type="button">Compartir mi score</button>
                   <p class="droppy__form-note" data-form-note></p>
                 </form>
               </div>
             </div>
             <div class="droppy__controls">
               <button class="btn btn--secondary droppy__jump" type="button">Saltar</button>
-              <p class="droppy__hint">Toca el canvas, el botón o presiona espacio para saltar. Doble salto activo.</p>
+              <p class="droppy__hint">Toca o presiona espacio para saltar.</p>
             </div>
           </div>
         </div>
@@ -658,42 +695,61 @@
 	        </div>
 
 	        <div class="container section__grid">
-	          <div>
-	            <h2>Ingredientes funcionales, sin misterio.</h2>
-            <p>
-              Seleccionamos ingredientes de grado alimenticio con análisis, trazabilidad y dosis
-              visibles. Hablamos de acompañar tu rutina, no de promesas milagrosas.
-            </p>
+          <div>
+            <h2>Ingredientes, claro y directo.</h2>
+            <p>Dosis visibles en menú.</p>
           </div>
 
           <div class="ingredients">
             <article class="ingredient-card">
-              <h3>CBD de amplio espectro</h3>
-              <p>
-                Utilizamos CBD derivado de cáñamo, no psicoactivo, con análisis de laboratorio y dosis
-                medibles. En cantidades responsables puede contribuir a una sensación de calma y
-                bienestar general. No es medicamento ni reemplaza tratamientos médicos.
-              </p>
+              <h3>CBD (amplio espectro)</h3>
+              <ul class="ingredient-card__list">
+                <li><span>Qué es:</span> cáñamo sin THC.</li>
+                <li><span>Cómo se siente:</span> calma suave.</li>
+                <li><span>Dosis:</span> visible por bebida.</li>
+                <li><span>Evitar:</span> embarazo/lactancia/menores.</li>
+              </ul>
             </article>
             <article class="ingredient-card">
-              <h3>Adaptógenos seleccionados</h3>
-              <p>
-                Adaptógenos de grado alimenticio con uso tradicional y evidencia emergente para apoyar
-                la adaptación al estrés cotidiano. Trabajamos con más de 15 adaptógenos en rotación;
-                estos son algunos.
-              </p>
-              <ul>
-                <li>Ashwagandha</li>
-                <li>Melena de león</li>
-                <li>Reishi</li>
-                <li>Cordyceps</li>
-                <li>Rhodiola</li>
+              <h3>Ashwagandha</h3>
+              <ul class="ingredient-card__list">
+                <li><span>Qué es:</span> adaptógeno clásico.</li>
+                <li><span>Cómo se siente:</span> equilibrio.</li>
+                <li><span>Dosis:</span> visible por bebida.</li>
+                <li><span>Evitar:</span> embarazo/lactancia.</li>
+              </ul>
+            </article>
+            <article class="ingredient-card">
+              <h3>Melena de león</h3>
+              <ul class="ingredient-card__list">
+                <li><span>Qué es:</span> hongo funcional.</li>
+                <li><span>Cómo se siente:</span> enfoque claro.</li>
+                <li><span>Dosis:</span> visible por bebida.</li>
+                <li><span>Evitar:</span> menores.</li>
+              </ul>
+            </article>
+            <article class="ingredient-card">
+              <h3>Reishi</h3>
+              <ul class="ingredient-card__list">
+                <li><span>Qué es:</span> hongo funcional.</li>
+                <li><span>Cómo se siente:</span> calma estable.</li>
+                <li><span>Dosis:</span> visible por bebida.</li>
+                <li><span>Evitar:</span> embarazo/lactancia.</li>
+              </ul>
+            </article>
+            <article class="ingredient-card">
+              <h3>Cordyceps</h3>
+              <ul class="ingredient-card__list">
+                <li><span>Qué es:</span> hongo funcional.</li>
+                <li><span>Cómo se siente:</span> energía suave.</li>
+                <li><span>Dosis:</span> visible por bebida.</li>
+                <li><span>Evitar:</span> menores.</li>
               </ul>
             </article>
           </div>
 
           <div class="section__cta section__cta--left">
-            <a class="btn btn--secondary" href="#menu">Arma tu combinación</a>
+            <a class="btn btn--secondary" href="#menu">Ver menú</a>
           </div>
         </div>
       </section>
@@ -709,25 +765,15 @@
           <div class="science__grid">
             <article class="science-card">
               <h3>CBD y sistema endocannabinoide</h3>
-              <p>
-                El CBD interactúa con el sistema endocannabinoide, una red natural del cuerpo asociada
-                al equilibrio interno. Por eso lo usamos para acompañar estados de calma, sin efectos
-                psicoactivos.
-              </p>
+              <p>Apoyo no psicoactivo para equilibrio interno.</p>
             </article>
             <article class="science-card">
               <h3>Adaptógenos</h3>
-              <p>
-                Los adaptógenos ayudan a modular la respuesta del organismo ante estrés físico o mental.
-                Se integran en tu día como apoyo suave y consistente.
-              </p>
+              <p>Soporte suave para estrés físico o mental.</p>
             </article>
             <article class="science-card">
               <h3>Transparencia</h3>
-              <p>
-                Dosis visibles en el menú, personal capacitado, certificados de ingredientes y origen
-                del café documentado.
-              </p>
+              <p>Dosis visibles, personal capacitado, certificados.</p>
             </article>
           </div>
 
@@ -735,45 +781,34 @@
             <h3 id="faq-title">Preguntas rápidas</h3>
             <div class="faq__items">
               <details class="faq__item">
+                <summary>¿Cuántos mg trae cada bebida?</summary>
+                <p>Depende; siempre visible en el menú.</p>
+              </details>
+              <details class="faq__item">
                 <summary>¿Qué son los adaptógenos?</summary>
-                <p>
-                  Son hierbas y hongos naturales que ayudan al cuerpo a adaptarse al estrés y mantener el
-                  equilibrio.
-                </p>
+                <p>Botánicos que apoyan adaptación al estrés.</p>
               </details>
               <details class="faq__item">
                 <summary>¿Qué es el CBD?</summary>
-                <p>
-                  Es un compuesto natural del cannabis, no psicoactivo (no te coloca), que se usa para el
-                  bienestar general.
-                </p>
+                <p>Compuesto no psicoactivo, sin THC.</p>
               </details>
               <details class="faq__item">
                 <summary>¿Para qué sirven los adaptógenos?</summary>
-                <p>
-                  Ayudan a modular la respuesta del cuerpo al estrés y pueden apoyar energía, enfoque y
-                  recuperación de forma suave. La experiencia puede variar según la persona.
-                </p>
+                <p>Apoyo suave a energía, enfoque y calma.</p>
               </details>
               <details class="faq__item">
                 <summary>¿Qué es el café de especialidad?</summary>
-                <p>
-                  Es café de alta calidad, de origen trazable y con procesos cuidados desde la finca hasta
-                  la taza, para resaltar sabores y aromas.
-                </p>
+                <p>Origen trazable y procesos cuidados.</p>
               </details>
               <details class="faq__item">
                 <summary>¿El café con CBD y hongos tiene efectos psicoactivos o &quot;coloca&quot;?</summary>
-                <p>
-                  No. Usamos CBD sin THC y hongos funcionales no psicodélicos. Obtendrás enfoque mental y
-                  calma, sin alterar tu conciencia.
-                </p>
+                <p>No. CBD sin THC y hongos funcionales.</p>
               </details>
             </div>
           </div>
 
           <div class="section__cta">
-            <a class="btn btn--primary" href="#ingredients">Lee nuestra guía de ingredientes</a>
+            <a class="btn btn--primary" href="#ingredients">Guía de ingredientes</a>
           </div>
         </div>
       </section>
@@ -782,33 +817,30 @@
       <section class="section" id="community">
         <div class="container community section__grid">
           <div>
-            <h2>Tu rutina, con recompensas.</h2>
-            <p>
-              Con nuestra wallet digital acumulas beneficios cada vez que vienes. Es nuestra forma de
-              cuidar a quienes hacen de Better Mood parte de su día.
-            </p>
-            <ul class="checklist">
-              <li>Cada 6 sellos, una bebida gratis.</li>
-              <li>Promos exclusivas</li>
-              <li>Acceso prioritario a catas y eventos</li>
-              <li>Contenido educativo</li>
-            </ul>
+            <h2>Wallet Better Mood</h2>
+            <p>Recompensas claras por visita.</p>
             <div class="hero__actions">
               <a class="btn btn--primary" href="https://take.cards/7pgmg" target="_blank" rel="noopener">
-                Únete a la comunidad
+                Instalar wallet
               </a>
-              <a class="btn btn--ghost" href="#location">Visítanos hoy</a>
+              <a class="btn btn--ghost" href="#location">Visítanos</a>
             </div>
           </div>
 
-          <div class="community__card">
-            <h3>Wallet Better Mood</h3>
-            <p>Registra tu visita, acumula puntos y recibe beneficios.</p>
-            <ol>
-              <li>Escanea tu QR en tienda.</li>
-              <li>Elige tus bebidas y funcionales.</li>
-              <li>Recibe recompensas en automático.</li>
-            </ol>
+          <div class="wallet-card" role="img" aria-label="Tarjeta Wallet Better Mood">
+            <div class="wallet-card__top">
+              <span>Better Mood Coffee</span>
+              <span>Wallet</span>
+            </div>
+            <div class="wallet-card__main">
+              <p class="wallet-card__title">6 sellos = bebida gratis</p>
+              <p class="wallet-card__note">Sin adiciones</p>
+            </div>
+            <div class="wallet-card__tags">
+              <span>Promos</span>
+              <span>Catas</span>
+              <span>Contenido</span>
+            </div>
           </div>
         </div>
       </section>
@@ -818,10 +850,7 @@
         <div class="container location section__grid">
           <div>
             <h2>Te esperamos en Puebla.</h2>
-            <p>
-              Un espacio pensado para disfrutar café de alto nivel y bienestar responsable. Ven por tu
-              ritual diario o quédate a trabajar con calma.
-            </p>
+            <p>Café de especialidad, ambiente cómodo.</p>
             <div class="location__info">
               <p><strong>Dirección:</strong> <span>13 poniente 2302/F Col.La Paz</span></p>
               <div class="hours">
@@ -841,6 +870,12 @@
                   </div>
                 </dl>
               </div>
+              <p><strong>Estacionamiento:</strong> Sí, sobre 13 Poniente.</p>
+              <div class="location__amenities" aria-label="Amenidades">
+                <span>📶 Wi‑Fi</span>
+                <span>🔌 Enchufes</span>
+                <span>🐾 Pet friendly</span>
+              </div>
             </div>
             <div class="hero__actions">
               <a
@@ -849,9 +884,17 @@
                 target="_blank"
                 rel="noopener"
               >
-                Cómo llegar
+                Maps
               </a>
-              <a class="btn btn--ghost" href="#menu">Ver menú</a>
+              <a
+                class="btn btn--secondary"
+                href="https://waze.com/ul?q=Better%20Mood%20Coffee%20Puebla"
+                target="_blank"
+                rel="noopener"
+              >
+                Waze
+              </a>
+              <a class="btn btn--ghost" href="#menu">Menú</a>
             </div>
           </div>
 
@@ -884,7 +927,7 @@
                 <span aria-hidden="true">⭐</span> <strong>4.4/5</strong> en Google
                 <span class="review-summary__count">(168 reseñas)</span>
               </p>
-              <p class="review-summary__note">Prueba social medible: lee reseñas y toma una decisión informada.</p>
+              <p class="review-summary__note">Lee reseñas verificadas.</p>
             </div>
             <a
               class="btn btn--secondary btn--sm"
@@ -906,13 +949,7 @@
             </figure>
             <figure class="testimonial">
               <blockquote>
-                “El latte con CBD se siente como una pausa ligera. El lugar es tranquilo y profesional.”
-              </blockquote>
-              <figcaption>— Diego M.</figcaption>
-            </figure>
-            <figure class="testimonial">
-              <blockquote>
-                “Brain Taro sabe increíble; me gusta que te expliquen qué incluye y por qué.”
+                “Brain Taro con perfil claro; explican ingredientes y dosis.”
               </blockquote>
               <figcaption>— Fernanda L.</figcaption>
             </figure>
@@ -929,12 +966,12 @@
       <!-- FINAL CTA -->
       <section class="section section--cta" id="cta-final">
         <div class="container cta-final">
-          <h2>Empieza tu ritual Better Mood.</h2>
-          <p>Explora nuestras bebidas, elige tus ingredientes y disfruta bienestar real en taza.</p>
+          <h2>Café de especialidad con funcionales.</h2>
+          <p>Elige bebida + dosis.</p>
           <div class="hero__actions hero__actions--center">
-            <a class="btn btn--primary" href="#menu">Explora el menú</a>
-            <a class="btn btn--secondary" href="#community">Únete a la comunidad</a>
-            <a class="btn btn--ghost" href="#location">Visítanos hoy</a>
+            <a class="btn btn--primary" href="#order">Pedir ahora</a>
+            <a class="btn btn--secondary" href="#menu">Menú</a>
+            <a class="btn btn--ghost" href="#location">Ubicación</a>
           </div>
         </div>
       </section>
@@ -976,6 +1013,14 @@
         <p class="footer__copyright">© Better Mood Coffee. Todos los derechos reservados.</p>
       </div>
     </footer>
+
+    <div id="certificados" class="sr-only">Certificados y COA disponibles en tienda.</div>
+
+    <nav class="mobile-bar" aria-label="Accesos rápidos">
+      <a class="mobile-bar__item" href="#menu">Menú</a>
+      <a class="mobile-bar__item is-primary" href="#order">Pedir</a>
+      <a class="mobile-bar__item" href="#location">Ubicación</a>
+    </nav>
 
     <script src="script.js"></script>
     <script src="game/droppy-dash.js"></script>
