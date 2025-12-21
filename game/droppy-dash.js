@@ -21,6 +21,7 @@
   const rankEl = root.querySelector("[data-rank]");
   const jumpBtn = root.querySelector(".droppy__jump");
   const connectionEl = root.querySelector("[data-connection]");
+  const shareBtn = root.querySelector(".droppy__share");
 
   const API_BASE = "/api";
   const MAX_COMBO = 5;
@@ -249,7 +250,7 @@
     running = false;
     setOverlay("gameover");
     if (finalScoreEl) finalScoreEl.textContent = String(score);
-    showForm("Ingresa tu nombre y tu Instagram o teléfono.");
+    showForm("Nombre + Instagram o teléfono.");
   }
 
   function jump() {
@@ -796,6 +797,91 @@
     return data;
   }
 
+  async function buildShareImage() {
+    const shareCanvas = document.createElement("canvas");
+    shareCanvas.width = 1080;
+    shareCanvas.height = 1920;
+    const sctx = shareCanvas.getContext("2d");
+    if (!sctx) return null;
+
+    const grad = sctx.createLinearGradient(0, 0, 0, shareCanvas.height);
+    grad.addColorStop(0, "#86d0ff");
+    grad.addColorStop(0.6, "#dff5ff");
+    grad.addColorStop(1, "#fff2c4");
+    sctx.fillStyle = grad;
+    sctx.fillRect(0, 0, shareCanvas.width, shareCanvas.height);
+
+    sctx.fillStyle = "rgba(255, 236, 167, 0.9)";
+    sctx.beginPath();
+    sctx.arc(860, 240, 130, 0, Math.PI * 2);
+    sctx.fill();
+
+    sctx.fillStyle = "rgba(255,255,255,0.9)";
+    sctx.beginPath();
+    sctx.arc(220, 260, 90, 0, Math.PI * 2);
+    sctx.arc(310, 260, 80, 0, Math.PI * 2);
+    sctx.arc(390, 250, 70, 0, Math.PI * 2);
+    sctx.fill();
+
+    sctx.fillStyle = "#2f6b3a";
+    sctx.fillRect(0, 1300, shareCanvas.width, 220);
+    sctx.fillStyle = "#6bb45f";
+    sctx.fillRect(0, 1450, shareCanvas.width, 470);
+
+    sctx.fillStyle = "#231f20";
+    sctx.font = "700 72px 'Montserrat', system-ui, sans-serif";
+    sctx.fillText("Droppy Dash", 120, 220);
+
+    sctx.fillStyle = "#231f20";
+    sctx.font = "800 160px 'Montserrat', system-ui, sans-serif";
+    sctx.fillText(String(score), 120, 430);
+    sctx.font = "600 56px 'Montserrat', system-ui, sans-serif";
+    sctx.fillText("Mi score", 120, 500);
+
+    if (droppyReady) {
+      const targetW = 520;
+      const targetH = targetW / droppyAspect;
+      sctx.drawImage(droppyImage, 520, 620, targetW, targetH);
+    } else {
+      sctx.fillStyle = "#ffd54d";
+      sctx.beginPath();
+      sctx.arc(770, 820, 140, 0, Math.PI * 2);
+      sctx.fill();
+    }
+
+    return new Promise((resolve) => {
+      shareCanvas.toBlob((blob) => resolve(blob), "image/png");
+    });
+  }
+
+  async function shareScoreImage() {
+    const blob = await buildShareImage();
+    if (!blob) return;
+    const file = new File([blob], "droppy-score.png", { type: "image/png" });
+
+    if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({
+          files: [file],
+          title: "Droppy Dash",
+          text: `Mi score: ${score}`,
+        });
+        return;
+      } catch (err) {
+        // fall back to download
+      }
+    }
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "droppy-score.png";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+  }
+
   function setActivePeriod(period) {
     currentPeriod = period;
     filterButtons.forEach((button) => {
@@ -920,6 +1006,7 @@
     playBtn?.addEventListener("click", startGame);
     retryBtn?.addEventListener("click", startGame);
     form?.addEventListener("submit", onFormSubmit);
+    shareBtn?.addEventListener("click", shareScoreImage);
     jumpBtn?.addEventListener("click", jump);
     filterButtons.forEach((button) => {
       button.addEventListener("click", () => {
