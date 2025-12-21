@@ -265,6 +265,12 @@ function sanitizePhone(input, maxLen = 18) {
   return safe.slice(0, maxLen);
 }
 
+function sanitizeContact(input, maxLen = 32) {
+  const text = String(input || "").trim().replace(/\s+/g, " ");
+  const safe = text.replace(/[^a-zA-Z0-9@._+\s()-]/g, "");
+  return safe.slice(0, maxLen);
+}
+
 module.exports = {
   json,
   signToken,
@@ -281,6 +287,7 @@ module.exports = {
   pruneSessions,
   sanitizeName,
   sanitizePhone,
+  sanitizeContact,
   SESSION_TTL_MS,
   MAX_DISTANCE_PER_SEC,
   MAX_SCORE_PER_SEC,
