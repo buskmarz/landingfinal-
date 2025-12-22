@@ -182,7 +182,17 @@
                 <li>No es medicamento</li>
                 <li>No recomendado: embarazo/lactancia/menores</li>
               </ul>
-              <a class="btn btn--ghost btn--sm" href="#certificados">Ver certificados</a>
+              <details class="certificates">
+                <summary class="btn btn--ghost btn--sm" aria-label="Ver certificados">
+                  Ver certificados
+                </summary>
+                <div class="certificates__menu" role="menu" aria-label="Certificados disponibles">
+                  <a class="certificates__item" role="menuitem" href="assets/coafocus.pdf" target="_blank" rel="noopener noreferrer">Focus</a>
+                  <a class="certificates__item" role="menuitem" href="assets/coacalming.pdf" target="_blank" rel="noopener noreferrer">Calming</a>
+                  <a class="certificates__item" role="menuitem" href="assets/coasleep.pdf" target="_blank" rel="noopener noreferrer">Sleep</a>
+                  <a class="certificates__item" role="menuitem" href="assets/coawellness.pdf" target="_blank" rel="noopener noreferrer">Wellness</a>
+                </div>
+              </details>
             </div>
 
             <div class="hero__actions">
