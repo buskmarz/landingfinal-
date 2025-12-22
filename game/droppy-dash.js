@@ -22,6 +22,10 @@
   const jumpBtn = root.querySelector(".droppy__jump");
   const connectionEl = root.querySelector("[data-connection]");
   const shareBtn = root.querySelector(".droppy__share");
+  const pauseBtn = root.querySelector(".droppy__pause");
+  const resumeBtn = root.querySelector(".droppy__resume");
+  const restartBtn = root.querySelector(".droppy__restart");
+  const overlayPause = root.querySelector('[data-overlay="pause"]');
 
   const API_BASE = "/api";
   const MAX_COMBO = 5;
@@ -51,6 +55,7 @@
   let collectibles = [];
   let clouds = [];
   let skyLights = [];
+  let particles = [];
   let bgOffset = 0;
   let midOffset = 0;
   let forestOffset = 0;
@@ -82,6 +87,7 @@
   let lastScoreRendered = -1;
   let lastComboRendered = -1;
   let skyGradient = null;
+  let wasOnGround = true;
   const droppyImage = new Image();
   let droppyReady = false;
   let droppyAspect = 1;
@@ -91,7 +97,7 @@
     droppyReady = true;
     droppyAspect = droppyImage.naturalWidth / droppyImage.naturalHeight || 1;
   };
-    droppyImage.src = "assets/droppy.png";
+  droppyImage.src = "assets/droppy.PNG";
 
   const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
   const lerp = (a, b, t) => a + (b - a) * t;
@@ -181,6 +187,8 @@
     forestOffset = 0;
     fieldOffset = 0;
     groundOffset = 0;
+    particles = [];
+    wasOnGround = true;
     buildClouds();
 
     world.runner.y = world.groundY - world.runner.height;
@@ -193,8 +201,12 @@
   }
 
   function setOverlay(stateName) {
-    if (overlayStart) overlayStart.hidden = stateName !== "start";
-    if (overlayGameover) overlayGameover.hidden = stateName !== "gameover";
+    const showStart = stateName === "start";
+    const showGameover = stateName === "gameover";
+    const showPause = stateName === "pause";
+    if (overlayStart) overlayStart.hidden = !showStart;
+    if (overlayGameover) overlayGameover.hidden = !showGameover;
+    if (overlayPause) overlayPause.hidden = !showPause;
   }
 
   function setConnectionNote(message) {
@@ -230,6 +242,7 @@
     setOverlay("start");
     if (playBtn) playBtn.disabled = true;
     if (retryBtn) retryBtn.disabled = true;
+    if (pauseBtn) pauseBtn.disabled = true;
     requestSession().finally(() => {
       resetGame();
       state = "playing";
@@ -240,6 +253,9 @@
       if (retryBtn) retryBtn.disabled = false;
       if (overlayStart) overlayStart.hidden = true;
       if (overlayGameover) overlayGameover.hidden = true;
+      if (overlayPause) overlayPause.hidden = true;
+      if (pauseBtn) pauseBtn.textContent = "II";
+      if (pauseBtn) pauseBtn.disabled = false;
       if (form) form.hidden = true;
       entryId = null;
       requestAnimationFrame(loop);
@@ -251,7 +267,26 @@
     running = false;
     setOverlay("gameover");
     if (finalScoreEl) finalScoreEl.textContent = String(score);
+    if (pauseBtn) pauseBtn.disabled = true;
     showForm("Nombre + Instagram o teléfono.");
+  }
+
+  function pauseGame() {
+    if (state !== "playing") return;
+    state = "paused";
+    running = false;
+    setOverlay("pause");
+    if (pauseBtn) pauseBtn.textContent = "▶";
+  }
+
+  function resumeGame() {
+    if (state !== "paused") return;
+    state = "playing";
+    setOverlay(null);
+    running = true;
+    lastTime = performance.now();
+    if (pauseBtn) pauseBtn.textContent = "II";
+    requestAnimationFrame(loop);
   }
 
   function jump() {
@@ -320,6 +355,9 @@
   function updateHud() {
     if (scoreEl && score !== lastScoreRendered) {
       scoreEl.textContent = String(score);
+      if (score > lastScoreRendered) {
+        pulseElement(scoreEl);
+      }
       lastScoreRendered = score;
     }
     if (comboEl && combo !== lastComboRendered) {
@@ -336,6 +374,97 @@
     el.classList.add("is-pulse");
   }
 
+  function spawnSparkles(x, y, count = 8) {
+    for (let i = 0; i < count; i += 1) {
+      const angle = rand(0, Math.PI * 2);
+      const speed = rand(40, 120);
+      particles.push({
+        x,
+        y,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed * 0.7,
+        size: rand(1.5, 3.2),
+        life: rand(0.35, 0.6),
+        age: 0,
+        type: "sparkle",
+        layer: "front",
+      });
+    }
+    particles.push({
+      x,
+      y,
+      vx: 0,
+      vy: 0,
+      size: rand(8, 12),
+      life: 0.4,
+      age: 0,
+      type: "ring",
+      layer: "front",
+    });
+  }
+
+  function spawnDust(x, y) {
+    const count = 6;
+    for (let i = 0; i < count; i += 1) {
+      particles.push({
+        x: x + rand(-12, 12),
+        y: y + rand(-6, 4),
+        vx: rand(-20, 20),
+        vy: rand(-20, -5),
+        size: rand(6, 12),
+        life: rand(0.35, 0.7),
+        age: 0,
+        type: "dust",
+        layer: "back",
+      });
+    }
+  }
+
+  function updateParticles(dt) {
+    if (!particles.length) return;
+    particles = particles.filter((p) => {
+      p.age += dt;
+      if (p.age >= p.life) return false;
+      p.x += p.vx * dt;
+      p.y += p.vy * dt;
+      if (p.type === "dust") {
+        p.vy += 40 * dt;
+      }
+      return true;
+    });
+  }
+
+  function drawParticles(layer) {
+    if (!particles.length) return;
+    ctx.save();
+    particles.forEach((p) => {
+      if (layer && p.layer !== layer) return;
+      const t = 1 - p.age / p.life;
+      if (p.type === "sparkle") {
+        ctx.strokeStyle = `rgba(255, 246, 210, ${0.85 * t})`;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(p.x - p.size, p.y);
+        ctx.lineTo(p.x + p.size, p.y);
+        ctx.moveTo(p.x, p.y - p.size);
+        ctx.lineTo(p.x, p.y + p.size);
+        ctx.stroke();
+      } else if (p.type === "ring") {
+        ctx.strokeStyle = `rgba(255, 230, 160, ${0.7 * t})`;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size * (1 + (1 - t)), 0, Math.PI * 2);
+        ctx.stroke();
+      } else if (p.type === "dust") {
+        ctx.fillStyle = `rgba(90, 60, 30, ${0.25 * t})`;
+        ctx.beginPath();
+        ctx.ellipse(p.x, p.y, p.size, p.size * 0.5, 0, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    });
+    ctx.restore();
+  }
+
   function updateGame(dt, now) {
     if (state !== "playing") return;
     gameTime += dt;
@@ -343,13 +472,19 @@
     distance += (speed * dt) / DISTANCE_SCALE;
 
     const runner = world.runner;
+    const wasOnGroundPrev = wasOnGround;
     runner.velY += runner.gravity * dt;
     runner.y += runner.velY * dt;
-    if (runner.y >= world.groundY - runner.height) {
+    const onGround = runner.y >= world.groundY - runner.height;
+    if (onGround) {
+      if (!wasOnGroundPrev && runner.velY > 120) {
+        spawnDust(runner.x + runner.width * 0.5, world.groundY + 2);
+      }
       runner.y = world.groundY - runner.height;
       runner.velY = 0;
       runner.jumpCount = 0;
     }
+    wasOnGround = onGround;
 
     bgOffset += speed * dt * 0.07;
     midOffset += speed * dt * 0.16;
@@ -416,6 +551,7 @@
       if (dx * dx + dy * dy < bean.r * bean.r) {
         collectibles.splice(i, 1);
         collected += 1;
+        spawnSparkles(bean.x, bean.y);
         if (now - lastCollectAt < COMBO_WINDOW_MS) {
           combo = Math.min(combo + 1, MAX_COMBO);
         } else {
@@ -433,6 +569,7 @@
 
     score = Math.max(0, Math.floor(distance) + comboScore);
     updateHud();
+    updateParticles(dt);
   }
 
   function drawBackground() {
@@ -574,9 +711,33 @@
       const canopyW = treeH * (0.6 + 0.08 * Math.sin(index * 0.9));
       const canopyH = treeH * (0.5 + 0.08 * Math.cos(index * 0.8));
       const canopyY = baseY - treeH + treeH * 0.2;
+      const isPine = (index + Math.round(depth * 3)) % 3 === 0;
 
-      ctx.fillStyle = trunkColor;
+      const trunkGrad = ctx.createLinearGradient(0, baseY - trunkH, 0, baseY);
+      trunkGrad.addColorStop(0, "#6b4a2b");
+      trunkGrad.addColorStop(1, trunkColor);
+      ctx.fillStyle = trunkGrad;
       ctx.fillRect(cx - trunkW / 2, baseY - trunkH + 2, trunkW, trunkH);
+
+      if (isPine) {
+        ctx.fillStyle = leafDark;
+        const tierH = canopyH * 0.36;
+        for (let tier = 0; tier < 3; tier += 1) {
+          const tierW = canopyW * (0.9 - tier * 0.18);
+          const tierY = canopyY + tier * (tierH * 0.55);
+          ctx.beginPath();
+          ctx.moveTo(cx, tierY);
+          ctx.lineTo(cx - tierW * 0.5, tierY + tierH);
+          ctx.lineTo(cx + tierW * 0.5, tierY + tierH);
+          ctx.closePath();
+          ctx.fill();
+        }
+        ctx.fillStyle = "rgba(255, 255, 255, 0.1)";
+        ctx.beginPath();
+        ctx.ellipse(cx - canopyW * 0.15, canopyY + canopyH * 0.3, canopyW * 0.2, canopyH * 0.12, 0, 0, Math.PI * 2);
+        ctx.fill();
+        continue;
+      }
 
       const canopyGrad = ctx.createRadialGradient(
         cx - canopyW * 0.2,
@@ -715,9 +876,16 @@
     const scaleX = squash - bounce * 0.6;
 
     ctx.save();
-    ctx.fillStyle = "rgba(0, 0, 0, 0.16)";
+    const shadowX = x + w * 0.5;
+    const shadowY = world.groundY + 6;
+    const shadowW = w * 0.45;
+    const shadowH = w * 0.14;
+    const shadowGrad = ctx.createRadialGradient(shadowX, shadowY, 2, shadowX, shadowY, shadowW);
+    shadowGrad.addColorStop(0, "rgba(0, 0, 0, 0.28)");
+    shadowGrad.addColorStop(1, "rgba(0, 0, 0, 0)");
+    ctx.fillStyle = shadowGrad;
     ctx.beginPath();
-    ctx.ellipse(x + w * 0.5, world.groundY + 6, w * 0.32, w * 0.12, 0, 0, Math.PI * 2);
+    ctx.ellipse(shadowX, shadowY, shadowW, shadowH, 0, 0, Math.PI * 2);
     ctx.fill();
 
     const originX = x + w * 0.5;
@@ -800,9 +968,16 @@
     const stemX = obs.x + obs.w * 0.5 - stemW / 2;
     const stemY = obs.y + obs.h * 0.45;
 
-    ctx.fillStyle = "rgba(0, 0, 0, 0.14)";
+    const obsShadowX = obs.x + obs.w * 0.5;
+    const obsShadowY = world.groundY + 4;
+    const obsShadowW = obs.w * 0.4;
+    const obsShadowH = obs.w * 0.14;
+    const obsShadow = ctx.createRadialGradient(obsShadowX, obsShadowY, 2, obsShadowX, obsShadowY, obsShadowW);
+    obsShadow.addColorStop(0, "rgba(0, 0, 0, 0.26)");
+    obsShadow.addColorStop(1, "rgba(0, 0, 0, 0)");
+    ctx.fillStyle = obsShadow;
     ctx.beginPath();
-    ctx.ellipse(obs.x + obs.w * 0.5, world.groundY + 4, obs.w * 0.35, obs.w * 0.12, 0, 0, Math.PI * 2);
+    ctx.ellipse(obsShadowX, obsShadowY, obsShadowW, obsShadowH, 0, 0, Math.PI * 2);
     ctx.fill();
 
     ctx.fillStyle = "#f1dfc2";
@@ -829,6 +1004,19 @@
       ctx.arc(obs.x + obs.w * spot.x, obs.y + obs.h * spot.y, obs.w * spot.r, 0, Math.PI * 2);
       ctx.fill();
     });
+
+    ctx.fillStyle = "rgba(255, 255, 255, 0.35)";
+    ctx.beginPath();
+    ctx.ellipse(
+      obs.x + obs.w * 0.6,
+      obs.y + obs.h * 0.28,
+      obs.w * 0.22,
+      obs.h * 0.14,
+      obs.tilt || 0,
+      0,
+      Math.PI * 2
+    );
+    ctx.fill();
 
     ctx.strokeStyle = "rgba(92, 44, 34, 0.35)";
     ctx.lineWidth = 2;
@@ -883,10 +1071,12 @@
     ctx.clearRect(0, 0, world.width, world.height);
     drawBackground();
     drawGround();
+    drawParticles("back");
 
     collectibles.forEach((bean) => drawCollectible(bean));
     obstacles.forEach((obs) => drawObstacle(obs));
     drawRunner();
+    drawParticles("front");
   }
 
   function loop(now) {
@@ -1138,6 +1328,12 @@
     form?.addEventListener("submit", onFormSubmit);
     shareBtn?.addEventListener("click", shareScoreImage);
     jumpBtn?.addEventListener("click", jump);
+    pauseBtn?.addEventListener("click", () => {
+      if (state === "playing") pauseGame();
+      else if (state === "paused") resumeGame();
+    });
+    resumeBtn?.addEventListener("click", resumeGame);
+    restartBtn?.addEventListener("click", startGame);
     filterButtons.forEach((button) => {
       button.addEventListener("click", () => {
         const period = button.dataset.period || "weekly";
@@ -1155,6 +1351,11 @@
     window.addEventListener("keydown", (event) => {
       const tag = event.target && event.target.tagName ? event.target.tagName.toLowerCase() : "";
       if (tag === "input" || tag === "textarea") return;
+      if (event.code === "KeyP" || event.code === "Escape") {
+        if (state === "playing") pauseGame();
+        else if (state === "paused") resumeGame();
+        return;
+      }
       if (event.code === "Space" || event.code === "ArrowUp" || event.code === "KeyW") {
         if (state !== "playing" || event.repeat) return;
         event.preventDefault();
@@ -1167,11 +1368,15 @@
       const observer = new ResizeObserver(() => resizeCanvas());
       observer.observe(canvas);
     }
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden && state === "playing") pauseGame();
+    });
   }
 
   resizeCanvas();
   initEvents();
   setOverlay("start");
+  if (pauseBtn) pauseBtn.disabled = true;
   setActivePeriod("weekly");
   fetchLeaderboard("weekly");
 })();
