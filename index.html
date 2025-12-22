@@ -637,21 +637,37 @@
             <div class="droppy__canvas-frame">
               <canvas class="droppy__canvas" id="droppy-canvas" role="img" aria-label="Juego Droppy Dash"></canvas>
               <div class="droppy__hud" aria-live="polite">
-                <div class="droppy__hud-block">
-                  <span class="droppy__hud-label">Score</span>
-                  <span class="droppy__hud-value" data-score>0</span>
+                <div class="droppy__hud-left">
+                  <div class="droppy__hud-score">
+                    <span class="droppy__hud-bean" aria-hidden="true"></span>
+                    <div class="droppy__hud-block">
+                      <span class="droppy__hud-label">Score</span>
+                      <span class="droppy__hud-value" data-score>0</span>
+                    </div>
+                  </div>
+                  <div class="droppy__hud-block droppy__hud-combo">
+                    <span class="droppy__hud-label">Combo</span>
+                    <span class="droppy__hud-value" data-combo>x1</span>
+                  </div>
                 </div>
-                <div class="droppy__hud-block">
-                  <span class="droppy__hud-label">Combo</span>
-                  <span class="droppy__hud-value" data-combo>x1</span>
-                </div>
+                <button class="droppy__pause" type="button" aria-label="Pausar juego">II</button>
               </div>
 
               <div class="droppy__overlay droppy__overlay--start" data-overlay="start">
-                <p class="droppy__overlay-title">Toca para saltar. Doble salto activo.</p>
-                <p class="droppy__overlay-text">Esquiva hongos y suma granos.</p>
+                <p class="droppy__overlay-title">Droppy Dash</p>
+                <p class="droppy__overlay-text">Toca para saltar. Doble salto activo.</p>
+                <p class="droppy__overlay-note">Esquiva hongos y suma granos.</p>
                 <button class="btn btn--primary droppy__play" type="button" data-play>Jugar</button>
                 <p class="droppy__overlay-note" data-connection>Listo para jugar.</p>
+              </div>
+
+              <div class="droppy__overlay droppy__overlay--pause" data-overlay="pause" hidden>
+                <p class="droppy__overlay-title">Pausa</p>
+                <p class="droppy__overlay-text">Tu partida está en pausa.</p>
+                <div class="droppy__actions">
+                  <button class="btn btn--primary droppy__resume" type="button">Continuar</button>
+                  <button class="btn btn--secondary droppy__restart" type="button">Reiniciar</button>
+                </div>
               </div>
 
               <div class="droppy__overlay droppy__overlay--gameover" data-overlay="gameover" hidden>
