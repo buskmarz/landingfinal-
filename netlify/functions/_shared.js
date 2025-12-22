@@ -186,6 +186,11 @@ async function loadState(event) {
       entries: [],
       rate: {},
       usedSessions: {},
+      visitStats: {
+        total: 0,
+        byDay: {},
+        lastByFp: {},
+      },
     };
   }
   return {
@@ -193,6 +198,7 @@ async function loadState(event) {
     entries: Array.isArray(data.entries) ? data.entries : [],
     rate: data.rate || {},
     usedSessions: data.usedSessions || {},
+    visitStats: data.visitStats || { total: 0, byDay: {}, lastByFp: {} },
   };
 }
 
