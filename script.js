@@ -55,3 +55,18 @@ window.addEventListener("scroll", () => {
   const scrolled = window.scrollY > 8;
   header.style.boxShadow = scrolled ? "0 6px 18px rgba(35,31,32,0.06)" : "none";
 });
+
+const sendVisitPing = () => {
+  const url = "/api/visit";
+  if (navigator.sendBeacon) {
+    navigator.sendBeacon(url, "");
+    return;
+  }
+  fetch(url, { method: "POST", keepalive: true }).catch(() => {});
+};
+
+if (document.readyState === "complete") {
+  sendVisitPing();
+} else {
+  window.addEventListener("load", sendVisitPing, { once: true });
+}
