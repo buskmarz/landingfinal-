@@ -91,9 +91,10 @@
     droppyReady = true;
     droppyAspect = droppyImage.naturalWidth / droppyImage.naturalHeight || 1;
   };
-  droppyImage.src = "assets/droppy.png";
+    droppyImage.src = "assets/droppy.png";
 
   const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+  const lerp = (a, b, t) => a + (b - a) * t;
 
   function mulberry32(seed) {
     let t = seed >>> 0;
@@ -133,9 +134,9 @@
     world.runner.jumpStrength = rect.height * 0.95;
 
     skyGradient = ctx.createLinearGradient(0, 0, 0, world.height);
-    skyGradient.addColorStop(0, "#dfefff");
-    skyGradient.addColorStop(0.55, "#f7fbff");
-    skyGradient.addColorStop(1, "#fff4da");
+    skyGradient.addColorStop(0, "#7ecbff");
+    skyGradient.addColorStop(0.5, "#dff4ff");
+    skyGradient.addColorStop(1, "#fff1c6");
 
     buildClouds();
     buildSkyLights();
@@ -350,11 +351,11 @@
       runner.jumpCount = 0;
     }
 
-    bgOffset += speed * dt * 0.05;
-    midOffset += speed * dt * 0.1;
-    forestOffset += speed * dt * 0.14;
-    fieldOffset += speed * dt * 0.2;
-    groundOffset += speed * dt * 0.3;
+    bgOffset += speed * dt * 0.07;
+    midOffset += speed * dt * 0.16;
+    forestOffset += speed * dt * 0.28;
+    fieldOffset += speed * dt * 0.42;
+    groundOffset += speed * dt * 0.52;
 
     obstacleTimer -= dt;
     if (obstacleTimer <= 0) spawnObstacle();
@@ -436,21 +437,26 @@
 
   function drawBackground() {
     drawSky();
+    drawSunRays();
     drawSun();
     drawSkyLights();
     drawClouds();
-    drawMountains(bgOffset * 0.18, world.height * 0.52, world.width * 0.22, "#b9cbe4", 3.5);
-    drawMountains(bgOffset * 0.32, world.height * 0.6, world.width * 0.2, "#a9bedc", 1.8);
-    drawForest(forestOffset * 0.6, world.height * 0.68);
-    drawCoffeeFields(fieldOffset * 0.8, world.height * 0.75);
+    drawHaze();
+    drawMountains(bgOffset * 0.12, world.height * 0.54, world.width * 0.24, "#bcd2ea", 3);
+    drawMountains(bgOffset * 0.22, world.height * 0.63, world.width * 0.22, "#a9c3e0", 1.6);
+    drawForest(midOffset * 0.5, world.height * 0.68, 0.75);
+    drawForest(forestOffset, world.height * 0.74, 1.05);
+    drawCoffeeFields(fieldOffset, world.height * 0.76);
   }
 
   function drawSky() {
-    const gradient = ctx.createLinearGradient(0, 0, 0, world.height);
-    gradient.addColorStop(0, "#86d0ff");
-    gradient.addColorStop(0.45, "#dff5ff");
-    gradient.addColorStop(1, "#fff2c4");
-    ctx.fillStyle = gradient;
+    if (!skyGradient) {
+      skyGradient = ctx.createLinearGradient(0, 0, 0, world.height);
+      skyGradient.addColorStop(0, "#7ecbff");
+      skyGradient.addColorStop(0.5, "#dff4ff");
+      skyGradient.addColorStop(1, "#fff1c6");
+    }
+    ctx.fillStyle = skyGradient;
     ctx.fillRect(0, 0, world.width, world.height);
   }
 
@@ -473,6 +479,39 @@
     ctx.fill();
   }
 
+  function drawSunRays() {
+    const x = world.width * 0.78;
+    const y = world.height * 0.16;
+    const rayLength = world.height * 0.45;
+    const rayWidth = world.width * 0.08;
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(Math.sin(gameTime * 0.12) * 0.04);
+    ctx.fillStyle = "rgba(255, 230, 155, 0.16)";
+    for (let i = 0; i < 6; i += 1) {
+      ctx.save();
+      ctx.rotate((Math.PI * 2 * i) / 6);
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(-rayWidth * 0.4, rayLength);
+      ctx.lineTo(rayWidth * 0.4, rayLength);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    }
+    ctx.restore();
+  }
+
+  function drawHaze() {
+    const top = world.height * 0.48;
+    const height = world.height * 0.28;
+    const haze = ctx.createLinearGradient(0, top, 0, top + height);
+    haze.addColorStop(0, "rgba(255, 255, 255, 0)");
+    haze.addColorStop(1, "rgba(255, 255, 255, 0.45)");
+    ctx.fillStyle = haze;
+    ctx.fillRect(0, top, world.width, height);
+  }
+
   function drawSkyLights() {
     const t = gameTime;
     skyLights.forEach((light) => {
@@ -488,62 +527,136 @@
     ctx.save();
     if (blur) ctx.filter = `blur(${blur}px)`;
     ctx.fillStyle = color;
-    const step = size * 1.1;
-    const startX = -step + (offset % step);
-    for (let x = startX, index = 0; x < world.width + step; x += step, index += 1) {
-      const peak = size * (0.65 + 0.25 * Math.sin(index * 0.8));
+    const step = size * 0.95;
+    const startX = -step * 1.4 + (offset % (step * 1.4));
+    ctx.beginPath();
+    ctx.moveTo(startX, baseY);
+    for (let x = startX, index = 0; x <= world.width + step; x += step, index += 1) {
+      const peak = size * (0.52 + 0.3 * Math.sin(index * 0.9));
+      const ridgeX = x + step * 0.5;
+      const ridgeY = baseY - peak;
+      ctx.quadraticCurveTo(ridgeX, ridgeY, x + step, baseY);
+    }
+    ctx.lineTo(world.width + step, world.height);
+    ctx.lineTo(startX, world.height);
+    ctx.closePath();
+    ctx.fill();
+
+    if (blur < 2) {
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.12)";
+      ctx.lineWidth = 2;
       ctx.beginPath();
-      ctx.moveTo(x, baseY);
-      ctx.lineTo(x + step * 0.5, baseY - peak);
-      ctx.lineTo(x + step, baseY);
-      ctx.closePath();
-      ctx.fill();
+      ctx.moveTo(startX, baseY);
+      for (let x = startX, index = 0; x <= world.width + step; x += step, index += 1) {
+        const peak = size * (0.42 + 0.24 * Math.sin(index * 0.9));
+        const ridgeX = x + step * 0.5;
+        const ridgeY = baseY - peak;
+        ctx.quadraticCurveTo(ridgeX, ridgeY, x + step, baseY);
+      }
+      ctx.stroke();
     }
     ctx.restore();
   }
 
-  function drawForest(offset, baseY) {
-    const spacing = 34;
+  function drawForest(offset, baseY, depth = 1) {
+    const spacing = Math.max(26, 48 - depth * 16);
     const startX = -spacing + (offset % spacing);
+    const trunkColor = depth < 0.9 ? "#27412b" : "#2f4a31";
+    const leafDark = depth < 0.9 ? "#2e5b36" : "#2f6b3a";
+    const leafLight = depth < 0.9 ? "#3a7a46" : "#4b8a53";
+
     for (let x = startX, index = 0; x < world.width + spacing; x += spacing, index += 1) {
-      const treeH = world.height * (0.12 + 0.02 * Math.sin(index * 0.6));
-      const treeW = treeH * 0.6;
-      const y = baseY - treeH;
-      ctx.fillStyle = index % 2 === 0 ? "#2f6b3a" : "#3a7a46";
+      const sway = Math.sin(index * 0.7 + depth * 2.1);
+      const treeH = world.height * (0.1 + 0.07 * depth) * (0.85 + 0.2 * sway);
+      const trunkH = treeH * 0.22;
+      const trunkW = Math.max(2, treeH * 0.08);
+      const cx = x + spacing * 0.5;
+      const canopyW = treeH * (0.6 + 0.08 * Math.sin(index * 0.9));
+      const canopyH = treeH * (0.5 + 0.08 * Math.cos(index * 0.8));
+      const canopyY = baseY - treeH + treeH * 0.2;
+
+      ctx.fillStyle = trunkColor;
+      ctx.fillRect(cx - trunkW / 2, baseY - trunkH + 2, trunkW, trunkH);
+
+      const canopyGrad = ctx.createRadialGradient(
+        cx - canopyW * 0.2,
+        canopyY + canopyH * 0.3,
+        canopyW * 0.1,
+        cx,
+        canopyY + canopyH * 0.55,
+        canopyW * 0.8
+      );
+      canopyGrad.addColorStop(0, leafLight);
+      canopyGrad.addColorStop(1, leafDark);
+      ctx.fillStyle = canopyGrad;
       ctx.beginPath();
-      ctx.moveTo(x, baseY + 4);
-      ctx.lineTo(x + treeW * 0.5, y);
-      ctx.lineTo(x + treeW, baseY + 4);
-      ctx.closePath();
+      ctx.ellipse(cx, canopyY + canopyH * 0.6, canopyW * 0.55, canopyH * 0.45, 0, 0, Math.PI * 2);
+      ctx.ellipse(cx - canopyW * 0.35, canopyY + canopyH * 0.58, canopyW * 0.42, canopyH * 0.35, 0, 0, Math.PI * 2);
+      ctx.ellipse(cx + canopyW * 0.35, canopyY + canopyH * 0.58, canopyW * 0.42, canopyH * 0.35, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "rgba(255, 255, 255, 0.08)";
+      ctx.beginPath();
+      ctx.ellipse(cx - canopyW * 0.18, canopyY + canopyH * 0.4, canopyW * 0.2, canopyH * 0.14, 0, 0, Math.PI * 2);
       ctx.fill();
     }
   }
 
   function drawCoffeeFields(offset, baseY) {
-    const rowCount = 4;
-    const rowHeight = world.height * 0.055;
-    const fieldColors = ["#7fc46c", "#6bb45f", "#5aa652", "#4f9948"];
+    const fieldHeight = world.groundY - baseY + world.height * 0.06;
+    const rowCount = 5;
+    const fieldColors = ["#6fc66a", "#5ab85b", "#4fae52", "#449d49", "#3f8d42"];
+
+    const drawCoffeeBush = (x, y, size, tint) => {
+      const grad = ctx.createRadialGradient(x - size * 0.4, y - size * 0.4, 1, x, y, size);
+      grad.addColorStop(0, tint === "light" ? "#6edc6f" : "#3f8d42");
+      grad.addColorStop(1, "#2f6b3a");
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.ellipse(x, y, size, size * 0.7, 0, 0, Math.PI * 2);
+      ctx.ellipse(x - size * 0.6, y + size * 0.1, size * 0.6, size * 0.5, 0, 0, Math.PI * 2);
+      ctx.ellipse(x + size * 0.6, y + size * 0.15, size * 0.6, size * 0.5, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "rgba(255, 255, 255, 0.12)";
+      ctx.beginPath();
+      ctx.ellipse(x - size * 0.2, y - size * 0.25, size * 0.35, size * 0.25, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "#b3372e";
+      ctx.beginPath();
+      ctx.arc(x + size * 0.25, y - size * 0.05, size * 0.18, 0, Math.PI * 2);
+      ctx.arc(x - size * 0.2, y + size * 0.08, size * 0.15, 0, Math.PI * 2);
+      ctx.fill();
+    };
 
     for (let row = 0; row < rowCount; row += 1) {
-      const y = baseY + row * rowHeight;
+      const t = row / (rowCount - 1);
+      const y = baseY + t * fieldHeight;
+      const bandH = fieldHeight / rowCount + 10;
+      const waveAmp = lerp(10, 3, t);
+      const waveFreq = lerp(0.012, 0.03, t);
+      const phase = row * 60;
+
       ctx.fillStyle = fieldColors[row % fieldColors.length];
-      ctx.fillRect(0, y, world.width, rowHeight + 1);
+      ctx.beginPath();
+      ctx.moveTo(-40, y);
+      for (let x = -40; x <= world.width + 40; x += 40) {
+        const wave = Math.sin((x + offset * 0.35 + phase) * waveFreq) * waveAmp;
+        ctx.quadraticCurveTo(x + 20, y + wave + waveAmp * 0.45, x + 40, y + wave);
+      }
+      ctx.lineTo(world.width + 60, y + bandH);
+      ctx.lineTo(-60, y + bandH);
+      ctx.closePath();
+      ctx.fill();
 
-      const spacing = Math.max(30, 70 - row * 8);
-      const shift = (offset * (0.5 + row * 0.12)) % spacing;
-      const bushY = y + rowHeight * 0.52;
-      const bushR = Math.max(3, 8 - row);
-
+      const spacing = lerp(68, 32, t);
+      const shift = (offset * (0.6 + t * 0.7)) % spacing;
       for (let x = -shift; x < world.width + spacing; x += spacing) {
-        ctx.fillStyle = "#2f6b3a";
-        ctx.beginPath();
-        ctx.arc(x, bushY, bushR, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.fillStyle = "#b5332c";
-        ctx.beginPath();
-        ctx.arc(x + bushR * 0.4, bushY - bushR * 0.2, bushR * 0.3, 0, Math.PI * 2);
-        ctx.arc(x - bushR * 0.2, bushY + bushR * 0.1, bushR * 0.25, 0, Math.PI * 2);
-        ctx.fill();
+        const wave = Math.sin((x + offset * 0.35 + phase) * waveFreq) * waveAmp;
+        const bushY = y + bandH * 0.3 + wave;
+        const bushSize = lerp(10, 4, t);
+        drawCoffeeBush(x, bushY, bushSize, row % 2 === 0 ? "light" : "dark");
       }
     }
   }
@@ -563,19 +676,26 @@
   }
 
   function drawGround() {
-    ctx.fillStyle = "#7fca6f";
-    ctx.fillRect(0, world.groundY - 10, world.width, 12);
-    ctx.fillStyle = "#6ab15b";
-    for (let x = -groundOffset % 24; x < world.width + 24; x += 24) {
-      ctx.fillRect(x, world.groundY - 6, 12, 3);
+    ctx.fillStyle = "#5fb96a";
+    ctx.fillRect(0, world.groundY - 12, world.width, 14);
+    ctx.fillStyle = "rgba(255, 255, 255, 0.12)";
+    for (let x = -groundOffset % 40; x < world.width + 40; x += 40) {
+      ctx.fillRect(x, world.groundY - 8, 16, 4);
     }
 
-    ctx.fillStyle = "#d7b385";
+    const soil = ctx.createLinearGradient(0, world.groundY, 0, world.height);
+    soil.addColorStop(0, "#9a6a3a");
+    soil.addColorStop(1, "#6a4320");
+    ctx.fillStyle = soil;
     ctx.fillRect(0, world.groundY, world.width, world.height - world.groundY);
 
-    ctx.fillStyle = "rgba(120, 84, 46, 0.22)";
-    for (let x = -groundOffset % 32; x < world.width + 32; x += 32) {
-      ctx.fillRect(x, world.groundY + 12, 12, 4);
+    ctx.strokeStyle = "rgba(50, 30, 16, 0.28)";
+    ctx.lineWidth = 2;
+    for (let x = -groundOffset % 36; x < world.width + 36; x += 36) {
+      ctx.beginPath();
+      ctx.moveTo(x, world.groundY + 10);
+      ctx.lineTo(x + 12, world.groundY + 20);
+      ctx.stroke();
     }
   }
 
@@ -721,30 +841,40 @@
 
   function drawCollectible(bean) {
     const tilt = Math.sin(gameTime * 3 + bean.phase) * 0.25 + (bean.tilt || 0);
-    const grad = ctx.createRadialGradient(
-      bean.x - bean.r * 0.3,
-      bean.y - bean.r * 0.3,
-      2,
-      bean.x,
-      bean.y,
-      bean.r * 1.2
-    );
-    grad.addColorStop(0, "#ffe3a1");
-    grad.addColorStop(0.55, "#f1a82e");
-    grad.addColorStop(1, "#a65b17");
     ctx.save();
     ctx.translate(bean.x, bean.y);
     ctx.rotate(tilt);
+    ctx.fillStyle = "rgba(0, 0, 0, 0.18)";
+    ctx.beginPath();
+    ctx.ellipse(0, bean.r * 0.85, bean.r * 0.8, bean.r * 0.28, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    const grad = ctx.createLinearGradient(-bean.r, -bean.r, bean.r, bean.r);
+    grad.addColorStop(0, "#ffe6ad");
+    grad.addColorStop(0.5, "#e19a2b");
+    grad.addColorStop(1, "#8b4a14");
     ctx.fillStyle = grad;
     ctx.beginPath();
     ctx.ellipse(0, 0, bean.r, bean.r * 0.72, 0, 0, Math.PI * 2);
     ctx.fill();
 
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.7)";
-    ctx.lineWidth = 2;
+    ctx.fillStyle = "rgba(255, 255, 255, 0.45)";
     ctx.beginPath();
-    ctx.moveTo(-bean.r * 0.15, -bean.r * 0.5);
-    ctx.lineTo(bean.r * 0.25, bean.r * 0.5);
+    ctx.ellipse(-bean.r * 0.35, -bean.r * 0.18, bean.r * 0.35, bean.r * 0.22, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.6)";
+    ctx.lineWidth = Math.max(1.6, bean.r * 0.12);
+    ctx.beginPath();
+    ctx.moveTo(-bean.r * 0.2, -bean.r * 0.55);
+    ctx.quadraticCurveTo(0, 0, bean.r * 0.2, bean.r * 0.55);
+    ctx.stroke();
+
+    ctx.strokeStyle = "rgba(255, 223, 160, 0.4)";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(bean.r * 0.3, -bean.r * 0.2);
+    ctx.lineTo(bean.r * 0.55, -bean.r * 0.4);
     ctx.stroke();
     ctx.restore();
   }
