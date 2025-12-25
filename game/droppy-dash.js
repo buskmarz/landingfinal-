@@ -940,19 +940,38 @@
       ctx.fillRect(x, world.groundY - 8, 16, 4);
     }
 
-    const soilBottom = Math.min(world.height, world.groundY + world.height * 0.14);
+    const soilBottom = Math.min(world.height, world.groundY + world.height * 0.09);
     const soil = ctx.createLinearGradient(0, world.groundY, 0, soilBottom);
-    soil.addColorStop(0, "#9a6a3a");
-    soil.addColorStop(1, "#6a4320");
+    soil.addColorStop(0, "#a77742");
+    soil.addColorStop(0.55, "#7b4f2a");
+    soil.addColorStop(1, "#5d3a1d");
     ctx.fillStyle = soil;
     ctx.fillRect(0, world.groundY, world.width, soilBottom - world.groundY);
 
-    ctx.strokeStyle = "rgba(50, 30, 16, 0.28)";
-    ctx.lineWidth = 2;
-    for (let x = -groundOffset % 36; x < world.width + 36; x += 36) {
+    ctx.fillStyle = "rgba(255, 255, 255, 0.08)";
+    for (let x = -groundOffset % 42; x < world.width + 42; x += 42) {
       ctx.beginPath();
-      ctx.moveTo(x, world.groundY + 8);
-      ctx.lineTo(x + 12, world.groundY + 16);
+      ctx.ellipse(x + 10, world.groundY + 6, 16, 4, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    ctx.fillStyle = "rgba(68, 40, 18, 0.35)";
+    for (let x = -groundOffset % 70; x < world.width + 70; x += 70) {
+      const puffX = x + 30;
+      const puffY = world.groundY + 12;
+      ctx.beginPath();
+      ctx.ellipse(puffX, puffY, 18, 6, 0, 0, Math.PI * 2);
+      ctx.ellipse(puffX - 16, puffY + 2, 10, 4, 0, 0, Math.PI * 2);
+      ctx.ellipse(puffX + 16, puffY + 1, 9, 3.5, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    ctx.strokeStyle = "rgba(50, 30, 16, 0.22)";
+    ctx.lineWidth = 2;
+    for (let x = -groundOffset % 48; x < world.width + 48; x += 48) {
+      ctx.beginPath();
+      ctx.moveTo(x, world.groundY + 6);
+      ctx.lineTo(x + 12, world.groundY + 12);
       ctx.stroke();
     }
   }
