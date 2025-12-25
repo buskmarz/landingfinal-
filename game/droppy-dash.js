@@ -89,14 +89,14 @@
   let skyGradient = null;
   let wasOnGround = true;
   const forestLayers = {
-    bg: { src: "assets/forest/bg_treeline.png", img: new Image(), ready: false },
-    mg: { src: "assets/forest/mg_trees.png", img: new Image(), ready: false },
-    fg: { src: "assets/forest/fg_trees.png", img: new Image(), ready: false },
+    bg: { src: "assets/bg_treeline.png", img: new Image(), ready: false },
+    mg: { src: "assets/mg_trees.png", img: new Image(), ready: false },
+    fg: { src: "assets/fg_trees.png", img: new Image(), ready: false },
   };
   const forestConfig = {
-    bg: { scroll: 0.18, y: 0.54 },
-    mg: { scroll: 0.32, y: 0.66 },
-    fg: { scroll: 0.52, y: 0.74 },
+    bg: { scroll: 0.16, y: 0.72, opacity: 0.75, heightRatio: 0.34 },
+    mg: { scroll: 0.28, y: 0.72, opacity: 0.85, heightRatio: 0.4 },
+    fg: { scroll: 0.46, y: 0.78, opacity: 0.95, heightRatio: 0.46 },
   };
   const droppyImage = new Image();
   let droppyReady = false;
@@ -113,6 +113,11 @@
     const layer = forestLayers[key];
     layer.img.onload = () => {
       layer.ready = true;
+    };
+    layer.img.onerror = () => {
+      if (layer.src.startsWith("assets/forest/")) return;
+      layer.src = layer.src.replace("assets/", "assets/forest/");
+      layer.img.src = layer.src;
     };
     layer.img.src = layer.src;
   });
@@ -910,7 +915,8 @@
     if (!layer || !layer.ready) return;
     const cfg = forestConfig[key];
     const img = layer.img;
-    const scale = world.width / img.width;
+    const targetH = world.height * (cfg.heightRatio || 0.4);
+    const scale = Math.max(world.width / img.width, targetH / img.height);
     const drawW = img.width * scale;
     const drawH = img.height * scale;
     const baseY = world.height * cfg.y;
@@ -918,6 +924,7 @@
     const shift = (offset * cfg.scroll) % drawW;
 
     ctx.save();
+    ctx.globalAlpha = cfg.opacity ?? 1;
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = "high";
     for (let x = -shift - drawW; x < world.width + drawW; x += drawW) {
