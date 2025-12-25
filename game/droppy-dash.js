@@ -606,7 +606,6 @@
     drawMountains(bgOffset * 0.12, world.height * 0.54, world.width * 0.24, "#bcd2ea", 3);
     drawMountains(bgOffset * 0.22, world.height * 0.63, world.width * 0.22, "#a9c3e0", 1.6);
     drawParallaxLayer("mg", midOffset);
-    drawForest(midOffset * 0.5, world.height * 0.68, 0.75);
     drawCoffeeFields(fieldOffset, world.height * 0.76);
     drawParallaxLayer("fg", forestOffset);
   }
