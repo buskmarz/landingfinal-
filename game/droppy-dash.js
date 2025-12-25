@@ -748,6 +748,13 @@
       ctx.closePath();
       ctx.fill();
 
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.08)";
+      ctx.lineWidth = Math.max(1, trunkW * 0.1);
+      ctx.beginPath();
+      ctx.moveTo(trunkX + trunkW * 0.25, trunkY + trunkH * 0.2);
+      ctx.lineTo(trunkX + trunkW * 0.18, baseY - trunkH * 0.15);
+      ctx.stroke();
+
       ctx.strokeStyle = "rgba(20, 12, 8, 0.35)";
       ctx.lineWidth = Math.max(1, trunkW * 0.18);
       ctx.beginPath();
@@ -755,11 +762,25 @@
       ctx.lineTo(cx, baseY);
       ctx.stroke();
 
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.15)";
-      ctx.lineWidth = Math.max(1, trunkW * 0.12);
+      ctx.strokeStyle = "rgba(35, 20, 12, 0.25)";
+      ctx.lineWidth = 1;
+      for (let i = 0; i < 3; i += 1) {
+        const lineX = trunkX + trunkW * (0.2 + i * 0.3);
+        ctx.beginPath();
+        ctx.moveTo(lineX, trunkY + trunkH * 0.15);
+        ctx.lineTo(lineX - trunkW * 0.05, baseY - trunkH * (0.05 + i * 0.05));
+        ctx.stroke();
+      }
+
+      const knotY = trunkY + trunkH * (0.45 + 0.08 * Math.sin(index));
+      ctx.fillStyle = "rgba(30, 18, 12, 0.35)";
       ctx.beginPath();
-      ctx.moveTo(trunkX + trunkW * 0.25, trunkY + trunkH * 0.1);
-      ctx.lineTo(trunkX + trunkW * 0.2, baseY - trunkH * 0.1);
+      ctx.ellipse(cx + trunkW * 0.15, knotY, trunkW * 0.16, trunkW * 0.12, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.12)";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.arc(cx + trunkW * 0.15, knotY, trunkW * 0.16, 0.3, Math.PI * 1.6);
       ctx.stroke();
 
       ctx.fillStyle = "rgba(255, 255, 255, 0.08)";
