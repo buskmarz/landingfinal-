@@ -124,7 +124,6 @@
             <small>Top 3 semanal = bebida gratis</small>
           </a>
           <a class="nav__tag" href="https://drive.google.com/drive/folders/17h4TmJz7SYwpuY8gR-75qDLrflPmosqd?usp=share_link" target="_blank" rel="noopener noreferrer" title="Catálogo de CBD + adaptógenos">Catálogo</a>
-          <a href="#ingredients">Ingredientes</a>
           <a href="#ingredients">Ingredientes y ciencia</a>
           <a href="#community">Comunidad</a>
           <a href="#location">Ubicación</a>
@@ -219,6 +218,161 @@
                 <p class="hero__overlay-text">Perfil sensorial + soporte suave.</p>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- DROPPY DASH -->
+      <section class="section section--alt droppy" id="droppy-dash" data-droppy>
+        <div class="container droppy__grid">
+          <div class="droppy__intro">
+            <p class="eyebrow">Arcade premium · Better Mood</p>
+            <h2>Juega y gana bebidas gratis</h2>
+            <p>
+              Top 3 semanal = bebida gratis. Salta, suma granos y sube tu score.
+            </p>
+
+            <div class="droppy__leaderboard" aria-live="polite">
+              <div class="droppy__leaderboard-head">
+                <h3>Leaderboard</h3>
+                <span class="droppy__week" data-period-label>Semana en curso</span>
+              </div>
+              <div class="droppy__leaderboard-filters" role="tablist" aria-label="Filtrar leaderboard">
+                <button class="droppy__filter is-active" type="button" data-period="weekly" aria-pressed="true">Semanal</button>
+                <button class="droppy__filter" type="button" data-period="monthly" aria-pressed="false">Mensual</button>
+                <button class="droppy__filter" type="button" data-period="all" aria-pressed="false">Histórico</button>
+              </div>
+              <ol class="droppy__leaderboard-list" data-leaderboard>
+                <li class="droppy__leaderboard-empty">Cargando leaderboard...</li>
+              </ol>
+              <p class="droppy__leaderboard-rank" data-rank></p>
+            </div>
+
+            <div class="droppy__cta">
+              <a class="btn btn--secondary" href="https://take.cards/7pgmg" target="_blank" rel="noopener">
+                Instalar wallet
+              </a>
+            </div>
+          </div>
+
+          <div class="droppy__game">
+            <div class="droppy__canvas-frame">
+              <canvas class="droppy__canvas" id="droppy-canvas" role="img" aria-label="Juego Droppy Dash"></canvas>
+              <div class="droppy__hud" aria-live="polite">
+                <div class="droppy__hud-left">
+                  <div class="droppy__hud-score">
+                    <span class="droppy__hud-bean" aria-hidden="true"></span>
+                    <div class="droppy__hud-block">
+                      <span class="droppy__hud-label">Score</span>
+                      <span class="droppy__hud-value" data-score>0</span>
+                    </div>
+                  </div>
+                  <div class="droppy__hud-block droppy__hud-combo">
+                    <span class="droppy__hud-label">Combo</span>
+                    <span class="droppy__hud-value" data-combo>x1</span>
+                  </div>
+                </div>
+                <button class="droppy__pause" type="button" aria-label="Pausar juego">II</button>
+              </div>
+
+              <div class="droppy__overlay droppy__overlay--start" data-overlay="start">
+                <p class="droppy__overlay-title">Droppy Dash</p>
+                <p class="droppy__overlay-text">Toca para saltar. Doble salto activo.</p>
+                <p class="droppy__overlay-note">Esquiva hongos y suma granos.</p>
+                <button class="btn btn--primary droppy__play" type="button" data-play>Jugar</button>
+                <p class="droppy__overlay-note" data-connection>Listo para jugar.</p>
+              </div>
+
+              <div class="droppy__overlay droppy__overlay--pause" data-overlay="pause" hidden>
+                <p class="droppy__overlay-title">Pausa</p>
+                <p class="droppy__overlay-text">Tu partida está en pausa.</p>
+                <div class="droppy__actions">
+                  <button class="btn btn--primary droppy__resume" type="button">Continuar</button>
+                  <button class="btn btn--secondary droppy__restart" type="button">Reiniciar</button>
+                </div>
+              </div>
+
+              <div class="droppy__overlay droppy__overlay--gameover" data-overlay="gameover" hidden>
+                <h3>Game Over</h3>
+                <p class="droppy__final">Tu puntaje: <strong data-final-score>0</strong></p>
+                <div class="droppy__actions">
+                  <button class="btn btn--secondary droppy__retry" type="button">Reintentar</button>
+                </div>
+                <form class="droppy__form" data-form hidden>
+                  <label class="droppy__label">
+                    Nombre
+                    <input class="droppy__input" name="name" autocomplete="nickname" maxlength="24" required />
+                  </label>
+                  <label class="droppy__label">
+                    Instagram o teléfono (si ganas)
+                    <input class="droppy__input" name="contact" autocomplete="username" maxlength="32" required />
+                  </label>
+                  <p class="droppy__consent">Solo para avisarte si ganas.</p>
+                  <button class="btn btn--primary droppy__submit" type="submit">Enviar puntaje</button>
+                  <button class="btn btn--secondary droppy__share" type="button">Compartir mi score</button>
+                  <p class="droppy__form-note" data-form-note></p>
+                </form>
+              </div>
+            </div>
+            <div class="droppy__controls">
+              <button class="btn btn--secondary droppy__jump" type="button">Saltar</button>
+              <p class="droppy__hint">Toca o presiona espacio para saltar.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- COMMUNITY -->
+      <section class="section" id="community">
+        <div class="container community section__grid">
+          <div>
+            <h2>Wallet Better Mood</h2>
+            <p>Recompensas claras por visita.</p>
+            <div class="hero__actions">
+              <a class="btn btn--primary" href="https://take.cards/7pgmg" target="_blank" rel="noopener">
+                Instalar wallet
+              </a>
+              <a class="btn btn--ghost" href="#location">Visítanos</a>
+            </div>
+          </div>
+
+          <div class="wallet-card" role="img" aria-label="Tarjeta Wallet Better Mood">
+            <div class="wallet-card__top">
+              <span>Better Mood Coffee</span>
+              <span>Wallet</span>
+            </div>
+            <div class="wallet-card__main">
+              <p class="wallet-card__title">6 sellos = bebida gratis</p>
+              <p class="wallet-card__note">Sin adiciones</p>
+            </div>
+            <div class="wallet-card__tags">
+              <span>Promos</span>
+              <span>Catas</span>
+              <span>Contenido</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CATALOG -->
+      <section class="order-strip" id="catalogo" aria-labelledby="catalogo-title">
+        <div class="container order-strip__inner">
+          <div>
+            <h2 id="catalogo-title">Catálogo CBD + adaptógenos</h2>
+            <p>Comercializamos productos funcionales; aquí están todos los catálogos.</p>
+          </div>
+          <div class="order-strip__actions" aria-label="Catálogos de productos Better Mood">
+            <a
+              class="btn btn--primary"
+              href="https://drive.google.com/drive/folders/17h4TmJz7SYwpuY8gR-75qDLrflPmosqd?usp=share_link"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Ver catálogo completo
+            </a>
+            <a class="btn btn--secondary" href="assets/menu-better-mood.pdf" target="_blank" rel="noopener">
+              Menú Better Mood
+            </a>
           </div>
         </div>
       </section>
@@ -566,106 +720,6 @@
         </div>
       </section>
 
-      <!-- DROPPY DASH -->
-      <section class="section section--alt droppy" id="droppy-dash" data-droppy>
-        <div class="container droppy__grid">
-          <div class="droppy__intro">
-            <p class="eyebrow">Arcade premium · Better Mood</p>
-            <h2>Juega y gana</h2>
-            <p>
-              Salta, suma granos y sube tu score.
-            </p>
-
-            <div class="droppy__leaderboard" aria-live="polite">
-              <div class="droppy__leaderboard-head">
-                <h3>Leaderboard</h3>
-                <span class="droppy__week" data-period-label>Semana en curso</span>
-              </div>
-              <div class="droppy__leaderboard-filters" role="tablist" aria-label="Filtrar leaderboard">
-                <button class="droppy__filter is-active" type="button" data-period="weekly" aria-pressed="true">Semanal</button>
-                <button class="droppy__filter" type="button" data-period="monthly" aria-pressed="false">Mensual</button>
-                <button class="droppy__filter" type="button" data-period="all" aria-pressed="false">Histórico</button>
-              </div>
-              <ol class="droppy__leaderboard-list" data-leaderboard>
-                <li class="droppy__leaderboard-empty">Cargando leaderboard...</li>
-              </ol>
-              <p class="droppy__leaderboard-rank" data-rank></p>
-            </div>
-
-            <div class="droppy__cta">
-              <a class="btn btn--secondary" href="https://take.cards/7pgmg" target="_blank" rel="noopener">
-                Instalar wallet
-              </a>
-            </div>
-          </div>
-
-          <div class="droppy__game">
-            <div class="droppy__canvas-frame">
-              <canvas class="droppy__canvas" id="droppy-canvas" role="img" aria-label="Juego Droppy Dash"></canvas>
-              <div class="droppy__hud" aria-live="polite">
-                <div class="droppy__hud-left">
-                  <div class="droppy__hud-score">
-                    <span class="droppy__hud-bean" aria-hidden="true"></span>
-                    <div class="droppy__hud-block">
-                      <span class="droppy__hud-label">Score</span>
-                      <span class="droppy__hud-value" data-score>0</span>
-                    </div>
-                  </div>
-                  <div class="droppy__hud-block droppy__hud-combo">
-                    <span class="droppy__hud-label">Combo</span>
-                    <span class="droppy__hud-value" data-combo>x1</span>
-                  </div>
-                </div>
-                <button class="droppy__pause" type="button" aria-label="Pausar juego">II</button>
-              </div>
-
-              <div class="droppy__overlay droppy__overlay--start" data-overlay="start">
-                <p class="droppy__overlay-title">Droppy Dash</p>
-                <p class="droppy__overlay-text">Toca para saltar. Doble salto activo.</p>
-                <p class="droppy__overlay-note">Esquiva hongos y suma granos.</p>
-                <button class="btn btn--primary droppy__play" type="button" data-play>Jugar</button>
-                <p class="droppy__overlay-note" data-connection>Listo para jugar.</p>
-              </div>
-
-              <div class="droppy__overlay droppy__overlay--pause" data-overlay="pause" hidden>
-                <p class="droppy__overlay-title">Pausa</p>
-                <p class="droppy__overlay-text">Tu partida está en pausa.</p>
-                <div class="droppy__actions">
-                  <button class="btn btn--primary droppy__resume" type="button">Continuar</button>
-                  <button class="btn btn--secondary droppy__restart" type="button">Reiniciar</button>
-                </div>
-              </div>
-
-              <div class="droppy__overlay droppy__overlay--gameover" data-overlay="gameover" hidden>
-                <h3>Game Over</h3>
-                <p class="droppy__final">Tu puntaje: <strong data-final-score>0</strong></p>
-                <div class="droppy__actions">
-                  <button class="btn btn--secondary droppy__retry" type="button">Reintentar</button>
-                </div>
-                <form class="droppy__form" data-form hidden>
-                  <label class="droppy__label">
-                    Nombre
-                    <input class="droppy__input" name="name" autocomplete="nickname" maxlength="24" required />
-                  </label>
-                  <label class="droppy__label">
-                    Instagram o teléfono (si ganas)
-                    <input class="droppy__input" name="contact" autocomplete="username" maxlength="32" required />
-                  </label>
-                  <p class="droppy__consent">Solo para avisarte si ganas.</p>
-                  <button class="btn btn--primary droppy__submit" type="submit">Enviar puntaje</button>
-                  <button class="btn btn--secondary droppy__share" type="button">Compartir mi score</button>
-                  <p class="droppy__form-note" data-form-note></p>
-                </form>
-              </div>
-            </div>
-            <div class="droppy__controls">
-              <button class="btn btn--secondary droppy__jump" type="button">Saltar</button>
-              <p class="droppy__hint">Toca o presiona espacio para saltar.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <!-- INGREDIENTS -->
       <section class="section" id="ingredients">
 	        <!-- Marquee: barra animada de mensajes clave (edita el copy/velocidad/colores en styles.css) -->
@@ -686,7 +740,7 @@
 
 	        <div class="container section__grid">
           <div>
-            <h2>Ingredientes, claro y directo.</h2>
+            <h2>Ingredientes y ciencia, claro y directo.</h2>
             <p>Información clara para decisiones libres y responsables.</p>
           </div>
 
@@ -743,11 +797,6 @@
           </div>
         </div>
         <div class="container science" id="science">
-          <div class="section__header">
-            <h2>Ingredientes y ciencia en simple.</h2>
-            <p>Información clara para decisiones responsables.</p>
-          </div>
-
           <div class="science__grid">
             <article class="science-card">
               <h3>CBD y sistema endocannabinoide</h3>
@@ -781,38 +830,6 @@
             </div>
           </div>
 
-        </div>
-      </section>
-
-      <!-- COMMUNITY -->
-      <section class="section" id="community">
-        <div class="container community section__grid">
-          <div>
-            <h2>Wallet Better Mood</h2>
-            <p>Recompensas claras por visita.</p>
-            <div class="hero__actions">
-              <a class="btn btn--primary" href="https://take.cards/7pgmg" target="_blank" rel="noopener">
-                Instalar wallet
-              </a>
-              <a class="btn btn--ghost" href="#location">Visítanos</a>
-            </div>
-          </div>
-
-          <div class="wallet-card" role="img" aria-label="Tarjeta Wallet Better Mood">
-            <div class="wallet-card__top">
-              <span>Better Mood Coffee</span>
-              <span>Wallet</span>
-            </div>
-            <div class="wallet-card__main">
-              <p class="wallet-card__title">6 sellos = bebida gratis</p>
-              <p class="wallet-card__note">Sin adiciones</p>
-            </div>
-            <div class="wallet-card__tags">
-              <span>Promos</span>
-              <span>Catas</span>
-              <span>Contenido</span>
-            </div>
-          </div>
         </div>
       </section>
 
