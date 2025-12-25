@@ -88,6 +88,16 @@
   let lastComboRendered = -1;
   let skyGradient = null;
   let wasOnGround = true;
+  const forestLayers = {
+    bg: { src: "assets/forest/bg_treeline.png", img: new Image(), ready: false },
+    mg: { src: "assets/forest/mg_trees.png", img: new Image(), ready: false },
+    fg: { src: "assets/forest/fg_trees.png", img: new Image(), ready: false },
+  };
+  const forestConfig = {
+    bg: { scroll: 0.18, y: 0.54 },
+    mg: { scroll: 0.32, y: 0.66 },
+    fg: { scroll: 0.52, y: 0.74 },
+  };
   const droppyImage = new Image();
   let droppyReady = false;
   let droppyAspect = 1;
@@ -98,6 +108,14 @@
     droppyAspect = droppyImage.naturalWidth / droppyImage.naturalHeight || 1;
   };
   droppyImage.src = "assets/droppy.PNG";
+
+  Object.keys(forestLayers).forEach((key) => {
+    const layer = forestLayers[key];
+    layer.img.onload = () => {
+      layer.ready = true;
+    };
+    layer.img.src = layer.src;
+  });
 
   const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
   const lerp = (a, b, t) => a + (b - a) * t;
@@ -579,11 +597,13 @@
     drawSkyLights();
     drawClouds();
     drawHaze();
+    drawParallaxLayer("bg", bgOffset);
     drawMountains(bgOffset * 0.12, world.height * 0.54, world.width * 0.24, "#bcd2ea", 3);
     drawMountains(bgOffset * 0.22, world.height * 0.63, world.width * 0.22, "#a9c3e0", 1.6);
+    drawParallaxLayer("mg", midOffset);
     drawForest(midOffset * 0.5, world.height * 0.68, 0.75);
-    drawForest(forestOffset, world.height * 0.74, 1.05);
     drawCoffeeFields(fieldOffset, world.height * 0.76);
+    drawParallaxLayer("fg", forestOffset);
   }
 
   function drawSky() {
@@ -713,11 +733,39 @@
       const canopyY = baseY - treeH + treeH * 0.2;
       const isPine = (index + Math.round(depth * 3)) % 3 === 0;
 
-      const trunkGrad = ctx.createLinearGradient(0, baseY - trunkH, 0, baseY);
-      trunkGrad.addColorStop(0, "#6b4a2b");
-      trunkGrad.addColorStop(1, trunkColor);
+      const trunkX = cx - trunkW / 2;
+      const trunkY = baseY - trunkH + 2;
+      const trunkGrad = ctx.createLinearGradient(trunkX, trunkY, trunkX + trunkW, trunkY);
+      trunkGrad.addColorStop(0, "#3a2416");
+      trunkGrad.addColorStop(0.5, "#6b4a2b");
+      trunkGrad.addColorStop(1, "#2a1b11");
       ctx.fillStyle = trunkGrad;
-      ctx.fillRect(cx - trunkW / 2, baseY - trunkH + 2, trunkW, trunkH);
+      ctx.beginPath();
+      ctx.moveTo(trunkX, trunkY);
+      ctx.lineTo(trunkX + trunkW, trunkY);
+      ctx.lineTo(trunkX + trunkW * 0.9, baseY);
+      ctx.lineTo(trunkX + trunkW * 0.1, baseY);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.strokeStyle = "rgba(20, 12, 8, 0.35)";
+      ctx.lineWidth = Math.max(1, trunkW * 0.18);
+      ctx.beginPath();
+      ctx.moveTo(cx, trunkY + trunkH * 0.15);
+      ctx.lineTo(cx, baseY);
+      ctx.stroke();
+
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.15)";
+      ctx.lineWidth = Math.max(1, trunkW * 0.12);
+      ctx.beginPath();
+      ctx.moveTo(trunkX + trunkW * 0.25, trunkY + trunkH * 0.1);
+      ctx.lineTo(trunkX + trunkW * 0.2, baseY - trunkH * 0.1);
+      ctx.stroke();
+
+      ctx.fillStyle = "rgba(255, 255, 255, 0.08)";
+      ctx.beginPath();
+      ctx.ellipse(cx, baseY + 2, trunkW * 0.45, trunkW * 0.18, 0, 0, Math.PI * 2);
+      ctx.fill();
 
       if (isPine) {
         ctx.fillStyle = leafDark;
@@ -834,6 +882,27 @@
       ctx.arc(x + s * 1.4, y, s * 0.7, 0, Math.PI * 2);
       ctx.fill();
     });
+  }
+
+  function drawParallaxLayer(key, offset) {
+    const layer = forestLayers[key];
+    if (!layer || !layer.ready) return;
+    const cfg = forestConfig[key];
+    const img = layer.img;
+    const scale = world.width / img.width;
+    const drawW = img.width * scale;
+    const drawH = img.height * scale;
+    const baseY = world.height * cfg.y;
+    const y = baseY - drawH;
+    const shift = (offset * cfg.scroll) % drawW;
+
+    ctx.save();
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    for (let x = -shift - drawW; x < world.width + drawW; x += drawW) {
+      ctx.drawImage(img, x, y, drawW, drawH);
+    }
+    ctx.restore();
   }
 
   function drawGround() {
