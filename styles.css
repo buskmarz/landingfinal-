@@ -30,6 +30,11 @@ body {
   line-height: 1.6;
   padding-top: var(--header-offset, 72px);
 }
+body.droppy-lock {
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: none;
+}
 
 [id] {
   scroll-margin-top: var(--header-offset, 72px);
@@ -1861,6 +1866,49 @@ p {
   opacity: 0.55;
   pointer-events: none;
   z-index: 0;
+}
+.droppy--fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  padding: 0;
+  margin: 0;
+  background: var(--bg);
+}
+.droppy--fullscreen .droppy__grid {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+.droppy--fullscreen .droppy__intro,
+.droppy--fullscreen .droppy__controls {
+  display: none;
+}
+.droppy--fullscreen .droppy__game {
+  width: 100%;
+  height: 100%;
+  justify-items: stretch;
+}
+.droppy--fullscreen .droppy__canvas-frame {
+  width: 100vw;
+  height: 100dvh;
+  aspect-ratio: auto;
+  border-radius: 0;
+  border: 0;
+  box-shadow: none;
+}
+.droppy--fullscreen .droppy__canvas-frame::before,
+.droppy--fullscreen .droppy__canvas-frame::after {
+  display: none;
+}
+.droppy--fullscreen .droppy__canvas {
+  width: 100%;
+  height: 100%;
+}
+.droppy--fullscreen .droppy__hud {
+  top: calc(env(safe-area-inset-top) + 12px);
+  left: calc(env(safe-area-inset-left) + 12px);
+  right: calc(env(safe-area-inset-right) + 12px);
 }
 .droppy__canvas {
   width: 100%;
