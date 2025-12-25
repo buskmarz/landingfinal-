@@ -26,6 +26,7 @@
   const resumeBtn = root.querySelector(".droppy__resume");
   const restartBtn = root.querySelector(".droppy__restart");
   const overlayPause = root.querySelector('[data-overlay="pause"]');
+  const canvasFrame = root.querySelector(".droppy__canvas-frame");
 
   const API_BASE = "/api";
   const MAX_COMBO = 5;
@@ -150,7 +151,7 @@
 
     world.width = rect.width;
     world.height = rect.height;
-    world.groundY = rect.height * 0.82;
+    world.groundY = rect.height * 0.88;
 
     const runnerWidth = clamp(rect.width * 0.12, 32, 54);
     world.runner.width = runnerWidth;
@@ -223,6 +224,14 @@
     updateHud();
   }
 
+  function setFullscreenMode(enabled) {
+    root.classList.toggle("droppy--fullscreen", enabled);
+    document.body.classList.toggle("droppy-lock", enabled);
+    if (enabled && canvasFrame) {
+      canvasFrame.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }
+
   function setOverlay(stateName) {
     const showStart = stateName === "start";
     const showGameover = stateName === "gameover";
@@ -281,6 +290,9 @@
       if (pauseBtn) pauseBtn.disabled = false;
       if (form) form.hidden = true;
       entryId = null;
+      if (window.matchMedia("(max-width: 900px)").matches) {
+        setFullscreenMode(true);
+      }
       requestAnimationFrame(loop);
     });
   }
@@ -291,6 +303,7 @@
     setOverlay("gameover");
     if (finalScoreEl) finalScoreEl.textContent = String(score);
     if (pauseBtn) pauseBtn.disabled = true;
+    setFullscreenMode(false);
     showForm("Nombre + Instagram o teléfono.");
   }
 
@@ -603,8 +616,6 @@
     drawClouds();
     drawHaze();
     drawParallaxLayer("bg", bgOffset);
-    drawMountains(bgOffset * 0.12, world.height * 0.54, world.width * 0.24, "#bcd2ea", 3);
-    drawMountains(bgOffset * 0.22, world.height * 0.63, world.width * 0.22, "#a9c3e0", 1.6);
     drawParallaxLayer("mg", midOffset);
     drawCoffeeFields(fieldOffset, world.height * 0.76);
     drawParallaxLayer("fg", forestOffset);
@@ -940,39 +951,46 @@
       ctx.fillRect(x, world.groundY - 8, 16, 4);
     }
 
-    const soilBottom = Math.min(world.height, world.groundY + world.height * 0.09);
+    const soilBottom = world.height;
     const soil = ctx.createLinearGradient(0, world.groundY, 0, soilBottom);
-    soil.addColorStop(0, "#a77742");
-    soil.addColorStop(0.55, "#7b4f2a");
-    soil.addColorStop(1, "#5d3a1d");
+    soil.addColorStop(0, "#b6834b");
+    soil.addColorStop(0.35, "#8a5a2f");
+    soil.addColorStop(1, "#4f2f17");
     ctx.fillStyle = soil;
     ctx.fillRect(0, world.groundY, world.width, soilBottom - world.groundY);
 
-    ctx.fillStyle = "rgba(255, 255, 255, 0.08)";
-    for (let x = -groundOffset % 42; x < world.width + 42; x += 42) {
+    ctx.fillStyle = "rgba(255, 255, 255, 0.06)";
+    for (let x = -groundOffset % 46; x < world.width + 46; x += 46) {
       ctx.beginPath();
-      ctx.ellipse(x + 10, world.groundY + 6, 16, 4, 0, 0, Math.PI * 2);
+      ctx.ellipse(x + 12, world.groundY + 5, 18, 4.5, 0, 0, Math.PI * 2);
       ctx.fill();
     }
 
-    ctx.fillStyle = "rgba(68, 40, 18, 0.35)";
-    for (let x = -groundOffset % 70; x < world.width + 70; x += 70) {
+    ctx.fillStyle = "rgba(72, 42, 18, 0.35)";
+    for (let x = -groundOffset % 72; x < world.width + 72; x += 72) {
       const puffX = x + 30;
-      const puffY = world.groundY + 12;
+      const puffY = world.groundY + 14;
       ctx.beginPath();
-      ctx.ellipse(puffX, puffY, 18, 6, 0, 0, Math.PI * 2);
-      ctx.ellipse(puffX - 16, puffY + 2, 10, 4, 0, 0, Math.PI * 2);
-      ctx.ellipse(puffX + 16, puffY + 1, 9, 3.5, 0, 0, Math.PI * 2);
+      ctx.ellipse(puffX, puffY, 20, 6.5, 0, 0, Math.PI * 2);
+      ctx.ellipse(puffX - 18, puffY + 2, 11, 4.5, 0, 0, Math.PI * 2);
+      ctx.ellipse(puffX + 18, puffY + 1, 10, 4, 0, 0, Math.PI * 2);
       ctx.fill();
     }
 
-    ctx.strokeStyle = "rgba(50, 30, 16, 0.22)";
+    ctx.strokeStyle = "rgba(50, 30, 16, 0.2)";
     ctx.lineWidth = 2;
-    for (let x = -groundOffset % 48; x < world.width + 48; x += 48) {
+    for (let x = -groundOffset % 52; x < world.width + 52; x += 52) {
       ctx.beginPath();
       ctx.moveTo(x, world.groundY + 6);
-      ctx.lineTo(x + 12, world.groundY + 12);
+      ctx.lineTo(x + 14, world.groundY + 13);
       ctx.stroke();
+    }
+
+    ctx.fillStyle = "rgba(60, 35, 16, 0.15)";
+    for (let x = -groundOffset % 64; x < world.width + 64; x += 64) {
+      ctx.beginPath();
+      ctx.ellipse(x + 22, world.groundY + 24, 8, 3.2, 0.2, 0, Math.PI * 2);
+      ctx.fill();
     }
   }
 
