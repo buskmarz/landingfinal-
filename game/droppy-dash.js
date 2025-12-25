@@ -940,18 +940,19 @@
       ctx.fillRect(x, world.groundY - 8, 16, 4);
     }
 
-    const soil = ctx.createLinearGradient(0, world.groundY, 0, world.height);
+    const soilBottom = Math.min(world.height, world.groundY + world.height * 0.14);
+    const soil = ctx.createLinearGradient(0, world.groundY, 0, soilBottom);
     soil.addColorStop(0, "#9a6a3a");
     soil.addColorStop(1, "#6a4320");
     ctx.fillStyle = soil;
-    ctx.fillRect(0, world.groundY, world.width, world.height - world.groundY);
+    ctx.fillRect(0, world.groundY, world.width, soilBottom - world.groundY);
 
     ctx.strokeStyle = "rgba(50, 30, 16, 0.28)";
     ctx.lineWidth = 2;
     for (let x = -groundOffset % 36; x < world.width + 36; x += 36) {
       ctx.beginPath();
-      ctx.moveTo(x, world.groundY + 10);
-      ctx.lineTo(x + 12, world.groundY + 20);
+      ctx.moveTo(x, world.groundY + 8);
+      ctx.lineTo(x + 12, world.groundY + 16);
       ctx.stroke();
     }
   }
