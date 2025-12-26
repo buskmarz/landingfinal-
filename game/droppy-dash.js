@@ -16,6 +16,7 @@
   const form = root.querySelector("[data-form]");
   const formNote = root.querySelector("[data-form-note]");
   const leaderboardList = root.querySelector("[data-leaderboard]");
+  const leaderboardToggle = root.querySelector("[data-leaderboard-toggle]");
   const periodLabelEl = root.querySelector("[data-period-label]");
   const filterButtons = Array.from(root.querySelectorAll("[data-period]"));
   const rankEl = root.querySelector("[data-rank]");
@@ -84,15 +85,17 @@
   let sessionToken = null;
   let sessionSeed = Date.now();
   let entryId = null;
+  let showTopTen = false;
+  let lastLeaderboardData = null;
 
   let lastScoreRendered = -1;
   let lastComboRendered = -1;
   let skyGradient = null;
   let wasOnGround = true;
   const forestLayers = {
-    bg: { src: "assets/bg_treeline.png", img: new Image(), ready: false },
-    mg: { src: "assets/mg_trees.png", img: new Image(), ready: false },
-    fg: { src: "assets/fg_trees.png", img: new Image(), ready: false },
+    bg: { src: "assets/forest/bg_treeline.png", img: new Image(), ready: false },
+    mg: { src: "assets/forest/mg_trees.png", img: new Image(), ready: false },
+    fg: { src: "assets/forest/fg_trees.png", img: new Image(), ready: false },
   };
   const forestConfig = {
     bg: { scroll: 0.16, y: 0.72, opacity: 0.75, heightRatio: 0.34 },
@@ -116,9 +119,7 @@
       layer.ready = true;
     };
     layer.img.onerror = () => {
-      if (layer.src.startsWith("assets/forest/")) return;
-      layer.src = layer.src.replace("assets/", "assets/forest/");
-      layer.img.src = layer.src;
+      console.warn(`[droppy] No se pudo cargar ${key}: ${layer.src}`);
     };
     layer.img.src = layer.src;
   });
@@ -151,7 +152,7 @@
 
     world.width = rect.width;
     world.height = rect.height;
-    world.groundY = rect.height * 0.88;
+    world.groundY = rect.height * 0.9;
 
     const runnerWidth = clamp(rect.width * 0.12, 32, 54);
     world.runner.width = runnerWidth;
@@ -228,8 +229,9 @@
     root.classList.toggle("droppy--fullscreen", enabled);
     document.body.classList.toggle("droppy-lock", enabled);
     if (enabled && canvasFrame) {
-      canvasFrame.scrollIntoView({ behavior: "smooth", block: "start" });
+      canvasFrame.scrollIntoView({ behavior: "auto", block: "start" });
     }
+    requestAnimationFrame(() => resizeCanvas());
   }
 
   function setOverlay(stateName) {
@@ -270,6 +272,9 @@
 
   function startGame() {
     if (state === "playing") return;
+    if (window.matchMedia("(max-width: 900px)").matches) {
+      setFullscreenMode(true);
+    }
     state = "loading";
     setOverlay("start");
     if (playBtn) playBtn.disabled = true;
@@ -290,9 +295,6 @@
       if (pauseBtn) pauseBtn.disabled = false;
       if (form) form.hidden = true;
       entryId = null;
-      if (window.matchMedia("(max-width: 900px)").matches) {
-        setFullscreenMode(true);
-      }
       requestAnimationFrame(loop);
     });
   }
@@ -944,36 +946,43 @@
   }
 
   function drawGround() {
-    ctx.fillStyle = "#5fb96a";
-    ctx.fillRect(0, world.groundY - 12, world.width, 14);
-    ctx.fillStyle = "rgba(255, 255, 255, 0.12)";
-    for (let x = -groundOffset % 40; x < world.width + 40; x += 40) {
-      ctx.fillRect(x, world.groundY - 8, 16, 4);
+    const grassHeight = 12;
+    ctx.fillStyle = "#60b86c";
+    ctx.fillRect(0, world.groundY - grassHeight, world.width, grassHeight + 2);
+    ctx.fillStyle = "rgba(255, 255, 255, 0.14)";
+    for (let x = -groundOffset % 42; x < world.width + 42; x += 42) {
+      ctx.fillRect(x, world.groundY - 8, 18, 4);
     }
 
-    const soilBottom = world.height;
+    const soilBottom = world.height + 1;
     const soil = ctx.createLinearGradient(0, world.groundY, 0, soilBottom);
-    soil.addColorStop(0, "#b6834b");
-    soil.addColorStop(0.35, "#8a5a2f");
-    soil.addColorStop(1, "#4f2f17");
+    soil.addColorStop(0, "#b47b44");
+    soil.addColorStop(0.45, "#83522c");
+    soil.addColorStop(1, "#4a2b15");
     ctx.fillStyle = soil;
     ctx.fillRect(0, world.groundY, world.width, soilBottom - world.groundY);
 
-    ctx.fillStyle = "rgba(255, 255, 255, 0.06)";
-    for (let x = -groundOffset % 46; x < world.width + 46; x += 46) {
+    const dust = ctx.createLinearGradient(0, world.groundY, 0, world.groundY + 30);
+    dust.addColorStop(0, "rgba(255, 234, 195, 0.45)");
+    dust.addColorStop(1, "rgba(255, 234, 195, 0)");
+    ctx.fillStyle = dust;
+    ctx.fillRect(0, world.groundY, world.width, 30);
+
+    ctx.fillStyle = "rgba(74, 44, 20, 0.36)";
+    for (let x = -groundOffset % 70; x < world.width + 70; x += 70) {
+      const puffX = x + 28;
+      const puffY = world.groundY + 16;
       ctx.beginPath();
-      ctx.ellipse(x + 12, world.groundY + 5, 18, 4.5, 0, 0, Math.PI * 2);
+      ctx.ellipse(puffX, puffY, 20, 6.2, 0, 0, Math.PI * 2);
+      ctx.ellipse(puffX - 18, puffY + 2, 11, 4.2, 0, 0, Math.PI * 2);
+      ctx.ellipse(puffX + 18, puffY + 1, 10, 3.8, 0, 0, Math.PI * 2);
       ctx.fill();
     }
 
-    ctx.fillStyle = "rgba(72, 42, 18, 0.35)";
-    for (let x = -groundOffset % 72; x < world.width + 72; x += 72) {
-      const puffX = x + 30;
-      const puffY = world.groundY + 14;
+    ctx.fillStyle = "rgba(55, 32, 14, 0.2)";
+    for (let x = -groundOffset % 56; x < world.width + 56; x += 56) {
       ctx.beginPath();
-      ctx.ellipse(puffX, puffY, 20, 6.5, 0, 0, Math.PI * 2);
-      ctx.ellipse(puffX - 18, puffY + 2, 11, 4.5, 0, 0, Math.PI * 2);
-      ctx.ellipse(puffX + 18, puffY + 1, 10, 4, 0, 0, Math.PI * 2);
+      ctx.ellipse(x + 18, world.groundY + 26, 7.5, 3, 0.18, 0, Math.PI * 2);
       ctx.fill();
     }
 
@@ -981,16 +990,9 @@
     ctx.lineWidth = 2;
     for (let x = -groundOffset % 52; x < world.width + 52; x += 52) {
       ctx.beginPath();
-      ctx.moveTo(x, world.groundY + 6);
-      ctx.lineTo(x + 14, world.groundY + 13);
+      ctx.moveTo(x, world.groundY + 8);
+      ctx.lineTo(x + 14, world.groundY + 14);
       ctx.stroke();
-    }
-
-    ctx.fillStyle = "rgba(60, 35, 16, 0.15)";
-    for (let x = -groundOffset % 64; x < world.width + 64; x += 64) {
-      ctx.beginPath();
-      ctx.ellipse(x + 22, world.groundY + 24, 8, 3.2, 0.2, 0, Math.PI * 2);
-      ctx.fill();
     }
   }
 
@@ -1356,6 +1358,7 @@
       const res = await fetch(url.toString());
       if (!res.ok) throw new Error("leaderboard");
       const data = await res.json();
+      lastLeaderboardData = data;
       renderLeaderboard(data);
     } catch (err) {
       leaderboardList.innerHTML = '<li class="droppy__leaderboard-empty">No se pudo cargar el leaderboard.</li>';
@@ -1368,8 +1371,9 @@
     leaderboardList.innerHTML = "";
     const period = data.period || currentPeriod;
     const periodStart = data.periodStart || "";
+    const visibleEntries = showTopTen ? entries.slice(0, 10) : entries.slice(0, 3);
 
-    if (!entries.length) {
+    if (!visibleEntries.length) {
       const emptyText =
         period === "monthly"
           ? "Aún no hay scores este mes."
@@ -1378,7 +1382,7 @@
           : "Aún no hay scores esta semana.";
       leaderboardList.innerHTML = `<li class="droppy__leaderboard-empty">${emptyText}</li>`;
     } else {
-      entries.forEach((entry, index) => {
+      visibleEntries.forEach((entry, index) => {
         const li = document.createElement("li");
         li.className = "droppy__leaderboard-item";
         const nameSpan = document.createElement("span");
@@ -1398,6 +1402,13 @@
       } else {
         periodLabelEl.textContent = periodStart ? `Semana del ${periodStart}` : "Semana en curso";
       }
+    }
+
+    if (leaderboardToggle) {
+      const canToggle = entries.length > 3;
+      leaderboardToggle.hidden = !canToggle;
+      leaderboardToggle.textContent = showTopTen ? "Ver top 3" : "Ver top 10";
+      leaderboardToggle.setAttribute("aria-expanded", String(showTopTen));
     }
 
     if (rankEl) {
@@ -1454,6 +1465,15 @@
         showForm(err.message || "No se pudo guardar el puntaje.", "error");
       })
       .finally(() => {});
+  }
+
+  if (leaderboardToggle) {
+    leaderboardToggle.addEventListener("click", () => {
+      showTopTen = !showTopTen;
+      if (lastLeaderboardData) {
+        renderLeaderboard(lastLeaderboardData);
+      }
+    });
   }
 
   function initEvents() {
