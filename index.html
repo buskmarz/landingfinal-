@@ -114,8 +114,8 @@
 
         <button class="nav-toggle" aria-controls="primary-nav" aria-expanded="false">
           <span class="nav-toggle__icon" aria-hidden="true"></span>
-          <span class="nav-toggle__label" aria-hidden="true">Menú</span>
-          <span class="sr-only">Abrir menú</span>
+          <span class="nav-toggle__label" aria-hidden="true">Descubre</span>
+          <span class="sr-only">Abrir navegación</span>
         </button>
 
         <nav class="nav" id="primary-nav">
@@ -213,10 +213,6 @@
                 width="640"
                 height="720"
               />
-              <div class="hero__overlay">
-                <p class="hero__overlay-title">Especialidad + funcionales</p>
-                <p class="hero__overlay-text">Perfil sensorial + soporte suave.</p>
-              </div>
             </div>
           </div>
         </div>
@@ -245,6 +241,9 @@
               <ol class="droppy__leaderboard-list" data-leaderboard>
                 <li class="droppy__leaderboard-empty">Cargando leaderboard...</li>
               </ol>
+              <button class="btn btn--ghost btn--sm droppy__leaderboard-toggle" type="button" data-leaderboard-toggle>
+                Ver top 10
+              </button>
               <p class="droppy__leaderboard-rank" data-rank></p>
             </div>
 
@@ -315,15 +314,14 @@
               </div>
             </div>
             <div class="droppy__controls">
-              <button class="btn btn--secondary droppy__jump" type="button">Saltar</button>
-              <p class="droppy__hint">Toca o presiona espacio para saltar.</p>
+              <p class="droppy__hint">Toca la pantalla o presiona espacio para saltar. Doble salto con doble clic.</p>
             </div>
           </div>
         </div>
       </section>
 
       <!-- COMMUNITY -->
-      <section class="section" id="community">
+      <section class="section section--compact" id="community">
         <div class="container community section__grid">
           <div>
             <h2>Wallet Better Mood</h2>
@@ -336,20 +334,8 @@
             </div>
           </div>
 
-          <div class="wallet-card" role="img" aria-label="Tarjeta Wallet Better Mood">
-            <div class="wallet-card__top">
-              <span>Better Mood Coffee</span>
-              <span>Wallet</span>
-            </div>
-            <div class="wallet-card__main">
-              <p class="wallet-card__title">6 sellos = bebida gratis</p>
-              <p class="wallet-card__note">Sin adiciones</p>
-            </div>
-            <div class="wallet-card__tags">
-              <span>Promos</span>
-              <span>Catas</span>
-              <span>Contenido</span>
-            </div>
+          <div class="wallet-card wallet-card--image" role="img" aria-label="Tarjeta Wallet Better Mood">
+            <img class="wallet-card__image" src="assets/wallet.jpg" alt="Wallet Better Mood" loading="lazy" decoding="async" />
           </div>
         </div>
       </section>
@@ -371,7 +357,7 @@
               Ver catálogo completo
             </a>
             <a class="btn btn--secondary" href="assets/menu-better-mood.pdf" target="_blank" rel="noopener">
-              Menú Better Mood
+              Descubre Better Mood
             </a>
           </div>
         </div>
@@ -500,6 +486,9 @@
             <article class="menu-card">
               <h3>Café de especialidad</h3>
               <p>Espresso y métodos con origen claro, perfiles definidos y extracción precisa.</p>
+              <a class="link-arrow" href="https://lavadobetter.netlify.app" target="_blank" rel="noopener noreferrer">
+                Proceso del café
+              </a>
             </article>
             <article class="menu-card">
               <h3>Bebidas funcionales</h3>
@@ -865,28 +854,42 @@
                 <span>🐾 Pet friendly</span>
               </div>
             </div>
-            <div class="hero__actions">
-              <a
-                class="btn btn--secondary"
-                href="https://maps.google.com/?q=Better%20Mood%20Coffee%20Cholula"
-                target="_blank"
-                rel="noopener"
-              >
-                Maps
-              </a>
-              <a
-                class="btn btn--secondary"
-                href="https://waze.com/ul?q=Better%20Mood%20Coffee%20Puebla"
-                target="_blank"
-                rel="noopener"
-              >
-                Waze
-              </a>
-              <a class="btn btn--ghost" href="#menu">Menú</a>
+              <div class="hero__actions">
+                <a
+                  class="btn btn--secondary"
+                  href="https://maps.google.com/?q=Better%20Mood%20Coffee%20Cholula"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  Maps
+                </a>
+                <a
+                  class="btn btn--secondary"
+                  href="https://waze.com/ul?q=Better%20Mood%20Coffee%20Puebla"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  Waze
+                </a>
+              <a class="btn btn--ghost" href="#menu">Descubre</a>
             </div>
           </div>
 
           <div class="map">
+            <div class="hero__card location__card" aria-hidden="true">
+              <img
+                src="assets/hero-coffee.jpg"
+                alt=""
+                loading="lazy"
+                decoding="async"
+                width="640"
+                height="720"
+              />
+              <div class="hero__overlay">
+                <p class="hero__overlay-title">Especialidad + funcionales</p>
+                <p class="hero__overlay-text">Perfil sensorial + soporte suave.</p>
+              </div>
+            </div>
             <iframe
               title="Mapa Better Mood Coffee"
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7542.69884057009!2d-98.22048322456946!3d19.04836868215056!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85cfc14fac2039a3%3A0xa75d980fe5516d27!2sBetter%20Mood%20Coffee!5e0!3m2!1ses!2sca!4v1765492116929!5m2!1ses!2sca"
@@ -958,7 +961,7 @@
           <p>Elige bebida + bienestar informado.</p>
           <div class="hero__actions hero__actions--center">
             <a class="btn btn--primary" href="#order">Pedir ahora</a>
-            <a class="btn btn--secondary" href="#menu">Menú</a>
+            <a class="btn btn--secondary" href="#menu">Descubre</a>
             <a class="btn btn--ghost" href="#location">Ubicación</a>
           </div>
         </div>
@@ -974,9 +977,8 @@
 
         <div class="footer__links">
           <h3>Navegación</h3>
-          <a href="#menu">Menú</a>
+          <a href="#menu">Descubre</a>
           <a href="https://lavadobetter.netlify.app" target="_blank" rel="noopener noreferrer">Proceso del café</a>
-          <a href="#ingredients">Ingredientes</a>
           <a href="#ingredients">Ingredientes y ciencia</a>
           <a href="#community">Comunidad</a>
           <a href="#location">Ubicación</a>
@@ -1005,7 +1007,7 @@
     <div id="certificados" class="sr-only">Certificados y COA disponibles en tienda.</div>
 
     <nav class="mobile-bar" aria-label="Accesos rápidos">
-      <a class="mobile-bar__item" href="#menu">Menú</a>
+      <a class="mobile-bar__item" href="#menu">Descubre</a>
       <a class="mobile-bar__item is-primary" href="#order">Pedir</a>
       <a class="mobile-bar__item" href="#location">Ubicación</a>
     </nav>
