@@ -93,9 +93,9 @@
   let skyGradient = null;
   let wasOnGround = true;
   const forestLayers = {
-    bg: { src: "assets/forest/bg_treeline.png", img: new Image(), ready: false },
-    mg: { src: "assets/forest/mg_trees.png", img: new Image(), ready: false },
-    fg: { src: "assets/forest/fg_trees.png", img: new Image(), ready: false },
+    bg: { src: "assets/bg_treeline.png", img: new Image(), ready: false },
+    mg: { src: "assets/mg_trees.png", img: new Image(), ready: false },
+    fg: { src: "assets/fg_trees.png", img: new Image(), ready: false },
   };
   const forestConfig = {
     bg: { scroll: 0.16, y: 0.72, opacity: 0.75, heightRatio: 0.34 },
