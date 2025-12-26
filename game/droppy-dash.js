@@ -1355,6 +1355,7 @@
       const url = new URL(`${API_BASE}/leaderboard`, window.location.origin);
       if (period) url.searchParams.set("period", period);
       if (focusId) url.searchParams.set("entryId", focusId);
+      url.searchParams.set("limit", showTopTen ? "10" : "3");
       const res = await fetch(url.toString());
       if (!res.ok) throw new Error("leaderboard");
       const data = await res.json();
@@ -1470,9 +1471,7 @@
   if (leaderboardToggle) {
     leaderboardToggle.addEventListener("click", () => {
       showTopTen = !showTopTen;
-      if (lastLeaderboardData) {
-        renderLeaderboard(lastLeaderboardData);
-      }
+      fetchLeaderboard(currentPeriod, entryId || undefined);
     });
   }
 
