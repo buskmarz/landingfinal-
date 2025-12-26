@@ -174,7 +174,7 @@ summary:focus-visible {
 /* Marquee */
 .marquee {
   /* Editables: copy, velocidad, colores y tipografía */
-  --marquee-text: "Café de especialidad · CBD no psicoactivo · Dosis claras y responsables · Ciencia accesible · Bienestar real en taza · Ingredientes de grado alimenticio · ";
+  --marquee-text: "Café de especialidad · CBD no psicoactivo · Información clara y responsable · Ciencia accesible · Bienestar real en taza · Ingredientes de grado alimenticio · ";
   --marquee-duration: 80s; /* Menor = más rápido */
   --marquee-bg: rgba(255, 215, 75, 0.34);
   --marquee-color: var(--black);
@@ -402,6 +402,9 @@ summary:focus-visible {
 /* Sections */
 .section {
   padding: 80px 0;
+}
+.section--compact {
+  padding-bottom: 48px;
 }
 .section#ingredients {
   padding-top: 0;
@@ -1015,6 +1018,17 @@ p {
   display: grid;
   gap: 16px;
 }
+.wallet-card--image {
+  padding: 0;
+  background: none;
+}
+.wallet-card__image {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 22px;
+  box-shadow: 0 18px 28px rgba(35, 31, 32, 0.25);
+}
 .wallet-card__top {
   display: flex;
   justify-content: space-between;
@@ -1072,6 +1086,9 @@ p {
   background: rgba(35, 31, 32, 0.04);
   border: 1px solid rgba(35, 31, 32, 0.08);
   font-size: 0.85rem;
+}
+.location__card {
+  margin-bottom: 16px;
 }
 .hours {
   display: grid;
@@ -1800,6 +1817,9 @@ p {
   padding: 0;
   display: grid;
   gap: 8px;
+}
+.droppy__leaderboard-toggle {
+  margin-top: 12px;
 }
 .droppy__leaderboard-item {
   display: flex;
