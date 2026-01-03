@@ -79,6 +79,30 @@ const setCateringNote = (message, tone = "neutral") => {
   }
 };
 
+const buildCateringMessage = (payload) => {
+  const lines = [
+    "Cotizacion mesa de cafe",
+    `Nombre: ${payload.name}`,
+    `Contacto: ${payload.contact}`,
+    `Fecha: ${payload.date}`,
+    `Invitados: ${payload.guests}`,
+  ];
+  if (payload.details) {
+    lines.push(`Detalles: ${payload.details}`);
+  }
+  return lines.join("\n");
+};
+
+const getCateringWhatsappUrl = (message) => {
+  const base = cateringForm?.dataset.whatsapp || "";
+  const text = encodeURIComponent(message);
+  if (base) {
+    const joiner = base.includes("?") ? "&" : "?";
+    return `${base}${joiner}text=${text}`;
+  }
+  return `https://wa.me/?text=${text}`;
+};
+
 if (cateringForm) {
   const submitButton = cateringForm.querySelector("button[type=submit]");
   cateringForm.addEventListener("submit", async (event) => {
@@ -110,8 +134,12 @@ if (cateringForm) {
       return;
     }
 
-    setCateringNote("Enviando solicitud...");
+    const whatsappMessage = buildCateringMessage(payload);
+    const whatsappUrl = getCateringWhatsappUrl(whatsappMessage);
+
+    setCateringNote("Abriendo WhatsApp y enviando solicitud...");
     if (submitButton) submitButton.disabled = true;
+    window.open(whatsappUrl, "_blank");
 
     try {
       const res = await fetch(`${API_BASE}/catering`, {
