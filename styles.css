@@ -832,6 +832,24 @@ p {
 .menu-card > .btn {
   margin-top: 12px;
 }
+.origin-mini {
+  margin: 18px 0 6px;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(35, 31, 32, 0.08);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.origin-mini p {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
 .panera-feature {
   margin-top: 14px;
   display: grid;
