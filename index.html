@@ -403,7 +403,7 @@
             <h2>Mesa de cafe para eventos.</h2>
             <p>Cafe de especialidad a tu alcance. Podemos montar panques, trufas, tortugas y cafe.</p>
 
-            <form class="catering__form" aria-label="Solicitud de cotizacion">
+            <form class="catering__form" data-catering-form aria-label="Solicitud de cotizacion">
               <label class="catering__label">
                 Nombre
                 <input class="catering__input" name="name" autocomplete="name" required />
@@ -427,13 +427,13 @@
                 <textarea class="catering__textarea" name="details" rows="3" placeholder="Cuantas horas, tipo de evento, requerimientos..."></textarea>
               </label>
               <button class="btn btn--primary" type="submit">Solicitar cotizacion</button>
-              <p class="catering__note">Te contactamos para armar la propuesta.</p>
+              <p class="catering__note" data-catering-note role="status">Te contactamos para armar la propuesta.</p>
             </form>
           </div>
 
           <div class="catering__media">
             <img
-              src="assets/hero-coffee.jpg"
+              src="assets/evento-corporativo.jpg"
               alt="Mesa de cafe para eventos"
               loading="lazy"
               decoding="async"
