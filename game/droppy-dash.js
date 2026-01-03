@@ -1366,6 +1366,26 @@
     }
   }
 
+  function formatWeekRange(startStr) {
+    if (!startStr) return "Semana en curso";
+    const start = new Date(`${startStr}T00:00:00`);
+    if (Number.isNaN(start.getTime())) return "Semana en curso";
+    const end = new Date(start);
+    end.setDate(start.getDate() + 6);
+    const fmt = new Intl.DateTimeFormat("es-MX", { day: "numeric", month: "short" });
+    const startParts = fmt.formatToParts(start);
+    const endParts = fmt.formatToParts(end);
+    const pick = (parts, type) => parts.find((part) => part.type === type)?.value || "";
+    const startDay = pick(startParts, "day");
+    const startMonth = pick(startParts, "month");
+    const endDay = pick(endParts, "day");
+    const endMonth = pick(endParts, "month");
+    if (startMonth === endMonth) {
+      return `${startDay}–${endDay} ${endMonth}`;
+    }
+    return `${startDay} ${startMonth}–${endDay} ${endMonth}`;
+  }
+
   function renderLeaderboard(data) {
     if (!leaderboardList) return;
     const entries = Array.isArray(data.entries) ? data.entries : [];
@@ -1401,7 +1421,7 @@
       } else if (period === "all") {
         periodLabelEl.textContent = "Histórico";
       } else {
-        periodLabelEl.textContent = periodStart ? `Semana del ${periodStart}` : "Semana en curso";
+        periodLabelEl.textContent = formatWeekRange(periodStart);
       }
     }
 
