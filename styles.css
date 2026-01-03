@@ -460,6 +460,9 @@ summary:focus-visible {
 .section--alt {
   background: var(--bg-alt);
 }
+#location {
+  padding-bottom: 56px;
+}
 .section--cta {
   background: var(--black);
   color: var(--bg);
@@ -570,6 +573,10 @@ p {
   gap: 12px;
   margin: 18px 0 18px;
 }
+.location__actions {
+  margin: 10px 0 8px;
+  gap: 8px;
+}
 .hero__actions--center {
   justify-content: center;
 }
@@ -675,9 +682,12 @@ p {
 }
 .hero__media {
   position: relative;
+  max-width: 520px;
+  justify-self: end;
 }
 .hero__card {
   position: relative;
+  aspect-ratio: 4 / 5;
   border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: var(--shadow-sm);
@@ -1202,6 +1212,9 @@ p {
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
 }
+.map {
+  margin-top: 6px;
+}
 
 /* Testimonials */
 .review-summary {
@@ -1651,7 +1664,7 @@ p {
     padding-top: 24px;
   }
   .hero__card {
-    height: 240px;
+    height: auto;
   }
   .hero__card img {
     height: 100%;
@@ -1667,6 +1680,9 @@ p {
   }
   .order-strip {
     padding: 20px 0;
+  }
+  #location {
+    padding-bottom: 40px;
   }
   .drink__image {
     height: 230px;
