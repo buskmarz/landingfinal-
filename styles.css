@@ -309,9 +309,10 @@ summary:focus-visible {
 .nav-toggle__icon {
   width: 32px;
   height: 32px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, #fff6f2, #ffe2d3 65%, #f9c9b3 100%);
-  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.8), 0 6px 12px rgba(35, 31, 32, 0.18);
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid rgba(35, 31, 32, 0.16);
+  box-shadow: 0 6px 12px rgba(35, 31, 32, 0.12);
   display: grid;
   place-items: center;
   position: relative;
@@ -319,27 +320,14 @@ summary:focus-visible {
 }
 .nav-toggle__icon::before {
   content: "";
-  position: absolute;
-  top: 7px;
-  left: 50%;
-  width: 18px;
-  height: 10px;
-  border-radius: 10px 10px 6px 6px;
-  background: linear-gradient(160deg, #f15a4b, #d83a2e);
-  box-shadow: inset 0 -2px 0 rgba(255, 255, 255, 0.25);
-  transform: translateX(-50%);
+  width: 16px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--black);
+  box-shadow: 0 -6px 0 var(--black), 0 6px 0 var(--black);
 }
 .nav-toggle__icon::after {
-  content: "";
-  position: absolute;
-  top: 14px;
-  left: 50%;
-  width: 8px;
-  height: 12px;
-  background: linear-gradient(180deg, #f6e7da, #e8cdb6);
-  border-radius: 6px;
-  box-shadow: inset 0 0 0 1px rgba(120, 70, 50, 0.12);
-  transform: translateX(-50%);
+  content: none;
 }
 .nav-toggle__label {
   display: none;
@@ -417,6 +405,57 @@ summary:focus-visible {
 }
 .section#ingredients > .container {
   padding-top: 72px;
+}
+.catering {
+  align-items: start;
+}
+.catering__media {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(35, 31, 32, 0.08);
+  background: #fff;
+}
+.catering__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.catering__form {
+  margin-top: 16px;
+  display: grid;
+  gap: 12px;
+}
+.catering__label {
+  display: grid;
+  gap: 6px;
+  font-weight: 700;
+}
+.catering__input,
+.catering__textarea {
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid rgba(35, 31, 32, 0.2);
+  padding: 0 12px;
+  font-size: 1rem;
+  font-family: inherit;
+}
+.catering__textarea {
+  height: auto;
+  padding: 10px 12px;
+  resize: vertical;
+}
+.catering__row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.catering__note {
+  margin: 0;
+  font-size: 0.9rem;
+  color: rgba(35, 31, 32, 0.7);
 }
 .section--alt {
   background: var(--bg-alt);
@@ -1604,6 +1643,9 @@ p {
   }
   .section {
     padding: 56px 0;
+  }
+  .catering__row {
+    grid-template-columns: 1fr;
   }
   .order-strip {
     padding: 20px 0;
