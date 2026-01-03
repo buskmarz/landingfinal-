@@ -25,6 +25,20 @@ if (toggleButton && nav) {
   });
 }
 
+const gameLink = document.querySelector(".nav__game");
+const gameSection = document.querySelector("#droppy-dash");
+const gamePlayButton = document.querySelector("[data-play]");
+
+if (gameLink && gameSection) {
+  gameLink.addEventListener("click", (event) => {
+    event.preventDefault();
+    gameSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    window.setTimeout(() => {
+      gamePlayButton?.focus({ preventScroll: true });
+    }, 500);
+  });
+}
+
 const orderDropdown = document.querySelector(".order-dropdown");
 const orderSummary = orderDropdown?.querySelector("summary");
 
