@@ -141,6 +141,18 @@ function getZonedDate(date, timeZone) {
   return new Date(Date.UTC(parts.year, parts.month - 1, parts.day, parts.hour, parts.minute, parts.second));
 }
 
+function getTimeZoneOffsetMs(date, timeZone) {
+  const parts = getZonedParts(date, timeZone);
+  const asUtc = Date.UTC(parts.year, parts.month - 1, parts.day, parts.hour, parts.minute, parts.second);
+  return asUtc - date.getTime();
+}
+
+function getTimeZoneMidnight(year, month, day, timeZone) {
+  const utc = Date.UTC(year, month - 1, day, 0, 0, 0);
+  const offset = getTimeZoneOffsetMs(new Date(utc), timeZone);
+  return new Date(utc - offset);
+}
+
 function formatDateKey(date, timeZone) {
   const parts = getZonedParts(date, timeZone);
   return `${parts.year}-${String(parts.month).padStart(2, "0")}-${String(parts.day).padStart(2, "0")}`;
@@ -152,17 +164,22 @@ function formatMonthKey(date, timeZone) {
 }
 
 function getWeekStartDate(date = new Date()) {
-  const zoned = getZonedDate(date, WEEK_TZ);
-  const weekday = zoned.getUTCDay();
+  const parts = getZonedParts(date, WEEK_TZ);
+  const localDate = new Date(Date.UTC(parts.year, parts.month - 1, parts.day));
+  const weekday = localDate.getUTCDay();
   const diff = (weekday + 6) % 7;
-  zoned.setUTCDate(zoned.getUTCDate() - diff);
-  zoned.setUTCHours(0, 0, 0, 0);
-  return zoned;
+  localDate.setUTCDate(localDate.getUTCDate() - diff);
+  return getTimeZoneMidnight(
+    localDate.getUTCFullYear(),
+    localDate.getUTCMonth() + 1,
+    localDate.getUTCDate(),
+    WEEK_TZ
+  );
 }
 
 function getMonthStartDate(date = new Date()) {
   const parts = getZonedParts(date, WEEK_TZ);
-  return new Date(Date.UTC(parts.year, parts.month - 1, 1, 0, 0, 0));
+  return getTimeZoneMidnight(parts.year, parts.month, 1, WEEK_TZ);
 }
 
 function getPeriodMeta(period, date = new Date()) {
