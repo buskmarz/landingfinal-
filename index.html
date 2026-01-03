@@ -1,736 +1,2286 @@
-<!doctype html>
-<html lang="es-MX">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+:root {
+  --yellow: #ffd74b;
+  --black: #231f20;
+  --bg: #fffdf6;
+  --bg-alt: #f3f1ea;
+  --gray: #a6a6a6;
+  --header-offset: 72px;
+  --radius-lg: 16px;
+  --radius-md: 12px;
+  --shadow-sm: 0 6px 24px rgba(35, 31, 32, 0.08);
+  --maxw: 1200px;
+}
 
-    <title>Better Mood Coffee Puebla | Café de especialidad con CBD y adaptógenos</title>
-    <meta
-      name="description"
-      content="Café de especialidad en Puebla con CBD de amplio espectro y adaptógenos. Información clara, baristas entrenados y trazabilidad."
-    />
-    <meta name="robots" content="index,follow" />
-    <link rel="canonical" href="{{SITE_URL}}" />
-    <meta
-      name="keywords"
-      content="café de especialidad Puebla, cafetería CBD Puebla, Colonia La Paz Puebla, bebidas funcionales, café con adaptógenos, latte con CBD, wellness responsable, Better Mood Coffee"
-    />
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
-    <meta property="og:locale" content="es_MX" />
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Better Mood Coffee" />
-    <meta property="og:title" content="Better Mood Coffee Puebla | Café de especialidad con CBD y adaptógenos" />
-    <meta
-      property="og:description"
-      content="Café de especialidad en Puebla con CBD de amplio espectro y adaptógenos. Información clara, baristas entrenados y trazabilidad."
-    />
-    <meta property="og:url" content="{{SITE_URL}}" />
-    <meta property="og:image" content="{{OG_IMAGE_URL}}" />
-    <meta property="og:image:alt" content="Better Mood Coffee Puebla" />
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--header-offset, 72px);
+}
 
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Better Mood Coffee Puebla | Café de especialidad con CBD y adaptógenos" />
-    <meta
-      name="twitter:description"
-      content="Café de especialidad en Puebla con CBD de amplio espectro y adaptógenos. Información clara, baristas entrenados y trazabilidad."
-    />
-    <meta name="twitter:url" content="{{SITE_URL}}" />
-    <meta name="twitter:image" content="{{OG_IMAGE_URL}}" />
+body {
+  margin: 0;
+  font-family: "Metropolis", "Montserrat", system-ui, -apple-system, Segoe UI, sans-serif;
+  color: var(--black);
+  background: var(--bg);
+  line-height: 1.6;
+  padding-top: var(--header-offset, 72px);
+}
+body.droppy-lock {
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: none;
+}
 
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "CafeOrCoffeeShop",
-        "name": "Better Mood Coffee",
-        "description": "Café de especialidad con CBD de amplio espectro y adaptógenos, con enfoque de bienestar responsable en Puebla.",
-        "url": "{{SITE_URL}}",
-        "image": "{{OG_IMAGE_URL}}",
-        "priceRange": "$$",
-        "aggregateRating": {
-          "@type": "AggregateRating",
-          "ratingValue": 4.4,
-          "reviewCount": 168
-        },
-        "servesCuisine": ["Coffee", "Desserts"],
-        "telephone": "+52XXXXXXXXXX",
-        "address": {
-          "@type": "PostalAddress",
-          "streetAddress": "13 Poniente 2302/F, Col. La Paz",
-          "addressLocality": "Puebla",
-          "addressRegion": "Pue.",
-          "postalCode": "{{POSTAL_CODE}}",
-          "addressCountry": "MX"
-        },
-        "geo": {
-          "@type": "GeoCoordinates",
-          "latitude": "{{LAT}}",
-          "longitude": "{{LNG}}"
-        },
-        "openingHoursSpecification": [
-          {
-            "@type": "OpeningHoursSpecification",
-            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-            "opens": "08:00",
-            "closes": "21:00"
-          },
-          {
-            "@type": "OpeningHoursSpecification",
-            "dayOfWeek": "Saturday",
-            "opens": "09:00",
-            "closes": "20:00"
-          },
-          {
-            "@type": "OpeningHoursSpecification",
-            "dayOfWeek": "Sunday",
-            "opens": "10:00",
-            "closes": "18:00"
-          }
-        ],
-        "sameAs": [
-          "https://wa.me/message/WQWEEODGY6H2P1",
-          "https://instagram.com/bettermood.coffee",
-          "https://facebook.com/bettermoodcoffee"
-        ]
-      }
-    </script>
+[id] {
+  scroll-margin-top: var(--header-offset, 72px);
+}
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="styles.css" />
-    <link rel="icon" href="assets/favicon.ico" />
-  </head>
-  <body>
-    <a class="skip-link" href="#main">Saltar al contenido</a>
+img {
+  max-width: 100%;
+  display: block;
+}
 
-	    <header class="header" id="top">
-	      <div class="container header__inner">
-        <a class="logo" href="#top" aria-label="Better Mood Coffee">
-          <img src="assets/logo-better-mood.png" alt="Better Mood Coffee" />
-        </a>
+a {
+  color: inherit;
+  text-decoration: none;
+}
 
-        <button class="nav-toggle" aria-controls="primary-nav" aria-expanded="false">
-          <span class="nav-toggle__icon" aria-hidden="true"></span>
-          <span class="nav-toggle__label" aria-hidden="true">Menú</span>
-          <span class="sr-only">Abrir navegación</span>
-        </button>
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible {
+  outline: 3px solid var(--yellow);
+  outline-offset: 3px;
+}
+.btn:focus-visible {
+  outline: 3px solid var(--black);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 4px rgba(255, 215, 75, 0.75);
+}
 
-        <nav class="nav" id="primary-nav">
-          <a href="#menu">Menú</a>
-          <a href="#location">Ubicación</a>
-          <a href="#ingredients">Bienestar y CBD</a>
-          <a href="#community">Comunidad</a>
-          <a class="nav__game" href="#droppy-dash">
-            <span>Juega y gana</span>
-            <small>Top 3 semanal = bebida gratis</small>
-          </a>
-          <a class="nav__tag" href="https://drive.google.com/drive/folders/17h4TmJz7SYwpuY8gR-75qDLrflPmosqd?usp=share_link" target="_blank" rel="noopener noreferrer" title="Productos CBD + adaptógenos">Productos</a>
-          <a href="#contacto">Contacto</a>
-          <details class="order-dropdown">
-            <summary class="btn btn--sm btn--primary" aria-label="Pedir ahora">
-              Pedir ahora
-            </summary>
-            <div class="order-dropdown__menu" role="menu" aria-label="Opciones para pedir a domicilio">
-              <a
-                class="order-dropdown__item"
-                role="menuitem"
-                href="https://www.ubereats.com/store/better-mood-coffee/hPA2fzGUX9WLGGvkeNwCrg?diningMode=DELIVERY"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Uber Eats
-              </a>
-              <a
-                class="order-dropdown__item"
-                role="menuitem"
-                href="https://www.rappi.com.mx/restaurantes/delivery/495986-better-mood-coffee?utm_source=app&amp;utm_medium=deeplink&amp;utm_campaign=share"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Rappi
-              </a>
-            </div>
-          </details>
-        </nav>
-	      </div>
-		    </header>
+.container {
+  width: 100%;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 24px;
+}
 
-	    <main id="main">
-	      <!-- HERO -->
-	      <section class="hero" aria-labelledby="hero-title">
-	        <div class="container hero__grid">
-          <div class="hero__content">
-            <h1 id="hero-title">Bienestar real en taza.</h1>
-            <p class="hero__subtitle">
-              Café de especialidad con CBD y adaptógenos responsables.
-            </p>
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.skip-link:focus {
+  left: 16px;
+  top: 16px;
+  width: auto;
+  height: auto;
+  padding: 8px 12px;
+  background: var(--yellow);
+  border-radius: var(--radius-md);
+  z-index: 999;
+}
 
-            <div class="hero__actions">
-              <a class="btn btn--primary" href="#order">Pedir ahora</a>
-            </div>
-          </div>
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
 
-          <div class="hero__media">
-            <div class="hero__card">
-              <img
-                src="assets/hero-coffee.jpg"
-                alt="Café de especialidad con funcionales"
-                loading="lazy"
-                decoding="async"
-                width="640"
-                height="720"
-              />
-              <div class="hero__overlay">
-                <p class="hero__overlay-title">Especialidad + funcionales</p>
-                <p class="hero__overlay-text">Perfil sensorial + soporte suave.</p>
-              </div>
-            </div>
-          </div>
+/* Header */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: rgba(255, 253, 246, 0.9);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(35, 31, 32, 0.08);
+}
+.header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 72px;
+  gap: 16px;
+}
+.logo img {
+  height: 36px;
+  width: auto;
+}
 
-        </div>
-      </section>
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  padding: 6px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(35, 31, 32, 0.08);
+  background: rgba(255, 255, 255, 0.55);
+}
+.nav__game {
+  display: grid;
+  gap: 2px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+.nav__game small {
+  font-size: 0.7rem;
+  color: rgba(35, 31, 32, 0.7);
+  font-weight: 600;
+  display: block;
+}
+.nav a:not(.btn) {
+  padding: 8px 10px;
+  border-radius: 999px;
+  transition: background 160ms ease, transform 160ms ease;
+}
+.nav a:not(.btn):hover {
+  background: rgba(35, 31, 32, 0.06);
+}
+.nav__tag {
+  font-weight: 800;
+  background: rgba(255, 215, 75, 0.55);
+  border: 1px solid rgba(35, 31, 32, 0.12);
+}
+.nav__tag:hover {
+  background: rgba(255, 215, 75, 0.8);
+}
+.header .nav .btn {
+  border-radius: 999px;
+}
+.header .nav .btn--primary {
+  box-shadow: none;
+}
+.header .nav .btn--primary:hover {
+  transform: none;
+}
 
-      <!-- ORDER -->
-      <section class="order-strip" id="order" aria-labelledby="order-title">
-        <div class="container order-strip__inner">
-          <div>
-            <h2 id="order-title">Pedir ahora</h2>
-            <p>Entrega rápida en Uber Eats o Rappi.</p>
-          </div>
-          <div class="order-strip__actions" aria-label="Plataformas de entrega">
-            <a class="btn btn--primary" href="https://www.ubereats.com/store/better-mood-coffee/hPA2fzGUX9WLGGvkeNwCrg?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer">
-              Uber Eats
-            </a>
-            <a class="btn btn--secondary" href="https://www.rappi.com.mx/restaurantes/delivery/495986-better-mood-coffee?utm_source=app&amp;utm_medium=deeplink&amp;utm_campaign=share" target="_blank" rel="noopener noreferrer">
-              Rappi
-            </a>
-          </div>
-        </div>
-      </section>
+/* Marquee */
+.marquee {
+  /* Editables: copy, velocidad, colores y tipografía */
+  --marquee-text: "Café de especialidad · CBD no psicoactivo · Información clara y responsable · Ciencia accesible · Bienestar real en taza · Ingredientes de grado alimenticio · ";
+  --marquee-duration: 80s; /* Menor = más rápido */
+  --marquee-bg: rgba(255, 215, 75, 0.34);
+  --marquee-color: var(--black);
+  --marquee-border: rgba(35, 31, 32, 0.08);
+  --marquee-font-size: 0.92rem;
+  --marquee-font-weight: 700;
+  --marquee-letter-spacing: 0.04em;
+  --marquee-padding-y: 10px;
 
-      <!-- MENU -->
-      <section class="section" id="menu">
-        <div class="container">
-          <div class="section__header">
-            <h2>Menú claro para elegir rápido.</h2>
-            <p>Especialidad + funcionales, sin rodeos.</p>
-          </div>
+  width: 100%;
+  overflow: hidden;
+  background: var(--marquee-bg);
+  color: var(--marquee-color);
+  border-bottom: 1px solid var(--marquee-border);
+}
 
-          <div class="menu-grid">
-            <article class="menu-card">
-              <h3>Café de especialidad</h3>
-              <p>Espresso y métodos con origen claro.</p>
-            </article>
-            <article class="menu-card">
-              <h3>Bebidas funcionales</h3>
-              <p>Ingredientes funcionales con guía clara.</p>
-            </article>
-            <article class="menu-card">
-              <h3>Smoothies</h3>
-              <p>Fruta real + funcionales.</p>
-            </article>
-            <article class="menu-card">
-              <h3>Creaciones Better Mood</h3>
-              <p>Recetas de temporada y bebidas firma.</p>
-            </article>
-            <article class="menu-card">
-              <h3>Productos funcionales</h3>
-              <p>CBD, adaptógenos y aliados del bienestar diario.</p>
-              <a
-                class="btn btn--primary btn--sm"
-                href="https://drive.google.com/drive/folders/17h4TmJz7SYwpuY8gR-75qDLrflPmosqd?usp=share_link"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Ver productos CBD + adaptógenos
-              </a>
-            </article>
-            <article class="menu-card">
-              <h3>Postres Panera Signature</h3>
-              <p>Postres artesanales de Panera Signature.</p>
-              <a
-                class="btn btn--secondary btn--sm"
-                href="https://www.instagram.com/panera.signature?igsh=MTBvdGNjem82bnNueQ%3D%3D&utm_source=qr"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Ver Panera Signature
-              </a>
-            </article>
-          </div>
+.marquee__inner {
+  padding: var(--marquee-padding-y) 0;
+}
 
-          <div class="origin-mini">
-            <p><strong>Café de Finca Santa Cruz.</strong> Trazabilidad completa.</p>
-            <a class="link-arrow" href="https://lavadobetter.netlify.app" target="_blank" rel="noopener noreferrer">
-              Historia completa
-            </a>
-          </div>
+.marquee__track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: marquee-scroll var(--marquee-duration) linear infinite;
+}
 
-          <div class="featured-drinks">
-            <h3>Bebidas estrella</h3>
-            <div class="featured-drinks__grid">
-              <article class="drink">
-                <img class="drink__image" src="assets/dragon.jpg" alt="Dragon's Blood" loading="lazy" decoding="async" width="300" height="220" />
-                <div class="drink__body">
-                  <h4>Dragon's Blood</h4>
-                  <p>Mango, fresa y durazno en agua mineral.</p>
-                  <div class="drink__meta">
-                    <span class="drink__price">$99</span>
-                    <span class="drink__chip">Frío</span>
-                    <span class="drink__chip">Efecto: calma</span>
-                  </div>
-                  <a class="btn btn--primary btn--sm" href="https://www.ubereats.com/store/better-mood-coffee/hPA2fzGUX9WLGGvkeNwCrg?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer">Pedir esta bebida</a>
-                </div>
-              </article>
-              <article class="drink">
-                <img class="drink__image" src="assets/Coldbarry.jpg" alt="Cold Berry Days" loading="lazy" decoding="async" width="300" height="220" />
-                <div class="drink__body">
-                  <h4>Cold Berry Days</h4>
-                  <p>Fresa, hierbabuena y ginger ale.</p>
-                  <div class="drink__meta">
-                    <span class="drink__price">$122</span>
-                    <span class="drink__chip">Frío</span>
-                    <span class="drink__chip">Efecto: calma</span>
-                  </div>
-                  <a class="btn btn--primary btn--sm" href="https://www.ubereats.com/store/better-mood-coffee/hPA2fzGUX9WLGGvkeNwCrg?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer">Pedir esta bebida</a>
-                </div>
-              </article>
-              <article class="drink">
-                <img class="drink__image" src="assets/sweettrip.jpg" alt="Sweet Trip" loading="lazy" decoding="async" width="300" height="220" />
-                <div class="drink__body">
-                  <h4>Sweet Trip</h4>
-                  <p>Fresa mineral con perlas explosivas.</p>
-                  <div class="drink__meta">
-                    <span class="drink__price">$195</span>
-                    <span class="drink__chip">Frío</span>
-                    <span class="drink__chip">Efecto: energía</span>
-                  </div>
-                  <a class="btn btn--primary btn--sm" href="https://www.ubereats.com/store/better-mood-coffee/hPA2fzGUX9WLGGvkeNwCrg?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer">Pedir esta bebida</a>
-                </div>
-              </article>
-              <article class="drink">
-                <img class="drink__image" src="assets/spaceman.jpg" alt="Spaceman" loading="lazy" decoding="async" width="300" height="220" />
-                <div class="drink__body">
-                  <h4>Spaceman</h4>
-                  <p>Lavanda y limón en agua mineral.</p>
-                  <div class="drink__meta">
-                    <span class="drink__price">$195</span>
-                    <span class="drink__chip">Frío</span>
-                    <span class="drink__chip">Efecto: calma</span>
-                  </div>
-                  <a class="btn btn--primary btn--sm" href="https://www.ubereats.com/store/better-mood-coffee/hPA2fzGUX9WLGGvkeNwCrg?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer">Pedir esta bebida</a>
-                </div>
-              </article>
-            </div>
-          </div>
+.marquee__content {
+  flex: 0 0 auto;
+}
 
-          <div class="section__cta">
-            <a class="btn btn--primary" href="#order">Pedir ahora</a>
-            <a class="btn btn--secondary" href="assets/menu-better-mood.pdf" target="_blank" rel="noopener">
-              Ver menú completo
-            </a>
-          </div>
-        </div>
-      </section>
+.marquee__content::before {
+  /* Repetición para que el loop sea continuo y sin cortes */
+  content: var(--marquee-text) var(--marquee-text) var(--marquee-text) var(--marquee-text);
+  white-space: nowrap;
+  font-size: var(--marquee-font-size);
+  font-weight: var(--marquee-font-weight);
+  line-height: 1;
+  letter-spacing: var(--marquee-letter-spacing);
+}
 
-      <!-- CATALOG -->
-      <section class="order-strip" id="catalogo" aria-labelledby="catalogo-title">
-        <div class="container order-strip__inner">
-          <div>
-            <h2 id="catalogo-title">Productos CBD + adaptógenos</h2>
-            <p>Productos funcionales con información clara.</p>
-          </div>
-          <div class="order-strip__actions" aria-label="Productos Better Mood">
-            <a
-              class="btn btn--secondary"
-              href="https://drive.google.com/drive/folders/17h4TmJz7SYwpuY8gR-75qDLrflPmosqd?usp=share_link"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Ver productos
-            </a>
-          </div>
-        </div>
-      </section>
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
 
-      <!-- LOCATION -->
-      <section class="section section--alt" id="location">
-        <div class="container location section__grid">
-          <div>
-            <h2>Visítanos en Puebla.</h2>
-            <p>Café de especialidad, ambiente cómodo.</p>
-            <div class="location__info">
-              <p><strong>Dirección:</strong> <span>13 poniente 2302/F Col.La Paz</span></p>
-              <div class="hours">
-                <strong class="hours__label">Horarios:</strong>
-                <dl class="hours__list">
-                  <div class="hours__row">
-                    <dt>Lunes a Viernes</dt>
-                    <dd>8:00 – 21:00</dd>
-                  </div>
-                  <div class="hours__row">
-                    <dt>Sábado</dt>
-                    <dd>9:00 – 20:00</dd>
-                  </div>
-                  <div class="hours__row">
-                    <dt>Domingo</dt>
-                    <dd>10:00 – 18:00</dd>
-                  </div>
-                </dl>
-              </div>
-              <p><strong>Estacionamiento:</strong> Sí, sobre 13 Poniente.</p>
-              <div class="location__amenities" aria-label="Amenidades">
-                <span>📶 Wi‑Fi</span>
-                <span>🔌 Enchufes</span>
-                <span>🐾 Pet friendly</span>
-              </div>
-            </div>
-            <div class="hero__actions location__actions">
-              <a
-                class="btn btn--secondary"
-                href="https://maps.google.com/?q=Better%20Mood%20Coffee%20Cholula"
-                target="_blank"
-                rel="noopener"
-              >
-                Maps
-              </a>
-              <a
-                class="btn btn--secondary"
-                href="https://waze.com/ul?q=Better%20Mood%20Coffee%20Puebla"
-                target="_blank"
-                rel="noopener"
-              >
-                Waze
-              </a>
-            </div>
-          </div>
+@media (prefers-reduced-motion: reduce) {
+  .marquee__track {
+    animation: none;
+    transform: translateX(0);
+  }
+}
 
-          <div class="map">
-            <iframe
-              title="Mapa Better Mood Coffee"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7542.69884057009!2d-98.22048322456946!3d19.04836868215056!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85cfc14fac2039a3%3A0xa75d980fe5516d27!2sBetter%20Mood%20Coffee!5e0!3m2!1ses!2sca!4v1765492116929!5m2!1ses!2sca"
-              width="100%"
-              height="360"
-              style="border:0"
-              allowfullscreen=""
-              loading="lazy"
-              referrerpolicy="no-referrer-when-downgrade"
-            ></iframe>
-          </div>
-        </div>
-      </section>
+@media (max-width: 720px) {
+  .marquee {
+    --marquee-font-size: 0.86rem;
+    --marquee-padding-y: 8px;
+  }
+}
 
-      <!-- CATERING -->
-      <section class="section" id="catering">
-        <div class="container section__grid catering">
-          <div>
-            <h2>Mesa de cafe para eventos.</h2>
-            <p>Cafe de especialidad a tu alcance. Podemos montar panques, trufas, tortugas y cafe.</p>
+.order-dropdown {
+  position: relative;
+}
+.order-dropdown > summary {
+  cursor: pointer;
+  list-style: none;
+}
+.order-dropdown > summary::-webkit-details-marker {
+  display: none;
+}
+.order-dropdown__menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  min-width: 210px;
+  padding: 10px;
+  border-radius: 14px;
+  border: 1px solid rgba(35, 31, 32, 0.12);
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: var(--shadow-sm);
+  display: grid;
+  gap: 8px;
+  z-index: 200;
+}
+.order-dropdown__item {
+  display: block;
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-weight: 800;
+  border: 1px solid rgba(35, 31, 32, 0.08);
+  background: rgba(35, 31, 32, 0.03);
+  transition: background 160ms ease, transform 160ms ease, border-color 160ms ease;
+}
+.order-dropdown__item:hover {
+  background: rgba(255, 215, 75, 0.45);
+  border-color: rgba(35, 31, 32, 0.12);
+}
 
-            <form
-              class="catering__form"
-              data-catering-form
-              data-whatsapp="https://wa.me/message/WQWEEODGY6H2P1"
-              aria-label="Solicitud de cotizacion"
-            >
-              <label class="catering__label">
-                Nombre
-                <input class="catering__input" name="name" autocomplete="name" required />
-              </label>
-              <label class="catering__label">
-                Email o telefono
-                <input class="catering__input" name="contact" autocomplete="email" required />
-              </label>
-              <div class="catering__row">
-                <label class="catering__label">
-                  Fecha del evento
-                  <input class="catering__input" type="date" name="date" required />
-                </label>
-                <label class="catering__label">
-                  Invitados aprox.
-                  <input class="catering__input" type="number" name="guests" min="1" inputmode="numeric" required />
-                </label>
-              </div>
-              <label class="catering__label">
-                Lugar / detalles
-                <textarea class="catering__textarea" name="details" rows="3" placeholder="Cuantas horas, tipo de evento, requerimientos..."></textarea>
-              </label>
-              <button class="btn btn--primary" type="submit">Solicitar cotizacion</button>
-              <p class="catering__note" data-catering-note role="status">Te contactamos para armar la propuesta.</p>
-            </form>
-          </div>
+.nav-toggle {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, rgba(255, 246, 216, 0.95), rgba(255, 255, 255, 0.95));
+  border: 1px solid rgba(35, 31, 32, 0.12);
+  padding: 6px 14px 6px 8px;
+  border-radius: 999px;
+  box-shadow: 0 10px 18px rgba(35, 31, 32, 0.12);
+  cursor: pointer;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+  position: relative;
+}
+.nav-toggle:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 24px rgba(35, 31, 32, 0.16);
+}
+.nav-toggle:active {
+  transform: translateY(0);
+}
+.nav-toggle[aria-expanded="true"] {
+  background: linear-gradient(135deg, rgba(255, 215, 75, 0.9), rgba(255, 245, 210, 0.95));
+  box-shadow: 0 14px 24px rgba(35, 31, 32, 0.2);
+}
+.nav-toggle__bar {
+  display: none;
+}
+.nav-toggle__icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid rgba(35, 31, 32, 0.16);
+  box-shadow: 0 6px 12px rgba(35, 31, 32, 0.12);
+  display: grid;
+  place-items: center;
+  position: relative;
+  flex-shrink: 0;
+}
+.nav-toggle__icon::before {
+  content: "";
+  width: 16px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--black);
+  box-shadow: 0 -6px 0 var(--black), 0 6px 0 var(--black);
+}
+.nav-toggle__icon::after {
+  content: none;
+}
+.nav-toggle__label {
+  display: none;
+  font-weight: 800;
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+}
 
-          <div class="catering__media">
-            <img
-              src="assets/evento-corporativo.jpg"
-              alt="Mesa de cafe para eventos"
-              loading="lazy"
-              decoding="async"
-              width="800"
-              height="1000"
-            />
-          </div>
-        </div>
-      </section>
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 48px;
+  padding: 0 18px;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  border: 2px solid transparent;
+  transition: background 160ms ease, color 160ms ease, transform 160ms ease, border-color 160ms ease;
+}
+.btn--sm {
+  height: 40px;
+  padding: 0 14px;
+  font-size: 0.95rem;
+}
+.btn--primary {
+  background: var(--yellow);
+  color: var(--black);
+  box-shadow: var(--shadow-sm);
+}
+.btn--primary:hover {
+  background: #f4c900;
+  transform: translateY(-1px);
+}
+.btn--secondary {
+  background: transparent;
+  border-color: var(--black);
+}
+.btn--secondary:hover {
+  background: var(--black);
+  color: var(--yellow);
+}
+.btn--ghost {
+  background: transparent;
+  border-color: transparent;
+  font-weight: 600;
+}
+.btn--ghost:hover {
+  background: rgba(35, 31, 32, 0.06);
+}
 
-      <!-- WELLNESS -->
-      <section class="section" id="ingredients">
-        <div class="container">
-          <div class="section__header">
-            <h2>Bienestar y CBD, claro y responsable.</h2>
-            <p>Información breve para decidir con confianza.</p>
-          </div>
+.link-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+}
+.link-arrow::after {
+  content: "→";
+  font-weight: 700;
+  transform: translateY(-1px);
+}
 
-          <div class="faq" aria-labelledby="bienestar-title">
-            <h3 id="bienestar-title">Preguntas clave</h3>
-            <div class="faq__items">
-              <details class="faq__item">
-                <summary>Café de especialidad y origen trazable</summary>
-                <p>Finca Santa Cruz, tueste y extracción precisos. Baristas entrenados para un perfil consistente.</p>
-              </details>
-              <details class="faq__item">
-                <summary>CBD amplio espectro (no psicoactivo)</summary>
-                <p>Apoyo suave para equilibrio interno. No es medicamento y su uso es responsable.</p>
-                <p>No recomendado: embarazo, lactancia o menores.</p>
-              </details>
-              <details class="faq__item">
-                <summary>Adaptógenos y hongos funcionales</summary>
-                <p>Ashwagandha, melena de león, reishi y cordyceps. Soporte suave para enfoque, energía y calma.</p>
-              </details>
-              <details class="faq__item">
-                <summary>Cómo se siente</summary>
-                <p>Calma ligera, enfoque estable y energía suave, sin picos ni promesas médicas.</p>
-              </details>
-              <details class="faq__item">
-                <summary>Transparencia y seguridad</summary>
-                <p>
-                  COA/Labs disponibles:
-                  <a href="assets/coafocus.pdf" target="_blank" rel="noopener noreferrer">Focus</a>
-                  · <a href="assets/coacalming.pdf" target="_blank" rel="noopener noreferrer">Calming</a>
-                  · <a href="assets/coasleep.pdf" target="_blank" rel="noopener noreferrer">Sleep</a>
-                  · <a href="assets/coawellness.pdf" target="_blank" rel="noopener noreferrer">Wellness</a>
-                </p>
-                <p>Si tomas medicamentos, consulta a tu médico.</p>
-              </details>
-            </div>
-          </div>
-        </div>
-      </section>
+/* Sections */
+.section {
+  padding: 80px 0;
+}
+.section--compact {
+  padding-bottom: 48px;
+}
+.section#ingredients {
+  padding-top: 0;
+}
+.section#ingredients > .container {
+  padding-top: 72px;
+}
+.catering {
+  align-items: start;
+}
+.catering__media {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(35, 31, 32, 0.08);
+  background: #fff;
+}
+.catering__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.catering__form {
+  margin-top: 16px;
+  display: grid;
+  gap: 12px;
+}
+.catering__label {
+  display: grid;
+  gap: 6px;
+  font-weight: 700;
+}
+.catering__input,
+.catering__textarea {
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid rgba(35, 31, 32, 0.2);
+  padding: 0 12px;
+  font-size: 1rem;
+  font-family: inherit;
+}
+.catering__textarea {
+  height: auto;
+  padding: 10px 12px;
+  resize: vertical;
+}
+.catering__row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.catering__note {
+  margin: 0;
+  font-size: 0.9rem;
+  color: rgba(35, 31, 32, 0.7);
+}
+.section--alt {
+  background: var(--bg-alt);
+}
+#location {
+  padding-bottom: 56px;
+}
+.section--cta {
+  background: var(--black);
+  color: var(--bg);
+}
+.section__header {
+  max-width: 720px;
+  margin: 0 auto 32px;
+  text-align: center;
+}
+.section__header p {
+  color: rgba(35, 31, 32, 0.8);
+}
+.section--cta .section__header p,
+.section--cta p {
+  color: rgba(255, 253, 246, 0.9);
+}
+.section--cta .btn--secondary {
+  border-color: rgba(255, 253, 246, 0.85);
+  color: var(--bg);
+}
+.section--cta .btn--secondary:hover {
+  background: var(--bg);
+  color: var(--black);
+}
+.section--cta .btn--ghost {
+  color: var(--bg);
+}
+.section--cta .btn--ghost:hover {
+  background: rgba(255, 253, 246, 0.12);
+}
+.section--cta .btn:focus-visible {
+  outline-color: var(--yellow);
+}
+.section__grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 40px;
+  align-items: center;
+}
+.section__cta {
+  margin-top: 28px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.section__cta--left {
+  justify-content: flex-start;
+}
 
-      <!-- COMMUNITY -->
-      <section class="section section--compact" id="community">
-        <div class="container community section__grid">
-          <div>
-            <h2>Wallet Better Mood</h2>
-            <p>Recompensas por visita y consumo.</p>
-            <div class="hero__actions">
-              <a class="btn btn--secondary" href="https://take.cards/7pgmg" target="_blank" rel="noopener">
-                Instalar wallet
-              </a>
-            </div>
-          </div>
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1.2;
+  margin: 0 0 12px;
+  letter-spacing: -0.02em;
+}
+h1 {
+  font-size: clamp(2.4rem, 4.2vw, 3.6rem);
+}
+h2 {
+  font-size: clamp(1.8rem, 2.8vw, 2.4rem);
+}
+h3 {
+  font-size: 1.25rem;
+}
+h4 {
+  font-size: 1.05rem;
+}
+p {
+  margin: 0 0 12px;
+}
 
-          <div class="wallet-card wallet-card--image" role="img" aria-label="Tarjeta Wallet Better Mood">
-            <img class="wallet-card__image" src="assets/wallet.jpg" alt="Wallet Better Mood" loading="lazy" decoding="async" />
-          </div>
-        </div>
-      </section>
+/* Hero */
+.hero {
+  padding: 32px 0 72px;
+}
+.hero__grid {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 40px;
+  align-items: center;
+}
+.eyebrow {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.85rem;
+  color: rgba(35, 31, 32, 0.7);
+  margin-bottom: 10px;
+}
+.hero__subtitle {
+  font-size: 1.15rem;
+  font-weight: 500;
+  margin-bottom: 14px;
+}
+.hero__text {
+  font-size: 1.05rem;
+  color: rgba(35, 31, 32, 0.9);
+}
+.hero__text--short {
+  display: none;
+}
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 18px 0 18px;
+}
+.location__actions {
+  margin: 10px 0 8px;
+  gap: 8px;
+}
+.hero__actions--center {
+  justify-content: center;
+}
+.hero__bullets {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 14px;
+  display: grid;
+  gap: 8px;
+  font-weight: 600;
+}
+.hero__bullets li {
+  padding-left: 24px;
+  position: relative;
+}
+.hero__bullets li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 6px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--yellow);
+  border: 2px solid var(--black);
+}
+.hero__trust {
+  margin: 10px 0 16px;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(35, 31, 32, 0.08);
+  box-shadow: var(--shadow-sm);
+  display: grid;
+  gap: 10px;
+}
+.hero__trust-title {
+  margin: 0;
+  font-weight: 800;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+}
+.hero__trust-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 6px;
+  font-size: 0.92rem;
+  color: rgba(35, 31, 32, 0.8);
+}
+.certificates {
+  position: relative;
+}
+.certificates > summary {
+  list-style: none;
+  cursor: pointer;
+}
+.certificates > summary::-webkit-details-marker {
+  display: none;
+}
+.certificates__menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 200px;
+  padding: 10px;
+  border-radius: 14px;
+  border: 1px solid rgba(35, 31, 32, 0.12);
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: var(--shadow-sm);
+  display: grid;
+  gap: 8px;
+  z-index: 20;
+}
+.certificates__item {
+  display: block;
+  padding: 8px 10px;
+  border-radius: 10px;
+  font-weight: 800;
+  border: 1px solid rgba(35, 31, 32, 0.08);
+  background: rgba(35, 31, 32, 0.03);
+  transition: background 160ms ease, transform 160ms ease, border-color 160ms ease;
+}
+.certificates__item:hover {
+  background: rgba(255, 215, 75, 0.45);
+  border-color: rgba(35, 31, 32, 0.12);
+}
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.badges li {
+  background: #fff;
+  border: 1px solid rgba(35, 31, 32, 0.08);
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.9rem;
+}
+.hero__media {
+  position: relative;
+  max-width: 520px;
+  justify-self: end;
+}
+.hero__card {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  background: #000;
+}
+.hero__card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.9;
+}
+.hero__overlay {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 18px;
+  background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.6));
+  color: #fff;
+}
+.hero__overlay-title {
+  font-weight: 700;
+  margin: 0 0 4px;
+}
+.hero__overlay-text {
+  margin: 0;
+  opacity: 0.9;
+}
 
-      <!-- DROPPY DASH -->
-      <section class="section section--alt droppy" id="droppy-dash" data-droppy>
-        <div class="container droppy__grid">
-          <div class="droppy__intro">
-            <p class="eyebrow">Arcade premium · Better Mood</p>
-            <h2>Droppy Dash: juega y gana</h2>
-            <p>
-              Top 3 semanal = bebida gratis. Salta, suma granos y sube tu score.
-            </p>
+/* Order strip */
+.order-strip {
+  padding: 26px 0;
+  background: linear-gradient(90deg, rgba(255, 215, 75, 0.28), rgba(243, 241, 234, 0.75));
+  border-top: 1px solid rgba(35, 31, 32, 0.08);
+  border-bottom: 1px solid rgba(35, 31, 32, 0.08);
+}
+.order-strip__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.order-strip h2 {
+  font-size: 1.5rem;
+  margin: 0 0 6px;
+}
+.order-strip p {
+  margin: 0;
+  color: rgba(35, 31, 32, 0.78);
+  font-weight: 600;
+}
+.order-strip__actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
 
-            <div class="droppy__leaderboard" aria-live="polite">
-              <div class="droppy__leaderboard-head">
-                <h3>Leaderboard</h3>
-                <span class="droppy__week" data-period-label>Semana en curso</span>
-              </div>
-              <div class="droppy__leaderboard-filters" role="tablist" aria-label="Filtrar leaderboard">
-                <button class="droppy__filter is-active" type="button" data-period="weekly" aria-pressed="true">Semanal</button>
-                <button class="droppy__filter" type="button" data-period="monthly" aria-pressed="false">Mensual</button>
-                <button class="droppy__filter" type="button" data-period="all" aria-pressed="false">Histórico</button>
-              </div>
-              <ol class="droppy__leaderboard-list" data-leaderboard>
-                <li class="droppy__leaderboard-empty">Cargando leaderboard...</li>
-              </ol>
-              <button class="btn btn--ghost btn--sm droppy__leaderboard-toggle" type="button" data-leaderboard-toggle>
-                Ver top 10
-              </button>
-              <p class="droppy__leaderboard-rank" data-rank></p>
-            </div>
-          </div>
+.mobile-bar {
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  display: none;
+  gap: 10px;
+  padding: 10px 10px calc(10px + env(safe-area-inset-bottom));
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 18px;
+  border: 1px solid rgba(35, 31, 32, 0.12);
+  box-shadow: 0 16px 28px rgba(35, 31, 32, 0.18);
+  z-index: 120;
+}
+.mobile-bar__item {
+  flex: 1;
+  text-align: center;
+  padding: 10px 8px;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 0.9rem;
+  border: 1px solid rgba(35, 31, 32, 0.16);
+  background: rgba(255, 255, 255, 0.9);
+}
+.mobile-bar__item.is-primary {
+  background: var(--yellow);
+  border-color: rgba(35, 31, 32, 0.2);
+}
 
-          <div class="droppy__game">
-            <div class="droppy__canvas-frame">
-              <canvas class="droppy__canvas" id="droppy-canvas" role="img" aria-label="Juego Droppy Dash"></canvas>
-              <div class="droppy__hud" aria-live="polite">
-                <div class="droppy__hud-left">
-                  <div class="droppy__hud-score">
-                    <span class="droppy__hud-bean" aria-hidden="true"></span>
-                    <div class="droppy__hud-block">
-                      <span class="droppy__hud-label">Score</span>
-                      <span class="droppy__hud-value" data-score>0</span>
-                    </div>
-                  </div>
-                  <div class="droppy__hud-block droppy__hud-combo">
-                    <span class="droppy__hud-label">Combo</span>
-                    <span class="droppy__hud-value" data-combo>x1</span>
-                  </div>
-                </div>
-                <button class="droppy__pause" type="button" aria-label="Pausar juego">II</button>
-              </div>
+/* About stats */
+.about__stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+.stat {
+  background: #fff;
+  border-radius: var(--radius-md);
+  padding: 18px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+}
+.stat__number {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 0;
+}
+.stat__label {
+  font-size: 0.9rem;
+  color: rgba(35, 31, 32, 0.75);
+  margin: 6px 0 0;
+}
 
-              <div class="droppy__overlay droppy__overlay--start" data-overlay="start">
-                <p class="droppy__overlay-title">Droppy Dash</p>
-                <p class="droppy__overlay-text">Toca para saltar. Doble salto activo.</p>
-                <p class="droppy__overlay-note">Esquiva hongos y suma granos.</p>
-                <button class="btn btn--primary droppy__play" type="button" data-play>Jugar</button>
-                <p class="droppy__overlay-note" data-connection>Listo para jugar.</p>
-              </div>
+/* Origin */
+.origin-card {
+  background: #fff;
+  padding: 24px;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(35, 31, 32, 0.06);
+  box-shadow: var(--shadow-sm);
+}
+.origin-card h3 {
+  margin-bottom: 10px;
+}
 
-              <div class="droppy__overlay droppy__overlay--pause" data-overlay="pause" hidden>
-                <p class="droppy__overlay-title">Pausa</p>
-                <p class="droppy__overlay-text">Tu partida está en pausa.</p>
-                <div class="droppy__actions">
-                  <button class="btn btn--primary droppy__resume" type="button">Continuar</button>
-                  <button class="btn btn--secondary droppy__restart" type="button">Reiniciar</button>
-                </div>
-              </div>
+/* Cards */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.card {
+  background: #fff;
+  padding: 18px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(35, 31, 32, 0.06);
+  box-shadow: var(--shadow-sm);
+}
+.card p {
+  margin: 0;
+  color: rgba(35, 31, 32, 0.85);
+}
 
-              <div class="droppy__overlay droppy__overlay--gameover" data-overlay="gameover" hidden>
-                <h3>Game Over</h3>
-                <p class="droppy__final">Tu puntaje: <strong data-final-score>0</strong></p>
-                <div class="droppy__actions">
-                  <button class="btn btn--secondary droppy__retry" type="button">Reintentar</button>
-                </div>
-                <form class="droppy__form" data-form hidden>
-                  <label class="droppy__label">
-                    Nombre
-                    <input class="droppy__input" name="name" autocomplete="nickname" maxlength="24" required />
-                  </label>
-                  <label class="droppy__label">
-                    Instagram o teléfono (si ganas)
-                    <input class="droppy__input" name="contact" autocomplete="username" maxlength="32" required />
-                  </label>
-                  <p class="droppy__consent">Solo para avisarte si ganas.</p>
-                  <button class="btn btn--primary droppy__submit" type="submit">Enviar puntaje</button>
-                  <button class="btn btn--secondary droppy__share" type="button">Compartir mi score</button>
-                  <p class="droppy__form-note" data-form-note></p>
-                </form>
-              </div>
-            </div>
-            <div class="droppy__controls">
-              <p class="droppy__hint">Toca la pantalla o presiona espacio para saltar. Doble salto con doble clic.</p>
-            </div>
-          </div>
-        </div>
-      </section>
+/* Menu */
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.menu-card {
+  background: #fff;
+  border-radius: var(--radius-md);
+  padding: 18px;
+  border: 1px solid rgba(35, 31, 32, 0.06);
+}
+.menu-card > .btn {
+  margin-top: 12px;
+}
+.origin-mini {
+  margin: 18px 0 6px;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(35, 31, 32, 0.08);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.origin-mini p {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+.panera-feature {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 18px;
+  align-items: center;
+  padding: 22px;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(35, 31, 32, 0.06);
+  box-shadow: var(--shadow-sm);
+  background: linear-gradient(180deg, #ffffff 0%, rgba(255, 215, 75, 0.12) 100%);
+}
+.panera-feature .hero__actions {
+  margin: 12px 0 0;
+}
+.panera__media {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  border-radius: 14px;
+  overflow: hidden;
+}
+.panera__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.panera__meta {
+  margin: 10px 0 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: rgba(35, 31, 32, 0.75);
+}
+.panera__order-label {
+  margin: 14px 0 8px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: rgba(35, 31, 32, 0.78);
+}
+.panera__order-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.featured-drinks {
+  margin-top: 32px;
+}
+.featured-drinks__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.drink {
+  background: #fff;
+  border-radius: var(--radius-md);
+  padding: 0;
+  border: 1px solid rgba(35, 31, 32, 0.06);
+  overflow: hidden;
+  display: grid;
+}
+.drink__image {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  display: block;
+}
+.drink__body {
+  padding: 14px 16px 16px;
+  display: grid;
+  gap: 10px;
+}
+.drink__body p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: rgba(35, 31, 32, 0.8);
+}
+.drink__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+.drink__chip {
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(35, 31, 32, 0.12);
+  background: rgba(255, 255, 255, 0.7);
+}
+.drink__price {
+  font-size: 0.85rem;
+  font-weight: 800;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(255, 215, 75, 0.4);
+  border: 1px solid rgba(35, 31, 32, 0.12);
+}
+.drink .btn {
+  width: 100%;
+}
 
-      <!-- TESTIMONIALS -->
-      <section class="section" id="testimonials">
-        <div class="container">
-          <div class="section__header">
-            <h2>Lo que dicen nuestros clientes.</h2>
-            <p>Opiniones reales de una experiencia honesta.</p>
-          </div>
+/* Ingredients */
+.ingredients {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.ingredient-card {
+  background: #fff;
+  padding: 18px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(35, 31, 32, 0.06);
+  box-shadow: var(--shadow-sm);
+}
+.ingredient-card__list {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0;
+  display: grid;
+  gap: 6px;
+  font-size: 0.92rem;
+  color: rgba(35, 31, 32, 0.8);
+}
+.ingredient-card__list span {
+  font-weight: 700;
+  color: rgba(35, 31, 32, 0.9);
+}
 
-          <div class="review-summary" aria-label="Calificación en Google">
-            <div class="review-summary__meta">
-              <p class="review-summary__rating">
-                <span aria-hidden="true">⭐</span> <strong>4.4/5</strong> en Google
-                <span class="review-summary__count">(168 reseñas)</span>
-              </p>
-              <p class="review-summary__note">Lee reseñas verificadas.</p>
-            </div>
-            <a
-              class="btn btn--secondary btn--sm"
-              href="https://maps.app.goo.gl/qeipDG96kXREwB8JA?g_st=ic"
-              target="_blank"
-              rel="noopener"
-            >
-              Déjanos tu reseña
-            </a>
-          </div>
+/* Science */
+.science__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.science-card {
+  background: #fff;
+  padding: 18px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(35, 31, 32, 0.06);
+  box-shadow: var(--shadow-sm);
+}
 
-          <div class="testimonials">
-            <figure class="testimonial">
-              <blockquote>
-                “Café excelente y explicación clara de los ingredientes. Se nota el cuidado en cada
-                detalle.”
-              </blockquote>
-              <figcaption>— Ana R.</figcaption>
-            </figure>
-            <figure class="testimonial">
-              <blockquote>
-                “Coldbarry fresco y balanceado; explican ingredientes y efectos.”
-              </blockquote>
-              <figcaption>— Fernanda L.</figcaption>
-            </figure>
-            <figure class="testimonial">
-              <blockquote>
-                “Café de especialidad real con opciones funcionales responsables. Transparencia que se agradece.”
-              </blockquote>
-              <figcaption>— Luis G.</figcaption>
-            </figure>
-          </div>
-        </div>
-      </section>
-    </main>
+.faq {
+  margin-top: 22px;
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(35, 31, 32, 0.08);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+}
+.faq h3 {
+  margin-bottom: 12px;
+}
+.faq__items {
+  display: grid;
+  gap: 10px;
+}
+.faq__item {
+  background: #fff;
+  border: 1px solid rgba(35, 31, 32, 0.08);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.faq__item summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  font-weight: 800;
+}
+.faq__item summary::-webkit-details-marker {
+  display: none;
+}
+.faq__item summary::after {
+  content: "＋";
+  font-weight: 900;
+  line-height: 1;
+}
+.faq__item[open] summary::after {
+  content: "—";
+}
+.faq__item p {
+  margin: 0;
+  padding: 0 14px 14px;
+  color: rgba(35, 31, 32, 0.85);
+}
+.faq__item a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-weight: 700;
+}
 
-    <footer class="footer">
-      <div class="container footer__grid">
-        <div>
-          <img class="footer__logo" src="assets/logo-better-mood.png" alt="Better Mood Coffee" />
-          <p>Better Mood Coffee — Café de especialidad y bienestar responsable en Puebla.</p>
-        </div>
+/* Community */
+.checklist {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 12px;
+}
+.checklist li {
+  padding-left: 24px;
+  position: relative;
+  margin-bottom: 8px;
+}
+.checklist li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 7px;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--black);
+  border-radius: 4px;
+  background: var(--yellow);
+}
+.community__card {
+  background: #fff;
+  padding: 24px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+.community__card ol {
+  margin: 8px 0 0;
+  padding-left: 18px;
+}
+.wallet-card {
+  border-radius: 22px;
+  padding: 20px;
+  background: linear-gradient(135deg, #1f1f1f, #3a2b26 55%, #1f1f1f 100%);
+  color: #fff;
+  box-shadow: 0 18px 28px rgba(35, 31, 32, 0.25);
+  display: grid;
+  gap: 16px;
+}
+.wallet-card--image {
+  padding: 0;
+  background: none;
+}
+.wallet-card__image {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 22px;
+  box-shadow: 0 18px 28px rgba(35, 31, 32, 0.25);
+}
+.wallet-card__top {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+.wallet-card__title {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+.wallet-card__note {
+  margin: 4px 0 0;
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+.wallet-card__tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.wallet-card__tags span {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
 
-        <div class="footer__links">
-          <h3>Navegación</h3>
-          <a href="#order">Pedir ahora</a>
-          <a href="#menu">Menú</a>
-          <a href="#location">Ubicación</a>
-          <a href="#ingredients">Bienestar y CBD</a>
-          <a href="#community">Comunidad</a>
-          <a href="aviso-privacidad.html">Aviso de privacidad</a>
-        </div>
+/* Location */
+.location__info {
+  background: #fff;
+  padding: 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(35, 31, 32, 0.06);
+  margin: 12px 0 16px;
+  display: grid;
+  gap: 10px;
+}
+.location__info p {
+  margin: 0;
+}
+.location__amenities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-weight: 700;
+}
+.location__amenities span {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(35, 31, 32, 0.04);
+  border: 1px solid rgba(35, 31, 32, 0.08);
+  font-size: 0.85rem;
+}
+.location__card {
+  margin-bottom: 16px;
+}
+.hours {
+  display: grid;
+  gap: 8px;
+}
+.hours__label {
+  width: fit-content;
+}
+.hours__list {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.hours__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 10px;
+  border-radius: 12px;
+  background: rgba(35, 31, 32, 0.03);
+  border: 1px solid rgba(35, 31, 32, 0.06);
+}
+.hours__row dt,
+.hours__row dd {
+  margin: 0;
+}
+.hours__row dt {
+  font-weight: 600;
+}
+.hours__row dd {
+  justify-self: end;
+  font-weight: 800;
+  background: var(--yellow);
+  color: var(--black);
+  padding: 4px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.map iframe {
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+.map {
+  margin-top: 6px;
+}
 
-        <div class="footer__links" id="contacto">
-          <h3>Redes</h3>
-          <a href="https://wa.me/message/WQWEEODGY6H2P1" target="_blank" rel="noopener noreferrer">WhatsApp</a>
-          <a href="https://instagram.com/bettermood.coffee" target="_blank" rel="noopener">Instagram</a>
-          <a href="https://facebook.com/bettermoodcoffee" target="_blank" rel="noopener">Facebook</a>
-          <a href="https://g.page/r/Coffee/review" target="_blank" rel="noopener">Google Reviews</a>
-        </div>
-      </div>
+/* Testimonials */
+.review-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(35, 31, 32, 0.1);
+  background: rgba(255, 215, 75, 0.22);
+  margin: 18px 0 16px;
+  box-shadow: var(--shadow-sm);
+}
+.review-summary__meta p {
+  margin: 0;
+}
+.review-summary__rating {
+  font-size: 1.05rem;
+  font-weight: 900;
+}
+.review-summary__count {
+  font-weight: 800;
+  color: rgba(35, 31, 32, 0.75);
+}
+.review-summary__note {
+  margin-top: 4px;
+  font-size: 0.95rem;
+  color: rgba(35, 31, 32, 0.8);
+}
 
-      <div class="container footer__disclaimer">
-        <p>
-          Uso responsable de CBD: Producto derivado de cáñamo, no psicoactivo. No recomendado para
-          menores de edad, embarazo o lactancia. Si tomas medicamentos, consulta a tu médico. No
-          pretende diagnosticar, tratar, curar ni prevenir enfermedades.
-        </p>
-        <p class="footer__copyright">© Better Mood Coffee. Todos los derechos reservados.</p>
-      </div>
-    </footer>
+.testimonials {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.testimonial {
+  margin: 0;
+  background: #fff;
+  border-radius: var(--radius-md);
+  padding: 18px;
+  border: 1px solid rgba(35, 31, 32, 0.06);
+  box-shadow: var(--shadow-sm);
+}
+.testimonial blockquote {
+  margin: 0 0 10px;
+  font-size: 1rem;
+}
+.testimonial figcaption {
+  font-weight: 700;
+  color: rgba(35, 31, 32, 0.8);
+}
 
-    <div id="certificados" class="sr-only">Certificados y COA disponibles en tienda.</div>
+/* Finder (Recomendador) */
+.finder-widget {
+  --bg: #ffffff;
+  --text: #1c1c1c;
+  --muted: #6b6b6b;
+  --brand: var(--yellow);
+  --brand-ink: var(--black);
+  --brand-dark: #f4c900;
+  --card: #f7f7f7;
+  --ring: var(--black);
+  --shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  --radius: 14px;
+  color: var(--text);
+  font-family: inherit;
+  user-select: none;
+  touch-action: manipulation;
+}
 
-    <nav class="mobile-bar" aria-label="Accesos rápidos">
-      <a class="mobile-bar__item" href="#menu">Menú</a>
-      <a class="mobile-bar__item is-primary" href="#order">Pedir</a>
-      <a class="mobile-bar__item" href="#location">Ubicación</a>
-    </nav>
+.finder-card {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 28px;
+}
 
-    <script src="script.js"></script>
-    <script src="game/droppy-dash.js"></script>
-  </body>
-</html>
+.finder-header {
+  text-align: center;
+  margin-bottom: 8px;
+}
+.finder-header img {
+  width: 200px;
+  height: auto;
+  display: inline-block;
+}
+.finder-header h3 {
+  text-align: center;
+  color: #000;
+  margin: 8px 0 6px;
+  font-size: clamp(22px, 3.6vw, 28px);
+}
+.finder-widget .tagline {
+  text-align: center;
+  color: var(--muted);
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+.finder-widget label {
+  display: block;
+  margin-top: 18px;
+  font-weight: 700;
+}
+.finder-widget .hint {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-top: 4px;
+}
+
+.finder-widget .button-group {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+.finder-widget .button-group[data-name="efecto"] {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.finder-widget .option {
+  background: var(--brand);
+  color: var(--brand-ink);
+  font-weight: 700;
+  padding: 14px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  text-align: center;
+  flex: 1 1 auto;
+  transition: transform 0.12s ease, background 0.12s ease, color 0.12s ease, box-shadow 0.12s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  min-height: 52px;
+  font-size: clamp(16px, 2.6vw, 18px);
+  outline: none;
+}
+.finder-widget .option:hover {
+  background: var(--brand-dark);
+}
+.finder-widget .option:focus-visible {
+  box-shadow: 0 0 0 3px var(--ring), 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+.finder-widget .option.selected,
+.finder-widget .option[aria-pressed="true"] {
+  background: #111;
+  color: var(--brand);
+  transform: translateY(-1px);
+}
+.finder-widget .option.selected::after {
+  content: "✓";
+  margin-left: 6px;
+  font-weight: 800;
+}
+
+.finder-widget .cta-row {
+  display: grid;
+  grid-template-columns: 1.3fr 0.7fr;
+  gap: 12px;
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1px solid #ececec;
+}
+
+.finder-widget .btn {
+  width: 100%;
+  padding: 18px;
+  border: none;
+  border-radius: 14px;
+  font-weight: 800;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: transform 0.12s ease, filter 0.12s ease, background 0.12s ease, color 0.12s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  height: auto;
+  display: block;
+}
+.finder-widget .btn-primary {
+  background: var(--brand);
+  color: #000;
+}
+.finder-widget .btn-primary:hover {
+  filter: brightness(0.97);
+}
+.finder-widget .btn-primary:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  box-shadow: none;
+}
+.finder-widget .btn-secondary {
+  background: #111;
+  color: var(--brand);
+}
+.finder-widget .btn-secondary:hover {
+  filter: brightness(1.05);
+}
+.finder-widget .btn-link {
+  background: transparent;
+  color: #111;
+  box-shadow: none;
+  padding: 8px 0;
+  font-weight: 700;
+}
+.finder-widget .btn-link:hover {
+  text-decoration: underline;
+}
+
+.finder-widget .actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-top: 8px;
+}
+.finder-widget .links-row {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+.finder-widget .link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  border-radius: 999px;
+  border: 2px solid #111;
+  color: #111;
+  text-decoration: none;
+  font-weight: 800;
+}
+.finder-widget .link-btn:hover {
+  background: #111;
+  color: var(--brand);
+}
+
+.finder-widget #resultado {
+  background: var(--card);
+  padding: 18px;
+  border-radius: 12px;
+  margin-top: 18px;
+  color: #333;
+  opacity: 0;
+  transform: translateY(8px);
+  animation: reveal 0.22s ease forwards;
+}
+@keyframes reveal {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.finder-widget .pill {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #111;
+  color: var(--brand);
+  font-weight: 700;
+  font-size: 12px;
+  margin-right: 8px;
+}
+.finder-widget .custom-list {
+  margin-top: 10px;
+}
+.finder-widget .custom-item {
+  margin-bottom: 0.45rem;
+  font-size: 1.05rem;
+  line-height: 1.4;
+  color: #000;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.finder-widget .custom-item::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--brand);
+  border: 2px solid #000;
+  flex-shrink: 0;
+}
+.finder-widget .custom-item.clickable {
+  cursor: pointer;
+}
+.finder-widget .custom-item.clickable::after {
+  content: "›";
+  margin-left: auto;
+  color: var(--muted);
+  font-weight: 800;
+}
+.finder-widget .custom-item.clickable:active {
+  transform: scale(0.99);
+}
+
+.finder-widget .finder-footer {
+  color: var(--muted);
+  text-align: center;
+  font-size: 12px;
+  margin-top: 12px;
+}
+
+.finder-widget .modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 20px;
+  z-index: 50;
+}
+.finder-widget .modal.show {
+  display: grid;
+}
+.finder-widget .modal-card {
+  width: min(640px, 96vw);
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  padding: 18px;
+}
+.finder-widget .modal-title {
+  font-weight: 800;
+  margin: 0 0 8px;
+  font-size: 18px;
+}
+.finder-widget .modal-body {
+  color: #222;
+  line-height: 1.45;
+}
+.finder-widget .modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 14px;
+}
+.finder-widget .modal-close {
+  background: #111;
+  color: var(--brand);
+  border: 0;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+@media (max-width: 480px) {
+  .finder-widget .cta-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .about__stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Final CTA */
+.cta-final {
+  text-align: center;
+  padding: 6px 0;
+}
+
+/* Footer */
+.footer {
+  background: var(--black);
+  color: var(--bg);
+  padding: 56px 0 28px;
+}
+.footer__grid {
+  display: grid;
+  grid-template-columns: 1.3fr 0.9fr 0.9fr;
+  gap: 28px;
+  align-items: start;
+}
+.footer__logo {
+  height: 36px;
+  margin-bottom: 8px;
+}
+.footer__links h3 {
+  margin-bottom: 10px;
+}
+.footer__links a {
+  display: block;
+  margin-bottom: 6px;
+  color: rgba(255, 253, 246, 0.9);
+}
+.footer__links a:hover {
+  color: var(--yellow);
+}
+.footer__disclaimer {
+  margin-top: 24px;
+  border-top: 1px solid rgba(255, 253, 246, 0.15);
+  padding-top: 16px;
+  font-size: 0.92rem;
+  color: rgba(255, 253, 246, 0.85);
+}
+.footer__copyright {
+  margin-top: 8px;
+  font-size: 0.85rem;
+  color: rgba(255, 253, 246, 0.7);
+}
+
+/* Responsive */
+@media (max-width: 1100px) {
+  .cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .testimonials {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .featured-drinks__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 860px) {
+  .hero__grid,
+  .section__grid {
+    grid-template-columns: 1fr;
+  }
+  .hero__grid {
+    gap: 32px;
+  }
+  .menu-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .science__grid {
+    grid-template-columns: 1fr;
+  }
+  .ingredients {
+    grid-template-columns: 1fr;
+  }
+  .about__stats {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .container {
+    padding: 0 16px;
+  }
+  .hero {
+    padding-top: 24px;
+  }
+  .hero__card {
+    height: auto;
+  }
+  .hero__card img {
+    height: 100%;
+  }
+  body {
+    padding-bottom: calc(86px + env(safe-area-inset-bottom));
+  }
+  .section {
+    padding: 56px 0;
+  }
+  .catering__row {
+    grid-template-columns: 1fr;
+  }
+  .order-strip {
+    padding: 20px 0;
+  }
+  #location {
+    padding-bottom: 40px;
+  }
+  .drink__image {
+    height: 230px;
+  }
+  .hero__actions {
+    margin: 14px 0;
+  }
+  .hero__bullets {
+    font-size: 0.95rem;
+  }
+  .hero__trust {
+    padding: 10px 12px;
+  }
+  .cards {
+    grid-template-columns: 1fr;
+  }
+  .menu-grid,
+  .featured-drinks__grid {
+    grid-template-columns: 1fr;
+  }
+  .testimonials {
+    grid-template-columns: 1fr;
+  }
+  .review-summary {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .footer__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .nav-toggle {
+    display: inline-flex;
+    padding: 6px 14px 6px 8px;
+    gap: 10px;
+  }
+  .nav-toggle__label {
+    display: inline-block;
+  }
+  .nav {
+    position: fixed;
+    inset: var(--header-offset, 72px) 0 auto 0;
+    background: var(--bg);
+    border: 0;
+    border-radius: 0;
+    border-bottom: 1px solid rgba(35, 31, 32, 0.08);
+    padding: 12px 16px 18px;
+    display: grid;
+    gap: 10px;
+    transform: translateY(-120%);
+    transition: transform 200ms ease;
+  }
+  .nav.is-open {
+    transform: translateY(0);
+  }
+  .nav a.btn {
+    width: fit-content;
+  }
+
+  .order-dropdown__menu {
+    position: static;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+  .order-dropdown__item {
+    background: #fff;
+  }
+
+  .panera-feature {
+    grid-template-columns: 1fr;
+  }
+  .panera__media {
+    width: min(260px, 100%);
+    margin: 0 auto;
+  }
+
+  .mobile-bar {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Droppy Dash */
+.droppy {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg, #f7f4ed 0%, #f1f6fb 46%, #ffffff 100%);
+}
+.droppy::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 18% 12%, rgba(255, 215, 75, 0.28), transparent 45%),
+    radial-gradient(circle at 85% 18%, rgba(205, 222, 241, 0.7), transparent 50%);
+  pointer-events: none;
+}
+.droppy .container {
+  position: relative;
+  z-index: 1;
+}
+.droppy__grid {
+  display: grid;
+  gap: 32px;
+}
+.droppy__intro h2 {
+  margin-bottom: 8px;
+}
+.droppy__prize {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: linear-gradient(120deg, rgba(255, 215, 75, 0.6), rgba(255, 241, 188, 0.8));
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 8px 18px rgba(35, 31, 32, 0.12);
+  font-weight: 700;
+  margin: 12px 0 20px;
+}
+.droppy__hook .droppy__prize {
+  margin: 0;
+  width: fit-content;
+}
+.droppy__hook {
+  display: grid;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(35, 31, 32, 0.08);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 18px;
+}
+.droppy__hook-title {
+  margin: 0 0 4px;
+  font-weight: 800;
+}
+.droppy__hook-line {
+  margin: 0;
+  color: rgba(35, 31, 32, 0.7);
+  font-size: 0.92rem;
+}
+.droppy__stats {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  margin-bottom: 20px;
+}
+.droppy__stat {
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(35, 31, 32, 0.08);
+}
+.droppy__stat-label {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(35, 31, 32, 0.6);
+  margin-bottom: 4px;
+}
+.droppy__stat-value {
+  margin: 0;
+  font-weight: 700;
+}
+.droppy__leaderboard {
+  padding: 18px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  box-shadow: 0 12px 26px rgba(35, 31, 32, 0.12);
+}
+.droppy__leaderboard-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.droppy__week {
+  font-size: 0.85rem;
+  color: rgba(35, 31, 32, 0.7);
+}
+.droppy__leaderboard-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.droppy__filter {
+  border: 1px solid rgba(35, 31, 32, 0.16);
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--black);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  box-shadow: 0 6px 12px rgba(35, 31, 32, 0.08);
+  transition: background 160ms ease, border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+}
+.droppy__filter:hover {
+  background: rgba(255, 215, 75, 0.25);
+  border-color: rgba(35, 31, 32, 0.2);
+  box-shadow: 0 10px 16px rgba(35, 31, 32, 0.12);
+}
+.droppy__filter.is-active {
+  background: var(--yellow);
+  border-color: rgba(35, 31, 32, 0.3);
+  box-shadow: 0 10px 18px rgba(35, 31, 32, 0.18);
+}
+.droppy__leaderboard-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.droppy__leaderboard-toggle {
+  margin-top: 12px;
+}
+.droppy__leaderboard-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: rgba(255, 215, 75, 0.12);
+  border: 1px solid rgba(35, 31, 32, 0.05);
+  font-weight: 600;
+}
+.droppy__leaderboard-item span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.droppy__leaderboard-empty {
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(35, 31, 32, 0.05);
+  color: rgba(35, 31, 32, 0.6);
+}
+.droppy__leaderboard-rank {
+  margin-top: 10px;
+  font-weight: 700;
+}
+.droppy__leaderboard-note {
+  margin-top: 6px;
+  font-size: 0.85rem;
+  color: rgba(35, 31, 32, 0.6);
+}
+.droppy__game {
+  display: grid;
+  gap: 16px;
+  justify-items: center;
+}
+.droppy__canvas-frame {
+  position: relative;
+  width: min(100%, 420px);
+  aspect-ratio: 9 / 16;
+  border-radius: 26px;
+  background: linear-gradient(180deg, #f9fdff 0%, #fff2d6 100%);
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 20px 44px rgba(35, 31, 32, 0.18), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+  overflow: hidden;
+}
+.droppy__canvas-frame::before {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  pointer-events: none;
+  z-index: 0;
+}
+.droppy__canvas-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 12% 12%, rgba(255, 255, 255, 0.6), transparent 42%),
+    radial-gradient(circle at 85% 18%, rgba(255, 245, 215, 0.5), transparent 46%);
+  opacity: 0.55;
+  pointer-events: none;
+  z-index: 0;
+}
+.droppy--fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  padding: 0;
+  margin: 0;
+  background: var(--bg);
+}
+.droppy--fullscreen .droppy__grid {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+.droppy--fullscreen .droppy__intro,
+.droppy--fullscreen .droppy__controls {
+  display: none;
+}
+.droppy--fullscreen .droppy__game {
+  width: 100%;
+  height: 100%;
+  justify-items: stretch;
+}
+.droppy--fullscreen .droppy__canvas-frame {
+  width: 100vw;
+  height: 100dvh;
+  aspect-ratio: auto;
+  border-radius: 0;
+  border: 0;
+  box-shadow: none;
+}
+.droppy--fullscreen .droppy__canvas-frame::before,
+.droppy--fullscreen .droppy__canvas-frame::after {
+  display: none;
+}
+.droppy--fullscreen .droppy__canvas {
+  width: 100%;
+  height: 100%;
+}
+.droppy--fullscreen .droppy__hud {
+  top: calc(env(safe-area-inset-top) + 12px);
+  left: calc(env(safe-area-inset-left) + 12px);
+  right: calc(env(safe-area-inset-right) + 12px);
+}
+.droppy__canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  position: relative;
+  z-index: 1;
+  touch-action: none;
+  cursor: pointer;
+}
+.droppy__hud {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  right: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 12px 20px rgba(35, 31, 32, 0.16);
+  backdrop-filter: blur(8px);
+  z-index: 2;
+}
+.droppy__hud-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.droppy__hud-score {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.droppy__hud-bean {
+  position: relative;
+  width: 26px;
+  height: 18px;
+  border-radius: 999px;
+  background: linear-gradient(140deg, #f7d28a, #c9802a 55%, #7a3d12 100%);
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.65), 0 4px 8px rgba(35, 31, 32, 0.2);
+}
+.droppy__hud-bean::before {
+  content: "";
+  position: absolute;
+  left: 10px;
+  top: 3px;
+  width: 2px;
+  height: 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.6);
+  transform: rotate(-12deg);
+}
+.droppy__hud-block {
+  padding: 6px 10px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(35, 31, 32, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.7);
+}
+.droppy__hud-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(35, 31, 32, 0.6);
+}
+.droppy__hud-value {
+  font-weight: 800;
+  font-size: 1.05rem;
+  text-shadow: 0 2px 6px rgba(35, 31, 32, 0.18);
+  -webkit-text-stroke: 0.4px rgba(35, 31, 32, 0.35);
+}
+.droppy__pause {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 2px solid rgba(35, 31, 32, 0.7);
+  background: linear-gradient(135deg, #fff4c9, #ffd45c 60%, #f1b43c 100%);
+  color: #2d1c12;
+  font-weight: 900;
+  font-size: 0.9rem;
+  text-shadow: 0 2px 0 rgba(255, 255, 255, 0.6);
+  -webkit-text-stroke: 1px rgba(35, 31, 32, 0.35);
+  box-shadow: 0 8px 16px rgba(35, 31, 32, 0.2);
+  cursor: pointer;
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+.droppy__pause:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 20px rgba(35, 31, 32, 0.25);
+}
+.droppy__pause:active {
+  transform: translateY(0);
+}
+.droppy__hud-value.is-pulse {
+  animation: droppyPulse 260ms ease;
+}
+.droppy__overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 24px;
+  text-align: center;
+  background: linear-gradient(180deg, rgba(255, 253, 246, 0.9), rgba(255, 240, 204, 0.9));
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  z-index: 3;
+  animation: droppyOverlayIn 240ms ease;
+}
+.droppy__overlay[hidden] {
+  display: none;
+}
+.droppy__overlay-title {
+  font-weight: 900;
+  font-size: 1.4rem;
+  letter-spacing: 0.02em;
+  text-shadow: 0 3px 0 rgba(255, 255, 255, 0.7), 0 8px 16px rgba(35, 31, 32, 0.2);
+  -webkit-text-stroke: 1px rgba(35, 31, 32, 0.25);
+  margin: 0;
+}
+.droppy__overlay-text {
+  margin: 0;
+  color: rgba(35, 31, 32, 0.7);
+}
+.droppy__overlay-note {
+  margin: 0;
+  font-size: 0.85rem;
+  color: rgba(35, 31, 32, 0.6);
+}
+.droppy__final {
+  margin: 0;
+}
+.droppy__actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.droppy__form {
+  width: 100%;
+  display: grid;
+  gap: 10px;
+  margin-top: 8px;
+}
+.droppy__form .btn {
+  width: 100%;
+}
+.droppy__label {
+  display: grid;
+  gap: 6px;
+  text-align: left;
+  font-weight: 600;
+}
+.droppy__input {
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid rgba(35, 31, 32, 0.2);
+  padding: 0 12px;
+  font-size: 1rem;
+  font-family: inherit;
+}
+.droppy__form-note {
+  margin: 0;
+  font-size: 0.85rem;
+  color: rgba(35, 31, 32, 0.7);
+}
+.droppy__consent {
+  margin: 0;
+  font-size: 0.82rem;
+  color: rgba(35, 31, 32, 0.65);
+}
+.droppy__cta {
+  margin-top: 16px;
+}
+.droppy__controls {
+  width: min(100%, 420px);
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+}
+.droppy__jump {
+  width: 100%;
+  padding: 14px 18px;
+  font-size: 1rem;
+}
+.droppy__hint {
+  margin: 0;
+  font-size: 0.85rem;
+  color: rgba(35, 31, 32, 0.7);
+}
+
+.droppy .btn {
+  box-shadow: 0 12px 20px rgba(35, 31, 32, 0.12);
+  border-width: 2px;
+}
+
+@keyframes droppyPulse {
+  0% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1.18);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes droppyOverlayIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (min-width: 900px) {
+  .droppy__grid {
+    grid-template-columns: 1.05fr 0.95fr;
+    align-items: center;
+  }
+  .droppy__game {
+    justify-items: end;
+  }
+  .droppy__hook {
+    grid-template-columns: 1fr auto;
+    align-items: center;
+  }
+  .droppy__canvas-frame {
+    width: min(100%, 460px);
+  }
+}
+
+@media (max-width: 720px) {
+  .droppy__hud {
+    top: 12px;
+    left: 12px;
+    right: 12px;
+    padding: 6px 8px;
+  }
+  .droppy__hud-bean {
+    width: 22px;
+    height: 15px;
+  }
+  .droppy__pause {
+    width: 34px;
+    height: 34px;
+    font-size: 0.8rem;
+  }
+  .droppy__actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  .droppy__actions .btn {
+    width: 100%;
+  }
+}
