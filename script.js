@@ -1,6 +1,7 @@
 const toggleButton = document.querySelector(".nav-toggle");
 const nav = document.querySelector(".nav");
 const header = document.querySelector(".header");
+const API_BASE = "/api";
 
 const setHeaderOffset = () => {
   if (!header) return;
@@ -63,6 +64,75 @@ if (orderDropdown) {
   });
 }
 
+const cateringForm = document.querySelector("[data-catering-form]");
+const cateringNote = document.querySelector("[data-catering-note]");
+
+const setCateringNote = (message, tone = "neutral") => {
+  if (!cateringNote) return;
+  cateringNote.textContent = message;
+  if (tone === "error") {
+    cateringNote.style.color = "#a6322c";
+  } else if (tone === "success") {
+    cateringNote.style.color = "#2f6b3a";
+  } else {
+    cateringNote.style.color = "rgba(35, 31, 32, 0.7)";
+  }
+};
+
+if (cateringForm) {
+  const submitButton = cateringForm.querySelector("button[type=submit]");
+  cateringForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const formData = new FormData(cateringForm);
+    const payload = {
+      name: String(formData.get("name") || "").trim(),
+      contact: String(formData.get("contact") || "").trim(),
+      date: String(formData.get("date") || "").trim(),
+      guests: String(formData.get("guests") || "").trim(),
+      details: String(formData.get("details") || "").trim(),
+    };
+
+    if (!payload.name) {
+      setCateringNote("Ingresa tu nombre.", "error");
+      return;
+    }
+    if (!payload.contact) {
+      setCateringNote("Comparte un email o telefono.", "error");
+      return;
+    }
+    if (!payload.date) {
+      setCateringNote("Selecciona la fecha del evento.", "error");
+      return;
+    }
+    const guestsNumber = Number(payload.guests);
+    if (!Number.isFinite(guestsNumber) || guestsNumber < 1) {
+      setCateringNote("Ingresa el numero de invitados.", "error");
+      return;
+    }
+
+    setCateringNote("Enviando solicitud...");
+    if (submitButton) submitButton.disabled = true;
+
+    try {
+      const res = await fetch(`${API_BASE}/catering`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data.error || "No se pudo enviar la solicitud.");
+      }
+      setCateringNote("Solicitud enviada. Te contactamos pronto.", "success");
+      cateringForm.reset();
+    } catch (err) {
+      setCateringNote(err.message || "No se pudo enviar la solicitud.", "error");
+    } finally {
+      if (submitButton) submitButton.disabled = false;
+    }
+  });
+}
+
 // Small header shadow on scroll for depth
 window.addEventListener("scroll", () => {
   if (!header) return;
@@ -71,7 +141,7 @@ window.addEventListener("scroll", () => {
 });
 
 const sendVisitPing = () => {
-  const url = "/api/visit";
+  const url = `${API_BASE}/visit`;
   if (navigator.sendBeacon) {
     navigator.sendBeacon(url, "");
     return;
