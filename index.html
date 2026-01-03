@@ -396,6 +396,54 @@
         </div>
       </section>
 
+      <!-- CATERING -->
+      <section class="section" id="catering">
+        <div class="container section__grid catering">
+          <div>
+            <h2>Mesa de cafe para eventos.</h2>
+            <p>Cafe de especialidad a tu alcance. Podemos montar panques, trufas, tortugas y cafe.</p>
+
+            <form class="catering__form" aria-label="Solicitud de cotizacion">
+              <label class="catering__label">
+                Nombre
+                <input class="catering__input" name="name" autocomplete="name" required />
+              </label>
+              <label class="catering__label">
+                Email o telefono
+                <input class="catering__input" name="contact" autocomplete="email" required />
+              </label>
+              <div class="catering__row">
+                <label class="catering__label">
+                  Fecha del evento
+                  <input class="catering__input" type="date" name="date" required />
+                </label>
+                <label class="catering__label">
+                  Invitados aprox.
+                  <input class="catering__input" type="number" name="guests" min="1" inputmode="numeric" required />
+                </label>
+              </div>
+              <label class="catering__label">
+                Lugar / detalles
+                <textarea class="catering__textarea" name="details" rows="3" placeholder="Cuantas horas, tipo de evento, requerimientos..."></textarea>
+              </label>
+              <button class="btn btn--primary" type="submit">Solicitar cotizacion</button>
+              <p class="catering__note">Te contactamos para armar la propuesta.</p>
+            </form>
+          </div>
+
+          <div class="catering__media">
+            <img
+              src="assets/hero-coffee.jpg"
+              alt="Mesa de cafe para eventos"
+              loading="lazy"
+              decoding="async"
+              width="800"
+              height="1000"
+            />
+          </div>
+        </div>
+      </section>
+
       <!-- WELLNESS -->
       <section class="section" id="ingredients">
         <div class="container">
