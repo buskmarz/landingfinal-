@@ -1368,11 +1368,14 @@
 
   function formatWeekRange(startStr) {
     if (!startStr) return "Semana en curso";
-    const start = new Date(`${startStr}T00:00:00`);
+    const parts = startStr.split("-").map(Number);
+    if (parts.length !== 3 || parts.some((value) => Number.isNaN(value))) return "Semana en curso";
+    const [year, month, day] = parts;
+    const start = new Date(Date.UTC(year, month - 1, day));
     if (Number.isNaN(start.getTime())) return "Semana en curso";
     const end = new Date(start);
-    end.setDate(start.getDate() + 6);
-    const fmt = new Intl.DateTimeFormat("es-MX", { day: "numeric", month: "short" });
+    end.setUTCDate(start.getUTCDate() + 6);
+    const fmt = new Intl.DateTimeFormat("es-MX", { day: "numeric", month: "short", timeZone: "UTC" });
     const startParts = fmt.formatToParts(start);
     const endParts = fmt.formatToParts(end);
     const pick = (parts, type) => parts.find((part) => part.type === type)?.value || "";
