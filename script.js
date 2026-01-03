@@ -33,6 +33,8 @@ const gamePlayButton = document.querySelector("[data-play]");
 if (gameLink && gameSection) {
   gameLink.addEventListener("click", (event) => {
     event.preventDefault();
+    nav?.classList.remove("is-open");
+    toggleButton?.setAttribute("aria-expanded", "false");
     gameSection.scrollIntoView({ behavior: "smooth", block: "start" });
     window.setTimeout(() => {
       gamePlayButton?.focus({ preventScroll: true });
