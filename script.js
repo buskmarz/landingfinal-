@@ -1,735 +1,208 @@
-<!doctype html>
-<html lang="es-MX">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+const toggleButton = document.querySelector(".nav-toggle");
+const nav = document.querySelector(".nav");
+const header = document.querySelector(".header");
+const API_BASE = "/api";
 
-    <title>Better Mood Coffee Puebla | Café de especialidad con CBD y adaptógenos</title>
-    <meta
-      name="description"
-      content="Café de especialidad en Puebla con CBD de amplio espectro y adaptógenos. Información clara, baristas entrenados y trazabilidad."
-    />
-    <meta name="robots" content="index,follow" />
-    <link rel="canonical" href="{{SITE_URL}}" />
-    <meta
-      name="keywords"
-      content="café de especialidad Puebla, cafetería CBD Puebla, Colonia La Paz Puebla, bebidas funcionales, café con adaptógenos, latte con CBD, wellness responsable, Better Mood Coffee"
-    />
+const setHeaderOffset = () => {
+  if (!header) return;
+  document.documentElement.style.setProperty("--header-offset", `${header.offsetHeight}px`);
+};
 
-    <meta property="og:locale" content="es_MX" />
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Better Mood Coffee" />
-    <meta property="og:title" content="Better Mood Coffee Puebla | Café de especialidad con CBD y adaptógenos" />
-    <meta
-      property="og:description"
-      content="Café de especialidad en Puebla con CBD de amplio espectro y adaptógenos. Información clara, baristas entrenados y trazabilidad."
-    />
-    <meta property="og:url" content="{{SITE_URL}}" />
-    <meta property="og:image" content="{{OG_IMAGE_URL}}" />
-    <meta property="og:image:alt" content="Better Mood Coffee Puebla" />
+setHeaderOffset();
+window.addEventListener("resize", setHeaderOffset);
+window.addEventListener("load", setHeaderOffset);
 
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Better Mood Coffee Puebla | Café de especialidad con CBD y adaptógenos" />
-    <meta
-      name="twitter:description"
-      content="Café de especialidad en Puebla con CBD de amplio espectro y adaptógenos. Información clara, baristas entrenados y trazabilidad."
-    />
-    <meta name="twitter:url" content="{{SITE_URL}}" />
-    <meta name="twitter:image" content="{{OG_IMAGE_URL}}" />
+if (toggleButton && nav) {
+  toggleButton.addEventListener("click", () => {
+    const isOpen = nav.classList.toggle("is-open");
+    toggleButton.setAttribute("aria-expanded", String(isOpen));
+  });
 
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "CafeOrCoffeeShop",
-        "name": "Better Mood Coffee",
-        "description": "Café de especialidad con CBD de amplio espectro y adaptógenos, con enfoque de bienestar responsable en Puebla.",
-        "url": "{{SITE_URL}}",
-        "image": "{{OG_IMAGE_URL}}",
-        "priceRange": "$$",
-        "aggregateRating": {
-          "@type": "AggregateRating",
-          "ratingValue": 4.4,
-          "reviewCount": 168
-        },
-        "servesCuisine": ["Coffee", "Desserts"],
-        "telephone": "+52XXXXXXXXXX",
-        "address": {
-          "@type": "PostalAddress",
-          "streetAddress": "13 Poniente 2302/F, Col. La Paz",
-          "addressLocality": "Puebla",
-          "addressRegion": "Pue.",
-          "postalCode": "{{POSTAL_CODE}}",
-          "addressCountry": "MX"
-        },
-        "geo": {
-          "@type": "GeoCoordinates",
-          "latitude": "{{LAT}}",
-          "longitude": "{{LNG}}"
-        },
-        "openingHoursSpecification": [
-          {
-            "@type": "OpeningHoursSpecification",
-            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-            "opens": "08:00",
-            "closes": "21:00"
-          },
-          {
-            "@type": "OpeningHoursSpecification",
-            "dayOfWeek": "Saturday",
-            "opens": "09:00",
-            "closes": "20:00"
-          },
-          {
-            "@type": "OpeningHoursSpecification",
-            "dayOfWeek": "Sunday",
-            "opens": "10:00",
-            "closes": "18:00"
-          }
-        ],
-        "sameAs": [
-          "https://wa.me/message/WQWEEODGY6H2P1",
-          "https://instagram.com/bettermood.coffee",
-          "https://facebook.com/bettermoodcoffee"
-        ]
+  nav.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
+      nav.classList.remove("is-open");
+      toggleButton.setAttribute("aria-expanded", "false");
+    });
+  });
+}
+
+const gameLink = document.querySelector(".nav__game");
+const gameSection = document.querySelector("#droppy-dash");
+const gamePlayButton = document.querySelector("[data-play]");
+
+const scrollToGameSection = (behavior = "smooth") => {
+  if (!gameSection) return;
+  const headerOffset = header ? header.offsetHeight : 0;
+  const top = gameSection.getBoundingClientRect().top + window.scrollY - headerOffset;
+  window.scrollTo({ top, behavior });
+  window.setTimeout(() => {
+    gamePlayButton?.focus({ preventScroll: true });
+  }, 500);
+};
+
+if (gameLink && gameSection) {
+  gameLink.addEventListener("click", (event) => {
+    event.preventDefault();
+    nav?.classList.remove("is-open");
+    toggleButton?.setAttribute("aria-expanded", "false");
+    scrollToGameSection("smooth");
+  });
+}
+
+if (gameSection) {
+  const handleGameHash = () => {
+    if (window.location.hash === "#droppy-dash") {
+      scrollToGameSection("auto");
+      window.setTimeout(() => scrollToGameSection("auto"), 600);
+    }
+  };
+  if (document.readyState === "complete") {
+    handleGameHash();
+  } else {
+    window.addEventListener("load", handleGameHash, { once: true });
+  }
+  window.addEventListener("hashchange", handleGameHash);
+}
+
+const orderDropdown = document.querySelector(".order-dropdown");
+const orderSummary = orderDropdown?.querySelector("summary");
+
+if (orderDropdown) {
+  orderDropdown.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
+      orderDropdown.removeAttribute("open");
+    });
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!orderDropdown.hasAttribute("open")) return;
+    if (orderDropdown.contains(event.target)) return;
+    orderDropdown.removeAttribute("open");
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") return;
+    if (!orderDropdown.hasAttribute("open")) return;
+    orderDropdown.removeAttribute("open");
+    orderSummary?.focus();
+  });
+}
+
+const cateringForm = document.querySelector("[data-catering-form]");
+const cateringNote = document.querySelector("[data-catering-note]");
+
+const setCateringNote = (message, tone = "neutral") => {
+  if (!cateringNote) return;
+  cateringNote.textContent = message;
+  if (tone === "error") {
+    cateringNote.style.color = "#a6322c";
+  } else if (tone === "success") {
+    cateringNote.style.color = "#2f6b3a";
+  } else {
+    cateringNote.style.color = "rgba(35, 31, 32, 0.7)";
+  }
+};
+
+const buildCateringMessage = (payload) => {
+  const lines = [
+    "Cotizacion mesa de cafe",
+    `Nombre: ${payload.name}`,
+    `Contacto: ${payload.contact}`,
+    `Fecha: ${payload.date}`,
+    `Invitados: ${payload.guests}`,
+  ];
+  if (payload.details) {
+    lines.push(`Detalles: ${payload.details}`);
+  }
+  return lines.join("\n");
+};
+
+const getCateringWhatsappUrl = (message) => {
+  const base = cateringForm?.dataset.whatsapp || "";
+  const text = encodeURIComponent(message);
+  if (base) {
+    const joiner = base.includes("?") ? "&" : "?";
+    return `${base}${joiner}text=${text}`;
+  }
+  return `https://wa.me/?text=${text}`;
+};
+
+if (cateringForm) {
+  const submitButton = cateringForm.querySelector("button[type=submit]");
+  cateringForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const formData = new FormData(cateringForm);
+    const payload = {
+      name: String(formData.get("name") || "").trim(),
+      contact: String(formData.get("contact") || "").trim(),
+      date: String(formData.get("date") || "").trim(),
+      guests: String(formData.get("guests") || "").trim(),
+      details: String(formData.get("details") || "").trim(),
+    };
+
+    if (!payload.name) {
+      setCateringNote("Ingresa tu nombre.", "error");
+      return;
+    }
+    if (!payload.contact) {
+      setCateringNote("Comparte un email o telefono.", "error");
+      return;
+    }
+    if (!payload.date) {
+      setCateringNote("Selecciona la fecha del evento.", "error");
+      return;
+    }
+    const guestsNumber = Number(payload.guests);
+    if (!Number.isFinite(guestsNumber) || guestsNumber < 1) {
+      setCateringNote("Ingresa el numero de invitados.", "error");
+      return;
+    }
+
+    const whatsappMessage = buildCateringMessage(payload);
+    const whatsappUrl = getCateringWhatsappUrl(whatsappMessage);
+
+    setCateringNote("Abriendo WhatsApp y enviando solicitud...");
+    if (submitButton) submitButton.disabled = true;
+    window.open(whatsappUrl, "_blank");
+
+    try {
+      const res = await fetch(`${API_BASE}/catering`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data.error || "No se pudo enviar la solicitud.");
       }
-    </script>
+      setCateringNote("Solicitud enviada. Te contactamos pronto.", "success");
+      cateringForm.reset();
+    } catch (err) {
+      setCateringNote(err.message || "No se pudo enviar la solicitud.", "error");
+    } finally {
+      if (submitButton) submitButton.disabled = false;
+    }
+  });
+}
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="styles.css" />
-    <link rel="icon" href="assets/favicon.ico" />
-  </head>
-  <body>
-    <a class="skip-link" href="#main">Saltar al contenido</a>
+// Small header shadow on scroll for depth
+window.addEventListener("scroll", () => {
+  if (!header) return;
+  const scrolled = window.scrollY > 8;
+  header.style.boxShadow = scrolled ? "0 6px 18px rgba(35,31,32,0.06)" : "none";
+});
 
-	    <header class="header" id="top">
-	      <div class="container header__inner">
-        <a class="logo" href="#top" aria-label="Better Mood Coffee">
-          <img src="assets/logo-better-mood.png" alt="Better Mood Coffee" />
-        </a>
+const sendVisitPing = () => {
+  const url = `${API_BASE}/visit`;
+  if (navigator.sendBeacon) {
+    navigator.sendBeacon(url, "");
+    return;
+  }
+  fetch(url, { method: "POST", keepalive: true }).catch(() => {});
+};
 
-        <button class="nav-toggle" aria-controls="primary-nav" aria-expanded="false">
-          <span class="nav-toggle__icon" aria-hidden="true"></span>
-          <span class="nav-toggle__label" aria-hidden="true">Menú</span>
-          <span class="sr-only">Abrir navegación</span>
-        </button>
-
-        <nav class="nav" id="primary-nav">
-          <a href="#menu">Menú</a>
-          <a href="#location">Ubicación</a>
-          <a href="#ingredients">Bienestar y CBD</a>
-          <a href="#community">Comunidad</a>
-          <a class="nav__game" href="#droppy-dash">
-            <span>Juega y gana</span>
-            <small>Top 3 semanal = bebida gratis</small>
-          </a>
-          <a class="nav__tag" href="https://drive.google.com/drive/folders/17h4TmJz7SYwpuY8gR-75qDLrflPmosqd?usp=share_link" target="_blank" rel="noopener noreferrer" title="Productos CBD + adaptógenos">Productos</a>
-          <a href="#contacto">Contacto</a>
-          <details class="order-dropdown">
-            <summary class="btn btn--sm btn--primary" aria-label="Pedir ahora">
-              Pedir ahora
-            </summary>
-            <div class="order-dropdown__menu" role="menu" aria-label="Opciones para pedir a domicilio">
-              <a
-                class="order-dropdown__item"
-                role="menuitem"
-                href="https://www.ubereats.com/store/better-mood-coffee/hPA2fzGUX9WLGGvkeNwCrg?diningMode=DELIVERY"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Uber Eats
-              </a>
-              <a
-                class="order-dropdown__item"
-                role="menuitem"
-                href="https://www.rappi.com.mx/restaurantes/delivery/495986-better-mood-coffee?utm_source=app&amp;utm_medium=deeplink&amp;utm_campaign=share"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Rappi
-              </a>
-            </div>
-          </details>
-        </nav>
-	      </div>
-		    </header>
-
-	    <main id="main">
-	      <!-- HERO -->
-	      <section class="hero" aria-labelledby="hero-title">
-	        <div class="container hero__grid">
-          <div class="hero__content">
-            <h1 id="hero-title">Bienestar real en taza.</h1>
-            <p class="hero__subtitle">
-              Café de especialidad con CBD y adaptógenos responsables.
-            </p>
-
-            <div class="hero__actions">
-              <a class="btn btn--primary" href="#order">Pedir ahora</a>
-            </div>
-          </div>
-
-          <div class="hero__media">
-            <div class="hero__card">
-              <img
-                src="assets/hero-coffee.jpg"
-                alt="Café de especialidad con funcionales"
-                loading="lazy"
-                decoding="async"
-                width="640"
-                height="720"
-              />
-              <div class="hero__overlay">
-                <p class="hero__overlay-title">Especialidad + funcionales</p>
-                <p class="hero__overlay-text">Perfil sensorial + soporte suave.</p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      <!-- ORDER -->
-      <section class="order-strip" id="order" aria-labelledby="order-title">
-        <div class="container order-strip__inner">
-          <div>
-            <h2 id="order-title">Pedir ahora</h2>
-            <p>Entrega rápida en Uber Eats o Rappi.</p>
-          </div>
-          <div class="order-strip__actions" aria-label="Plataformas de entrega">
-            <a class="btn btn--primary" href="https://www.ubereats.com/store/better-mood-coffee/hPA2fzGUX9WLGGvkeNwCrg?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer">
-              Uber Eats
-            </a>
-            <a class="btn btn--secondary" href="https://www.rappi.com.mx/restaurantes/delivery/495986-better-mood-coffee?utm_source=app&amp;utm_medium=deeplink&amp;utm_campaign=share" target="_blank" rel="noopener noreferrer">
-              Rappi
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <!-- MENU -->
-      <section class="section" id="menu">
-        <div class="container">
-          <div class="section__header">
-            <h2>Menú claro para elegir rápido.</h2>
-            <p>Especialidad + funcionales, sin rodeos.</p>
-          </div>
-
-          <div class="menu-grid">
-            <article class="menu-card">
-              <h3>Café de especialidad</h3>
-              <p>Espresso y métodos con origen claro.</p>
-            </article>
-            <article class="menu-card">
-              <h3>Bebidas funcionales</h3>
-              <p>Ingredientes funcionales con guía clara.</p>
-            </article>
-            <article class="menu-card">
-              <h3>Smoothies</h3>
-              <p>Fruta real + funcionales.</p>
-            </article>
-            <article class="menu-card">
-              <h3>Creaciones Better Mood</h3>
-              <p>Recetas de temporada y bebidas firma.</p>
-            </article>
-            <article class="menu-card">
-              <h3>Productos funcionales</h3>
-              <p>CBD, adaptógenos y aliados del bienestar diario.</p>
-              <a
-                class="btn btn--primary btn--sm"
-                href="https://drive.google.com/drive/folders/17h4TmJz7SYwpuY8gR-75qDLrflPmosqd?usp=share_link"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Ver productos CBD + adaptógenos
-              </a>
-            </article>
-            <article class="menu-card">
-              <h3>Postres Panera Signature</h3>
-              <p>Postres artesanales de Panera Signature.</p>
-              <a
-                class="btn btn--secondary btn--sm"
-                href="https://www.instagram.com/panera.signature?igsh=MTBvdGNjem82bnNueQ%3D%3D&utm_source=qr"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Ver Panera Signature
-              </a>
-            </article>
-          </div>
-
-          <div class="origin-mini">
-            <p><strong>Café de Finca Santa Cruz.</strong> Trazabilidad completa.</p>
-            <a class="link-arrow" href="https://lavadobetter.netlify.app" target="_blank" rel="noopener noreferrer">
-              Historia completa
-            </a>
-          </div>
-
-          <div class="featured-drinks">
-            <h3>Bebidas estrella</h3>
-            <div class="featured-drinks__grid">
-              <article class="drink">
-                <img class="drink__image" src="assets/dragon.jpg" alt="Dragon's Blood" loading="lazy" decoding="async" width="300" height="220" />
-                <div class="drink__body">
-                  <h4>Dragon's Blood</h4>
-                  <p>Mango, fresa y durazno en agua mineral.</p>
-                  <div class="drink__meta">
-                    <span class="drink__price">$99</span>
-                    <span class="drink__chip">Frío</span>
-                    <span class="drink__chip">Efecto: calma</span>
-                  </div>
-                  <a class="btn btn--primary btn--sm" href="https://www.ubereats.com/store/better-mood-coffee/hPA2fzGUX9WLGGvkeNwCrg?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer">Pedir esta bebida</a>
-                </div>
-              </article>
-              <article class="drink">
-                <img class="drink__image" src="assets/Coldbarry.jpg" alt="Cold Berry Days" loading="lazy" decoding="async" width="300" height="220" />
-                <div class="drink__body">
-                  <h4>Cold Berry Days</h4>
-                  <p>Fresa, hierbabuena y ginger ale.</p>
-                  <div class="drink__meta">
-                    <span class="drink__price">$122</span>
-                    <span class="drink__chip">Frío</span>
-                    <span class="drink__chip">Efecto: calma</span>
-                  </div>
-                  <a class="btn btn--primary btn--sm" href="https://www.ubereats.com/store/better-mood-coffee/hPA2fzGUX9WLGGvkeNwCrg?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer">Pedir esta bebida</a>
-                </div>
-              </article>
-              <article class="drink">
-                <img class="drink__image" src="assets/sweettrip.jpg" alt="Sweet Trip" loading="lazy" decoding="async" width="300" height="220" />
-                <div class="drink__body">
-                  <h4>Sweet Trip</h4>
-                  <p>Fresa mineral con perlas explosivas.</p>
-                  <div class="drink__meta">
-                    <span class="drink__price">$195</span>
-                    <span class="drink__chip">Frío</span>
-                    <span class="drink__chip">Efecto: energía</span>
-                  </div>
-                  <a class="btn btn--primary btn--sm" href="https://www.ubereats.com/store/better-mood-coffee/hPA2fzGUX9WLGGvkeNwCrg?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer">Pedir esta bebida</a>
-                </div>
-              </article>
-              <article class="drink">
-                <img class="drink__image" src="assets/spaceman.jpg" alt="Spaceman" loading="lazy" decoding="async" width="300" height="220" />
-                <div class="drink__body">
-                  <h4>Spaceman</h4>
-                  <p>Lavanda y limón en agua mineral.</p>
-                  <div class="drink__meta">
-                    <span class="drink__price">$195</span>
-                    <span class="drink__chip">Frío</span>
-                    <span class="drink__chip">Efecto: calma</span>
-                  </div>
-                  <a class="btn btn--primary btn--sm" href="https://www.ubereats.com/store/better-mood-coffee/hPA2fzGUX9WLGGvkeNwCrg?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer">Pedir esta bebida</a>
-                </div>
-              </article>
-            </div>
-          </div>
-
-          <div class="section__cta">
-            <a class="btn btn--primary" href="#order">Pedir ahora</a>
-            <a class="btn btn--secondary" href="assets/menu-better-mood.pdf" target="_blank" rel="noopener">
-              Ver menú completo
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <!-- CATALOG -->
-      <section class="order-strip" id="catalogo" aria-labelledby="catalogo-title">
-        <div class="container order-strip__inner">
-          <div>
-            <h2 id="catalogo-title">Productos CBD + adaptógenos</h2>
-            <p>Productos funcionales con información clara.</p>
-          </div>
-          <div class="order-strip__actions" aria-label="Productos Better Mood">
-            <a
-              class="btn btn--secondary"
-              href="https://drive.google.com/drive/folders/17h4TmJz7SYwpuY8gR-75qDLrflPmosqd?usp=share_link"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Ver productos
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <!-- LOCATION -->
-      <section class="section section--alt" id="location">
-        <div class="container location section__grid">
-          <div>
-            <h2>Visítanos en Puebla.</h2>
-            <p>Café de especialidad, ambiente cómodo.</p>
-            <div class="location__info">
-              <p><strong>Dirección:</strong> <span>13 poniente 2302/F Col.La Paz</span></p>
-              <div class="hours">
-                <strong class="hours__label">Horarios:</strong>
-                <dl class="hours__list">
-                  <div class="hours__row">
-                    <dt>Lunes a Viernes</dt>
-                    <dd>8:00 – 21:00</dd>
-                  </div>
-                  <div class="hours__row">
-                    <dt>Sábado</dt>
-                    <dd>9:00 – 20:00</dd>
-                  </div>
-                  <div class="hours__row">
-                    <dt>Domingo</dt>
-                    <dd>10:00 – 18:00</dd>
-                  </div>
-                </dl>
-              </div>
-              <p><strong>Estacionamiento:</strong> Sí, sobre 13 Poniente.</p>
-              <div class="location__amenities" aria-label="Amenidades">
-                <span>📶 Wi‑Fi</span>
-                <span>🔌 Enchufes</span>
-                <span>🐾 Pet friendly</span>
-              </div>
-            </div>
-            <div class="hero__actions location__actions">
-              <a
-                class="btn btn--secondary"
-                href="https://maps.google.com/?q=Better%20Mood%20Coffee%20Cholula"
-                target="_blank"
-                rel="noopener"
-              >
-                Maps
-              </a>
-              <a
-                class="btn btn--secondary"
-                href="https://waze.com/ul?q=Better%20Mood%20Coffee%20Puebla"
-                target="_blank"
-                rel="noopener"
-              >
-                Waze
-              </a>
-            </div>
-          </div>
-
-          <div class="map">
-            <iframe
-              title="Mapa Better Mood Coffee"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7542.69884057009!2d-98.22048322456946!3d19.04836868215056!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85cfc14fac2039a3%3A0xa75d980fe5516d27!2sBetter%20Mood%20Coffee!5e0!3m2!1ses!2sca!4v1765492116929!5m2!1ses!2sca"
-              width="100%"
-              height="360"
-              style="border:0"
-              allowfullscreen=""
-              loading="lazy"
-              referrerpolicy="no-referrer-when-downgrade"
-            ></iframe>
-          </div>
-        </div>
-      </section>
-
-      <!-- CATERING -->
-      <section class="section" id="catering">
-        <div class="container section__grid catering">
-          <div>
-            <h2>Mesa de cafe para eventos.</h2>
-            <p>Cafe de especialidad a tu alcance. Podemos montar panques, trufas, tortugas y cafe.</p>
-
-            <form
-              class="catering__form"
-              data-catering-form
-              data-whatsapp="https://wa.me/message/WQWEEODGY6H2P1"
-              aria-label="Solicitud de cotizacion"
-            >
-              <label class="catering__label">
-                Nombre
-                <input class="catering__input" name="name" autocomplete="name" required />
-              </label>
-              <label class="catering__label">
-                Email o telefono
-                <input class="catering__input" name="contact" autocomplete="email" required />
-              </label>
-              <div class="catering__row">
-                <label class="catering__label">
-                  Fecha del evento
-                  <input class="catering__input" type="date" name="date" required />
-                </label>
-                <label class="catering__label">
-                  Invitados aprox.
-                  <input class="catering__input" type="number" name="guests" min="1" inputmode="numeric" required />
-                </label>
-              </div>
-              <label class="catering__label">
-                Lugar / detalles
-                <textarea class="catering__textarea" name="details" rows="3" placeholder="Cuantas horas, tipo de evento, requerimientos..."></textarea>
-              </label>
-              <button class="btn btn--primary" type="submit">Solicitar cotizacion</button>
-              <p class="catering__note" data-catering-note role="status">Te contactamos para armar la propuesta.</p>
-            </form>
-          </div>
-
-          <div class="catering__media">
-            <img
-              src="assets/evento-corporativo.jpg"
-              alt="Mesa de cafe para eventos"
-              loading="lazy"
-              decoding="async"
-              width="800"
-              height="1000"
-            />
-          </div>
-        </div>
-      </section>
-
-      <!-- WELLNESS -->
-      <section class="section" id="ingredients">
-        <div class="container">
-          <div class="section__header">
-            <h2>Bienestar y CBD, claro y responsable.</h2>
-            <p>Información breve para decidir con confianza.</p>
-          </div>
-
-          <div class="faq" aria-labelledby="bienestar-title">
-            <h3 id="bienestar-title">Preguntas clave</h3>
-            <div class="faq__items">
-              <details class="faq__item">
-                <summary>Café de especialidad y origen trazable</summary>
-                <p>Finca Santa Cruz, tueste y extracción precisos. Baristas entrenados para un perfil consistente.</p>
-              </details>
-              <details class="faq__item">
-                <summary>CBD amplio espectro (no psicoactivo)</summary>
-                <p>Apoyo suave para equilibrio interno. No es medicamento y su uso es responsable.</p>
-                <p>No recomendado: embarazo, lactancia o menores.</p>
-              </details>
-              <details class="faq__item">
-                <summary>Adaptógenos y hongos funcionales</summary>
-                <p>Ashwagandha, melena de león, reishi y cordyceps. Soporte suave para enfoque, energía y calma.</p>
-              </details>
-              <details class="faq__item">
-                <summary>Cómo se siente</summary>
-                <p>Calma ligera, enfoque estable y energía suave, sin picos ni promesas médicas.</p>
-              </details>
-              <details class="faq__item">
-                <summary>Transparencia y seguridad</summary>
-                <p>
-                  COA/Labs disponibles:
-                  <a href="assets/coafocus.pdf" target="_blank" rel="noopener noreferrer">Focus</a>
-                  · <a href="assets/coacalming.pdf" target="_blank" rel="noopener noreferrer">Calming</a>
-                  · <a href="assets/coasleep.pdf" target="_blank" rel="noopener noreferrer">Sleep</a>
-                  · <a href="assets/coawellness.pdf" target="_blank" rel="noopener noreferrer">Wellness</a>
-                </p>
-                <p>Si tomas medicamentos, consulta a tu médico.</p>
-              </details>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- COMMUNITY -->
-      <section class="section section--compact" id="community">
-        <div class="container community section__grid">
-          <div>
-            <h2>Wallet Better Mood</h2>
-            <p>Recompensas por visita y consumo.</p>
-            <div class="hero__actions">
-              <a class="btn btn--secondary" href="https://take.cards/7pgmg" target="_blank" rel="noopener">
-                Instalar wallet
-              </a>
-            </div>
-          </div>
-
-          <div class="wallet-card wallet-card--image" role="img" aria-label="Tarjeta Wallet Better Mood">
-            <img class="wallet-card__image" src="assets/wallet.jpg" alt="Wallet Better Mood" loading="lazy" decoding="async" />
-          </div>
-        </div>
-      </section>
-
-      <!-- DROPPY DASH -->
-      <section class="section section--alt droppy" id="droppy-dash" data-droppy>
-        <div class="container droppy__grid">
-          <div class="droppy__intro">
-            <p class="eyebrow">Arcade premium · Better Mood</p>
-            <h2>Droppy Dash: juega y gana</h2>
-            <p>
-              Top 3 semanal = bebida gratis. Salta, suma granos y sube tu score.
-            </p>
-
-            <div class="droppy__leaderboard" aria-live="polite">
-              <div class="droppy__leaderboard-head">
-                <h3>Leaderboard</h3>
-                <span class="droppy__week" data-period-label>Semana en curso</span>
-              </div>
-              <div class="droppy__leaderboard-filters" role="tablist" aria-label="Filtrar leaderboard">
-                <button class="droppy__filter is-active" type="button" data-period="weekly" aria-pressed="true">Semanal</button>
-                <button class="droppy__filter" type="button" data-period="monthly" aria-pressed="false">Mensual</button>
-                <button class="droppy__filter" type="button" data-period="all" aria-pressed="false">Histórico</button>
-              </div>
-              <ol class="droppy__leaderboard-list" data-leaderboard>
-                <li class="droppy__leaderboard-empty">Cargando leaderboard...</li>
-              </ol>
-              <button class="btn btn--ghost btn--sm droppy__leaderboard-toggle" type="button" data-leaderboard-toggle>
-                Ver top 10
-              </button>
-              <p class="droppy__leaderboard-rank" data-rank></p>
-            </div>
-          </div>
-
-          <div class="droppy__game">
-            <div class="droppy__canvas-frame">
-              <canvas class="droppy__canvas" id="droppy-canvas" role="img" aria-label="Juego Droppy Dash"></canvas>
-              <div class="droppy__hud" aria-live="polite">
-                <div class="droppy__hud-left">
-                  <div class="droppy__hud-score">
-                    <span class="droppy__hud-bean" aria-hidden="true"></span>
-                    <div class="droppy__hud-block">
-                      <span class="droppy__hud-label">Score</span>
-                      <span class="droppy__hud-value" data-score>0</span>
-                    </div>
-                  </div>
-                  <div class="droppy__hud-block droppy__hud-combo">
-                    <span class="droppy__hud-label">Combo</span>
-                    <span class="droppy__hud-value" data-combo>x1</span>
-                  </div>
-                </div>
-                <button class="droppy__pause" type="button" aria-label="Pausar juego">II</button>
-              </div>
-
-              <div class="droppy__overlay droppy__overlay--start" data-overlay="start">
-                <p class="droppy__overlay-title">Droppy Dash</p>
-                <p class="droppy__overlay-text">Toca para saltar. Doble salto activo.</p>
-                <p class="droppy__overlay-note">Esquiva hongos y suma granos.</p>
-                <button class="btn btn--primary droppy__play" type="button" data-play>Jugar</button>
-                <p class="droppy__overlay-note" data-connection>Listo para jugar.</p>
-              </div>
-
-              <div class="droppy__overlay droppy__overlay--pause" data-overlay="pause" hidden>
-                <p class="droppy__overlay-title">Pausa</p>
-                <p class="droppy__overlay-text">Tu partida está en pausa.</p>
-                <div class="droppy__actions">
-                  <button class="btn btn--primary droppy__resume" type="button">Continuar</button>
-                  <button class="btn btn--secondary droppy__restart" type="button">Reiniciar</button>
-                </div>
-              </div>
-
-              <div class="droppy__overlay droppy__overlay--gameover" data-overlay="gameover" hidden>
-                <h3>Game Over</h3>
-                <p class="droppy__final">Tu puntaje: <strong data-final-score>0</strong></p>
-                <div class="droppy__actions">
-                  <button class="btn btn--secondary droppy__retry" type="button">Reintentar</button>
-                </div>
-                <form class="droppy__form" data-form hidden>
-                  <label class="droppy__label">
-                    Nombre
-                    <input class="droppy__input" name="name" autocomplete="nickname" maxlength="24" required />
-                  </label>
-                  <label class="droppy__label">
-                    Instagram o teléfono (si ganas)
-                    <input class="droppy__input" name="contact" autocomplete="username" maxlength="32" required />
-                  </label>
-                  <p class="droppy__consent">Solo para avisarte si ganas.</p>
-                  <button class="btn btn--primary droppy__submit" type="submit">Enviar puntaje</button>
-                  <button class="btn btn--secondary droppy__share" type="button">Compartir mi score</button>
-                  <p class="droppy__form-note" data-form-note></p>
-                </form>
-              </div>
-            </div>
-            <div class="droppy__controls">
-              <p class="droppy__hint">Toca la pantalla o presiona espacio para saltar. Doble salto con doble clic.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- TESTIMONIALS -->
-      <section class="section" id="testimonials">
-        <div class="container">
-          <div class="section__header">
-            <h2>Lo que dicen nuestros clientes.</h2>
-            <p>Opiniones reales de una experiencia honesta.</p>
-          </div>
-
-          <div class="review-summary" aria-label="Calificación en Google">
-            <div class="review-summary__meta">
-              <p class="review-summary__rating">
-                <span aria-hidden="true">⭐</span> <strong>4.4/5</strong> en Google
-                <span class="review-summary__count">(168 reseñas)</span>
-              </p>
-              <p class="review-summary__note">Lee reseñas verificadas.</p>
-            </div>
-            <a
-              class="btn btn--secondary btn--sm"
-              href="https://maps.app.goo.gl/qeipDG96kXREwB8JA?g_st=ic"
-              target="_blank"
-              rel="noopener"
-            >
-              Déjanos tu reseña
-            </a>
-          </div>
-
-          <div class="testimonials">
-            <figure class="testimonial">
-              <blockquote>
-                “Lugar cómodo, pet friendly y café rico.”
-              </blockquote>
-              <figcaption>— Miyo Morales</figcaption>
-            </figure>
-            <figure class="testimonial">
-              <blockquote>
-                “Comida rica, servicio amable.”
-              </blockquote>
-              <figcaption>— Aimez Pozos</figcaption>
-            </figure>
-            <figure class="testimonial">
-              <blockquote>
-                “Excelente ambiente, postres muy ricos.”
-              </blockquote>
-              <figcaption>— Aranza V</figcaption>
-            </figure>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <footer class="footer">
-      <div class="container footer__grid">
-        <div>
-          <img class="footer__logo" src="assets/logo-better-mood.png" alt="Better Mood Coffee" />
-          <p>Better Mood Coffee — Café de especialidad y bienestar responsable en Puebla.</p>
-        </div>
-
-        <div class="footer__links">
-          <h3>Navegación</h3>
-          <a href="#order">Pedir ahora</a>
-          <a href="#menu">Menú</a>
-          <a href="#location">Ubicación</a>
-          <a href="#ingredients">Bienestar y CBD</a>
-          <a href="#community">Comunidad</a>
-          <a href="aviso-privacidad.html">Aviso de privacidad</a>
-        </div>
-
-        <div class="footer__links" id="contacto">
-          <h3>Redes</h3>
-          <a href="https://wa.me/message/WQWEEODGY6H2P1" target="_blank" rel="noopener noreferrer">WhatsApp</a>
-          <a href="https://instagram.com/bettermood.coffee" target="_blank" rel="noopener">Instagram</a>
-          <a href="https://facebook.com/bettermoodcoffee" target="_blank" rel="noopener">Facebook</a>
-          <a href="https://g.page/r/Coffee/review" target="_blank" rel="noopener">Google Reviews</a>
-        </div>
-      </div>
-
-      <div class="container footer__disclaimer">
-        <p>
-          Uso responsable de CBD: Producto derivado de cáñamo, no psicoactivo. No recomendado para
-          menores de edad, embarazo o lactancia. Si tomas medicamentos, consulta a tu médico. No
-          pretende diagnosticar, tratar, curar ni prevenir enfermedades.
-        </p>
-        <p class="footer__copyright">© Better Mood Coffee. Todos los derechos reservados.</p>
-      </div>
-    </footer>
-
-    <div id="certificados" class="sr-only">Certificados y COA disponibles en tienda.</div>
-
-    <nav class="mobile-bar" aria-label="Accesos rápidos">
-      <a class="mobile-bar__item" href="#menu">Menú</a>
-      <a class="mobile-bar__item is-primary" href="#order">Pedir</a>
-      <a class="mobile-bar__item" href="#location">Ubicación</a>
-    </nav>
-
-    <script src="script.js"></script>
-    <script src="game/droppy-dash.js"></script>
-  </body>
-</html>
+if (document.readyState === "complete") {
+  sendVisitPing();
+} else {
+  window.addEventListener("load", sendVisitPing, { once: true });
+}
