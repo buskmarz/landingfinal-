@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="assets/logo-better-mood.png">
+  <title>Recomendador Better Mood Coffee</title>
+  <link rel="icon" type="image/png" href="assets/logo-better-mood.png">
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #1c1c1c;
+      --muted: #6b6b6b;
+      --brand: #f9d923;
+      --brand-ink: #0e0e0e;
+      --brand-dark: #e0c61f;
+      --card: #f7f7f7;
+      --ring: #1a1a1a;
+      --shadow: 0 6px 16px rgba(0,0,0,0.1);
+      --radius: 14px;
+    }
+    html, body { height: 100%; }
+    * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
+    body { touch-action: manipulation; user-select: none; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 24px;
+      display: grid;
+      place-items: start center;
+    }
+    .container {
+      width: 100%;
+      max-width: 760px;
+      background: #fff;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 28px;
+    }
+    header { text-align: center; margin-bottom: 8px; }
+    header img { width: 200px; height: auto; display: inline-block; }
+    .home-link { display: inline-flex; align-items: center; justify-content: center; }
+    h1 { text-align: center; color: #000; margin: 8px 0 6px; font-size: clamp(22px, 3.6vw, 28px); }
+    .tagline { text-align: center; color: var(--muted); font-size: 14px; margin-bottom: 12px; }
+
+    label { display: block; margin-top: 18px; font-weight: 700; }
+    .hint { color: var(--muted); font-size: 0.9rem; margin-top: 4px; }
+
+    .button-group { display: flex; gap: 12px; margin-top: 8px; flex-wrap: wrap; }
+    .button-group[data-name="efecto"] { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    .option {
+      background: var(--brand);
+      color: var(--brand-ink);
+      font-weight: 700;
+      padding: 14px 16px;
+      border-radius: 12px;
+      cursor: pointer;
+      text-align: center;
+      flex: 1 1 auto;
+      transition: transform .12s ease, background .12s ease, color .12s ease, box-shadow .12s ease;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      min-height: 52px;
+      font-size: clamp(16px, 2.6vw, 18px);
+      outline: none;
+    }
+    .option:hover { background: var(--brand-dark); }
+    .option:focus-visible { box-shadow: 0 0 0 3px var(--ring), 0 2px 6px rgba(0,0,0,0.1); }
+    .option.selected { background: #111; color: var(--brand); transform: translateY(-1px); }
+    .option.selected::after { content: "✓"; margin-left: 6px; font-weight: 800; }
+    .option[aria-pressed="true"] { background: #111; color: var(--brand); }
+
+    .cta-row { display: grid; grid-template-columns: 1.3fr .7fr; gap: 12px; margin-top: 28px; padding-top: 14px; border-top: 1px solid #ececec; }
+    .btn {
+      width: 100%;
+      padding: 18px;
+      border: none;
+      border-radius: 14px;
+      font-weight: 800;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: transform .12s ease, filter .12s ease, background .12s ease, color .12s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    }
+    .btn-primary { background: var(--brand); color: #000; }
+    .btn-primary:hover { filter: brightness(0.97); }
+    .btn-primary:disabled { cursor: not-allowed; opacity: .6; box-shadow: none; }
+    .btn-secondary { background: #111; color: var(--brand); }
+    .btn-secondary:hover { filter: brightness(1.05); }
+    .btn-link { background: transparent; color: #111; box-shadow: none; padding: 8px 0; font-weight: 700; }
+    .btn-link:hover { text-decoration: underline; }
+    .actions { display: flex; gap: 16px; align-items: center; margin-top: 8px; }
+    .links-row { display: flex; gap: 12px; justify-content: center; margin-top: 16px; flex-wrap: wrap; }
+    .home-row { text-align: center; margin-top: 10px; }
+    .home-link-bottom { font-size: 0.95rem; }
+    .link-btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 14px; border-radius: 999px; border: 2px solid #111; color: #111; text-decoration: none; font-weight: 800; }
+    .link-btn:hover { background: #111; color: var(--brand); }
+
+    #resultado {
+      background: var(--card);
+      padding: 18px;
+      border-radius: 12px;
+      margin-top: 18px;
+      color: #333;
+      opacity: 0;
+      transform: translateY(8px);
+      animation: reveal .22s ease forwards;
+    }
+    @media (max-width: 480px) {
+      .cta-row { grid-template-columns: 1fr; gap: 10px; }
+    }
+    @keyframes reveal { to { opacity: 1; transform: none; } }
+    .pill {
+      display: inline-block; padding: 6px 10px; border-radius: 999px; background: #111; color: var(--brand); font-weight: 700; font-size: 12px; margin-right: 8px;
+    }
+    .custom-list { margin-top: 10px; }
+    .custom-item { margin-bottom: 0.45rem; font-size: 1.05rem; line-height: 1.4; color: #000; display: flex; align-items: center; gap: 0.6rem; }
+    .custom-item::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--brand); border: 2px solid #000; flex-shrink: 0; }
+    .custom-item.clickable { cursor: pointer; }
+    .custom-item.clickable::after { content: "›"; margin-left: auto; color: var(--muted); font-weight: 800; }
+    .custom-item.clickable:active { transform: scale(0.99); }
+
+    footer { color: var(--muted); text-align: center; font-size: 12px; margin-top: 12px; }
+    @supports (padding: max(0px)) { body { padding-bottom: max(24px, env(safe-area-inset-bottom)); } }
+
+    /* Modal descriptivo */
+    .modal { position: fixed; inset: 0; display: none; place-items: center; background: rgba(0,0,0,.35); padding: 20px; z-index: 50; }
+    .modal.show { display: grid; }
+    .modal-card { width: min(640px, 96vw); background: #fff; border-radius: 14px; box-shadow: var(--shadow); padding: 18px; }
+    .modal-title { font-weight: 800; margin: 0 0 8px; font-size: 18px; }
+    .modal-body { color: #222; line-height: 1.45; }
+    .modal-actions { display: flex; justify-content: flex-end; margin-top: 14px; }
+    .modal-close { background: #111; color: var(--brand); border: 0; border-radius: 10px; padding: 10px 14px; font-weight: 800; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <a class="home-link" href="index.html" aria-label="Volver a Better Mood Coffee">
+        <img src="assets/logo-better-mood.png" alt="Better Mood Coffee Logo">
+      </a>
+      <h1>Recomendador de Bebidas</h1>
+      <div class="tagline">Encuentra tu mood en una taza</div>
+    </header>
+
+    <label>1. ¿Qué tipo de bebida prefieres?</label>
+    <div class="hint">Elige caliente o fría</div>
+    <div class="button-group" data-name="tipo" data-required="true">
+      <div class="option" data-value="caliente" role="button" aria-pressed="false" tabindex="0">Caliente 🔥</div>
+      <div class="option" data-value="fría" role="button" aria-pressed="false" tabindex="0">Fría ❄️</div>
+    </div>
+
+    <label>2. ¿Buscas algo con cafeína?</label>
+    <div class="hint">Si no tomas café, ¡aún hay opciones!</div>
+    <div class="button-group" data-name="cafeina" data-required="true">
+      <div class="option" data-value="si" role="button" aria-pressed="false" tabindex="0">Sí ☕️</div>
+      <div class="option" data-value="no" role="button" aria-pressed="false" tabindex="0">No 🚫</div>
+    </div>
+
+    <label>3. ¿Te gustaría algo dulce?</label>
+    <div class="hint">Puedes pedir ajustar el dulzor en barra</div>
+    <div class="button-group" data-name="dulce" data-required="true">
+      <div class="option" data-value="si" role="button" aria-pressed="false" tabindex="0">Sí 🍯</div>
+      <div class="option" data-value="no" role="button" aria-pressed="false" tabindex="0">No 🧊</div>
+    </div>
+
+    <label>4. ¿Cómo quieres sentirte después de tu bebida?</label>
+    <div class="hint">Opcional, potencia tu experiencia</div>
+    <div class="button-group" data-name="efecto">
+      <div class="option" data-value="ninguno" role="button" aria-pressed="false" tabindex="0">Sin efecto especial</div>
+      <div class="option" data-value="energizante" role="button" aria-pressed="false" tabindex="0">Lleno de energía ⚡</div>
+      <div class="option" data-value="relajante" role="button" aria-pressed="false" tabindex="0">Tranquilo y relajado 🌿</div>
+      <div class="option" data-value="despegue" role="button" aria-pressed="false" tabindex="0">Listo para despegar 🚀</div>
+    </div>
+
+    <div class="cta-row">
+      <button id="ctaRecomendar" class="btn btn-primary" disabled>Recomendar bebida</button>
+      <button id="btnReset" class="btn btn-secondary" type="button">Limpiar</button>
+    </div>
+
+    <div id="resultado" aria-live="polite"></div>
+    <div class="links-row">
+      <a class="link-btn" href="https://www.instagram.com/s/aGlnaGxpZ2h0OjE4MzY4MjM2OTI0MTQ5MDYx?story_media_id=3719614596563078313&igsh=NGJ5NHFrb3VyNG9s" target="_blank" rel="noopener noreferrer">Ver menú completo</a>
+      <a class="link-btn" href="https://drive.google.com/drive/folders/17h4TmJz7SYwpuY8gR-75qDLrflPmosqd?usp=share_link" target="_blank" rel="noopener noreferrer">Ver catálogo de productos</a>
+      <a class="link-btn" href="https://www.instagram.com/bettermood.coffee?igsh=Y2F2cXNiZnFsZDUy&utm_source=qr" target="_blank" rel="noopener noreferrer">Instagram @bettermood.coffee</a>
+    </div>
+    <div class="home-row">
+      <a class="btn btn-link home-link-bottom" href="index.html">Volver a la página principal</a>
+    </div>
+    <footer>Tip: toca de nuevo una opción para deseleccionarla</footer>
+    <!-- Netlify Forms: registro de consultas -->
+    <form name="consultas" method="POST" netlify netlify-honeypot="bot-field" hidden>
+      <input type="hidden" name="form-name" value="consultas">
+      <input type="text" name="bot-field">
+      <input type="text" name="timestamp">
+      <input type="text" name="consulta_seq">
+      <input type="text" name="consulta_id">
+      <input type="text" name="tipo">
+      <input type="text" name="cafeina">
+      <input type="text" name="dulce">
+      <input type="text" name="efecto">
+      <input type="text" name="recomendaciones">
+    </form>
+  </div>
+  <!-- Modal de descripción -->
+  <div id="descModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="descTitle" aria-describedby="descText">
+    <div class="modal-card">
+      <h3 id="descTitle" class="modal-title"></h3>
+      <div id="descText" class="modal-body"></div>
+      <div class="modal-actions"><button class="modal-close" type="button">Cerrar</button></div>
+    </div>
+  </div>
+
+  <script>
+    const menu = [
+  // Latte especial (con sabores)
+  { nombre: "Latte lavanda", disponible_en: ["caliente", "fría"], dulce: true, cafeina: true, efecto: ["energizante", "despegue"] },
+  { nombre: "Latte caramelo", disponible_en: ["caliente", "fría"], dulce: true, cafeina: true, efecto: ["energizante", "despegue"] },
+  { nombre: "Latte vainilla", disponible_en: ["caliente", "fría"], dulce: true, cafeina: true, efecto: ["energizante", "despegue"] },
+  { nombre: "Latte horchata", disponible_en: ["caliente", "fría"], dulce: true, cafeina: true, efecto: ["energizante", "despegue"] },
+  { nombre: "Latte pistache", disponible_en: ["caliente", "fría"], dulce: true, cafeina: true, efecto: ["energizante", "despegue"] },
+  { nombre: "Latte pumpkin", disponible_en: ["caliente", "fría"], dulce: true, cafeina: true, efecto: ["energizante", "despegue"] },
+
+  // Sodas italianas
+  { nombre: "Soda lavanda", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "neutro" },
+  { nombre: "Soda fresa", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "neutro" },
+  { nombre: "Soda durazno", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "neutro" },
+  { nombre: "Soda mango", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "neutro" },
+  { nombre: "Soda manzana", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "neutro" },
+  { nombre: "Soda manzana verde", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "neutro" },
+  { nombre: "Soda maracuyá", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "neutro" },
+  { nombre: "Soda mixed berries", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "neutro" },
+  { nombre: "Soda coco", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "neutro" },
+
+  // Cafés de especialidad
+  { nombre: "V60", disponible_en: ["caliente"], dulce: false, cafeina: true, efecto: "energizante" },
+  { nombre: "Chemex", disponible_en: ["caliente"], dulce: false, cafeina: true, efecto: "energizante" },
+  { nombre: "Prensa francesa", disponible_en: ["caliente"], dulce: false, cafeina: true, efecto: "energizante" },
+  { nombre: "Aeropress", disponible_en: ["caliente"], dulce: false, cafeina: true, efecto: "energizante" },
+  { nombre: "Espresso", disponible_en: ["caliente"], dulce: false, cafeina: true, efecto: "energizante" },
+  { nombre: "Americano", disponible_en: ["caliente"], dulce: false, cafeina: true, efecto: "energizante" },
+  { nombre: "Cappuccino", disponible_en: ["caliente", "fría"], dulce: true, cafeina: true, efecto: "energizante" },
+  { nombre: "Flat white", disponible_en: ["caliente"], dulce: false, cafeina: true, efecto: "energizante" },
+  { nombre: "Dirty chai", disponible_en: ["caliente", "fría"], dulce: true, cafeina: true, efecto: "energizante" },
+
+  // Bebidas sin café
+  { nombre: "Matcha", disponible_en: ["caliente", "fría"], dulce: true, cafeina: false, efecto: "energizante" },
+    { nombre: "Matcha organico", disponible_en: ["caliente", "fría"], dulce: false, cafeina: false, efecto: "energizante" },
+        { nombre: "Taro sin azúcar", disponible_en: ["caliente", "fría"], dulce: false, cafeina: false, efecto: "neutro" },
+  { nombre: "Mango Matcha", disponible_en: ["caliente", "fría"], dulce: true, cafeina: false, efecto: "energizante" },
+  { nombre: "Strawberry Matcha", disponible_en: ["caliente", "fría"], dulce: true, cafeina: false, efecto: "energizante" },
+  { nombre: "Taro", disponible_en: ["caliente", "fría"], dulce: true, cafeina: false, efecto: "neutro" },
+  { nombre: "Chai", disponible_en: ["caliente", "fría"], dulce: true, cafeina: false, efecto: "neutro" },
+  { nombre: "Golden milk", disponible_en: ["caliente"], dulce: true, cafeina: false, efecto: "neutro" },
+  { nombre: "Chocolate", disponible_en: ["caliente", "fría"], dulce: true, cafeina: false, efecto: "neutro" },
+
+  // Nuevas bebidas
+  { nombre: "Mocha Better", disponible_en: ["fría"], dulce: true, cafeina: true, efecto: "energizante" },
+  { nombre: "Cold tonic boost", disponible_en: ["fría"], dulce: false, cafeina: true, efecto: "energizante" },
+  { nombre: "Cold brew + tonic", disponible_en: ["fría"], dulce: false, cafeina: true, efecto: "energizante" },
+  { nombre: "Cold brew", disponible_en: ["fría"], dulce: false, cafeina: true, efecto: "energizante" },
+  { nombre: "Affogato", disponible_en: ["fría"], dulce: true, cafeina: true, efecto: "energizante" },
+
+  // Nuevas 2025-09: Cocochata & Yakoold
+  { nombre: "Latte Cocochata", disponible_en: ["caliente", "fría"], dulce: true, cafeina: true, efecto: "energizante" },
+  { nombre: "Matcha Cocochata", disponible_en: ["caliente", "fría"], dulce: true, cafeina: false, efecto: "energizante" },
+  { nombre: "Yakoold Brew", disponible_en: ["fría"], dulce: true, cafeina: true, efecto: "energizante" },
+
+  // Tés y tisanas
+  { nombre: "Tisana frutos rojos", disponible_en: ["caliente", "fría"], dulce: true, cafeina: false, efecto: "neutro" },
+  { nombre: "Tisana frutos dorados", disponible_en: ["caliente", "fría"], dulce: true, cafeina: false, efecto: "neutro" },
+  { nombre: "Te bugambilia-canela", disponible_en: ["caliente", "fría"], dulce: false, cafeina: false, efecto: "neutro" },
+  { nombre: "Te lavanda-manzanilla", disponible_en: ["caliente", "fría"], dulce: false, cafeina: false, efecto: "relajante" },
+  { nombre: "Te verde-limon", disponible_en: ["caliente", "fría"], dulce: false, cafeina: false, efecto: "energizante" },
+
+  // Smoothies
+  { nombre: "Smoothie energy mango", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "energizante" },
+  { nombre: "Smoothie brain taro", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "energizante" },
+  { nombre: "Smoothie strawberry relax", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "relajante" },
+
+  // Especiales
+  { nombre: "Spaceman", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "despegue" },
+  { nombre: "Sweet trip", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "despegue" },
+  { nombre: "Nirvana lavender", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "relajante" },
+  { nombre: "Dragon's blood", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "relajante" },
+  { nombre: "Cold Berry Days", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "relajante" },
+  { nombre: "Tango Zen", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "relajante" },
+  { nombre: "Strawberry & Mango CBD Matcha", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "relajante" },
+  { nombre: "Magic Mocha Cookies", disponible_en: ["fría"], dulce: true, cafeina: true, efecto: "despegue" }
+  
+];
+
+    function scrollToResultado() {
+      const r = document.getElementById('resultado');
+      if (!r) return;
+      try {
+        r.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } catch (e) {
+        try { r.scrollIntoView(true); } catch (_) {
+          const y = r.getBoundingClientRect().top + (window.pageYOffset || document.documentElement.scrollTop || 0);
+          window.scrollTo(0, y);
+        }
+      }
+      r.style.boxShadow = '0 0 0 3px #ffde00';
+      setTimeout(() => { r.style.boxShadow = ''; }, 800);
+    }
+
+    function getSelected(name) {
+      var el = document.querySelector('[data-name="' + name + '"] .selected');
+      return el ? el.getAttribute('data-value') : null;
+    }
+
+    function updateCTA() {
+      const requiredGroups = document.querySelectorAll('.button-group[data-required="true"]');
+      let complete = true;
+      requiredGroups.forEach(g => { if (!g.querySelector('.option.selected')) complete = false; });
+      const btn = document.getElementById('ctaRecomendar');
+      if (btn) btn.disabled = !complete;
+    }
+
+    // Descripciones basadas en la carta
+    const DESCRIPCIONES = {
+      // Creaciones
+      "Nirvana lavender": "Soda italiana de lavanda y limón con CBD calming. 430 ml.",
+      "Dragon's blood": "Soda italiana de mango, durazno y fresa con CBD calming. 430 ml.",
+      "Strawberry & Mango CBD Matcha": "Fresa o mango macerado, leche de almendra, miel de agave, matcha y CBD cúrcuma wellness. 430 ml.",
+      "Cold Berry Days": "Macerado de berries con ginger ale y CBD calming. 430 ml.",
+      "Spaceman": "Lavanda, limón y agua mineral. 240 ml.",
+      "Sweet trip": "Berries, perlas de fresa y agua mineral; perfil dulce y refrescante. 240 ml.",
+      "Tango Zen": "Refrescante soda italiana de mango y maracuyá con CBD calming. 430 ml.",
+      "Mocha Better": "Chocolate artesanal de Oaxaca con espresso y miel de agave.",
+      "Latte Cocochata": "Latte suave con horchata cremosa y un toque tropical de coco. 480 ml.",
+      "Matcha Cocochata": "Matcha latte con horchata cremosa y un toque de coco. 480 ml (orgánico o endulzado).",
+      "Yakoold Brew": "Cold brew con un toque de Yakult; refrescante y único. 360 ml.",
+      // Smoothies
+      "Smoothie energy mango": "Mango, yogurt griego, leche de avena, cordyceps, eleuthero y rhodiola. 430 ml.",
+      "Smoothie brain taro": "Plátano, frutos rojos, taro, yogurt griego, leche de almendra, melena de león, gotu kola, rhodiola y ginkgo. 430 ml.",
+      "Smoothie strawberry relax": "Fresa, plátano, vainilla, leche de almendra, yogurt griego, tulsi, reishi y ashwagandha. 430 ml.",
+      // Clásicos café
+      "Espresso": "Shot concentrado de café (≈30 ml), intenso y aromático.",
+      "Americano": "Espresso extendido con agua caliente; taza limpia y balanceada.",
+      "Cappuccino": "Espresso con leche vaporizada y una capa de espuma cremosa.",
+      "Flat white": "Doble espresso con microespuma de leche; textura sedosa.",
+      "Affogato": "Helado de vainilla coronado con un espresso caliente.",
+      "Cold brew": "Café infusionado en frío por largas horas; suave y refrescante.",
+      "Cold brew + tonic": "Cold brew con agua tónica y hielo; cítrico y burbujeante.",
+      "Cold tonic boost": "Espresso frío con agua tónica; amargo-dulce y muy refrescante.",
+      "V60": "Método de filtro con taza limpia, dulce y aromática.",
+      "Chemex": "Método de filtro con gran claridad y cuerpo ligero.",
+      "Prensa francesa": "Método por inmersión, cuerpo medio-alto y aroma intenso.",
+      "Aeropress": "Método versátil con notas intensas y cuerpo medio.",
+      // Tés y tisanas
+      "Te verde-limon": "Té verde con limón; refrescante y ligeramente cítrico.",
+      "Te lavanda-manzanilla": "Infusión relajante de lavanda y manzanilla.",
+      "Te bugambilia-canela": "Infusión floral con bugambilia y toque de canela.",
+      "Tisana frutos rojos": "Infusión frutal de frutos rojos, sin cafeína.",
+      "Tisana frutos dorados": "Infusión cálida con notas frutales, sin cafeína.",
+      // Sin café
+      "Matcha": "Té verde japonés batido con leche; energía suave y sostenida.",
+      "Matcha organico": "Matcha orgánico, perfil vegetal y limpio.",
+      "Mango Matcha": "Matcha con mango; equilibrio entre frutal y herbal.",
+      "Strawberry Matcha": "Matcha con fresa; dulce y refrescante.",
+      "Chai": "Té negro especiado con leche y notas de canela y cardamomo.",
+      "Dirty chai": "Chai latte con un shot de espresso para un extra de energía.",
+      "Taro": "Bebida cremosa de taro con notas a vainilla.",
+      "Golden milk": "Leche especiada con cúrcuma; cálida y reconfortante.",
+      "Chocolate": "Chocolate de Oaxaca (oscuro, blanco o artesanal).",
+      // Sodas
+      "Soda lavanda": "Soda italiana de lavanda con agua mineral y hielo.",
+      "Soda fresa": "Soda italiana de fresa con agua mineral.",
+      "Soda durazno": "Soda italiana de durazno; dulce y aromática.",
+      "Soda mango": "Soda italiana de mango; muy refrescante.",
+      "Soda manzana": "Soda italiana de manzana; suave y frutal.",
+      "Soda manzana verde": "Soda italiana de manzana verde; toque ácido y fresco.",
+      "Soda maracuyá": "Soda italiana de maracuyá; tropical y cítrica.",
+      "Soda mixed berries": "Soda italiana de frutos rojos.",
+      "Soda coco": "Soda italiana de coco; dulce y cremosa.",
+    };
+
+    function descripcionGenerica(nombre) {
+      if (/^Latte\s/i.test(nombre)) {
+        const sabor = nombre.replace(/^Latte\s/i,'');
+        return `Espresso con leche y jarabe de ${sabor.toLowerCase()}.`;
+      }
+      if (/^Smoothie/i.test(nombre)) return 'Smoothie frutal 430 ml.';
+      if (/^Soda/i.test(nombre)) return 'Soda italiana con agua mineral.';
+      return 'Consulta en barra los detalles y variaciones.';
+    }
+
+    function getDescripcionByName(nombre) {
+      if (DESCRIPCIONES[nombre]) return DESCRIPCIONES[nombre];
+      return descripcionGenerica(nombre);
+    }
+
+    function openDescripcion(nombre) {
+      const modal = document.getElementById('descModal');
+      if (!modal) return;
+      document.getElementById('descTitle').textContent = nombre;
+      document.getElementById('descText').textContent = getDescripcionByName(nombre);
+      modal.classList.add('show');
+      const close = modal.querySelector('.modal-close');
+      const off = () => { modal.classList.remove('show'); cleanup(); };
+      const esc = (e) => { if (e.key === 'Escape') off(); };
+      function cleanup(){
+        modal.removeEventListener('click', bg);
+        document.removeEventListener('keydown', esc);
+      }
+      function bg(e){ if (e.target === modal) off(); }
+      modal.addEventListener('click', bg);
+      document.addEventListener('keydown', esc);
+      close.onclick = off;
+    }
+
+    function nextConsultaSeq() {
+      try {
+        const key = 'bm_consulta_seq';
+        const n = parseInt(localStorage.getItem(key) || '0', 10) + 1;
+        localStorage.setItem(key, String(n));
+        return n;
+      } catch (e) { return Math.floor(Date.now() / 1000); }
+    }
+
+    function shortId() {
+      try {
+        if (crypto && crypto.randomUUID) {
+          return crypto.randomUUID().split('-')[0].toUpperCase();
+        }
+      } catch (_) {}
+      return (Date.now().toString(36) + Math.random().toString(36).slice(2,8)).toUpperCase();
+    }
+
+    function encodeBody(data) {
+      return Object.keys(data)
+        .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
+        .join('&');
+    }
+
+    function isNetlifyHost() {
+      try {
+        const h = (location && location.hostname || '').toLowerCase();
+        if (!h) return false;
+        if (h === 'localhost' || h === '127.0.0.1') return false;
+        return /\.netlify\.(app|com)$/.test(h);
+      } catch (_) { return false; }
+    }
+
+    function submitConsultaLog(payload) {
+      if (!isNetlifyHost()) return; // Solo enviar cuando corre en Netlify
+      const body = encodeBody(Object.assign({ 'form-name': 'consultas' }, payload));
+      try {
+        fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body })
+          .catch(() => {});
+      } catch (e) { /* offline/local */ }
+    }
+
+    function recomendar() {
+      var tipo = getSelected('tipo');
+      var cafeinaVal = getSelected('cafeina');
+      var dulceVal = getSelected('dulce');
+      var efecto = getSelected('efecto') || 'ninguno';
+      var cafeina = (cafeinaVal === 'si');
+      var dulce = (dulceVal === 'si');
+
+      let recomendaciones = menu.filter(b =>
+        (tipo && b.disponible_en.indexOf(tipo) !== -1) &&
+        b.cafeina === cafeina &&
+        b.dulce === dulce &&
+        (efecto === "ninguno" || (Array.isArray(b.efecto) ? b.efecto.includes(efecto) : b.efecto === efecto))
+      );
+
+      // Si no hay recomendaciones exactas pero se pidió un efecto, sugerir bebidas similares
+      if (recomendaciones.length === 0 && efecto !== "ninguno") {
+        recomendaciones = menu.filter(b =>
+          (tipo && b.disponible_en.indexOf(tipo) !== -1) &&
+          b.cafeina === cafeina &&
+          b.dulce === dulce
+        );
+        if (recomendaciones.length > 0) {
+          recomendaciones.push({
+            nombre: "✨ Puedes personalizar esta bebida con nuestro jarabe favorito y una dosis de tintura especial para sentirte como quieres.",
+            disponible_en: [tipo],
+            dulce: true,
+            cafeina: cafeina,
+            efecto: efecto
+          });
+        }
+      }
+
+      const resultado = document.getElementById("resultado");
+      const consultaSeq = nextConsultaSeq();
+      const consultaId = shortId();
+      if (recomendaciones.length > 0) {
+        const chips = [];
+        if (tipo) chips.push(`<span class='pill'>${tipo}</span>`);
+        chips.push(`<span class='pill'>${cafeina ? 'con cafeína' : 'sin cafeína'}</span>`);
+        chips.push(`<span class='pill'>${dulce ? 'dulce' : 'no dulce'}</span>`);
+        if (efecto && efecto !== 'ninguno') chips.push(`<span class='pill'>${efecto}</span>`);
+
+        const folioStr = `Recomendación #${consultaSeq} · ID ${consultaId}`;
+        let salida = `<div class='hint'>${folioStr}</div>${chips.join(' ')}<h3>🎯 Recomendaciones para ti</h3><div class='hint'>Toca una bebida para ver descripción</div><div class='custom-list'>`;
+        recomendaciones.forEach(b => {
+          salida += `<div class="custom-item">${b.nombre}</div>`;
+        });
+        salida += "</div>";
+
+        if (efecto !== "ninguno") {
+          const tinturas = {
+            relajante: "Calming",
+            energizante: "Focus",
+            despegue: "Consulta a tu capitán de viaje"
+          };
+          salida += `<p>✨ Agrega una dosis de nuestra tintura <strong>${tinturas[efecto]}</strong> para potenciar tu experiencia.</p>`;
+        }
+        resultado.innerHTML = salida;
+        // Botones de compartir/copiar
+        const share = document.createElement('div');
+        share.className = 'actions';
+        const btnShare = document.createElement('button');
+        btnShare.className = 'btn btn-link';
+        btnShare.type = 'button';
+        btnShare.textContent = 'Compartir';
+        btnShare.addEventListener('click', async () => {
+          // Preparar contenido y PDF
+          const cleanChips = chips.map(c=>c.replace(/<[^>]+>/g,'')).join(' ');
+          const recNames = recomendaciones.map(r=>r.nombre).join(', ');
+          const title = 'Recomendaciones Better Mood';
+          const cid = consultaId; // desde el scope de recomendar()
+          const seq = consultaSeq;
+          const shareUrl = new URL(location.href);
+          shareUrl.searchParams.set('cid', cid);
+          const text = `Folio ${seq} (${cid}) — Recomendaciones: ${recNames} — Preferencias: ${cleanChips}`;
+          try {
+            const pdfBlob = generarPDFRecomendaciones({
+              title,
+              consultaId: cid,
+              chips: cleanChips,
+              recomendaciones: recomendaciones.map(r=>r.nombre)
+            });
+            let file;
+            try { file = new File([pdfBlob], `recomendaciones_${cid}.pdf`, { type: 'application/pdf' }); } catch(_) { file = pdfBlob; }
+            let canShareFiles = false;
+            try { canShareFiles = !!(navigator.canShare && (typeof File !== 'undefined') && (file instanceof File) && navigator.canShare({ files: [file] })); } catch(_) { canShareFiles = false; }
+            if (canShareFiles) {
+              await navigator.share({
+                files: [file],
+                title: `${title} · ${cid}`,
+                text,
+                url: shareUrl.toString()
+              });
+              return;
+            }
+            // Fallback: descargar el PDF y copiar texto
+            const a = document.createElement('a');
+            const blobForDl = (file instanceof Blob) ? file : pdfBlob;
+            a.href = URL.createObjectURL(blobForDl);
+            const filename = `recomendaciones_${cid}.pdf`;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+          } catch(_) {
+            try {
+              if (navigator.share) await navigator.share({ text, url: shareUrl.toString() });
+            } catch(__){}
+          }
+        });
+        share.appendChild(btnShare);
+        resultado.appendChild(share);
+        // Click en bebida para ver descripción
+        resultado.querySelectorAll('.custom-item').forEach(el => {
+          const name = el.textContent.trim();
+          if (name.startsWith('✨')) return; // no abrir para mensaje
+          el.classList.add('clickable');
+          el.title = 'Ver descripción';
+          el.setAttribute('role','button');
+          el.setAttribute('tabindex','0');
+          el.setAttribute('aria-label', `Ver descripción de ${name}`);
+          el.addEventListener('click', () => openDescripcion(name));
+          el.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openDescripcion(name); } });
+        });
+        scrollToResultado();
+      } else {
+        resultado.innerHTML = "<p>No encontramos la bebida perfecta, pero seguro tenemos algo que te encantará si preguntas en barra 😊</p>";
+        scrollToResultado();
+      }
+
+      // Registrar consulta en Netlify Forms
+      const payload = {
+        timestamp: new Date().toISOString(),
+        consulta_seq: String(consultaSeq),
+        consulta_id: consultaId,
+        tipo: tipo || '',
+        cafeina: cafeina ? 'si' : 'no',
+        dulce: dulce ? 'si' : 'no',
+        efecto: efecto || '',
+        recomendaciones: recomendaciones.map(r => r && r.nombre ? r.nombre : '').join(', ')
+      };
+      submitConsultaLog(payload);
+      trackRecommendation({
+        consulta_id: consultaId,
+        consulta_seq: consultaSeq,
+        tipo: tipo || '',
+        cafeina: cafeina ? 'si' : 'no',
+        dulce: dulce ? 'si' : 'no',
+        efecto: efecto || '',
+        rec_count: recomendaciones.length
+      });
+    }
+  </script>
+  <script>
+    Array.prototype.forEach.call(document.querySelectorAll('.button-group'), function(group){
+      group.addEventListener('click', function(e){
+        if (e.target && e.target.classList && e.target.classList.contains('option')) {
+          const wasSelected = e.target.classList.contains('selected');
+          Array.prototype.forEach.call(group.querySelectorAll('.option'), function(opt){
+            opt.classList.remove('selected');
+            opt.setAttribute('aria-pressed', 'false');
+          });
+          if (!wasSelected) {
+            e.target.classList.add('selected');
+            e.target.setAttribute('aria-pressed', 'true');
+          }
+          updateCTA();
+        }
+      });
+      // Soporte teclado
+      group.addEventListener('keydown', function(e){
+        if ((e.key === 'Enter' || e.key === ' ') && e.target && e.target.classList && e.target.classList.contains('option')) {
+          e.preventDefault();
+          e.target.click();
+        }
+      });
+    });
+
+    // Mantener la pantalla despierta (Wake Lock)
+    let wakeLock;
+    async function keepAwake() {
+      try { wakeLock = await navigator.wakeLock.request('screen'); } catch (e) { /* iPad viejo o permiso denegado */ }
+    }
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible' && !wakeLock) keepAwake();
+    });
+    window.addEventListener('load', () => { keepAwake(); updateCTA(); applyQueryParams(); });
+
+    // Auto‑reset por inactividad (60s)
+    let idle;
+    const RESET_MS = 60000; // 60 segundos
+    ['click','touchstart','keydown'].forEach(evt =>
+      document.addEventListener(evt, resetIdle, { passive: true })
+    );
+    function resetIdle(){
+      clearTimeout(idle);
+      idle = setTimeout(() => {
+        document.querySelectorAll('.button-group .option.selected').forEach(o => { o.classList.remove('selected'); o.setAttribute('aria-pressed','false'); });
+        const r = document.getElementById('resultado');
+        if (r) r.innerHTML = '';
+        try { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+        catch (e) { window.scrollTo(0, 0); }
+        updateCTA();
+      }, RESET_MS);
+    }
+    resetIdle();
+
+    // Registrar Service Worker (PWA). Si no existe sw.js no rompe la app.
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        const swUrl = './sw.js?v=2';
+        navigator.serviceWorker
+          .register(swUrl, { updateViaCache: 'none' })
+          .then(reg => { try { reg.update(); } catch(_){} })
+          .catch(() => {/* ignorar si no existe aún */});
+      });
+    }
+
+    // Botones CTA
+    const btnReco = document.getElementById('ctaRecomendar');
+    if (btnReco) btnReco.addEventListener('click', recomendar);
+    const btnReset = document.getElementById('btnReset');
+    if (btnReset) btnReset.addEventListener('click', () => {
+      document.querySelectorAll('.button-group .option.selected').forEach(o => { o.classList.remove('selected'); o.setAttribute('aria-pressed','false'); });
+      const r = document.getElementById('resultado');
+      if (r) r.innerHTML = '';
+      try { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+      catch (e) { window.scrollTo(0, 0); }
+      updateCTA();
+    });
+
+    // Preselección por querystring: ?tipo=fría&cafeina=si&dulce=no&efecto=energizante
+    function applyQueryParams() {
+      try {
+        const p = new URLSearchParams(location.search);
+        ['tipo','cafeina','dulce','efecto'].forEach(name => {
+          const v = p.get(name);
+          if (!v) return;
+          const group = document.querySelector(`.button-group[data-name="${name}"]`);
+          if (!group) return;
+          const opt = group.querySelector(`.option[data-value="${v}"]`);
+          if (!opt) return;
+          Array.prototype.forEach.call(group.querySelectorAll('.option'), o=>{ o.classList.remove('selected'); o.setAttribute('aria-pressed','false'); });
+          opt.classList.add('selected'); opt.setAttribute('aria-pressed','true');
+        });
+        updateCTA();
+      } catch(_){}
+    }
+
+    // Google Tag Manager: evento de recomendación
+    function trackRecommendation(ev) {
+      try {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push(Object.assign({ event: 'recommendation' }, ev));
+      } catch(_){}
+    }
+
+    // Generar PDF simple sin dependencias externas
+    function generarPDFRecomendaciones({ title, consultaId, chips, recomendaciones }) {
+      // Página A4 en puntos (72 dpi): 595 x 842
+      const width = 595, height = 842, margin = 48;
+      const lines = [];
+      function esc(str){
+        return String(str).replace(/\\/g,'\\\\').replace(/\(/g,'\\(').replace(/\)/g,'\\)');
+      }
+      lines.push('BT /F1 18 Tf 50 780 Td (' + esc(title) + ') Tj ET');
+      lines.push('BT /F1 11 Tf 50 760 Td (Consulta: ' + esc(consultaId) + ') Tj ET');
+      lines.push('BT /F1 11 Tf 50 742 Td (Preferencias: ' + esc(chips) + ') Tj ET');
+      let y = 720;
+      lines.push('BT /F1 13 Tf 50 ' + y + ' Td (Bebidas recomendadas) Tj ET');
+      y -= 18;
+      recomendaciones.forEach((name, i) => {
+        y -= 16;
+        if (y < margin) { /* no paginado: compactar si excede */ y = margin; }
+        lines.push('BT /F1 11 Tf 60 ' + y + ' Td (' + esc(String(i+1)+'. '+ name) + ') Tj ET');
+      });
+      // Construcción PDF mínima (5 objetos)
+      const contentStream = lines.join('\n');
+      const contentLen = new TextEncoder().encode(contentStream).length;
+      let chunks = [];
+      let offset = 0;
+      const xref = [];
+      function pushStr(s){ const b = new TextEncoder().encode(s); chunks.push(b); offset += b.length; }
+      function addObj(id, body){ xref[id] = offset; pushStr(id + ' 0 obj\n' + body + '\nendobj\n'); }
+      pushStr('%PDF-1.4\n');
+      pushStr('%\xFF\xFF\xFF\xFF\n');
+      addObj(1, '<< /Type /Catalog /Pages 2 0 R >>');
+      addObj(2, '<< /Type /Pages /Kids [3 0 R] /Count 1 >>');
+      addObj(3, `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${width} ${height}] /Contents 5 0 R /Resources << /Font << /F1 4 0 R >> >> >>`);
+      addObj(4, '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>');
+      addObj(5, `<< /Length ${contentLen} >>\nstream\n${contentStream}\nendstream`);
+      const xrefStart = offset;
+      let xrefTable = 'xref\n0 6\n0000000000 65535 f \n';
+      for (let i = 1; i <= 5; i++) {
+        xrefTable += (String(xref[i]).padStart(10, '0')) + ' 00000 n \n';
+      }
+      const trailer = `trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n${xrefStart}\n%%EOF`;
+      pushStr(xrefTable + trailer);
+      return new Blob(chunks, { type: 'application/pdf' });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+[functions]
+  external_node_modules = ["@netlify/blobs"]
+
+# 1) Forzar HTTPS
+[[redirects]]
+  from = "http://bmoodcoffee.com/*"
+  to = "https://bmoodcoffee.com/:splat"
+  status = 301
+  force = true
+
+# 2) Forzar no-www (o cambia a www si prefieres)
+[[redirects]]
+  from = "https://www.bmoodcoffee.com/*"
+  to = "https://bmoodcoffee.com/:splat"
+  status = 301
+  force = true
+
+# 3) API (rewrite interno, no redirect)
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
