@@ -401,7 +401,7 @@ summary:focus-visible {
 
 /* Sections */
 .section {
-  padding: 80px 0;
+  padding: 60px 0;
 }
 .section--compact {
   padding-bottom: 48px;
@@ -475,7 +475,7 @@ summary:focus-visible {
 }
 .section__header {
   max-width: 720px;
-  margin: 0 auto 32px;
+  margin: 0 auto 20px;
   text-align: center;
 }
 .section__header p {
@@ -1181,7 +1181,7 @@ p {
 .page-hero {
   position: relative;
   overflow: hidden;
-  padding: 48px 0 72px;
+  padding: 40px 0 48px;
 }
 .page-hero--rewards {
   background:
@@ -1446,15 +1446,15 @@ p {
   z-index: 1;
 }
 .rewards__header {
-  margin-bottom: 40px;
+  margin-bottom: 24px;
 }
 .rewards__hero {
   align-items: stretch;
-  margin-bottom: 28px;
+  margin-bottom: 16px;
 }
 .rewards__intro {
   display: grid;
-  gap: 16px;
+  gap: 12px;
 }
 .rewards__panel {
   border: 1px solid rgba(35, 31, 32, 0.08);
@@ -1462,7 +1462,7 @@ p {
 }
 .rewards__steps {
   display: grid;
-  gap: 18px;
+  gap: 14px;
 }
 .rewards-step {
   display: grid;
@@ -1745,13 +1745,13 @@ p {
 .rewards-tiers {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
-  margin-bottom: 28px;
+  gap: 12px;
+  margin-bottom: 18px;
 }
 .reward-tier {
   position: relative;
-  padding: 22px;
-  border-radius: 22px;
+  padding: 18px;
+  border-radius: 18px;
   border: 1px solid rgba(35, 31, 32, 0.08);
   box-shadow: 0 18px 30px rgba(35, 31, 32, 0.08);
 }
@@ -1790,8 +1790,8 @@ p {
 .rewards__details {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-  margin-bottom: 28px;
+  gap: 12px;
+  margin-bottom: 16px;
 }
 .rewards__mini-title {
   margin-bottom: 8px;
@@ -1840,7 +1840,7 @@ p {
     linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(243, 241, 234, 0.88));
 }
 .rewards-portal--compact {
-  padding-top: 24px;
+  padding-top: 20px;
 }
 .rewards-portal__header {
   max-width: 520px;
@@ -1848,7 +1848,7 @@ p {
 .rewards-portal__grid {
   display: grid;
   grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
-  gap: 14px;
+  gap: 12px;
   align-items: start;
 }
 .rewards-portal__card {

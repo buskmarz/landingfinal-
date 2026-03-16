@@ -170,103 +170,6 @@
         </div>
       </section>
 
-      <section class="section rewards-portal rewards-portal--compact" aria-labelledby="portal-title">
-        <div class="container">
-          <div class="section__header rewards-portal__header">
-            <p class="eyebrow">Consulta tu saldo</p>
-            <h2 id="portal-title">Hazlo aqui.</h2>
-            <p>Telefono y fecha de nacimiento.</p>
-          </div>
-
-          <div class="rewards-portal__grid" data-rewards-portal>
-            <article class="community__card rewards__panel rewards-portal__card">
-              <form class="rewards-portal__form" data-portal-form novalidate>
-                <label class="rewards-portal__field">
-                  <span>Teléfono</span>
-                  <input type="tel" name="phone" inputmode="numeric" autocomplete="tel" placeholder="2221234567" maxlength="16" required />
-                </label>
-
-                <div class="rewards-portal__birthday">
-                  <label class="rewards-portal__field">
-                    <span>Día</span>
-                    <input type="tel" name="birthdayDay" inputmode="numeric" placeholder="21" maxlength="2" required />
-                  </label>
-                  <label class="rewards-portal__field">
-                    <span>Mes</span>
-                    <input type="tel" name="birthdayMonth" inputmode="numeric" placeholder="08" maxlength="2" required />
-                  </label>
-                </div>
-
-                <div class="rewards-portal__actions">
-                  <button class="btn btn--primary" type="submit" data-portal-submit>Consultar saldo</button>
-                  <a class="btn btn--secondary" href="https://wa.me/?text=Quiero%20consultar%20mi%20saldo." target="_blank" rel="noopener">WhatsApp</a>
-                  <button class="btn btn--secondary" type="button" data-portal-reset hidden>Salir</button>
-                </div>
-                <p class="rewards-portal__status" data-portal-status aria-live="polite">
-                  Tambien en caja o por WhatsApp.
-                </p>
-              </form>
-            </article>
-
-            <article class="community__card rewards__panel rewards-portal__card rewards-portal__results" data-portal-results hidden>
-              <div class="rewards-portal__summary">
-                <div>
-                  <p class="rewards-portal__eyebrow">Cliente Better Mood</p>
-                  <h3 data-portal-name>Cliente Better Mood</h3>
-                  <p class="rewards-portal__muted" data-portal-phone></p>
-                </div>
-                <div class="rewards-portal__pill" data-portal-level>Pendiente</div>
-              </div>
-
-              <div class="rewards-portal__balance">
-                <div>
-                  <span>Saldo disponible</span>
-                  <strong data-portal-balance>$0.00</strong>
-                </div>
-                <div>
-                  <span>Cashback pendiente</span>
-                  <strong data-portal-pending>$0.00</strong>
-                </div>
-              </div>
-
-              <div class="rewards-portal__stats">
-                <article>
-                  <span>Consumo del mes</span>
-                  <strong data-portal-month-spend>$0.00</strong>
-                </article>
-                <article>
-                  <span>Cashback del mes</span>
-                  <strong data-portal-month-earned>$0.00</strong>
-                </article>
-                <article>
-                  <span>Falta para subir</span>
-                  <strong data-portal-next-amount>$0.00</strong>
-                  <small data-portal-next-label>Estás en tu nivel más alto.</small>
-                </article>
-              </div>
-
-              <div class="rewards-portal__meta">
-                <p data-portal-expiry>Sin vencimientos cercanos.</p>
-                <p data-portal-session></p>
-              </div>
-
-              <div class="rewards-portal__wallet" data-portal-wallet hidden>
-                <p class="rewards-portal__eyebrow">Tu tarjeta digital</p>
-                <div class="rewards-portal__wallet-links" data-portal-wallet-links></div>
-              </div>
-
-              <div class="rewards-portal__movements">
-                <div class="rewards-portal__movements-head">
-                  <h4>Movimientos recientes</h4>
-                  <span>Últimos 12</span>
-                </div>
-                <div class="rewards-portal__movement-list" data-portal-movements></div>
-              </div>
-            </article>
-          </div>
-        </div>
-      </section>
-
       <section class="section rewards" aria-labelledby="levels-title">
         <div class="container">
           <div class="section__header rewards__header">
@@ -364,6 +267,103 @@
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section rewards-portal rewards-portal--compact" aria-labelledby="portal-title">
+        <div class="container">
+          <div class="section__header rewards-portal__header">
+            <p class="eyebrow">Consulta tu saldo</p>
+            <h2 id="portal-title">Hazlo aqui.</h2>
+            <p>Telefono y fecha de nacimiento.</p>
+          </div>
+
+          <div class="rewards-portal__grid" data-rewards-portal>
+            <article class="community__card rewards__panel rewards-portal__card">
+              <form class="rewards-portal__form" data-portal-form novalidate>
+                <label class="rewards-portal__field">
+                  <span>Teléfono</span>
+                  <input type="tel" name="phone" inputmode="numeric" autocomplete="tel" placeholder="2221234567" maxlength="16" required />
+                </label>
+
+                <div class="rewards-portal__birthday">
+                  <label class="rewards-portal__field">
+                    <span>Día</span>
+                    <input type="tel" name="birthdayDay" inputmode="numeric" placeholder="21" maxlength="2" required />
+                  </label>
+                  <label class="rewards-portal__field">
+                    <span>Mes</span>
+                    <input type="tel" name="birthdayMonth" inputmode="numeric" placeholder="08" maxlength="2" required />
+                  </label>
+                </div>
+
+                <div class="rewards-portal__actions">
+                  <button class="btn btn--primary" type="submit" data-portal-submit>Consultar saldo</button>
+                  <a class="btn btn--secondary" href="https://wa.me/?text=Quiero%20consultar%20mi%20saldo." target="_blank" rel="noopener">WhatsApp</a>
+                  <button class="btn btn--secondary" type="button" data-portal-reset hidden>Salir</button>
+                </div>
+                <p class="rewards-portal__status" data-portal-status aria-live="polite">
+                  Tambien en caja o por WhatsApp.
+                </p>
+              </form>
+            </article>
+
+            <article class="community__card rewards__panel rewards-portal__card rewards-portal__results" data-portal-results hidden>
+              <div class="rewards-portal__summary">
+                <div>
+                  <p class="rewards-portal__eyebrow">Cliente Better Mood</p>
+                  <h3 data-portal-name>Cliente Better Mood</h3>
+                  <p class="rewards-portal__muted" data-portal-phone></p>
+                </div>
+                <div class="rewards-portal__pill" data-portal-level>Pendiente</div>
+              </div>
+
+              <div class="rewards-portal__balance">
+                <div>
+                  <span>Saldo disponible</span>
+                  <strong data-portal-balance>$0.00</strong>
+                </div>
+                <div>
+                  <span>Cashback pendiente</span>
+                  <strong data-portal-pending>$0.00</strong>
+                </div>
+              </div>
+
+              <div class="rewards-portal__stats">
+                <article>
+                  <span>Consumo del mes</span>
+                  <strong data-portal-month-spend>$0.00</strong>
+                </article>
+                <article>
+                  <span>Cashback del mes</span>
+                  <strong data-portal-month-earned>$0.00</strong>
+                </article>
+                <article>
+                  <span>Falta para subir</span>
+                  <strong data-portal-next-amount>$0.00</strong>
+                  <small data-portal-next-label>Estás en tu nivel más alto.</small>
+                </article>
+              </div>
+
+              <div class="rewards-portal__meta">
+                <p data-portal-expiry>Sin vencimientos cercanos.</p>
+                <p data-portal-session></p>
+              </div>
+
+              <div class="rewards-portal__wallet" data-portal-wallet hidden>
+                <p class="rewards-portal__eyebrow">Tu tarjeta digital</p>
+                <div class="rewards-portal__wallet-links" data-portal-wallet-links></div>
+              </div>
+
+              <div class="rewards-portal__movements">
+                <div class="rewards-portal__movements-head">
+                  <h4>Movimientos recientes</h4>
+                  <span>Últimos 12</span>
+                </div>
+                <div class="rewards-portal__movement-list" data-portal-movements></div>
+              </div>
+            </article>
           </div>
         </div>
       </section>
