@@ -1167,7 +1167,7 @@ p {
   font-size: 0.88rem;
 }
 .rewards-teaser__card {
-  padding: 28px;
+  padding: 22px;
 }
 .rewards-teaser__label {
   margin: 0 0 8px;
@@ -1839,27 +1839,30 @@ p {
     radial-gradient(circle at 8% 18%, rgba(255, 215, 75, 0.16), transparent 26%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(243, 241, 234, 0.88));
 }
+.rewards-portal--compact {
+  padding-top: 24px;
+}
 .rewards-portal__header {
-  max-width: 760px;
+  max-width: 520px;
 }
 .rewards-portal__grid {
   display: grid;
-  grid-template-columns: minmax(0, 360px) minmax(0, 1fr);
-  gap: 18px;
+  grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+  gap: 14px;
   align-items: start;
 }
 .rewards-portal__card {
   display: grid;
-  gap: 18px;
+  gap: 14px;
 }
 .rewards-portal__form,
 .rewards-portal__results {
   display: grid;
-  gap: 16px;
+  gap: 12px;
 }
 .rewards-portal__field {
   display: grid;
-  gap: 8px;
+  gap: 6px;
 }
 .rewards-portal__field span,
 .rewards-portal__eyebrow {
@@ -1872,14 +1875,14 @@ p {
 }
 .rewards-portal__field input {
   width: 100%;
-  min-height: 52px;
-  padding: 14px 16px;
-  border-radius: 16px;
+  min-height: 46px;
+  padding: 12px 14px;
+  border-radius: 14px;
   border: 1px solid rgba(35, 31, 32, 0.14);
   background: #fff;
   color: var(--black);
   font: inherit;
-  font-size: 1rem;
+  font-size: 0.98rem;
 }
 .rewards-portal__field input::placeholder {
   color: rgba(35, 31, 32, 0.42);
@@ -1892,13 +1895,12 @@ p {
 .rewards-portal__actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
 }
 .rewards-portal__actions .btn {
-  flex: 1 1 180px;
+  flex: 1 1 150px;
 }
 .rewards-portal__status,
-.rewards-portal__security p,
 .rewards-portal__muted,
 .rewards-portal__meta p,
 .rewards-portal__movement time,
@@ -1907,15 +1909,8 @@ p {
   margin: 0;
   color: rgba(35, 31, 32, 0.72);
 }
-.rewards-portal__security {
-  padding: 14px 16px;
-  border-radius: 18px;
-  background: rgba(255, 215, 75, 0.14);
-  border: 1px solid rgba(255, 215, 75, 0.28);
-}
-.rewards-portal__security strong {
-  display: block;
-  margin-bottom: 4px;
+.rewards-portal__status a {
+  font-weight: 700;
 }
 .rewards-portal__summary {
   display: flex;
@@ -1928,7 +1923,7 @@ p {
   margin: 0;
 }
 .rewards-portal__pill {
-  padding: 10px 14px;
+  padding: 8px 12px;
   border-radius: 999px;
   background: rgba(255, 215, 75, 0.18);
   border: 1px solid rgba(255, 215, 75, 0.34);
@@ -1943,8 +1938,8 @@ p {
 .rewards-portal__balance > div,
 .rewards-portal__stats article,
 .rewards-portal__movement {
-  padding: 16px;
-  border-radius: 18px;
+  padding: 14px;
+  border-radius: 16px;
   background: rgba(255, 255, 255, 0.92);
   border: 1px solid rgba(35, 31, 32, 0.08);
 }
@@ -1958,19 +1953,19 @@ p {
 }
 .rewards-portal__balance strong {
   display: block;
-  margin-top: 8px;
-  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  margin-top: 6px;
+  font-size: clamp(1.55rem, 3.2vw, 2.1rem);
   line-height: 1.05;
 }
 .rewards-portal__stats {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
+  gap: 10px;
 }
 .rewards-portal__stats strong {
   display: block;
-  margin: 8px 0 6px;
-  font-size: 1.24rem;
+  margin: 6px 0 4px;
+  font-size: 1.08rem;
 }
 .rewards-portal__stats small {
   color: rgba(35, 31, 32, 0.66);
@@ -1980,8 +1975,8 @@ p {
   gap: 8px;
 }
 .rewards-portal__wallet {
-  padding: 16px;
-  border-radius: 18px;
+  padding: 14px;
+  border-radius: 16px;
   background: linear-gradient(135deg, rgba(35, 31, 32, 0.94), rgba(69, 55, 42, 0.94));
   color: #fff9ec;
 }
@@ -2000,7 +1995,7 @@ p {
 }
 .rewards-portal__movements {
   display: grid;
-  gap: 12px;
+  gap: 10px;
 }
 .rewards-portal__movements-head {
   display: flex;
