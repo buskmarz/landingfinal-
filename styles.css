@@ -1399,10 +1399,28 @@ p {
   border-color: rgba(35, 31, 32, 0.1);
 }
 .wellness-hero-card {
-  min-height: 100%;
+  min-height: auto;
+  max-width: 340px;
+  justify-self: end;
+  align-self: start;
+  padding: 16px 18px;
   background: rgba(255, 255, 255, 0.9);
   border: 1px solid rgba(35, 31, 32, 0.08);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-sm);
+}
+.wellness-hero-card__label {
+  margin: 0 0 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: rgba(35, 31, 32, 0.58);
+}
+.wellness-hero-card__text {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: rgba(35, 31, 32, 0.8);
 }
 .wellness-teaser {
   align-items: center;
@@ -3063,6 +3081,10 @@ p {
   .rewards-teaser__card,
   .wellness-hero-card {
     padding: 18px;
+  }
+  .wellness-hero-card {
+    max-width: none;
+    justify-self: stretch;
   }
   .drink__image {
     height: 230px;
