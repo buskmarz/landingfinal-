@@ -848,6 +848,31 @@ p {
 .menu-card > .btn {
   margin-top: 12px;
 }
+.home-page .hero {
+  padding: 36px 0 24px;
+}
+.home-page .section {
+  padding: 64px 0;
+}
+.explore {
+  padding-top: 52px;
+}
+.explore__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.explore__card {
+  min-height: 100%;
+  border: 1px solid rgba(35, 31, 32, 0.08);
+  box-shadow: var(--shadow-sm);
+}
+.explore__card h3 {
+  margin-bottom: 8px;
+}
+.explore__card p {
+  margin-bottom: 0;
+}
 .origin-mini {
   margin: 18px 0 6px;
   padding: 12px 14px;
@@ -1294,6 +1319,12 @@ p {
 .rewards-teaser__card {
   padding: 22px;
 }
+.rewards-teaser__note {
+  margin: 12px 0 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: rgba(35, 31, 32, 0.72);
+}
 .rewards-teaser__label {
   margin: 0 0 8px;
   text-transform: uppercase;
@@ -1345,6 +1376,50 @@ p {
 }
 .page-note {
   min-height: 100%;
+}
+.wellness-page {
+  background:
+    radial-gradient(circle at 12% 10%, rgba(215, 236, 211, 0.45), transparent 28%),
+    radial-gradient(circle at 86% 12%, rgba(255, 228, 157, 0.28), transparent 24%),
+    linear-gradient(180deg, #fffaf2 0%, #f6f2e8 100%);
+}
+.page-hero--wellness {
+  background:
+    radial-gradient(circle at 14% 12%, rgba(215, 236, 211, 0.68), transparent 28%),
+    radial-gradient(circle at 86% 14%, rgba(255, 221, 132, 0.32), transparent 24%),
+    linear-gradient(180deg, #fff8ee 0%, #f7f1e5 52%, #efe8da 100%);
+}
+.page-hero--wellness .hero__text,
+.page-hero--wellness .hero__bullets li,
+.page-hero--wellness .eyebrow {
+  color: rgba(35, 31, 32, 0.84);
+}
+.page-hero--wellness .hero__bullets li::before {
+  background: rgba(255, 215, 75, 0.8);
+  border-color: rgba(35, 31, 32, 0.1);
+}
+.wellness-hero-card {
+  min-height: 100%;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(35, 31, 32, 0.08);
+  box-shadow: var(--shadow-md);
+}
+.wellness-teaser {
+  align-items: center;
+  gap: 28px;
+}
+.wellness-teaser__card {
+  min-height: 100%;
+  border: 1px solid rgba(35, 31, 32, 0.08);
+  box-shadow: var(--shadow-sm);
+}
+.wellness-teaser__label {
+  margin: 0 0 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: rgba(35, 31, 32, 0.62);
 }
 
 .events-page {
@@ -2912,6 +2987,9 @@ p {
   .menu-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+  .explore__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
   .science__grid {
     grid-template-columns: 1fr;
   }
@@ -2936,6 +3014,9 @@ p {
 @media (max-width: 720px) {
   .container {
     padding: 0 16px;
+  }
+  .home-page .section {
+    padding: 48px 0;
   }
   .hero {
     padding-top: 24px;
@@ -2972,6 +3053,16 @@ p {
   }
   #location {
     padding-bottom: 40px;
+  }
+  .explore__grid,
+  .menu-grid,
+  .featured-drinks__grid {
+    grid-template-columns: 1fr;
+  }
+  .wellness-teaser__card,
+  .rewards-teaser__card,
+  .wellness-hero-card {
+    padding: 18px;
   }
   .drink__image {
     height: 230px;
