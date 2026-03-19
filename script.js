@@ -43,6 +43,8 @@ const scrollToGameSection = (behavior = "smooth") => {
 
 if (gameLink && gameSection) {
   gameLink.addEventListener("click", (event) => {
+    const href = gameLink.getAttribute("href") || "";
+    if (!href.startsWith("#")) return;
     event.preventDefault();
     nav?.classList.remove("is-open");
     toggleButton?.setAttribute("aria-expanded", "false");

@@ -45,3 +45,26 @@ Original prompt: Refactorizar y mejorar el juego Droppy Dash implementando una n
 ## Siguiente agente
 - Si hace falta validar `Spring Flow` de forma visual, ejecutar otra corrida Playwright o agregar una ruta/debug flag temporal para forzar spawn en entorno local.
 - Si el timeout del click del harness sigue apareciendo, probar un payload con click por coordenadas o revisar el cliente del skill.
+
+## Avance 3
+- Se creó la nueva ruta `arcade/index.html` como hub propio de juegos Better Mood, con navegación y CTA cruzados a cashback y Droppy Dash.
+- Se implementó el nuevo juego tipo puzzle `Droppy Stacks` en `game/droppy-arcade.js`, apoyado por `game/arcade/pieces.js` y `game/arcade/render.js`.
+- El arcade reutiliza módulos y assets de Droppy Dash: `background.js`, `effects.js`, `audio.js` y `assets/droppy.PNG`.
+- La home ahora hace más visible desde el hero tanto cashback como arcade, sin quitar el mensaje principal de marca.
+- Se añadieron enlaces a `Arcade` en navegación/footer de home, bienestar, recompensas y eventos.
+
+## Pendiente inmediato
+- Validar `/arcade` con servidor local y Playwright.
+- Revisar screenshot del nuevo juego y confirmar que `render_game_to_text` refleje tablero, pieza activa y score.
+- Corregir cualquier error visual o de controles antes de commit/push.
+
+## Avance 4
+- Se validó `/arcade` con `python3 -m http.server 4173` y el cliente Playwright del skill.
+- Artefactos principales: `output/arcade-game/`, `output/arcade-right/`, `output/arcade-lock/` y `output/arcade-pause/`.
+- `output/arcade-right/state-0.json` confirmó movimiento lateral (`x: 5`).
+- `output/arcade-pause/state-0.json` dejó ver rotación vertical de una pieza `I`, aunque la tecla `p` no se pudo validar con el harness porque ese payload no está mapeado por el cliente.
+- `output/arcade-lock/state-0.json` confirmó tablero persistente con piezas bloqueadas y score activo (`score: 36`).
+- Screenshot inspeccionado visualmente: `output/arcade-lock/shot-0.png` muestra el tablero, el side panel, Droppy y la dirección de arte consistente con Better Mood.
+
+## Nota de prueba
+- El click directo al selector `[data-arcade-start]` sigue siendo intermitente en el harness, igual que pasó antes con Droppy Dash. Para validaciones más estables en este juego funcionó mejor iniciar con `Enter`.
