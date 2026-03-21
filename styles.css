@@ -4171,3 +4171,756 @@ p {
     font-size: 0.84rem;
   }
 }
+
+/* Home editorial redesign */
+:root {
+  --yellow: #ffde00;
+  --yellow-deep: #ffba00;
+  --bg: #f6efe5;
+  --bg-alt: #efe6d9;
+  --surface: #fff9f0;
+  --surface-strong: #f2e9dc;
+  --text: #231f20;
+  --muted: #685f59;
+  --line: rgba(35, 31, 32, 0.12);
+  --line-soft: rgba(35, 31, 32, 0.08);
+  --radius-lg: 28px;
+  --radius-md: 18px;
+  --shadow-sm: 0 10px 24px rgba(35, 31, 32, 0.06);
+  --shadow-md: 0 24px 60px rgba(35, 31, 32, 0.12);
+  --maxw: 1280px;
+}
+
+body {
+  color: var(--text);
+  background:
+    radial-gradient(circle at top left, rgba(255, 222, 0, 0.1), transparent 28%),
+    radial-gradient(circle at top right, rgba(255, 186, 0, 0.08), transparent 24%),
+    var(--bg);
+}
+
+.header {
+  background: rgba(246, 239, 229, 0.84);
+  border-bottom: 1px solid var(--line-soft);
+  backdrop-filter: blur(18px);
+}
+
+.header__inner {
+  height: 74px;
+  gap: 20px;
+}
+
+.logo img {
+  height: 42px;
+}
+
+.nav {
+  gap: 18px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.nav a:not(.btn) {
+  padding: 0;
+  border-radius: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: rgba(35, 31, 32, 0.76);
+}
+
+.nav a:not(.btn):hover {
+  background: transparent;
+  color: var(--black);
+}
+
+.nav__game {
+  gap: 8px;
+}
+
+.nav__game small {
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.btn {
+  height: 52px;
+  padding: 0 20px;
+  border-radius: 999px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+.btn--sm {
+  height: 42px;
+  padding: 0 15px;
+  font-size: 0.92rem;
+}
+
+.btn--primary {
+  background: linear-gradient(180deg, var(--yellow) 0%, var(--yellow-deep) 100%);
+  color: var(--black);
+  box-shadow: none;
+}
+
+.btn--primary:hover {
+  background: linear-gradient(180deg, #ffe65a 0%, #ffbf1b 100%);
+  transform: translateY(-1px);
+}
+
+.btn--secondary {
+  border-color: rgba(35, 31, 32, 0.22);
+  background: transparent;
+}
+
+.btn--secondary:hover {
+  background: var(--black);
+  border-color: var(--black);
+  color: var(--bg);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  letter-spacing: -0.04em;
+}
+
+h1 {
+  font-size: clamp(3.4rem, 7vw, 6.4rem);
+  line-height: 0.95;
+}
+
+h2 {
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  line-height: 0.98;
+}
+
+h3 {
+  font-size: clamp(1.16rem, 1.8vw, 1.4rem);
+}
+
+p {
+  color: rgba(35, 31, 32, 0.84);
+}
+
+.home-page .section {
+  padding: 92px 0;
+}
+
+.home-page .section--alt {
+  background: transparent;
+}
+
+.home-page .section__header {
+  max-width: 760px;
+  margin: 0 0 32px;
+  text-align: left;
+}
+
+.home-page .section__header p {
+  max-width: 36ch;
+  font-size: 1rem;
+  color: var(--muted);
+}
+
+.home-page .hero {
+  position: relative;
+  padding: 48px 0 34px;
+  min-height: calc(100svh - var(--header-offset));
+  display: flex;
+  align-items: center;
+}
+
+.home-page .hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 14% 26%, rgba(255, 222, 0, 0.16), transparent 28%),
+    radial-gradient(circle at 88% 18%, rgba(255, 255, 255, 0.72), transparent 26%);
+  pointer-events: none;
+}
+
+.home-page .hero__grid {
+  position: relative;
+  z-index: 1;
+  grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr);
+  gap: 64px;
+  align-items: end;
+}
+
+.home-page .hero__content {
+  max-width: 560px;
+}
+
+.home-page .hero .eyebrow {
+  margin-bottom: 18px;
+  color: rgba(35, 31, 32, 0.62);
+}
+
+.home-page .hero__subtitle {
+  font-size: clamp(1.35rem, 2.2vw, 1.85rem);
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.home-page .hero__text {
+  max-width: 31ch;
+  font-size: 1.12rem;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+.hero__caption {
+  max-width: 34ch;
+  margin: 0;
+  font-size: 0.96rem;
+  color: rgba(35, 31, 32, 0.62);
+}
+
+.home-page .hero__actions {
+  margin: 28px 0 16px;
+  gap: 14px;
+}
+
+.home-page .hero__media {
+  max-width: none;
+  justify-self: stretch;
+}
+
+.home-page .hero__card {
+  aspect-ratio: 7 / 8;
+  border-radius: 34px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: var(--shadow-md);
+}
+
+.home-page .hero__card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(35, 31, 32, 0.04), rgba(35, 31, 32, 0.24)),
+    radial-gradient(circle at 12% 12%, rgba(255, 255, 255, 0.34), transparent 28%);
+}
+
+.home-page .hero__card img {
+  opacity: 1;
+}
+
+.home-page .hero__overlay {
+  padding: 28px;
+  background: linear-gradient(180deg, transparent 10%, rgba(15, 14, 14, 0.72) 100%);
+}
+
+.home-page .hero__overlay-title {
+  font-size: 0.88rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 10px;
+}
+
+.home-page .hero__overlay-text {
+  max-width: 26ch;
+  font-size: 1.12rem;
+  line-height: 1.4;
+}
+
+.home-page .order-strip {
+  padding: 0 0 8px;
+  background: transparent;
+  border: 0;
+}
+
+.order-strip__stack {
+  padding-top: 12px;
+}
+
+.order-strip__lead {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+
+.order-strip__lead p:last-child {
+  max-width: 30ch;
+  margin: 0;
+  color: var(--muted);
+}
+
+.order-strip__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.order-panel {
+  min-height: 220px;
+  padding: 24px 22px 28px 0;
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  border-right: 1px solid var(--line);
+}
+
+.order-panel:not(:first-child) {
+  padding-left: 22px;
+}
+
+.order-panel:last-child {
+  border-right: 0;
+}
+
+.order-panel__eyebrow {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(35, 31, 32, 0.56);
+}
+
+.order-panel h3,
+.order-panel p {
+  margin: 0;
+}
+
+.order-panel p {
+  color: var(--muted);
+  max-width: 28ch;
+}
+
+.order-strip__actions {
+  margin-top: 10px;
+}
+
+.home-page #menu .menu-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 28px;
+  border-top: 1px solid var(--line);
+}
+
+.home-page #menu .menu-card {
+  min-height: 166px;
+  padding: 24px 0;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  background: transparent;
+}
+
+.home-page #menu .menu-card h3 {
+  margin-bottom: 10px;
+}
+
+.home-page #menu .menu-card p {
+  max-width: 28ch;
+  color: var(--muted);
+}
+
+.home-page #menu .menu-card > .btn {
+  width: fit-content;
+  margin-top: 14px;
+}
+
+.home-page .origin-mini {
+  margin: 28px 0 0;
+  padding: 18px 0;
+  border-radius: 0;
+  background: transparent;
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  box-shadow: none;
+}
+
+.home-page .featured-drinks {
+  margin-top: 52px;
+}
+
+.home-page .featured-drinks h3 {
+  margin-bottom: 18px;
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+}
+
+.home-page .featured-drinks__grid {
+  grid-template-columns: 1.1fr 0.9fr 0.9fr;
+  gap: 26px;
+  align-items: start;
+}
+
+.home-page .drink {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  overflow: visible;
+}
+
+.home-page .drink:first-child {
+  grid-row: span 2;
+}
+
+.home-page .drink:first-child .drink__image {
+  height: 420px;
+}
+
+.home-page .drink__image {
+  height: 278px;
+  border-radius: 26px;
+  border: 1px solid var(--line-soft);
+}
+
+.home-page .drink__body {
+  padding: 16px 2px 0;
+}
+
+.home-page .drink__body p {
+  color: var(--muted);
+}
+
+.home-page .drink .btn {
+  width: fit-content;
+}
+
+.home-page .drink__price {
+  background: rgba(255, 222, 0, 0.22);
+}
+
+.home-page .explore {
+  padding-top: 82px;
+}
+
+.home-page .explore__grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 32px;
+  border-top: 1px solid var(--line);
+}
+
+.home-page .explore__card {
+  min-height: 0;
+  padding: 26px 0;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.home-page .explore__card p:not(.eyebrow) {
+  color: var(--muted);
+}
+
+.home-page .explore__card .btn {
+  width: fit-content;
+  margin-top: 12px;
+}
+
+.home-page .section__grid {
+  gap: 56px;
+  align-items: start;
+}
+
+.home-page .location h2,
+.home-page #catering h2,
+.home-page #wellness-teaser h2,
+.home-page .rewards-teaser h2,
+.home-page .droppy__intro h2,
+.home-page #testimonials h2 {
+  margin-bottom: 14px;
+}
+
+.home-page .location__info {
+  gap: 18px;
+}
+
+.home-page .location__info p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.home-page .hours__row {
+  padding: 12px 0;
+  border-radius: 0;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.home-page .hours__row:first-child {
+  border-top: 1px solid var(--line-soft);
+}
+
+.home-page .hours__row dd {
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+}
+
+.home-page .location__amenities {
+  gap: 10px;
+}
+
+.home-page .location__amenities span {
+  border-radius: 999px;
+  border: 1px solid var(--line-soft);
+  background: rgba(255, 255, 255, 0.54);
+}
+
+.home-page .map,
+.home-page .catering__media {
+  margin-top: 0;
+  border-radius: 30px;
+  overflow: hidden;
+  border: 1px solid var(--line-soft);
+  box-shadow: var(--shadow-sm);
+}
+
+.home-page .map iframe,
+.home-page .catering__media img {
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.home-page .catering__form {
+  margin-top: 26px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+}
+
+.home-page .catering__input,
+.home-page .catering__textarea {
+  border: 1px solid rgba(35, 31, 32, 0.14);
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.home-page .wellness-teaser,
+.home-page .rewards-teaser__grid {
+  gap: 56px;
+  align-items: start;
+}
+
+.home-page .wellness-teaser__card,
+.home-page .rewards-teaser__card {
+  padding: 22px 0 0;
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.home-page .rewards-teaser__badges {
+  margin-top: 22px;
+}
+
+.home-page .rewards-teaser__badges span {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.home-page .rewards-teaser__note {
+  color: rgba(35, 31, 32, 0.6);
+}
+
+.home-page .droppy {
+  background:
+    linear-gradient(180deg, rgba(238, 246, 232, 0.84) 0%, rgba(250, 246, 229, 0.88) 52%, rgba(255, 248, 241, 0.9) 100%);
+  border-top: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.home-page .droppy__intro p:not(.eyebrow) {
+  color: var(--muted);
+}
+
+.home-page .droppy__stat,
+.home-page .droppy__leaderboard,
+.home-page .droppy__canvas-frame {
+  box-shadow: none;
+}
+
+.home-page .review-summary {
+  padding: 20px 0;
+  border-radius: 0;
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  box-shadow: none;
+}
+
+.footer {
+  padding: 68px 0 28px;
+  background: #1a1718;
+}
+
+.footer__grid {
+  gap: 36px;
+}
+
+.footer__logo {
+  height: 42px;
+  margin-bottom: 12px;
+}
+
+.footer__links a {
+  margin-bottom: 10px;
+  color: rgba(255, 249, 240, 0.78);
+}
+
+.footer__disclaimer {
+  margin-top: 32px;
+  color: rgba(255, 249, 240, 0.68);
+}
+
+.mobile-bar {
+  background: rgba(255, 249, 240, 0.96);
+  box-shadow: 0 18px 32px rgba(35, 31, 32, 0.18);
+}
+
+@media (max-width: 980px) {
+  .nav {
+    gap: 14px;
+  }
+
+  .home-page .hero__grid,
+  .home-page .section__grid,
+  .home-page .rewards-teaser__grid {
+    gap: 40px;
+  }
+
+  .order-strip__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .order-panel,
+  .order-panel:not(:first-child) {
+    min-height: 0;
+    padding: 22px 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .order-panel:last-child {
+    border-bottom: 0;
+  }
+
+  .home-page .featured-drinks__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .home-page .drink:first-child {
+    grid-row: auto;
+    grid-column: span 2;
+  }
+
+  .home-page .drink:first-child .drink__image {
+    height: 360px;
+  }
+}
+
+@media (max-width: 720px) {
+  .header__inner {
+    height: 70px;
+  }
+
+  .home-page .hero {
+    min-height: auto;
+    padding: 28px 0 20px;
+  }
+
+  .home-page .hero__grid {
+    grid-template-columns: 1fr;
+    gap: 22px;
+    align-items: start;
+  }
+
+  .home-page .hero__content {
+    max-width: none;
+  }
+
+  .home-page .hero__text,
+  .hero__caption,
+  .order-strip__lead p:last-child,
+  .home-page .section__header p {
+    max-width: none;
+  }
+
+  .home-page .hero__actions {
+    gap: 10px;
+  }
+
+  .home-page .hero__actions .btn {
+    width: 100%;
+  }
+
+  .home-page .hero__card {
+    aspect-ratio: 4 / 5;
+    border-radius: 24px;
+  }
+
+  .home-page .hero__overlay {
+    padding: 20px;
+  }
+
+  .order-strip__lead {
+    display: grid;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .home-page .section {
+    padding: 62px 0;
+  }
+
+  .home-page .section__header {
+    margin-bottom: 20px;
+  }
+
+  .home-page #menu .menu-grid,
+  .home-page .explore__grid,
+  .home-page .featured-drinks__grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .home-page .drink:first-child {
+    grid-column: auto;
+  }
+
+  .home-page .drink:first-child .drink__image,
+  .home-page .drink__image {
+    height: 250px;
+  }
+
+  .home-page .wellness-teaser,
+  .home-page .rewards-teaser__grid,
+  .home-page .section__grid {
+    gap: 26px;
+  }
+
+  .home-page .wellness-teaser__card,
+  .home-page .rewards-teaser__card {
+    padding-top: 18px;
+  }
+
+  .review-summary {
+    gap: 16px;
+  }
+
+  .nav {
+    background: rgba(246, 239, 229, 0.98);
+    padding: 16px;
+  }
+
+  .nav a:not(.btn) {
+    padding: 4px 0;
+  }
+}
