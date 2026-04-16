@@ -2,6 +2,9 @@
   const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
   function roundRectPath(ctx, x, y, width, height, radius) {
+    if (width <= 0 || height <= 0) {
+      return false;
+    }
     const r = Math.min(radius, width / 2, height / 2);
     ctx.beginPath();
     ctx.moveTo(x + r, y);
@@ -10,16 +13,17 @@
     ctx.arcTo(x, y + height, x, y, r);
     ctx.arcTo(x, y, x + width, y, r);
     ctx.closePath();
+    return true;
   }
 
   function fillRoundedRect(ctx, x, y, width, height, radius, fillStyle) {
-    roundRectPath(ctx, x, y, width, height, radius);
+    if (!roundRectPath(ctx, x, y, width, height, radius)) return;
     ctx.fillStyle = fillStyle;
     ctx.fill();
   }
 
   function strokeRoundedRect(ctx, x, y, width, height, radius, strokeStyle, lineWidth = 1) {
-    roundRectPath(ctx, x, y, width, height, radius);
+    if (!roundRectPath(ctx, x, y, width, height, radius)) return;
     ctx.strokeStyle = strokeStyle;
     ctx.lineWidth = lineWidth;
     ctx.stroke();

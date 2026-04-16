@@ -98,6 +98,7 @@
   let running = false;
   let rafId = 0;
   let lastRealNow = 0;
+  let isActive = !root.closest("[hidden]");
 
   function createBoard() {
     return Array.from({ length: ROWS }, () => Array(COLS).fill(null));
@@ -105,6 +106,13 @@
 
   function resizeCanvas() {
     const rect = canvas.getBoundingClientRect();
+    if (rect.width < 40 || rect.height < 40) {
+      world.width = 360;
+      world.height = 520;
+      world.groundY = world.height * 0.9;
+      background.resize(world);
+      return;
+    }
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     canvas.width = rect.width * dpr;
     canvas.height = rect.height * dpr;
@@ -321,6 +329,7 @@
   }
 
   function startGame() {
+    if (!isActive) return;
     audio.ensureStarted();
     audio.resume();
     resetModel();
@@ -360,6 +369,7 @@
   }
 
   function resumeGame() {
+    if (!isActive) return;
     if (state !== "paused") return;
     state = "playing";
     running = true;
@@ -488,6 +498,7 @@
   }
 
   function draw() {
+    if (world.width < 40 || world.height < 40) return;
     ctx.clearRect(0, 0, world.width, world.height);
     renderer.draw(world, getSnapshot());
   }
@@ -542,6 +553,7 @@
   }
 
   function handleAction(action) {
+    if (!isActive) return;
     switch (action) {
       case "left":
         movePiece(-1);
@@ -561,6 +573,7 @@
   }
 
   document.addEventListener("keydown", (event) => {
+    if (!isActive) return;
     if (event.repeat && ["ArrowUp", "Space"].includes(event.code)) return;
 
     if (state === "idle" && (event.code === "Enter" || event.code === "Space")) {
@@ -608,6 +621,7 @@
   });
 
   document.addEventListener("keyup", (event) => {
+    if (!isActive) return;
     if (event.code === "ArrowDown") {
       model.softDrop = false;
     }
@@ -636,8 +650,28 @@
     }
   });
 
-  window.render_game_to_text = renderGameToText;
-  window.advanceTime = (ms) => advanceSimulation(ms);
+  const controller = {
+    gameKey: root.dataset.gameKey || "stacks",
+    renderGameToText,
+    advanceTime: (ms) => advanceSimulation(ms),
+    setActive(next) {
+      isActive = Boolean(next);
+      if (!isActive && state === "playing") {
+        pauseGame();
+      }
+      if (isActive) {
+        requestAnimationFrame(() => resizeCanvas());
+        window.render_game_to_text = renderGameToText;
+        window.advanceTime = (ms) => advanceSimulation(ms);
+      }
+    },
+  };
+
+  root.__arcadeStage = controller;
+  if (isActive) {
+    window.render_game_to_text = renderGameToText;
+    window.advanceTime = (ms) => advanceSimulation(ms);
+  }
 
   resizeCanvas();
   updateHud();

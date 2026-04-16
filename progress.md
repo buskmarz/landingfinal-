@@ -68,3 +68,17 @@ Original prompt: Refactorizar y mejorar el juego Droppy Dash implementando una n
 
 ## Nota de prueba
 - El click directo al selector `[data-arcade-start]` sigue siendo intermitente en el harness, igual que pasó antes con Droppy Dash. Para validaciones más estables en este juego funcionó mejor iniciar con `Enter`.
+
+## Avance 5
+- `eventos/index.html` se rehizo como pagina de expectativa: sin fechas, precio, reserva ni copy del evento pasado.
+- `arcade/index.html` se rehizo como hub con hero claro, cards para los tres juegos y stage seleccionable.
+- Se agrego `game/droppy-pinball.js`, `game/pinball/render.js` y `game/arcade-hub.js`.
+- `game/droppy-arcade.js` ahora soporta activacion/desactivacion para convivir con otros juegos en la misma pagina.
+- Pendiente inmediato: validacion visual y de controles en `/eventos` y `/arcade`, luego commit/push/deploy.
+
+## Avance 6
+- Validacion local completada con el cliente Playwright del skill en `/eventos`, `/arcade#stacks` y `/arcade#pinball`.
+- Artefactos clave: `output/events-page/shot-0.png`, `output/arcade-stacks-test/shot-0.png` y `output/arcade-pinball-test/shot-0.png`.
+- `output/arcade-stacks-test/state-0.json` confirmo partida activa en Stacks; `output/arcade-pinball-test/state-0.json` confirmo bola en juego, score y flippers en Pinball.
+- Se corrigio un error de canvas oculto al cambiar de panel en el hub arcade blindando `resize` y rounded rects en ambos renderers.
+- Pendiente final: commit, push y deploy a produccion.
