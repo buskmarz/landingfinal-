@@ -1,3 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /.netlify/
+
+Host: bmoodcoffee.com
 Sitemap: https://bmoodcoffee.com/sitemap.xml

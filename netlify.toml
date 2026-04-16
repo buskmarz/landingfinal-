@@ -24,3 +24,28 @@
   from = "/api/*"
   to = "/.netlify/functions/:splat"
   status = 200
+
+[[redirects]]
+  from = "/cafeteria-en-puebla"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/cafeteria-de-especialidad-puebla"
+  to = "/cafe-de-especialidad-puebla"
+  status = 301
+
+[[redirects]]
+  from = "/cafeteria-con-cbd-puebla"
+  to = "/cbd-en-el-cafe"
+  status = 301
+
+[[redirects]]
+  from = "/eventos-cafe-puebla"
+  to = "/talleres-de-cafe-puebla"
+  status = 301
+
+[[redirects]]
+  from = "/taller-de-cafe-puebla"
+  to = "/talleres-de-cafe-puebla"
+  status = 301
