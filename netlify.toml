@@ -56,7 +56,104 @@
   status = 301
   force = true
 
-# 4) API (rewrite interno, no redirect)
+# 4) Servir URLs limpias sin slash final como versión canónica
+[[redirects]]
+  from = "/bienestar/"
+  to = "/bienestar"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/bienestar"
+  to = "/bienestar/index.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/recompensas/"
+  to = "/recompensas"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/recompensas"
+  to = "/recompensas/index.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/eventos/"
+  to = "/eventos"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/eventos"
+  to = "/eventos/index.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/arcade/"
+  to = "/arcade"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/arcade"
+  to = "/arcade/index.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/cafe-de-especialidad-puebla/"
+  to = "/cafe-de-especialidad-puebla"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/cafe-de-especialidad-puebla"
+  to = "/cafe-de-especialidad-puebla/index.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/cbd-en-el-cafe/"
+  to = "/cbd-en-el-cafe"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/cbd-en-el-cafe"
+  to = "/cbd-en-el-cafe/index.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/como-preparar-cafe-en-casa/"
+  to = "/como-preparar-cafe-en-casa"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/como-preparar-cafe-en-casa"
+  to = "/como-preparar-cafe-en-casa/index.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/talleres-de-cafe-puebla/"
+  to = "/talleres-de-cafe-puebla"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/talleres-de-cafe-puebla"
+  to = "/talleres-de-cafe-puebla/index.html"
+  status = 200
+  force = true
+
+# 5) API (rewrite interno, no redirect)
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"
