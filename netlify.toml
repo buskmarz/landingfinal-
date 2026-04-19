@@ -5,21 +5,58 @@
 [functions]
   external_node_modules = ["@netlify/blobs"]
 
-# 1) Forzar HTTPS
+# 1) Cerrar el subdominio Netlify productivo sin afectar deploy previews
+[[redirects]]
+  from = "https://betterland.netlify.app/*"
+  to = "https://bmoodcoffee.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://betterland.netlify.app/*"
+  to = "https://bmoodcoffee.com/:splat"
+  status = 301
+  force = true
+
+# 2) Forzar HTTPS + dominio canónico sin cadenas
+[[redirects]]
+  from = "http://www.bmoodcoffee.com/*"
+  to = "https://bmoodcoffee.com/:splat"
+  status = 301
+  force = true
+
 [[redirects]]
   from = "http://bmoodcoffee.com/*"
   to = "https://bmoodcoffee.com/:splat"
   status = 301
   force = true
 
-# 2) Forzar no-www (o cambia a www si prefieres)
 [[redirects]]
   from = "https://www.bmoodcoffee.com/*"
   to = "https://bmoodcoffee.com/:splat"
   status = 301
   force = true
 
-# 3) API (rewrite interno, no redirect)
+# 3) Normalizar rutas legacy que hoy compiten con sus versiones bonitas
+[[redirects]]
+  from = "/recomendador.html"
+  to = "/recomendador"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/aviso-privacidad.html"
+  to = "/aviso-privacidad"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/aviso-privacidad/"
+  to = "/aviso-privacidad"
+  status = 301
+  force = true
+
+# 4) API (rewrite interno, no redirect)
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"
