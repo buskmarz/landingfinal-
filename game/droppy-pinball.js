@@ -63,6 +63,8 @@
     ballsLeft: 3,
     muted: false,
     waitingLaunch: true,
+    launchAssistTime: 0,
+    ballSaveTime: 0,
     bumpPulse: 0,
     environmentProgress: 0,
     input: {
@@ -77,6 +79,7 @@
       r: 10,
     },
     bumpers: [],
+    posts: [],
     targets: [],
     walls: [],
     flippers: {
@@ -130,6 +133,12 @@
       { x: world.width * 0.28, y: world.height * 0.13, width: world.width * 0.1, height: world.height * 0.032, label: "C", active: true },
       { x: world.width * 0.5, y: world.height * 0.1, width: world.width * 0.1, height: world.height * 0.032, label: "B", active: true },
       { x: world.width * 0.72, y: world.height * 0.13, width: world.width * 0.1, height: world.height * 0.032, label: "D", active: true },
+    ];
+
+    state.posts = [
+      { x: world.width * 0.31, y: world.height * 0.73, r: world.width * 0.028, kick: world.width * 0.035 },
+      { x: world.width * 0.5, y: world.height * 0.775, r: world.width * 0.034, kick: world.width * 0.05 },
+      { x: world.width * 0.69, y: world.height * 0.73, r: world.width * 0.028, kick: world.width * 0.035 },
     ];
 
     state.walls = [
@@ -189,6 +198,8 @@
     state.ball.vx = 0;
     state.ball.vy = 0;
     state.waitingLaunch = true;
+    state.launchAssistTime = 0;
+    state.ballSaveTime = 0;
   }
 
   function resetGameState() {
@@ -235,11 +246,17 @@
     updateHud();
   }
 
+  function applyLaunchVelocity() {
+    state.ball.vx = -world.width * 0.24;
+    state.ball.vy = -world.height * 1.42;
+    state.waitingLaunch = false;
+    state.launchAssistTime = 0.65;
+  }
+
   function launchBall() {
     if (state.mode !== "playing" || !state.waitingLaunch) return;
-    state.ball.vx = -world.width * 0.06;
-    state.ball.vy = -world.height * 0.98;
-    state.waitingLaunch = false;
+    applyLaunchVelocity();
+    state.ballSaveTime = 6;
     updateHud();
   }
 
@@ -422,6 +439,13 @@
   }
 
   function loseBall() {
+    if (state.ballSaveTime > 0) {
+      setBallAtLaunch();
+      applyLaunchVelocity();
+      state.ballSaveTime = Math.max(state.ballSaveTime - 1.5, 0);
+      updateHud();
+      return;
+    }
     state.ballsLeft -= 1;
     if (state.ballsLeft <= 0) {
       endGame();
@@ -460,6 +484,8 @@
 
     if (state.mode !== "playing") return;
 
+    state.ballSaveTime = Math.max(0, state.ballSaveTime - dt);
+
     updateFlippers(dt);
 
     if (state.waitingLaunch) {
@@ -472,7 +498,15 @@
     const stepDt = dt / substeps;
 
     for (let i = 0; i < substeps; i += 1) {
-      state.ball.vy += world.height * 1.28 * stepDt;
+      if (state.launchAssistTime > 0) {
+        state.launchAssistTime = Math.max(0, state.launchAssistTime - stepDt);
+        if (state.ball.x > world.width * 0.58 && state.ball.y < world.height * 0.36) {
+          state.ball.vx -= world.width * 2.5 * stepDt;
+          state.ball.vy -= world.height * 0.18 * stepDt;
+        }
+      }
+
+      state.ball.vy += world.height * 0.94 * stepDt;
       state.ball.vx *= 0.999;
       state.ball.vy *= 0.999;
       state.ball.x += state.ball.vx * stepDt;
@@ -498,6 +532,10 @@
         }
       });
 
+      state.posts.forEach((post) => {
+        collideCircle(post, post.kick);
+      });
+
       scoreLanes();
 
       if (state.ball.y - state.ball.r > world.height + 20) {
@@ -513,6 +551,7 @@
     return {
       ball: state.ball,
       bumpers: state.bumpers,
+      posts: state.posts,
       flippers: [state.flippers.left, state.flippers.right],
       walls: state.walls,
       targets: state.targets,
@@ -575,6 +614,12 @@
         x: Number(bumper.x.toFixed(1)),
         y: Number(bumper.y.toFixed(1)),
         r: Number(bumper.r.toFixed(1)),
+      })),
+      posts: state.posts.map((post) => ({
+        x: Number(post.x.toFixed(1)),
+        y: Number(post.y.toFixed(1)),
+        r: Number(post.r.toFixed(1)),
+        kick: Number(post.kick.toFixed(1)),
       })),
       flippers: {
         left: Number(state.flippers.left.angle.toFixed(2)),

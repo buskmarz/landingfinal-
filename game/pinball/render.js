@@ -110,6 +110,24 @@
       ctx.fillText(bumper.label, bumper.x, bumper.y + 1);
     }
 
+    function drawPost(post) {
+      const glow = ctx.createRadialGradient(post.x, post.y, post.r * 0.2, post.x, post.y, post.r * 1.9);
+      glow.addColorStop(0, "rgba(255,255,255,0.75)");
+      glow.addColorStop(1, "rgba(255,255,255,0)");
+      ctx.fillStyle = glow;
+      ctx.beginPath();
+      ctx.arc(post.x, post.y, post.r * 1.9, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "rgba(255,255,255,0.92)";
+      ctx.beginPath();
+      ctx.arc(post.x, post.y, post.r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = "rgba(35,31,32,0.16)";
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+
     function drawFlipper(flipper) {
       drawSegment(ctx, flipper.segment, flipper.width * 1.3, "rgba(255,255,255,0.22)", 1);
       drawSegment(ctx, flipper.segment, flipper.width, flipper.fill, 1);
@@ -155,19 +173,20 @@
     }
 
     function drawTable(world, snapshot) {
-      fillRoundRect(ctx, 14, 14, world.width - 28, world.height - 28, 28, "rgba(255,255,255,0.18)");
-      strokeRoundRect(ctx, 14, 14, world.width - 28, world.height - 28, 28, "rgba(255,255,255,0.42)", 1);
+      fillRoundRect(ctx, 14, 14, world.width - 28, world.height - 28, 28, "rgba(255,255,255,0.26)");
+      strokeRoundRect(ctx, 14, 14, world.width - 28, world.height - 28, 28, "rgba(255,255,255,0.52)", 1);
 
       const board = ctx.createLinearGradient(0, 0, 0, world.height);
-      board.addColorStop(0, "rgba(24, 30, 34, 0.74)");
-      board.addColorStop(0.38, "rgba(42, 52, 40, 0.72)");
-      board.addColorStop(1, "rgba(28, 24, 18, 0.86)");
+      board.addColorStop(0, "rgba(240, 247, 238, 0.78)");
+      board.addColorStop(0.4, "rgba(220, 232, 213, 0.8)");
+      board.addColorStop(1, "rgba(245, 228, 214, 0.78)");
       fillRoundRect(ctx, 28, 28, world.width - 56, world.height - 56, 24, board);
+      strokeRoundRect(ctx, 28, 28, world.width - 56, world.height - 56, 24, "rgba(35,31,32,0.08)", 1);
 
       ctx.save();
-      ctx.globalAlpha = 0.18;
+      ctx.globalAlpha = 0.16;
       const beam = ctx.createLinearGradient(world.width * 0.15, 0, world.width * 0.75, world.height);
-      beam.addColorStop(0, "rgba(255,255,255,0.7)");
+      beam.addColorStop(0, "rgba(255,255,255,0.9)");
       beam.addColorStop(1, "rgba(255,255,255,0)");
       ctx.fillStyle = beam;
       ctx.beginPath();
@@ -179,10 +198,19 @@
       ctx.fill();
       ctx.restore();
 
+      ctx.save();
+      ctx.strokeStyle = "rgba(35,31,32,0.08)";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(world.width * 0.5, 56);
+      ctx.lineTo(world.width * 0.5, world.height * 0.64);
+      ctx.stroke();
+      ctx.restore();
+
       if (droppyImage && droppyImage.complete) {
         const size = world.width * 0.18;
         ctx.save();
-        ctx.globalAlpha = 0.28;
+        ctx.globalAlpha = 0.16;
         ctx.drawImage(droppyImage, world.width * 0.41, world.height * 0.12, size, size * 1.2);
         ctx.restore();
       }
@@ -190,6 +218,7 @@
       snapshot.walls.forEach((segment) => drawSegment(ctx, segment, segment.width, segment.color, 0.95));
       drawTargets(snapshot.targets);
       snapshot.bumpers.forEach((bumper) => drawBumper(bumper, snapshot.bumpPulse));
+      snapshot.posts.forEach(drawPost);
       snapshot.flippers.forEach(drawFlipper);
       drawBall(snapshot.ball);
     }

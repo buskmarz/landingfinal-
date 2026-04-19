@@ -82,3 +82,14 @@ Original prompt: Refactorizar y mejorar el juego Droppy Dash implementando una n
 - `output/arcade-stacks-test/state-0.json` confirmo partida activa en Stacks; `output/arcade-pinball-test/state-0.json` confirmo bola en juego, score y flippers en Pinball.
 - Se corrigio un error de canvas oculto al cambiar de panel en el hub arcade blindando `resize` y rounded rects en ambos renderers.
 - Pendiente final: commit, push y deploy a produccion.
+
+## Avance 7
+- Se corrigio el launch de `Droppy Pinball` en `game/droppy-pinball.js`: la bola ahora sale del shooter lane con fuerza suficiente y recibe asistencia corta para entrar a la mesa.
+- Se redujo la gravedad para una caida menos agresiva y se agrego un `ball save` real con relanzamiento automatico durante el arranque.
+- Se añadieron postes guia/kickers en la parte baja para devolver la bola al juego y dar mas margen antes del drenaje.
+- `game/pinball/render.js` se ajusto a una direccion visual mas limpia y luminosa, con tablero mas minimalista y menos peso oscuro.
+- Validacion Playwright nueva:
+  - `output/pinball-mid-test/state-0.json` confirmo bola activa en mesa tras el launch (`waitingLaunch: false`).
+  - `output/pinball-fix-test-6/state-0.json` confirmo juego activo y score acumulado (`score: 70`, `ballsLeft: 3`).
+  - `output/pinball-passive-test/state-0.json` confirmo que incluso sin ayuda real del jugador la partida sigue activa despues del arranque (`waitingLaunch: false`).
+- Siguiente agente: si hace falta afinar mas la sensacion, revisar fuerza de flippers y scoring de bumpers, pero el bug principal de launch y drenaje inmediato ya no se reproduce igual.
