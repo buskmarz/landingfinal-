@@ -233,7 +233,7 @@ function renderFooter() {
           <a href="/eventos/">Eventos</a>
           <a href="/arcade/">Arcade</a>
           <a href="/recomendador">Recomendador</a>
-          <a href="/aviso-privacidad">Aviso de privacidad</a>
+          <a href="/aviso-privacidad.html">Aviso de privacidad</a>
         </div>
         <div class="footer__links footer__links--guides">
           <h3>Guías locales</h3>

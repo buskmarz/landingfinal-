@@ -45,14 +45,14 @@
   force = true
 
 [[redirects]]
-  from = "/aviso-privacidad.html"
-  to = "/aviso-privacidad"
+  from = "/aviso-privacidad/"
+  to = "/aviso-privacidad.html"
   status = 301
   force = true
 
 [[redirects]]
-  from = "/aviso-privacidad/"
-  to = "/aviso-privacidad"
+  from = "/aviso-privacidad"
+  to = "/aviso-privacidad.html"
   status = 301
   force = true
 
