@@ -40,9 +40,105 @@
 # 3) Normalizar rutas legacy que hoy compiten con sus versiones bonitas
 [[redirects]]
   from = "/recomendador.html"
-  to = "/recomendador"
+  to = "/recomendador/"
   status = 301
   force = true
+
+[[redirects]]
+  from = "/recomendador"
+  to = "/recomendador/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/recompensas"
+  to = "/recompensas/"
+  status = 301
+
+[[redirects]]
+  from = "/eventos"
+  to = "/eventos/"
+  status = 301
+
+[[redirects]]
+  from = "/bienestar"
+  to = "/bienestar/"
+  status = 301
+
+[[redirects]]
+  from = "/arcade"
+  to = "/arcade/"
+  status = 301
+
+[[redirects]]
+  from = "/cafe-de-especialidad-puebla"
+  to = "/cafe-de-especialidad-puebla/"
+  status = 301
+
+[[redirects]]
+  from = "/cbd-en-el-cafe"
+  to = "/cbd-en-el-cafe/"
+  status = 301
+
+[[redirects]]
+  from = "/como-preparar-cafe-en-casa"
+  to = "/como-preparar-cafe-en-casa/"
+  status = 301
+
+[[redirects]]
+  from = "/talleres-de-cafe-puebla"
+  to = "/talleres-de-cafe-puebla/"
+  status = 301
+
+[[redirects]]
+  from = "/cafeteria-en-la-paz-puebla"
+  to = "/cafeteria-en-la-paz-puebla/"
+  status = 301
+
+[[redirects]]
+  from = "/cafeteria-pet-friendly-puebla"
+  to = "/cafeteria-pet-friendly-puebla/"
+  status = 301
+
+[[redirects]]
+  from = "/cafeteria-para-trabajar-puebla"
+  to = "/cafeteria-para-trabajar-puebla/"
+  status = 301
+
+[[redirects]]
+  from = "/cafeteria-con-wifi-puebla"
+  to = "/cafeteria-con-wifi-puebla/"
+  status = 301
+
+[[redirects]]
+  from = "/matcha-en-puebla"
+  to = "/matcha-en-puebla/"
+  status = 301
+
+[[redirects]]
+  from = "/cold-brew-en-puebla"
+  to = "/cold-brew-en-puebla/"
+  status = 301
+
+[[redirects]]
+  from = "/brunch-en-puebla"
+  to = "/brunch-en-puebla/"
+  status = 301
+
+[[redirects]]
+  from = "/bebidas-funcionales-puebla"
+  to = "/bebidas-funcionales-puebla/"
+  status = 301
+
+[[redirects]]
+  from = "/cbd-no-psicoactivo-puebla"
+  to = "/cbd-no-psicoactivo-puebla/"
+  status = 301
+
+[[redirects]]
+  from = "/adaptogenos-en-bebidas-puebla"
+  to = "/adaptogenos-en-bebidas-puebla/"
+  status = 301
 
 [[redirects]]
   from = "/aviso-privacidad/"
@@ -69,20 +165,25 @@
 
 [[redirects]]
   from = "/cafeteria-de-especialidad-puebla"
-  to = "/cafe-de-especialidad-puebla"
+  to = "/cafe-de-especialidad-puebla/"
   status = 301
 
 [[redirects]]
   from = "/cafeteria-con-cbd-puebla"
-  to = "/cbd-en-el-cafe"
+  to = "/cbd-en-el-cafe/"
   status = 301
 
 [[redirects]]
   from = "/eventos-cafe-puebla"
-  to = "/talleres-de-cafe-puebla"
+  to = "/talleres-de-cafe-puebla/"
   status = 301
 
 [[redirects]]
   from = "/taller-de-cafe-puebla"
-  to = "/talleres-de-cafe-puebla"
+  to = "/talleres-de-cafe-puebla/"
   status = 301
+
+[[headers]]
+  for = "/assets/*.pdf"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"

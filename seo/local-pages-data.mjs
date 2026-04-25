@@ -40,7 +40,7 @@ const guideLookup = Object.fromEntries(footerLocalGuides.map((entry) => [entry.h
 const staticLinkLabels = {
   "/bienestar/": { label: "Bienestar y CBD" },
   "/recompensas/": { label: "Recompensas Better Mood" },
-  "/recomendador": { label: "Recomendador de bebidas" },
+  "/recomendador/": { label: "Recomendador de bebidas" },
   "/cafe-de-especialidad-puebla/": { label: "Café de especialidad en Puebla" },
   "/cbd-en-el-cafe/": { label: "CBD en el café" },
   "/como-preparar-cafe-en-casa/": { label: "Cómo preparar café en casa" },
@@ -528,7 +528,7 @@ export const localPagesData = [
       "/bebidas-funcionales-puebla/",
       "/cbd-en-el-cafe/",
       "/cafeteria-en-la-paz-puebla/",
-      "/recomendador"
+      "/recomendador/"
     ],
     cta: {
       title: "Ve de la curiosidad al pedido con menos fricción.",
@@ -819,7 +819,7 @@ export const localPagesData = [
       "/bienestar/",
       "/cbd-no-psicoactivo-puebla/",
       "/adaptogenos-en-bebidas-puebla/",
-      "/recomendador"
+      "/recomendador/"
     ],
     cta: {
       title: "Elige mejor antes de pedir.",
@@ -917,7 +917,7 @@ export const localPagesData = [
       "/bienestar/",
       "/cbd-en-el-cafe/",
       "/bebidas-funcionales-puebla/",
-      "/recomendador"
+      "/recomendador/"
     ],
     cta: {
       title: "Pide con más contexto y menos ruido.",

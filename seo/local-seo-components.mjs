@@ -178,6 +178,54 @@ function pageSchemas(page) {
   return [
     {
       "@context": "https://schema.org",
+      "@type": "CafeOrCoffeeShop",
+      name: business.name,
+      url: business.siteUrl,
+      image: `${business.siteUrl}/assets/hero-coffee.jpg`,
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "13 Poniente 2302/F, Col. La Paz",
+        addressLocality: "Puebla",
+        addressRegion: "Puebla",
+        addressCountry: "MX"
+      },
+      hasMap: business.mapsUrl,
+      openingHoursSpecification: [
+        {
+          "@type": "OpeningHoursSpecification",
+          dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+          opens: "08:00",
+          closes: "21:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          dayOfWeek: "Saturday",
+          opens: "09:00",
+          closes: "20:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          dayOfWeek: "Sunday",
+          opens: "10:00",
+          closes: "18:00"
+        }
+      ],
+      sameAs: [business.instagramUrl, business.facebookUrl],
+      potentialAction: [
+        {
+          "@type": "ReserveAction",
+          target: business.whatsappUrl,
+          name: "Escribir por WhatsApp"
+        },
+        {
+          "@type": "OrderAction",
+          target: [business.uberEatsUrl, business.rappiUrl],
+          name: "Pedir Better Mood Coffee"
+        }
+      ]
+    },
+    {
+      "@context": "https://schema.org",
       "@type": "WebPage",
       name: page.title,
       url: canonical,
@@ -232,7 +280,7 @@ function renderFooter() {
           <a href="/bienestar/">Bienestar</a>
           <a href="/eventos/">Eventos</a>
           <a href="/arcade/">Arcade</a>
-          <a href="/recomendador">Recomendador</a>
+          <a href="/recomendador/">Recomendador</a>
           <a href="/aviso-privacidad.html">Aviso de privacidad</a>
         </div>
         <div class="footer__links footer__links--guides">
