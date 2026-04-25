@@ -39,19 +39,7 @@
 
 # 3) Normalizar rutas legacy que hoy compiten con sus versiones bonitas
 [[redirects]]
-  from = "/recomendador/"
-  to = "/recomendador/index.html"
-  status = 200
-  force = true
-
-[[redirects]]
   from = "/recomendador.html"
-  to = "/recomendador/"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/recomendador"
   to = "/recomendador/"
   status = 301
   force = true
