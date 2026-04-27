@@ -1,0 +1,11 @@
+.q-admin-alert {
+  border: 1px solid #e9cf83;
+  border-radius: 12px;
+  background: #fff7d9;
+  padding: 1rem;
+}
+
+.admin-section {
+  padding-top: 1.2rem;
+  padding-bottom: 1.2rem;
+}

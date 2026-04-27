@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiniela Better Mood 2026</title>
+  <meta name="description" content="Quiniela Better Mood 2026: predice marcadores, suma puntos y vive la temporada futbolera con café y comunidad." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Metropolis:wght@400;600;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="quiniela.css" />
+</head>
+<body>
+  <header class="q-header">
+    <div class="q-container q-topbar">
+      <a class="q-brand" href="/">Better Mood Coffee</a>
+      <nav class="q-nav" aria-label="Navegación principal quiniela">
+        <a href="#registro">Crear mi folio</a>
+        <a href="#como-funciona">Cómo funciona</a>
+        <a href="#ranking">Ranking</a>
+        <a href="/quiniela/admin/" class="q-admin-link">Admin</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="q-hero">
+      <div class="q-container">
+        <p class="q-chip">Temporada futbolera Better Mood</p>
+        <h1>La Quiniela Better Mood 2026</h1>
+        <p class="q-lead">Predice marcadores, suma puntos y vive la temporada futbolera con café, comunidad y buen mood.</p>
+        <div class="q-hero-actions">
+          <a href="#registro" class="q-btn q-btn-primary" data-track="quiniela_register_start">Crear mi folio</a>
+          <a href="#como-funciona" class="q-btn q-btn-secondary">Ver cómo funciona</a>
+        </div>
+        <p class="q-note">Dinámica de comunidad. Premios sujetos a términos y condiciones. No premios en efectivo.</p>
+      </div>
+    </section>
+
+    <section id="como-funciona" class="q-section">
+      <div class="q-container">
+        <h2>Cómo funciona</h2>
+        <ol class="q-steps">
+          <li>Regístrate.</li>
+          <li>Recibe tu folio único.</li>
+          <li>Llena tus predicciones por fase.</li>
+          <li>Suma puntos con cada resultado.</li>
+          <li>Consulta el ranking y gana beneficios Better Mood.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="registro" class="q-section q-section-alt">
+      <div class="q-container q-grid-2">
+        <div>
+          <h2>Registro de participante</h2>
+          <form id="register-form" class="q-form" novalidate>
+            <div class="q-form-field">
+              <label for="name">Nombre completo</label>
+              <input id="name" name="name" type="text" autocomplete="name" required />
+              <small class="q-error" id="name-error" aria-live="polite"></small>
+            </div>
+
+            <div class="q-form-field">
+              <label for="whatsapp">WhatsApp</label>
+              <input id="whatsapp" name="whatsapp" type="tel" inputmode="tel" required />
+              <small class="q-error" id="whatsapp-error" aria-live="polite"></small>
+            </div>
+
+            <div class="q-form-field">
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" autocomplete="email" required />
+              <small class="q-error" id="email-error" aria-live="polite"></small>
+            </div>
+
+            <fieldset class="q-form-field">
+              <legend>Método de participación</legend>
+              <label class="q-option"><input type="radio" name="participationType" value="digital" required /> Digital</label>
+              <label class="q-option"><input type="radio" name="participationType" value="fisico" required /> Cartón físico en cafetería</label>
+              <label class="q-option"><input type="radio" name="participationType" value="ambos" required /> Ambos</label>
+              <small class="q-error" id="participationType-error" aria-live="polite"></small>
+            </fieldset>
+
+            <label class="q-option q-option-check">
+              <input type="checkbox" name="acceptsTerms" required />
+              Acepto términos y condiciones de la dinámica.
+            </label>
+            <small class="q-error" id="acceptsTerms-error" aria-live="polite"></small>
+
+            <label class="q-option q-option-check">
+              <input type="checkbox" name="acceptsMarketing" />
+              Acepto recibir novedades y promociones de Better Mood.
+            </label>
+
+            <button class="q-btn q-btn-primary q-btn-block" type="submit">Generar folio</button>
+          </form>
+
+          <section id="register-success" class="q-card q-hidden" aria-live="polite">
+            <h3 id="success-title">Tu folio es BM26-000001</h3>
+            <p>Guárdalo. Lo usarás para registrar tus predicciones y consultar tu ranking.</p>
+            <div class="q-inline-actions">
+              <a href="#predicciones" class="q-btn q-btn-primary">Registrar predicciones</a>
+              <button id="copy-folio" type="button" class="q-btn q-btn-secondary">Copiar folio</button>
+            </div>
+            <small id="copy-feedback" class="q-feedback"></small>
+          </section>
+        </div>
+
+        <aside class="q-card">
+          <h3>Tu participación</h3>
+          <p>Con tu folio podrás registrar y consultar tu desempeño durante toda la temporada futbolera.</p>
+          <ul class="q-mini-list">
+            <li>1 folio único por registro.</li>
+            <li>Edición bloqueada al iniciar cada partido.</li>
+            <li>Criterios transparentes de puntuación.</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <section id="fases" class="q-section">
+      <div class="q-container">
+        <h2>Fases de la quiniela</h2>
+        <div id="phase-cards" class="q-phase-grid"></div>
+      </div>
+    </section>
+
+    <section id="predicciones" class="q-section q-section-alt">
+      <div class="q-container">
+        <h2>Registrar predicciones</h2>
+
+        <form id="prediction-access-form" class="q-form-inline" novalidate>
+          <div class="q-form-field">
+            <label for="folio-input">Folio</label>
+            <input id="folio-input" name="folio" type="text" placeholder="BM26-000001" required />
+          </div>
+
+          <div class="q-form-field">
+            <label for="phase-select">Fase</label>
+            <select id="phase-select" name="phase" required></select>
+          </div>
+
+          <button type="submit" class="q-btn q-btn-primary">Cargar partidos</button>
+        </form>
+        <p id="prediction-access-feedback" class="q-feedback" aria-live="polite"></p>
+
+        <form id="prediction-form" class="q-hidden" novalidate>
+          <div id="matches-container" class="q-match-list"></div>
+          <button type="submit" class="q-btn q-btn-primary q-btn-block">Guardar predicciones</button>
+          <p id="prediction-save-feedback" class="q-feedback" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+
+    <section id="ranking" class="q-section">
+      <div class="q-container">
+        <h2>Ranking</h2>
+        <div class="q-table-wrap">
+          <table class="q-table" aria-label="Ranking de la quiniela">
+            <thead>
+              <tr>
+                <th>Posición</th>
+                <th>Folio</th>
+                <th>Nombre</th>
+                <th>Puntos</th>
+                <th>Marcadores exactos</th>
+              </tr>
+            </thead>
+            <tbody id="ranking-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="terminos" class="q-section q-section-alt">
+      <div class="q-container">
+        <h2>Términos y condiciones</h2>
+        <ul class="q-terms">
+          <li>Dinámica de entretenimiento y comunidad.</li>
+          <li>No hay premios en efectivo.</li>
+          <li>Los beneficios serán definidos por Better Mood Coffee.</li>
+          <li>Las predicciones se bloquean al inicio de cada partido.</li>
+          <li>En caso de empate, gana quien tenga más marcadores exactos.</li>
+          <li>Si persiste empate, gana quien haya registrado antes sus predicciones.</li>
+          <li>Better Mood puede modificar la dinámica por causas operativas.</li>
+          <li>Participar implica aceptar términos.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="q-footer">
+    <div class="q-container q-footer-inner">
+      <p>Better Mood Coffee · Vive los partidos con café y buen mood.</p>
+      <a href="/" class="q-link">Volver a la landing</a>
+    </div>
+  </footer>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
