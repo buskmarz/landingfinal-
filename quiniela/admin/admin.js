@@ -57,7 +57,7 @@ function renderPredictions() {
   predictionsBody.innerHTML = predictions
     .map((prediction) => {
       const match = matchById[prediction.matchId];
-      const label = match ? `${match.homeTeam} vs ${match.awayTeam}` : prediction.matchId;
+      const label = match ? `${match.homeFlag || ''} ${match.homeTeam} vs ${match.awayFlag || ''} ${match.awayTeam}` : prediction.matchId;
 
       return `
       <tr>
@@ -81,20 +81,20 @@ function renderResultsMatches() {
       <article class="q-match-card">
         <div class="q-match-head">
           <div>
-            <strong>${match.homeTeam} vs ${match.awayTeam}</strong>
-            <div><small>${match.phase} · ${new Date(match.matchDate).toLocaleString('es-MX')}</small></div>
+            <strong>${match.homeFlag || ''} ${match.homeTeam} vs ${match.awayFlag || ''} ${match.awayTeam}</strong>
+            <div><small>Grupo ${match.group} · ${match.phase} · ${match.venue}, ${match.hostCity} · ${new Date(match.matchDate).toLocaleString('es-MX')}</small></div>
           </div>
           <span class="q-phase-status" data-status="${match.status === 'finalizado' ? 'cerrada' : 'proximamente'}">${match.status}</span>
         </div>
 
         <div class="q-score-grid">
           <label>
-            ${match.homeTeam}
+            ${match.homeFlag || ''} ${match.homeTeam}
             <input name="home-${match.id}" type="number" min="0" max="20" value="${match.homeScore ?? ''}" />
           </label>
           <strong>-</strong>
           <label>
-            ${match.awayTeam}
+            ${match.awayFlag || ''} ${match.awayTeam}
             <input name="away-${match.id}" type="number" min="0" max="20" value="${match.awayScore ?? ''}" />
           </label>
         </div>

@@ -17,8 +17,12 @@
  * @property {string} phase
  * @property {string} group
  * @property {string} homeTeam
+ * @property {string} homeFlag
  * @property {string} awayTeam
+ * @property {string} awayFlag
  * @property {string} matchDate
+ * @property {string} venue
+ * @property {string} hostCity
  * @property {'programado'|'en_juego'|'finalizado'} status
  * @property {number | null} homeScore
  * @property {number | null} awayScore

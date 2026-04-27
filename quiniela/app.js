@@ -205,20 +205,24 @@ function renderMatchInputs(folio, phaseId, matches) {
       <article class="q-match-card">
         <div class="q-match-head">
           <div>
-            <strong>${match.homeTeam} vs ${match.awayTeam}</strong>
-            <div><small>Fecha: ${formatMatchDate(match.matchDate)}</small></div>
+            <strong class="q-match-title">
+              <span>${match.homeFlag || ''} ${match.homeTeam}</span>
+              <span class="q-versus">vs</span>
+              <span>${match.awayFlag || ''} ${match.awayTeam}</span>
+            </strong>
+            <div><small>Grupo ${match.group} · ${formatMatchDate(match.matchDate)} · ${match.venue}, ${match.hostCity}</small></div>
           </div>
           <span class="q-phase-status" data-status="${locked ? 'cerrada' : 'abierta'}">${locked ? 'Cerrada' : 'Abierta'}</span>
         </div>
 
         <div class="q-score-grid">
           <label>
-            ${match.homeTeam}
+            <span>${match.homeFlag || ''} ${match.homeTeam}</span>
             <input type="number" min="0" max="20" inputmode="numeric" name="home-${match.id}" value="${homeValue}" ${locked ? 'disabled' : ''} required />
           </label>
           <strong>-</strong>
           <label>
-            ${match.awayTeam}
+            <span>${match.awayFlag || ''} ${match.awayTeam}</span>
             <input type="number" min="0" max="20" inputmode="numeric" name="away-${match.id}" value="${awayValue}" ${locked ? 'disabled' : ''} required />
           </label>
         </div>

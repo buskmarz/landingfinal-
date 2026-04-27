@@ -1,11 +1,12 @@
-import { MOCK_MATCHES, MOCK_RANKING, PHASES } from '../data/mockData.js';
+import { DATA_VERSION, MOCK_MATCHES, MOCK_RANKING, PHASES } from '../data/mockData.js';
 import { buildScoreSummary } from './scoring.js';
 
 const STORAGE_KEYS = {
   participants: 'bm26.participants',
   predictions: 'bm26.predictions',
   folioSequence: 'bm26.folioSequence',
-  matches: 'bm26.matches'
+  matches: 'bm26.matches',
+  dataVersion: 'bm26.dataVersion'
 };
 
 function readJSON(key, fallback) {
@@ -26,8 +27,11 @@ function writeJSON(key, value) {
 
 function ensureMatchesStorage() {
   const storedMatches = readJSON(STORAGE_KEYS.matches, null);
-  if (!storedMatches) {
+  const storedVersion = localStorage.getItem(STORAGE_KEYS.dataVersion);
+
+  if (!storedMatches || storedVersion !== DATA_VERSION) {
     writeJSON(STORAGE_KEYS.matches, MOCK_MATCHES);
+    localStorage.setItem(STORAGE_KEYS.dataVersion, DATA_VERSION);
     return [...MOCK_MATCHES];
   }
 
@@ -229,6 +233,7 @@ export function resetQuinielaMockData() {
   localStorage.removeItem(STORAGE_KEYS.predictions);
   localStorage.removeItem(STORAGE_KEYS.folioSequence);
   localStorage.removeItem(STORAGE_KEYS.matches);
+  localStorage.removeItem(STORAGE_KEYS.dataVersion);
 }
 
 // TODO backend: reemplazar lecturas/escrituras de localStorage por API o BaaS.

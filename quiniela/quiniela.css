@@ -7,6 +7,7 @@
   --q-text: #333333;
   --q-border: #ddd7c8;
   --q-success: #1f7a4d;
+  --q-pitch: #0f5132;
   --q-danger: #b00020;
 
   --q-font-heading: 'Metropolis', 'Montserrat', sans-serif;
@@ -97,9 +98,12 @@ a {
 .q-hero {
   padding: 5rem 0 4rem;
   background:
-    radial-gradient(circle at 85% 18%, rgba(255, 186, 0, 0.22), transparent 40%),
-    radial-gradient(circle at 10% 70%, rgba(255, 222, 0, 0.18), transparent 36%),
+    linear-gradient(90deg, rgba(15, 81, 50, 0.08) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(15, 81, 50, 0.08) 1px, transparent 1px),
+    radial-gradient(circle at 82% 22%, rgba(255, 186, 0, 0.28), transparent 34%),
+    radial-gradient(circle at 12% 72%, rgba(15, 81, 50, 0.14), transparent 30%),
     var(--q-ivory);
+  background-size: 42px 42px, 42px 42px, auto, auto, auto;
 }
 
 .q-chip {
@@ -112,6 +116,12 @@ a {
   color: #5b4f1f;
   font-size: 0.9rem;
   font-weight: 600;
+}
+
+.q-chip::before {
+  content: '●';
+  color: var(--q-pitch);
+  margin-right: 0.45rem;
 }
 
 .q-hero h1 {
@@ -284,6 +294,17 @@ a {
   background: var(--q-white);
   display: grid;
   gap: 0.7rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.q-phase-card::after {
+  content: '';
+  position: absolute;
+  inset: auto 1rem 0 1rem;
+  height: 3px;
+  background: linear-gradient(90deg, var(--q-pitch), var(--q-yellow), var(--q-yellow-warm));
+  border-radius: 999px 999px 0 0;
 }
 
 .q-phase-status {
@@ -318,7 +339,10 @@ a {
   border: 1px solid var(--q-border);
   border-radius: 10px;
   padding: 0.85rem;
-  background: var(--q-white);
+  background:
+    linear-gradient(90deg, rgba(15, 81, 50, 0.05) 1px, transparent 1px),
+    var(--q-white);
+  background-size: 28px 28px;
 }
 
 .q-match-head {
@@ -327,6 +351,23 @@ a {
   gap: 0.8rem;
   flex-wrap: wrap;
   margin-bottom: 0.75rem;
+}
+
+.q-match-title {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+  color: var(--q-black);
+}
+
+.q-versus {
+  border-radius: 999px;
+  background: var(--q-black);
+  color: var(--q-yellow);
+  font-size: 0.72rem;
+  padding: 0.12rem 0.42rem;
+  text-transform: uppercase;
 }
 
 .q-score-grid {
@@ -339,6 +380,7 @@ a {
 .q-score-grid label {
   display: grid;
   gap: 0.3rem;
+  font-weight: 600;
 }
 
 .q-score-grid input {
