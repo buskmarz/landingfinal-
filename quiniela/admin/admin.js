@@ -2,6 +2,8 @@ import {
   getMatches,
   getParticipants,
   getPredictions,
+  lockMatch,
+  updateParticipantStatus,
   updateMatchResult
 } from '../services/quinielaService.js';
 import { trackEvent } from '../services/analytics.js';
@@ -11,9 +13,13 @@ const predictionsBody = document.querySelector('#predictions-body');
 const resultsMatches = document.querySelector('#results-matches');
 const resultsForm = document.querySelector('#results-form');
 const resultsFeedback = document.querySelector('#results-feedback');
+const exportParticipantsButton = document.querySelector('#export-participants');
 
 renderAll();
 resultsForm.addEventListener('submit', onSaveResults);
+exportParticipantsButton.addEventListener('click', exportParticipantsCsv);
+participantsBody.addEventListener('click', onParticipantAction);
+resultsMatches.addEventListener('click', onMatchAction);
 
 function renderAll() {
   renderParticipants();
@@ -24,7 +30,7 @@ function renderAll() {
 function renderParticipants() {
   const participants = getParticipants();
   if (!participants.length) {
-    participantsBody.innerHTML = '<tr><td colspan="6">Sin participantes aún.</td></tr>';
+    participantsBody.innerHTML = '<tr><td colspan="8">Sin participantes aún.</td></tr>';
     return;
   }
 
@@ -37,7 +43,13 @@ function renderParticipants() {
         <td>${participant.whatsapp}</td>
         <td>${participant.email}</td>
         <td>${participant.participationType}</td>
+        <td>${participant.status || 'creado'}</td>
         <td>${new Date(participant.createdAt).toLocaleString('es-MX')}</td>
+        <td>
+          <button class="q-btn q-btn-secondary admin-mini-btn" data-status-toggle="${participant.folio}" type="button">
+            ${(participant.status || 'creado') === 'cancelado' ? 'Activar' : 'Cancelar'}
+          </button>
+        </td>
       </tr>
     `
     )
@@ -98,6 +110,7 @@ function renderResultsMatches() {
             <input name="away-${match.id}" type="number" min="0" max="20" value="${match.awayScore ?? ''}" />
           </label>
         </div>
+        <button class="q-btn q-btn-secondary admin-mini-btn" type="button" data-lock-match="${match.id}">Bloquear partido</button>
       </article>
       `
     )
@@ -133,4 +146,44 @@ function onSaveResults(event) {
   trackEvent('quiniela_admin_results_update', { updated });
 
   renderAll();
+}
+
+function onParticipantAction(event) {
+  const folio = event.target.dataset.statusToggle;
+  if (!folio) return;
+
+  const participant = getParticipants().find((entry) => entry.folio === folio);
+  const nextStatus = (participant?.status || 'creado') === 'cancelado' ? 'activado' : 'cancelado';
+  updateParticipantStatus(folio, nextStatus);
+  renderParticipants();
+}
+
+function onMatchAction(event) {
+  const matchId = event.target.dataset.lockMatch;
+  if (!matchId) return;
+
+  lockMatch(matchId);
+  renderResultsMatches();
+}
+
+function exportParticipantsCsv() {
+  const rows = [
+    ['folio', 'name', 'whatsapp', 'email', 'participationType', 'status', 'createdAt'],
+    ...getParticipants().map((participant) => [
+      participant.folio,
+      participant.name,
+      participant.whatsapp,
+      participant.email,
+      participant.participationType,
+      participant.status || 'creado',
+      participant.createdAt
+    ])
+  ];
+  const csv = rows.map((row) => row.map((cell) => `"${String(cell).replaceAll('"', '""')}"`).join(',')).join('\n');
+  const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'quiniela-better-mood-participantes.csv';
+  link.click();
+  URL.revokeObjectURL(url);
 }

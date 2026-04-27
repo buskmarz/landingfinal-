@@ -65,8 +65,12 @@ export function getMatchesByPhase(phaseId) {
   return getMatches().filter((match) => match.phase === phaseId);
 }
 
-export function isMatchLocked(matchDate) {
-  return new Date(matchDate).getTime() <= Date.now();
+export function isKnockoutPhase(phaseId) {
+  return !String(phaseId).startsWith('grupos-');
+}
+
+export function isMatchLocked(matchDate, status = 'open') {
+  return status === 'locked' || status === 'finalizado' || new Date(matchDate).getTime() <= Date.now();
 }
 
 export function getParticipants() {
@@ -98,6 +102,7 @@ export function createParticipant(input) {
     participationType: input.participationType,
     acceptsTerms: Boolean(input.acceptsTerms),
     acceptsMarketing: Boolean(input.acceptsMarketing),
+    status: 'creado',
     createdAt: new Date().toISOString()
   };
 
@@ -126,7 +131,7 @@ export function savePredictions(participantFolio, phaseId, predictionInputs) {
     }
 
     const match = matches.find((entry) => entry.id === item.matchId);
-    const matchLocked = isMatchLocked(match.matchDate);
+    const matchLocked = isMatchLocked(match.matchDate, match.status);
 
     const existing = predictions.find(
       (prediction) => prediction.participantFolio === participantFolio && prediction.matchId === item.matchId
@@ -135,6 +140,7 @@ export function savePredictions(participantFolio, phaseId, predictionInputs) {
     if (matchLocked) {
       if (existing) {
         existing.locked = true;
+        existing.lockedAt = existing.lockedAt || nowIso;
         existing.updatedAt = nowIso;
       }
       blockedMatches.push(item.matchId);
@@ -144,20 +150,32 @@ export function savePredictions(participantFolio, phaseId, predictionInputs) {
     if (existing) {
       existing.predictedHomeScore = item.predictedHomeScore;
       existing.predictedAwayScore = item.predictedAwayScore;
+      existing.homeScorePrediction = item.predictedHomeScore;
+      existing.awayScorePrediction = item.predictedAwayScore;
+      existing.advancingTeamId = item.advancingTeamId || null;
+      existing.phaseId = phaseId;
       existing.updatedAt = nowIso;
       existing.locked = false;
+      existing.lockedAt = null;
       return;
     }
 
     predictions.push({
       id: buildId('prediction'),
       participantFolio,
+      folio: participantFolio,
+      participantId: participant.id,
       matchId: item.matchId,
+      phaseId,
       predictedHomeScore: item.predictedHomeScore,
       predictedAwayScore: item.predictedAwayScore,
+      homeScorePrediction: item.predictedHomeScore,
+      awayScorePrediction: item.predictedAwayScore,
+      advancingTeamId: item.advancingTeamId || null,
       createdAt: nowIso,
       updatedAt: nowIso,
-      locked: false
+      locked: false,
+      lockedAt: null
     });
   });
 
@@ -187,6 +205,10 @@ export function updateMatchResult(matchId, homeScore, awayScore, status = 'final
 
   target.homeScore = homeScore;
   target.awayScore = awayScore;
+  target.homeScoreResult = homeScore;
+  target.awayScoreResult = awayScore;
+  target.winnerTeamId = homeScore === awayScore ? null : homeScore > awayScore ? 'home' : 'away';
+  target.advancingTeamId = target.winnerTeamId;
   target.status = status;
 
   writeJSON(STORAGE_KEYS.matches, matches);
@@ -216,6 +238,9 @@ export function getRanking() {
       totalPoints: score.totalPoints,
       exactScores: score.exactScores,
       correctResults: score.correctResults,
+      completedPhasesCount: score.completedPhasesCount,
+      phasePoints: score.phasePoints,
+      earliestPredictionAt: score.earliestPredictionAt,
       createdAt: participant.createdAt
     };
   });
@@ -223,8 +248,56 @@ export function getRanking() {
   return computed.sort((a, b) => {
     if (b.totalPoints !== a.totalPoints) return b.totalPoints - a.totalPoints;
     if (b.exactScores !== a.exactScores) return b.exactScores - a.exactScores;
-    return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+    if (b.completedPhasesCount !== a.completedPhasesCount) return b.completedPhasesCount - a.completedPhasesCount;
+    return new Date(a.earliestPredictionAt || a.createdAt).getTime() - new Date(b.earliestPredictionAt || b.createdAt).getTime();
   });
+}
+
+export function updateParticipantStatus(folio, status) {
+  const participants = getParticipants();
+  const participant = participants.find((entry) => entry.folio === folio);
+  if (!participant) throw new Error('Folio no encontrado.');
+
+  participant.status = status;
+  writeJSON(STORAGE_KEYS.participants, participants);
+  return participant;
+}
+
+export function lockMatch(matchId) {
+  const matches = getMatches();
+  const target = matches.find((match) => match.id === matchId);
+  if (!target) throw new Error('Partido no encontrado.');
+
+  target.status = 'locked';
+  writeJSON(STORAGE_KEYS.matches, matches);
+  return target;
+}
+
+export function getPhaseProgress(participantFolio, phaseId) {
+  if (!participantFolio) {
+    return { saved: 0, total: getMatchesByPhase(phaseId).length, complete: false };
+  }
+
+  const matchIds = new Set(getMatchesByPhase(phaseId).map((match) => match.id));
+  const saved = getPredictions().filter(
+    (prediction) => prediction.participantFolio === participantFolio && matchIds.has(prediction.matchId)
+  ).length;
+  const total = matchIds.size;
+
+  return {
+    saved,
+    total,
+    complete: total > 0 && saved >= total
+  };
+}
+
+export function getPhaseDeadline(phaseId) {
+  const timestamps = getMatchesByPhase(phaseId)
+    .map((match) => new Date(match.matchDate).getTime())
+    .filter(Number.isFinite);
+
+  if (!timestamps.length) return null;
+  return new Date(Math.min(...timestamps)).toISOString();
 }
 
 export function resetQuinielaMockData() {

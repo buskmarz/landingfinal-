@@ -28,6 +28,7 @@
 
       <section class="q-section admin-section">
         <h2>Participantes registrados</h2>
+        <button id="export-participants" class="q-btn q-btn-secondary" type="button">Exportar participantes CSV</button>
         <div class="q-table-wrap">
           <table class="q-table">
             <thead>
@@ -37,7 +38,9 @@
                 <th>WhatsApp</th>
                 <th>Email</th>
                 <th>Participación</th>
+                <th>Estado</th>
                 <th>Registro</th>
+                <th>Acción</th>
               </tr>
             </thead>
             <tbody id="participants-body"></tbody>
@@ -64,7 +67,7 @@
       </section>
 
       <section class="q-section admin-section">
-        <h2>Cargar resultados de partidos mock</h2>
+        <h2>Cargar resultados y bloquear partidos</h2>
         <form id="results-form" class="q-form" novalidate>
           <div id="results-matches" class="q-match-list"></div>
           <button type="submit" class="q-btn q-btn-primary q-btn-block">Guardar resultados y recalcular ranking</button>

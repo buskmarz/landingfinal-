@@ -33,11 +33,16 @@
  * @property {string} id
  * @property {string} participantFolio
  * @property {string} matchId
+ * @property {string} phaseId
  * @property {number} predictedHomeScore
  * @property {number} predictedAwayScore
+ * @property {number} homeScorePrediction
+ * @property {number} awayScorePrediction
+ * @property {string | null} advancingTeamId
  * @property {string} createdAt
  * @property {string} updatedAt
  * @property {boolean} locked
+ * @property {string | null} lockedAt
  */
 
 /**

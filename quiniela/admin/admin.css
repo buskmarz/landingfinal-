@@ -9,3 +9,9 @@
   padding-top: 1.2rem;
   padding-bottom: 1.2rem;
 }
+
+.admin-mini-btn {
+  min-height: 34px;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.78rem;
+}

@@ -1,4 +1,4 @@
-export const DATA_VERSION = 'bm26-real-groups-2026-04-27';
+export const DATA_VERSION = 'bm26-real-groups-ux-2026-04-27';
 
 export const PHASES = [
   { id: 'grupos-j1', name: 'Fase de grupos - Jornada 1', status: 'abierta' },
@@ -66,17 +66,25 @@ function m(id, phase, group, homeTeam, homeFlag, awayTeam, awayFlag, matchDate, 
   return {
     id,
     phase,
+    phaseId: phase,
     group,
     homeTeam,
     homeFlag,
     awayTeam,
     awayFlag,
     matchDate,
+    dateTime: matchDate,
     venue,
+    stadium: venue,
     hostCity,
-    status: 'programado',
+    city: hostCity,
+    status: 'open',
     homeScore: null,
-    awayScore: null
+    awayScore: null,
+    homeScoreResult: null,
+    awayScoreResult: null,
+    winnerTeamId: null,
+    advancingTeamId: null
   };
 }
 
