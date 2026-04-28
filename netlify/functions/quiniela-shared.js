@@ -34,7 +34,7 @@ function normalizeFolio(value) {
 }
 
 function store(name) {
-  return getStore(name, { consistency: "strong" });
+  return getStore(name);
 }
 
 function initNetlifyBlobs(event) {
