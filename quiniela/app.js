@@ -1,5 +1,6 @@
 import {
   createParticipant,
+  getMatches,
   getMatchesByPhase,
   getParticipantByFolio,
   getPhaseDeadline,
@@ -14,6 +15,19 @@ import {
 import { trackEvent } from './services/analytics.js';
 
 const phaseCardsEl = document.querySelector('#phase-cards');
+const calendarResults = document.querySelector('#calendar-results');
+const calendarSearch = document.querySelector('#calendar-search');
+const calendarGroupFilter = document.querySelector('#calendar-group-filter');
+const calendarDateFilter = document.querySelector('#calendar-date-filter');
+const calendarVenueFilter = document.querySelector('#calendar-venue-filter');
+const calendarHostFilter = document.querySelector('#calendar-host-filter');
+const calendarFeedback = document.querySelector('#calendar-feedback');
+const showMexicoMatchesButton = document.querySelector('#show-mexico-matches');
+const showTodayMatchesButton = document.querySelector('#show-today-matches');
+const addCalendarReminderButton = document.querySelector('#add-calendar-reminder');
+const groupsGrid = document.querySelector('#groups-grid');
+const mexicoMatches = document.querySelector('#mexico-matches');
+const mexicoVenues = document.querySelector('#mexico-venues');
 const registerForm = document.querySelector('#register-form');
 const registerSubmit = document.querySelector('#register-submit');
 const acceptsTerms = document.querySelector('#acceptsTerms');
@@ -30,9 +44,11 @@ const predictionSaveFeedback = document.querySelector('#prediction-save-feedback
 const matchesContainer = document.querySelector('#matches-container');
 const rankingBody = document.querySelector('#ranking-body');
 const rankingPodium = document.querySelector('#ranking-podium');
+const myRankingCard = document.querySelector('#my-ranking-card');
 const rankingPhaseFilter = document.querySelector('#ranking-phase-filter');
 const rankingSearch = document.querySelector('#ranking-search');
 const phaseSelect = document.querySelector('#phase-select');
+const predictionCount = document.querySelector('#prediction-count');
 
 let latestCreatedFolio = '';
 let loadedContext = { folio: '', phaseId: '' };
@@ -41,22 +57,144 @@ trackEvent('quiniela_view', { section: 'landing' });
 
 renderPhaseCards();
 renderPhaseSelect();
+renderCalendarFilters();
+renderCalendar();
+renderGroups();
+renderMexicoMatches();
+renderMexicoVenues();
 renderRanking();
 bindEvents();
 
 function bindEvents() {
   registerForm.addEventListener('submit', onRegisterSubmit);
-  acceptsTerms.addEventListener('change', updateRegisterButtonState);
+  registerForm.addEventListener('input', updateRegisterButtonState);
+  registerForm.addEventListener('change', updateRegisterButtonState);
   copyFolioButton.addEventListener('click', onCopyFolio);
   predictionAccessForm.addEventListener('submit', onPredictionAccess);
   predictionForm.addEventListener('submit', (event) => onPredictionSubmit(event, { requireComplete: true }));
   saveProgressButton.addEventListener('click', () => saveCurrentPredictions({ requireComplete: false }));
   rankingPhaseFilter.addEventListener('change', renderRanking);
   rankingSearch.addEventListener('input', renderRanking);
+  calendarSearch.addEventListener('input', () => {
+    trackEvent('busqueda_seleccion', { query: calendarSearch.value });
+    renderCalendar();
+  });
+  calendarGroupFilter.addEventListener('change', () => {
+    trackEvent('calendario_filtrado', { filter: 'group', value: calendarGroupFilter.value });
+    renderCalendar();
+  });
+  calendarDateFilter.addEventListener('change', () => {
+    trackEvent('calendario_filtrado', { filter: 'date', value: calendarDateFilter.value });
+    renderCalendar();
+  });
+  calendarVenueFilter.addEventListener('input', () => {
+    trackEvent('calendario_filtrado', { filter: 'venue', value: calendarVenueFilter.value });
+    renderCalendar();
+  });
+  calendarHostFilter.addEventListener('change', () => {
+    trackEvent('calendario_filtrado', { filter: 'host', value: calendarHostFilter.value });
+    renderCalendar();
+  });
+  showMexicoMatchesButton.addEventListener('click', showMexicoCalendar);
+  showTodayMatchesButton.addEventListener('click', showTodayCalendar);
+  addCalendarReminderButton.addEventListener('click', addOpeningReminder);
+  calendarResults.addEventListener('click', onPublicMatchAction);
+  groupsGrid.addEventListener('click', onGroupAction);
+  mexicoMatches.addEventListener('click', onPublicMatchAction);
+  mexicoVenues.addEventListener('click', onVenueAction);
 
   document.querySelectorAll('[data-track="quiniela_register_start"]').forEach((element) => {
-    element.addEventListener('click', () => trackEvent('quiniela_register_start', { source: 'hero' }));
+    element.addEventListener('click', () => trackEvent('click_crear_folio', { source: 'hero' }));
   });
+
+  document.querySelectorAll('[data-track="click_ver_calendario"]').forEach((element) => {
+    element.addEventListener('click', () => trackEvent('click_ver_calendario', { source: 'hero' }));
+  });
+
+  document.querySelectorAll('[data-track="click_ver_grupos"]').forEach((element) => {
+    element.addEventListener('click', () => trackEvent('click_ver_grupos', { source: 'hero' }));
+  });
+}
+
+function renderCalendarFilters() {
+  const groups = [...new Set(getMatches().map((match) => match.group))].sort();
+  calendarGroupFilter.innerHTML = '<option value="">Todos</option>' + groups.map((group) => `<option value="${group}">Grupo ${group}</option>`).join('');
+}
+
+function renderCalendar() {
+  const query = normalize(calendarSearch.value);
+  const group = calendarGroupFilter.value;
+  const date = calendarDateFilter.value;
+  const venue = normalize(calendarVenueFilter.value);
+  const host = calendarHostFilter.value;
+
+  const filtered = getMatches().filter((match) => {
+    const matchDate = match.matchDate.slice(0, 10);
+    const teamText = normalize(`${match.homeTeam} ${match.awayTeam}`);
+    const venueText = normalize(`${match.venue} ${match.hostCity}`);
+    return (!query || teamText.includes(query))
+      && (!group || match.group === group)
+      && (!date || matchDate === date)
+      && (!venue || venueText.includes(venue))
+      && (!host || getHostCountry(match.hostCity) === host);
+  });
+
+  calendarResults.innerHTML = filtered.slice(0, 72).map(renderPublicMatchCard).join('');
+  calendarFeedback.textContent = `${filtered.length} partidos encontrados.`;
+}
+
+function renderGroups() {
+  const groups = buildGroups();
+  groupsGrid.innerHTML = Object.entries(groups).map(([group, teams]) => `
+    <article class="q-group-card">
+      <h3>Grupo ${group}</h3>
+      <ul>${teams.map((team) => `<li><span>${team.flag}</span>${team.name}</li>`).join('')}</ul>
+      <div class="q-card-actions">
+        <button class="q-btn q-btn-secondary" type="button" data-group-filter="${group}">Ver partidos del grupo</button>
+        <button class="q-btn q-btn-primary" type="button" data-group-predict="${group}">Predecir grupo</button>
+      </div>
+    </article>
+  `).join('');
+}
+
+function renderMexicoMatches() {
+  mexicoMatches.innerHTML = getMatches()
+    .filter((match) => match.homeTeam === 'México' || match.awayTeam === 'México')
+    .map(renderPublicMatchCard)
+    .join('');
+}
+
+function renderMexicoVenues() {
+  const venues = ['Ciudad de México', 'Guadalajara', 'Monterrey'].map((city) => {
+    const matches = getMatches().filter((match) => match.hostCity === city);
+    const stadiums = [...new Set(matches.map((match) => match.venue))].join(' / ');
+    return { city, matches, stadiums };
+  });
+
+  mexicoVenues.innerHTML = venues.map((venue) => `
+    <article class="q-venue-card">
+      <span class="q-venue-mark" aria-hidden="true"></span>
+      <h3>${venue.city}</h3>
+      <p>${venue.stadiums || 'Sede por confirmar'}</p>
+      <strong>${venue.matches.length} partidos cargados</strong>
+      <button class="q-btn q-btn-secondary" type="button" data-venue-city="${venue.city}">Ver partidos en esta sede</button>
+    </article>
+  `).join('');
+}
+
+function renderPublicMatchCard(match) {
+  return `
+    <article class="q-public-match-card">
+      <div class="q-public-match-meta">
+        <span>Grupo ${match.group}</span>
+        <span>${getMatchStatusLabel(match)}</span>
+      </div>
+      <h3>${match.homeFlag || ''} ${match.homeTeam} <span>vs</span> ${match.awayFlag || ''} ${match.awayTeam}</h3>
+      <p>${formatMatchDate(match.matchDate)}</p>
+      <p>${match.venue}, ${match.hostCity}</p>
+      <button class="q-btn q-btn-primary" type="button" data-predict-match="${match.id}" data-phase="${match.phase}">Predecir marcador</button>
+    </article>
+  `;
 }
 
 function renderPhaseCards() {
@@ -67,7 +205,8 @@ function renderPhaseCards() {
     const matches = getMatchesByPhase(phase.id);
     const progress = getPhaseProgress(activeFolio, phase.id);
     const deadline = getPhaseDeadline(phase.id);
-    const visibleStatus = progress.complete ? 'completada' : phase.status;
+    const visibleStatus = matches.length === 0 ? 'por-confirmar' : progress.complete ? 'completada' : phase.status;
+    const disabled = matches.length === 0 || phase.status === 'cerrada';
 
     return `
       <article class="q-phase-card">
@@ -84,9 +223,9 @@ function renderPhaseCards() {
           type="button"
           class="q-btn q-btn-secondary"
           data-phase-select="${phase.id}"
-          ${phase.status === 'cerrada' ? 'disabled aria-disabled="true"' : ''}
+          ${disabled ? 'disabled aria-disabled="true"' : ''}
         >
-          Registrar predicciones
+          ${matches.length === 0 ? 'Disponible cuando se definan los cruces' : 'Registrar predicciones'}
         </button>
       </article>
     `;
@@ -102,7 +241,7 @@ function renderPhaseCards() {
 
 function renderPhaseSelect() {
   phaseSelect.innerHTML = getPhases()
-    .filter((phase) => phase.status !== 'cerrada')
+    .filter((phase) => phase.status !== 'cerrada' && getMatchesByPhase(phase.id).length > 0)
     .map((phase) => `<option value="${phase.id}">${phase.name}</option>`)
     .join('');
 }
@@ -132,17 +271,37 @@ function renderRanking() {
     });
 
   renderPodium(ranking);
+  renderMyRanking(ranking);
 
   rankingBody.innerHTML = ranking.map((entry, index) => `
     <tr>
-      <td><strong>#${index + 1}</strong></td>
-      <td>${entry.participantFolio}</td>
-      <td>${abbreviateName(entry.name || 'Participante')}</td>
-      <td>${entry.displayPoints} pts</td>
-      <td>${entry.exactScores || 0}</td>
-      <td>${entry.completedPhasesCount || 0}</td>
+      <td data-label="Posición"><strong>#${index + 1}</strong></td>
+      <td data-label="Folio">${entry.participantFolio}</td>
+      <td data-label="Nombre">${abbreviateName(entry.name || 'Participante')}</td>
+      <td data-label="Puntos">${entry.displayPoints} pts</td>
+      <td data-label="Exactos">${entry.exactScores || 0}</td>
+      <td data-label="Fases completas">${entry.completedPhasesCount || 0}</td>
     </tr>
   `).join('');
+}
+
+function renderMyRanking(ranking) {
+  const folio = loadedContext.folio || latestCreatedFolio;
+  const index = ranking.findIndex((entry) => entry.participantFolio === folio);
+
+  if (!folio || index < 0) {
+    myRankingCard.classList.add('q-hidden');
+    myRankingCard.innerHTML = '';
+    return;
+  }
+
+  const entry = ranking[index];
+  myRankingCard.classList.remove('q-hidden');
+  myRankingCard.innerHTML = `
+    <strong>Tu posición</strong>
+    <span>#${index + 1}</span>
+    <p>${entry.participantFolio} · ${entry.displayPoints} pts · ${entry.exactScores || 0} exactos</p>
+  `;
 }
 
 function renderPodium(ranking) {
@@ -199,6 +358,7 @@ function onRegisterSubmit(event) {
       folio: participant.folio,
       participationType: participant.participationType
     });
+    trackEvent('folio_generado', { folio: participant.folio });
 
     renderPhaseCards();
     renderRanking();
@@ -298,6 +458,8 @@ function renderMatchInputs(folio, phaseId, matches) {
       </article>
     `;
   }).join('');
+  updatePredictionCount();
+  matchesContainer.querySelectorAll('input').forEach((input) => input.addEventListener('input', updatePredictionCount));
 }
 
 function renderAdvanceSelector(match, selectedValue, locked) {
@@ -369,24 +531,123 @@ function saveCurrentPredictions({ requireComplete }) {
   const result = savePredictions(loadedContext.folio, loadedContext.phaseId, payload);
   predictionSaveFeedback.textContent = 'Tus marcadores quedaron guardados. Puedes editarlos hasta antes del inicio de cada partido.';
 
+  const progress = getPhaseProgress(loadedContext.folio, loadedContext.phaseId);
+  if (progress.complete) trackEvent('fase_completada', { folio: loadedContext.folio, phaseId: loadedContext.phaseId });
   trackEvent('quiniela_prediction_save', {
     folio: loadedContext.folio,
     phaseId: loadedContext.phaseId,
     savedCount: result.savedCount,
     blockedMatches: result.blockedMatches.length
   });
+  trackEvent('prediccion_guardada', { folio: loadedContext.folio, phaseId: loadedContext.phaseId, savedCount: result.savedCount });
 
   renderPhaseCards();
   renderRanking();
   renderMatchInputs(loadedContext.folio, loadedContext.phaseId, matches);
 }
 
+function onPublicMatchAction(event) {
+  const matchId = event.target.dataset.predictMatch;
+  if (!matchId) return;
+
+  const phaseId = event.target.dataset.phase;
+  trackEvent('click_predecir_marcador', { matchId, phaseId });
+  phaseSelect.value = phaseId;
+
+  if (!latestCreatedFolio && !loadedContext.folio) {
+    document.querySelector('#registro').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    predictionFeedback.textContent = 'Primero crea tu folio para guardar tus predicciones.';
+    return;
+  }
+
+  document.querySelector('#predicciones').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function onGroupAction(event) {
+  const group = event.target.dataset.groupFilter || event.target.dataset.groupPredict;
+  if (!group) return;
+
+  calendarGroupFilter.value = group;
+  renderCalendar();
+  document.querySelector('#calendario').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  if (event.target.dataset.groupPredict) {
+    trackEvent('click_predecir_marcador', { group });
+  }
+}
+
+function onVenueAction(event) {
+  const city = event.target.dataset.venueCity;
+  if (!city) return;
+
+  calendarVenueFilter.value = city;
+  renderCalendar();
+  document.querySelector('#calendario').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function showMexicoCalendar() {
+  calendarSearch.value = 'México';
+  renderCalendar();
+  trackEvent('click_partidos_mexico', {});
+}
+
+function showTodayCalendar() {
+  calendarDateFilter.value = new Date().toISOString().slice(0, 10);
+  renderCalendar();
+}
+
+function addOpeningReminder() {
+  const start = '20260611T190000Z';
+  const end = '20260611T210000Z';
+  const text = encodeURIComponent('México vs Sudáfrica - Quiniela Better Mood 2026');
+  const details = encodeURIComponent('Predice tu marcador y vive el partido con café y buen mood.');
+  window.open(`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${text}&dates=${start}/${end}&details=${details}`, '_blank', 'noopener');
+}
+
+function updatePredictionCount() {
+  const matches = getMatchesByPhase(loadedContext.phaseId);
+  let captured = 0;
+  matches.forEach((match) => {
+    const homeInput = predictionForm.querySelector(`[name="home-${match.id}"]`);
+    const awayInput = predictionForm.querySelector(`[name="away-${match.id}"]`);
+    if (homeInput?.value !== '' && awayInput?.value !== '') captured += 1;
+  });
+  predictionCount.textContent = `${captured}/${matches.length} predicciones capturadas`;
+}
+
+function buildGroups() {
+  return getMatches().reduce((groups, match) => {
+    groups[match.group] = groups[match.group] || [];
+    [
+      { name: match.homeTeam, flag: match.homeFlag },
+      { name: match.awayTeam, flag: match.awayFlag }
+    ].forEach((team) => {
+      if (!groups[match.group].some((entry) => entry.name === team.name)) groups[match.group].push(team);
+    });
+    return groups;
+  }, {});
+}
+
+function getMatchStatusLabel(match) {
+  const today = new Date().toISOString().slice(0, 10);
+  const matchDay = match.matchDate.slice(0, 10);
+  if (match.status === 'finalizado') return 'Finalizado';
+  if (matchDay === today) return 'Hoy';
+  return 'Próximo';
+}
+
+function getHostCountry(city) {
+  if (['Ciudad de México', 'Guadalajara', 'Monterrey'].includes(city)) return 'México';
+  if (['Toronto', 'Vancouver'].includes(city)) return 'Canadá';
+  return 'Estados Unidos';
+}
+
 function updateRegisterButtonState() {
-  registerSubmit.disabled = !acceptsTerms.checked;
+  registerSubmit.disabled = !acceptsTerms.checked || !registerForm.checkValidity();
 }
 
 function setRegisterLoading(isLoading) {
-  registerSubmit.disabled = isLoading || !acceptsTerms.checked;
+  registerSubmit.disabled = isLoading || !acceptsTerms.checked || !registerForm.checkValidity();
   registerSubmit.textContent = isLoading ? 'Generando folio...' : 'Generar folio';
 }
 
@@ -431,6 +692,7 @@ function normalizeStatusLabel(status) {
   if (status === 'abierta') return 'Abierta';
   if (status === 'cerrada') return 'Cerrada';
   if (status === 'completada') return 'Completada';
+  if (status === 'por-confirmar') return 'Por confirmar';
   return 'Próximamente';
 }
 
@@ -446,4 +708,11 @@ function formatMatchDate(isoDate) {
     dateStyle: 'medium',
     timeStyle: 'short'
   }).format(date);
+}
+
+function normalize(value) {
+  return String(value || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
 }
