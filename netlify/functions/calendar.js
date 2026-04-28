@@ -1,6 +1,8 @@
-const { getMatches, json } = require("./quiniela-shared");
+const {
+  initNetlifyBlobs, getMatches, json } = require("./quiniela-shared");
 
 exports.handler = async (event) => {
+  initNetlifyBlobs(event);
   if (event.httpMethod !== "GET") return json(405, { error: "Method not allowed" });
 
   const group = String(event.queryStringParameters?.group || "").toUpperCase();

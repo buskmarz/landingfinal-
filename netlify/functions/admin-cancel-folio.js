@@ -1,7 +1,9 @@
 const crypto = require("crypto");
-const { getJSON, json, normalizeFolio, parseBody, requireAdmin, setJSON } = require("./quiniela-shared");
+const {
+  initNetlifyBlobs, getJSON, json, normalizeFolio, parseBody, requireAdmin, setJSON } = require("./quiniela-shared");
 
 exports.handler = async (event) => {
+  initNetlifyBlobs(event);
   if (event.httpMethod !== "POST") return json(405, { error: "Method not allowed" });
   if (!requireAdmin(event)) return json(401, { error: "Unauthorized" });
 

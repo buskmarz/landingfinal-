@@ -1,4 +1,5 @@
 const {
+  initNetlifyBlobs,
   getJSON,
   getMatches,
   getMatch,
@@ -11,6 +12,7 @@ const {
 const crypto = require("crypto");
 
 exports.handler = async (event) => {
+  initNetlifyBlobs(event);
   if (event.httpMethod !== "POST") return json(405, { error: "Method not allowed" });
 
   const rate = await checkRateLimit("save-predictions", event, 30, 60_000);

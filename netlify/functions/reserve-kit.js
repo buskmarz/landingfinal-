@@ -1,5 +1,6 @@
 const crypto = require("crypto");
 const {
+  initNetlifyBlobs,
   checkRateLimit,
   generateFolioCode,
   json,
@@ -9,6 +10,7 @@ const {
 } = require("./quiniela-shared");
 
 exports.handler = async (event) => {
+  initNetlifyBlobs(event);
   if (event.httpMethod !== "POST") return json(405, { error: "Method not allowed" });
 
   const rate = await checkRateLimit("reserve-kit", event, 8, 60_000);

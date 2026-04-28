@@ -1,4 +1,5 @@
 const {
+  initNetlifyBlobs,
   CURRENCY,
   KIT_PRICE,
   getJSON,
@@ -10,6 +11,7 @@ const {
 } = require("./quiniela-shared");
 
 exports.handler = async (event) => {
+  initNetlifyBlobs(event);
   if (event.httpMethod !== "POST") return json(405, { error: "Method not allowed" });
 
   const body = parseBody(event);

@@ -1,6 +1,8 @@
-const { json, listJSON, requireAdmin } = require("./quiniela-shared");
+const {
+  initNetlifyBlobs, json, listJSON, requireAdmin } = require("./quiniela-shared");
 
 exports.handler = async (event) => {
+  initNetlifyBlobs(event);
   if (event.httpMethod !== "GET") return json(405, { error: "Method not allowed" });
   if (!requireAdmin(event)) return json(401, { error: "Unauthorized" });
 

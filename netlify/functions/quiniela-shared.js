@@ -2,7 +2,7 @@ const crypto = require("crypto");
 const path = require("path");
 const fs = require("fs");
 const vm = require("vm");
-const { getStore } = require("@netlify/blobs");
+const { connectLambda, getStore } = require("@netlify/blobs");
 
 const KIT_PRICE = 99;
 const CURRENCY = "MXN";
@@ -35,6 +35,10 @@ function normalizeFolio(value) {
 
 function store(name) {
   return getStore(name, { consistency: "strong" });
+}
+
+function initNetlifyBlobs(event) {
+  connectLambda(event);
 }
 
 async function getJSON(storeName, key) {
@@ -185,6 +189,7 @@ module.exports = {
   getJSON,
   getMatch,
   getMatches,
+  initNetlifyBlobs,
   json,
   listJSON,
   makeQrUrl,

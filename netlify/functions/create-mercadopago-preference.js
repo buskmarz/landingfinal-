@@ -1,5 +1,6 @@
 const crypto = require("crypto");
 const {
+  initNetlifyBlobs,
   CURRENCY,
   KIT_PRICE,
   PAYMENT_MODE,
@@ -11,6 +12,7 @@ const {
 } = require("./quiniela-shared");
 
 exports.handler = async (event) => {
+  initNetlifyBlobs(event);
   if (event.httpMethod !== "POST") return json(405, { error: "Method not allowed" });
   if (!process.env.MERCADOPAGO_ACCESS_TOKEN) return json(500, { error: "MERCADOPAGO_ACCESS_TOKEN no configurado." });
 

@@ -1,6 +1,8 @@
-const { getJSON, json, normalizeFolio } = require("./quiniela-shared");
+const {
+  initNetlifyBlobs, getJSON, json, normalizeFolio } = require("./quiniela-shared");
 
 exports.handler = async (event) => {
+  initNetlifyBlobs(event);
   if (event.httpMethod !== "GET") return json(405, { error: "Method not allowed" });
 
   const folioCode = normalizeFolio(event.queryStringParameters?.folio);

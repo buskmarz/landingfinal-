@@ -1,4 +1,5 @@
 const {
+  initNetlifyBlobs,
   calculateMatchPoints,
   getActiveFolios,
   getJSON,
@@ -9,6 +10,7 @@ const {
 } = require("./quiniela-shared");
 
 exports.handler = async (event) => {
+  initNetlifyBlobs(event);
   if (event.httpMethod !== "GET") return json(405, { error: "Method not allowed" });
 
   const phase = String(event.queryStringParameters?.phase || "general");
