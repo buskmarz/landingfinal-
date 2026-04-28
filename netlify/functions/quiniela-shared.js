@@ -1,8 +1,6 @@
 const crypto = require("crypto");
-const path = require("path");
-const fs = require("fs");
-const vm = require("vm");
 const { connectLambda, getStore } = require("@netlify/blobs");
+const { MOCK_MATCHES, PHASES } = require("./quiniela-static-data");
 
 const KIT_PRICE = 99;
 const CURRENCY = "MXN";
@@ -85,14 +83,7 @@ function getClientIp(event) {
 }
 
 async function loadStaticData() {
-  const filePath = path.join(process.cwd(), "quiniela/data/mockData.js");
-  const source = fs.readFileSync(filePath, "utf8")
-    .replaceAll("export const ", "const ")
-    .replaceAll("export function ", "function ");
-  const context = { console };
-  vm.createContext(context);
-  vm.runInContext(`${source}\nresult = { matches: MOCK_MATCHES, phases: PHASES };`, context, { filename: "mockData.js" });
-  return context.result || { matches: [], phases: [] };
+  return { matches: MOCK_MATCHES, phases: PHASES };
 }
 
 async function ensureSeedData() {
