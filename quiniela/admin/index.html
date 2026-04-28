@@ -23,7 +23,12 @@
     <div class="q-container">
       <section class="q-admin-alert" role="note" aria-label="Aviso de autenticación pendiente">
         <strong>Vista admin MVP</strong>
-        <p>Protección visual temporal. TODO: implementar autenticación y autorización real.</p>
+        <p>Protegida por <code>ADMIN_SECRET</code> en Netlify Functions. TODO: reemplazar por autenticación con roles.</p>
+        <label class="q-form-field">
+          ADMIN_SECRET
+          <input id="admin-secret" type="password" autocomplete="off" placeholder="Pega el secreto operativo" />
+        </label>
+        <button id="save-admin-secret" class="q-btn q-btn-secondary" type="button">Usar secreto</button>
       </section>
 
       <section class="q-section admin-section">

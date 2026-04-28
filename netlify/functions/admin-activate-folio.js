@@ -1,0 +1,64 @@
+const crypto = require("crypto");
+const {
+  CURRENCY,
+  KIT_PRICE,
+  getJSON,
+  json,
+  makeQrUrl,
+  normalizeFolio,
+  parseBody,
+  requireAdmin,
+  setJSON,
+} = require("./quiniela-shared");
+
+exports.handler = async (event) => {
+  if (event.httpMethod !== "POST") return json(405, { error: "Method not allowed" });
+  if (!requireAdmin(event)) return json(401, { error: "Unauthorized" });
+
+  const body = parseBody(event);
+  const folioCode = normalizeFolio(body?.folioCode || body?.folio);
+  if (!/^BM26-\d{6}$/.test(folioCode)) return json(400, { error: "Folio inválido" });
+
+  const folio = await getJSON("folios", `folios/${folioCode}.json`);
+  if (!folio) return json(404, { error: "Folio no encontrado" });
+  const participant = await getJSON("participants", `participants/${folio.participantId}.json`);
+  const now = new Date().toISOString();
+  const paymentId = folio.paymentId || crypto.randomUUID();
+
+  await setJSON("payments", `payments/${paymentId}.json`, {
+    id: paymentId,
+    participantId: folio.participantId,
+    folioId: folio.id,
+    folioCode,
+    amount: KIT_PRICE,
+    currency: CURRENCY,
+    provider: "in_store",
+    preferenceId: null,
+    providerPaymentId: null,
+    checkoutUrl: null,
+    externalReference: folioCode,
+    status: "paid",
+    rawProviderResponse: { activatedBy: "admin", note: body?.note || "" },
+    createdAt: now,
+    paidAt: now,
+    updatedAt: now,
+  });
+  await setJSON("folios", `folios/${folioCode}.json`, {
+    ...folio,
+    status: "active",
+    paymentId,
+    qrUrl: folio.qrUrl || makeQrUrl(folioCode),
+    activatedAt: folio.activatedAt || now,
+    updatedAt: now,
+  });
+  if (participant) {
+    await setJSON("participants", `participants/${participant.id}.json`, { ...participant, status: "active", updatedAt: now });
+  }
+  await setJSON("admin_actions", `admin_actions/${Date.now()}-${crypto.randomUUID()}.json`, {
+    action: "activate_folio",
+    folioCode,
+    createdAt: now,
+  });
+
+  return json(200, { ok: true, folioCode, status: "active" });
+};

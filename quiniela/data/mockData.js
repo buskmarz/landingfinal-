@@ -164,9 +164,3 @@ export const MOCK_MATCHES = [
   m('M-071', 'grupos-j3', 'J', 'Argelia', FLAGS.Argelia, 'Austria', FLAGS.Austria, '2026-06-27T21:00:00-05:00', 'Arrowhead Stadium', 'Kansas City'),
   m('M-072', 'grupos-j3', 'J', 'Jordania', FLAGS.Jordania, 'Argentina', FLAGS.Argentina, '2026-06-27T21:00:00-05:00', 'AT&T Stadium', 'Dallas')
 ];
-
-export const MOCK_RANKING = [
-  { participantFolio: 'BM26-000184', name: 'Ricardo D.', totalPoints: 45, exactScores: 5 },
-  { participantFolio: 'BM26-000092', name: 'Ana M.', totalPoints: 41, exactScores: 4 },
-  { participantFolio: 'BM26-000211', name: 'Luis R.', totalPoints: 39, exactScores: 4 }
-];

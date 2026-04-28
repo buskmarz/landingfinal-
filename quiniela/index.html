@@ -93,8 +93,8 @@
           <small>11 junio · 1:00 p.m.</small>
         </div>
         <div class="q-hero-actions">
-          <a href="#registro" class="q-btn q-btn-primary" data-track="quiniela_register_start">Crear mi folio</a>
-          <a href="#calendario" class="q-btn q-btn-secondary" data-track="click_ver_calendario">Ver calendario</a>
+          <a href="#registro" class="q-btn q-btn-primary" data-track="quiniela_register_start">Comprar kit y activar folio</a>
+          <a href="#calendario" class="q-btn q-btn-secondary" data-track="click_ver_calendario">Ver calendario gratis</a>
           <a href="#grupos" class="q-btn q-btn-secondary" data-track="click_ver_grupos">Ver grupos</a>
         </div>
         <p class="q-note">Dinámica de comunidad. Sin premios en efectivo.</p>
@@ -112,7 +112,7 @@
         <div>
           <p class="q-eyebrow">Partido inaugural para México</p>
           <h2 id="mexico-title">Arrancamos con México</h2>
-          <p>México abre la temporada futbolera el 11 de junio. Registra tu folio y deja tu marcador antes del silbatazo.</p>
+          <p>México abre la temporada futbolera el 11 de junio. Compra tu Kit Better Mood Futbolero y deja tu marcador antes del silbatazo.</p>
           <a href="#predicciones" class="q-btn q-btn-primary">Predecir marcador</a>
           <a href="#calendario" class="q-btn q-btn-secondary">Ver calendario completo</a>
         </div>
@@ -148,7 +148,7 @@
           <button id="show-mexico-matches" class="q-btn q-btn-secondary" type="button">Ver partidos de México</button>
           <button id="show-today-matches" class="q-btn q-btn-secondary" type="button">Ver partidos de hoy</button>
           <button id="add-calendar-reminder" class="q-btn q-btn-secondary" type="button">Agregar recordatorio</button>
-          <a href="#registro" class="q-btn q-btn-primary">Crear mi folio</a>
+          <a href="#registro" class="q-btn q-btn-primary">Comprar kit y activar folio</a>
         </div>
         <div id="calendar-results" class="q-public-match-grid"></div>
         <p id="calendar-feedback" class="q-feedback" aria-live="polite"></p>
@@ -182,7 +182,7 @@
         </div>
         <div class="q-inline-actions q-guide-actions">
           <a href="#calendario" class="q-btn q-btn-primary">Ver calendario completo</a>
-          <a href="#registro" class="q-btn q-btn-secondary">Crear mi folio</a>
+          <a href="#registro" class="q-btn q-btn-secondary">Comprar kit y activar folio</a>
         </div>
       </div>
     </section>
@@ -216,7 +216,7 @@
           <p>Crea tu folio, llena tus marcadores por fase y revisa tu posición en el ranking.</p>
         </div>
         <div class="q-steps">
-          <article class="q-step-card"><span>🎟</span><h3>Crea tu folio</h3><p>Regístrate una vez y conserva tu clave durante toda la dinámica.</p></article>
+          <article class="q-step-card"><span>🎟</span><h3>Activa tu kit</h3><p>Reserva tu Kit Better Mood Futbolero, paga $99 MXN y conserva tu folio.</p></article>
           <article class="q-step-card"><span>▦</span><h3>Predice marcadores</h3><p>Completa tus resultados por jornada antes de que inicien los partidos.</p></article>
           <article class="q-step-card"><span>⚡</span><h3>Suma puntos</h3><p>Entre más preciso tu marcador, más puntos sumas.</p></article>
           <article class="q-step-card"><span>▲</span><h3>Sube en ranking</h3><p>Consulta tu posición conforme se validan resultados.</p></article>
@@ -254,8 +254,12 @@
       <div class="q-container q-grid-2">
         <div>
           <div class="q-section-head">
-            <p class="q-eyebrow">Registro</p>
-            <h2>Crear folio de participante</h2>
+            <p class="q-eyebrow">Kit Better Mood Futbolero</p>
+            <h2>Activa tu Kit Better Mood Futbolero</h2>
+            <div class="q-kit-card">
+              <strong>$99 MXN</strong>
+              <p>Incluye folio digital, cartón físico, QR personal, ranking Better Mood y beneficios en cafetería.</p>
+            </div>
           </div>
           <form id="register-form" class="q-form" novalidate>
             <div class="q-form-field">
@@ -276,9 +280,14 @@
             <fieldset class="q-form-field q-choice-grid">
               <legend>Método de participación</legend>
               <label class="q-option"><input type="radio" name="participationType" value="digital" required /> Digital</label>
-              <label class="q-option"><input type="radio" name="participationType" value="fisico" required /> Cartón físico</label>
-              <label class="q-option"><input type="radio" name="participationType" value="ambos" required /> Ambos</label>
+              <label class="q-option"><input type="radio" name="participationType" value="physical" required /> Cartón físico</label>
+              <label class="q-option"><input type="radio" name="participationType" value="both" required /> Ambos</label>
               <small class="q-error" id="participationType-error" aria-live="polite"></small>
+            </fieldset>
+            <fieldset class="q-form-field q-choice-grid">
+              <legend>Forma de pago</legend>
+              <label class="q-option"><input type="radio" name="paymentMethod" value="mercado_pago" required checked /> Mercado Pago</label>
+              <label class="q-option"><input type="radio" name="paymentMethod" value="in_store" required /> Pagar en cafetería</label>
             </fieldset>
             <label class="q-option q-option-check">
               <input id="acceptsTerms" type="checkbox" name="acceptsTerms" required />
@@ -289,14 +298,14 @@
               <input type="checkbox" name="acceptsMarketing" />
               Acepto recibir novedades y promociones de Better Mood.
             </label>
-            <button id="register-submit" class="q-btn q-btn-primary q-btn-block" type="submit" disabled>Generar folio</button>
+            <button id="register-submit" class="q-btn q-btn-primary q-btn-block" type="submit" disabled>Continuar al pago</button>
           </form>
         </div>
 
         <section id="register-success" class="q-card q-success-card q-hidden" aria-live="polite">
-          <p class="q-eyebrow">Tu folio está listo</p>
+          <p class="q-eyebrow">Tu kit está reservado</p>
           <h3 id="success-title"></h3>
-          <p>Guárdalo bien. Lo usarás durante toda la dinámica.</p>
+          <p>Completa el pago de $99 MXN para activar tu folio automáticamente.</p>
           <div class="q-inline-actions">
             <a href="#predicciones" class="q-btn q-btn-primary">Registrar predicciones</a>
             <button id="copy-folio" type="button" class="q-btn q-btn-secondary">Copiar folio</button>
@@ -327,7 +336,7 @@
         <form id="prediction-access-form" class="q-form-inline" novalidate>
           <div class="q-form-field">
             <label for="folio-input">Folio</label>
-            <input id="folio-input" name="folio" type="text" placeholder="BM26-000001" required />
+            <input id="folio-input" name="folio" type="text" placeholder="BM26-XXXXXX" required />
           </div>
           <div class="q-form-field">
             <label for="phase-select">Fase</label>
@@ -370,7 +379,7 @@
           </label>
           <label class="q-form-field">
             Buscar folio
-            <input id="ranking-search" type="search" placeholder="BM26-000001" />
+            <input id="ranking-search" type="search" placeholder="BM26-XXXXXX" />
           </label>
         </div>
         <div class="q-table-wrap">

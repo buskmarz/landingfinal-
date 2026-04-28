@@ -1,17 +1,4 @@
-import {
-  createParticipant,
-  getMatches,
-  getMatchesByPhase,
-  getParticipantByFolio,
-  getPhaseDeadline,
-  getPhaseProgress,
-  getPhases,
-  getPredictionsByParticipantAndPhase,
-  getRanking,
-  isKnockoutPhase,
-  isMatchLocked,
-  savePredictions
-} from './services/quinielaService.js';
+import { MOCK_MATCHES, PHASES } from './data/mockData.js';
 import { trackEvent } from './services/analytics.js';
 
 const phaseCardsEl = document.querySelector('#phase-cards');
@@ -52,6 +39,9 @@ const predictionCount = document.querySelector('#prediction-count');
 
 let latestCreatedFolio = '';
 let loadedContext = { folio: '', phaseId: '' };
+let currentFolioStatus = null;
+let rankingEntries = [];
+let kitFormStarted = false;
 
 trackEvent('quiniela_view', { section: 'landing' });
 
@@ -63,11 +53,18 @@ renderGroups();
 renderMexicoMatches();
 renderMexicoVenues();
 renderRanking();
+hydrateFolioFromUrl();
 bindEvents();
 
 function bindEvents() {
   registerForm.addEventListener('submit', onRegisterSubmit);
-  registerForm.addEventListener('input', updateRegisterButtonState);
+  registerForm.addEventListener('input', () => {
+    if (!kitFormStarted) {
+      kitFormStarted = true;
+      trackEvent('kit_form_started', {});
+    }
+    updateRegisterButtonState();
+  });
   registerForm.addEventListener('change', updateRegisterButtonState);
   copyFolioButton.addEventListener('click', onCopyFolio);
   predictionAccessForm.addEventListener('submit', onPredictionAccess);
@@ -114,6 +111,13 @@ function bindEvents() {
   document.querySelectorAll('[data-track="click_ver_grupos"]').forEach((element) => {
     element.addEventListener('click', () => trackEvent('click_ver_grupos', { source: 'hero' }));
   });
+}
+
+function hydrateFolioFromUrl() {
+  const folio = new URLSearchParams(window.location.search).get('folio');
+  if (!folio) return;
+  const input = document.querySelector('#folio-input');
+  if (input) input.value = folio.toUpperCase();
 }
 
 function renderCalendarFilters() {
@@ -246,12 +250,14 @@ function renderPhaseSelect() {
     .join('');
 }
 
-function renderRanking() {
+async function renderRanking() {
   trackEvent('quiniela_ranking_view', { source: 'render' });
+  trackEvent('ranking_viewed', { source: 'render' });
+  rankingEntries = await fetchRanking();
 
   const phaseFilter = rankingPhaseFilter.value;
   const query = rankingSearch.value.trim().toUpperCase();
-  const ranking = getRanking()
+  const ranking = rankingEntries
     .map((entry) => ({
       ...entry,
       displayPoints: phaseFilter === 'general'
@@ -272,6 +278,13 @@ function renderRanking() {
 
   renderPodium(ranking);
   renderMyRanking(ranking);
+
+  if (!ranking.length) {
+    rankingBody.innerHTML = '<tr><td colspan="6">El ranking aparecerá cuando los primeros folios estén activos.</td></tr>';
+    renderPodium([]);
+    renderMyRanking([]);
+    return;
+  }
 
   rankingBody.innerHTML = ranking.map((entry, index) => `
     <tr>
@@ -322,7 +335,7 @@ function renderPodium(ranking) {
   `).join('');
 }
 
-function onRegisterSubmit(event) {
+async function onRegisterSubmit(event) {
   event.preventDefault();
   clearRegisterErrors();
 
@@ -332,6 +345,7 @@ function onRegisterSubmit(event) {
     whatsapp: String(formData.get('whatsapp') || ''),
     email: String(formData.get('email') || ''),
     participationType: String(formData.get('participationType') || ''),
+    paymentMethod: String(formData.get('paymentMethod') || 'mercado_pago'),
     acceptsTerms: formData.get('acceptsTerms') === 'on',
     acceptsMarketing: formData.get('acceptsMarketing') === 'on'
   };
@@ -343,26 +357,29 @@ function onRegisterSubmit(event) {
   }
 
   setRegisterLoading(true);
-  window.setTimeout(() => {
-    const participant = createParticipant(payload);
-    latestCreatedFolio = participant.folio;
+  try {
+    const reservation = await apiFetch('/.netlify/functions/reserve-kit', { method: 'POST', body: payload });
+    latestCreatedFolio = reservation.folioCode;
+    trackEvent('kit_reserved', { folio: reservation.folioCode, paymentMethod: payload.paymentMethod });
 
-    successTitle.textContent = participant.folio;
-    registerSuccess.classList.remove('q-hidden');
-    registerForm.reset();
-    updateRegisterButtonState();
-    updateWhatsappLink(participant.folio);
-    setRegisterLoading(false);
+    if (payload.paymentMethod === 'in_store') {
+      showReservedKit(reservation.folioCode, { inStore: true });
+      return;
+    }
 
-    trackEvent('quiniela_register_success', {
-      folio: participant.folio,
-      participationType: participant.participationType
+    const preference = await apiFetch('/.netlify/functions/create-mercadopago-preference', {
+      method: 'POST',
+      body: { participantId: reservation.participantId, folioCode: reservation.folioCode }
     });
-    trackEvent('folio_generado', { folio: participant.folio });
-
-    renderPhaseCards();
-    renderRanking();
-  }, 250);
+    trackEvent('mercado_pago_checkout_started', { folio: reservation.folioCode, paymentId: preference.paymentId });
+    showReservedKit(reservation.folioCode, { checkoutUrl: preference.init_point || preference.checkoutUrl });
+    window.location.href = preference.init_point || preference.checkoutUrl;
+  } catch (error) {
+    registerSuccess.classList.add('q-hidden');
+    renderRegisterErrors({ acceptsTerms: error.message || 'No pudimos reservar tu kit. Intenta de nuevo.' });
+  } finally {
+    setRegisterLoading(false);
+  }
 }
 
 async function onCopyFolio() {
@@ -379,7 +396,7 @@ async function onCopyFolio() {
   }
 }
 
-function onPredictionAccess(event) {
+async function onPredictionAccess(event) {
   event.preventDefault();
   predictionFeedback.textContent = '';
   predictionSaveFeedback.textContent = '';
@@ -393,9 +410,19 @@ function onPredictionAccess(event) {
     return;
   }
 
-  const participant = getParticipantByFolio(folio);
-  if (!participant) {
-    predictionFeedback.textContent = 'No encontramos este folio. Revisa que esté escrito correctamente o pide ayuda en cafetería.';
+  const status = await fetchFolioStatus(folio);
+  if (!status) {
+    predictionFeedback.textContent = 'No encontramos este folio. Revisa el código o crea tu kit.';
+    trackEvent('prediction_attempt_without_active_folio', { folio, reason: 'not_found' });
+    return;
+  }
+  if (!status.canPredict) {
+    const folioStatus = status.folioStatus || status.status;
+    predictionFeedback.textContent = folioStatus === 'pending_payment'
+      ? 'Tu folio está reservado. Completa tu pago para activarlo.'
+      : 'Para guardar marcadores necesitas activar tu Kit Better Mood Futbolero.';
+    showPredictionBlockModal(predictionFeedback.textContent);
+    trackEvent('prediction_attempt_without_active_folio', { folio, status: folioStatus });
     return;
   }
 
@@ -405,17 +432,18 @@ function onPredictionAccess(event) {
     return;
   }
 
+  currentFolioStatus = status;
   loadedContext = { folio, phaseId };
   predictionForm.classList.remove('q-hidden');
-  predictionFeedback.textContent = `Folio validado: ${folio}. Captura tus marcadores.`;
+  predictionFeedback.textContent = `Tu folio está activo. Ya puedes registrar marcadores.`;
 
-  renderMatchInputs(folio, phaseId, matches);
+  await renderMatchInputs(folio, phaseId, matches);
   renderPhaseCards();
   trackEvent('quiniela_prediction_start', { folio, phaseId });
 }
 
-function renderMatchInputs(folio, phaseId, matches) {
-  const existing = getPredictionsByParticipantAndPhase(folio, phaseId);
+async function renderMatchInputs(folio, phaseId, matches) {
+  const existing = await fetchPredictions(folio, phaseId);
   const existingByMatchId = Object.fromEntries(existing.map((item) => [item.matchId, item]));
   const knockout = isKnockoutPhase(phaseId);
 
@@ -477,7 +505,7 @@ function onPredictionSubmit(event, options) {
   saveCurrentPredictions(options);
 }
 
-function saveCurrentPredictions({ requireComplete }) {
+async function saveCurrentPredictions({ requireComplete }) {
   predictionSaveFeedback.textContent = '';
 
   const matches = getMatchesByPhase(loadedContext.phaseId);
@@ -528,7 +556,17 @@ function saveCurrentPredictions({ requireComplete }) {
     return;
   }
 
-  const result = savePredictions(loadedContext.folio, loadedContext.phaseId, payload);
+  let result;
+  try {
+    result = await apiFetch('/.netlify/functions/save-predictions', {
+      method: 'POST',
+      body: { folioCode: loadedContext.folio, phaseId: loadedContext.phaseId, predictions: payload }
+    });
+  } catch (error) {
+    predictionSaveFeedback.textContent = error.message || 'No pudimos guardar tus marcadores.';
+    if (/folio|activo|activar/i.test(predictionSaveFeedback.textContent)) showPredictionBlockModal('Para guardar marcadores necesitas activar tu Kit Better Mood Futbolero.');
+    return;
+  }
   predictionSaveFeedback.textContent = 'Tus marcadores quedaron guardados. Puedes editarlos hasta antes del inicio de cada partido.';
 
   const progress = getPhaseProgress(loadedContext.folio, loadedContext.phaseId);
@@ -540,6 +578,7 @@ function saveCurrentPredictions({ requireComplete }) {
     blockedMatches: result.blockedMatches.length
   });
   trackEvent('prediccion_guardada', { folio: loadedContext.folio, phaseId: loadedContext.phaseId, savedCount: result.savedCount });
+  trackEvent('prediction_saved', { folio: loadedContext.folio, phaseId: loadedContext.phaseId, savedCount: result.savedCount });
 
   renderPhaseCards();
   renderRanking();
@@ -648,7 +687,7 @@ function updateRegisterButtonState() {
 
 function setRegisterLoading(isLoading) {
   registerSubmit.disabled = isLoading || !acceptsTerms.checked || !registerForm.checkValidity();
-  registerSubmit.textContent = isLoading ? 'Generando folio...' : 'Generar folio';
+  registerSubmit.textContent = isLoading ? 'Reservando kit...' : 'Continuar al pago';
 }
 
 function updateWhatsappLink(folio) {
@@ -676,7 +715,8 @@ function validateRegisterPayload(payload) {
   if (payload.name.trim().length < 4) errors.name = 'Ingresa tu nombre completo.';
   if (!/^\+?[0-9\s()-]{8,}$/.test(payload.whatsapp.trim())) errors.whatsapp = 'Ingresa un WhatsApp válido.';
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email.trim())) errors.email = 'Ingresa un email válido.';
-  if (!['digital', 'fisico', 'ambos'].includes(payload.participationType)) errors.participationType = 'Selecciona un método de participación.';
+  if (!['digital', 'physical', 'both'].includes(payload.participationType)) errors.participationType = 'Selecciona un método de participación.';
+  if (!['mercado_pago', 'in_store'].includes(payload.paymentMethod)) errors.participationType = 'Selecciona una forma de pago.';
   if (!payload.acceptsTerms) errors.acceptsTerms = 'Debes aceptar términos y condiciones para continuar.';
 
   return errors;
@@ -715,4 +755,120 @@ function normalize(value) {
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase();
+}
+
+function getPhases() {
+  return PHASES;
+}
+
+function getMatches() {
+  return MOCK_MATCHES;
+}
+
+function getMatchesByPhase(phaseId) {
+  return getMatches().filter((match) => match.phase === phaseId);
+}
+
+function isKnockoutPhase(phaseId) {
+  return !String(phaseId).startsWith('grupos-');
+}
+
+function isMatchLocked(matchDate, status = 'open') {
+  return ['locked', 'finished', 'cerrada', 'finalizado'].includes(status) || new Date(matchDate).getTime() <= Date.now();
+}
+
+function getPhaseDeadline(phaseId) {
+  const matches = getMatchesByPhase(phaseId);
+  if (!matches.length) return null;
+  return matches.map((match) => match.matchDate).sort()[0];
+}
+
+function getPhaseProgress(folio, phaseId) {
+  const total = getMatchesByPhase(phaseId).length;
+  if (!folio || loadedContext.folio !== folio || loadedContext.phaseId !== phaseId) return { saved: 0, total, complete: false };
+  const captured = [...predictionForm.querySelectorAll('input[type="number"]')]
+    .filter((input) => input.value !== '')
+    .length / 2;
+  return { saved: Math.floor(captured), total, complete: total > 0 && Math.floor(captured) >= total };
+}
+
+async function fetchRanking() {
+  try {
+    const response = await apiFetch('/.netlify/functions/ranking?phase=general');
+    return response.ranking || [];
+  } catch (error) {
+    console.warn('Ranking fallback:', error);
+    return [];
+  }
+}
+
+async function fetchFolioStatus(folio) {
+  try {
+    return await apiFetch(`/.netlify/functions/folio-status?folio=${encodeURIComponent(folio)}`);
+  } catch (error) {
+    return null;
+  }
+}
+
+async function fetchPredictions(folio, phaseId) {
+  try {
+    const response = await apiFetch(`/.netlify/functions/get-predictions?folio=${encodeURIComponent(folio)}&phaseId=${encodeURIComponent(phaseId)}`);
+    return response.predictions || [];
+  } catch (error) {
+    return [];
+  }
+}
+
+async function apiFetch(url, options = {}) {
+  const fetchOptions = { ...options };
+  fetchOptions.headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
+  if (options.body && typeof options.body !== 'string') fetchOptions.body = JSON.stringify(options.body);
+
+  const response = await fetch(url, fetchOptions);
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(payload.error || 'Error de comunicación con el servidor.');
+  return payload;
+}
+
+function showReservedKit(folio, options = {}) {
+  successTitle.textContent = folio;
+  registerSuccess.classList.remove('q-hidden');
+  registerForm.reset();
+  updateRegisterButtonState();
+  updateWhatsappLink(folio);
+
+  const eyebrow = registerSuccess.querySelector('.q-eyebrow');
+  const body = registerSuccess.querySelector('p:not(.q-eyebrow)');
+  if (eyebrow) eyebrow.textContent = options.inStore ? 'Tu kit está reservado' : 'Tu kit está reservado';
+  if (body) {
+    body.textContent = options.inStore
+      ? 'Paga tu Kit Better Mood Futbolero en barra. Nuestro equipo activará tu folio.'
+      : 'Completa el pago de $99 MXN en Mercado Pago para activar tu folio automáticamente.';
+  }
+
+  trackEvent('quiniela_register_success', { folio, status: 'pending_payment' });
+  trackEvent('folio_generado', { folio, status: 'reserved' });
+  renderPhaseCards();
+}
+
+function showPredictionBlockModal(message) {
+  const existing = document.querySelector('.q-modal-backdrop');
+  if (existing) existing.remove();
+  const backdrop = document.createElement('div');
+  backdrop.className = 'q-modal-backdrop';
+  backdrop.innerHTML = `
+    <section class="q-modal" role="dialog" aria-modal="true" aria-labelledby="prediction-block-title">
+      <h3 id="prediction-block-title">Folio activo requerido</h3>
+      <p>${message}</p>
+      <div class="q-inline-actions">
+        <a class="q-btn q-btn-primary" href="#registro">Comprar kit y activar folio</a>
+        <button class="q-btn q-btn-secondary" type="button" data-close-modal>Cerrar</button>
+      </div>
+    </section>
+  `;
+  document.body.appendChild(backdrop);
+  backdrop.querySelector('[data-close-modal]').addEventListener('click', () => backdrop.remove());
+  backdrop.addEventListener('click', (event) => {
+    if (event.target === backdrop) backdrop.remove();
+  });
 }

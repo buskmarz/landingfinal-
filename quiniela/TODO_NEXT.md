@@ -1,18 +1,17 @@
 # TODO siguientes fases (post-MVP)
 
 ## Integraciones y plataforma
-- TODO: Conectar `quinielaService` a backend real (Supabase/Firebase/Airtable/API propia).
-- TODO: Sustituir `localStorage` por persistencia transaccional y control de concurrencia.
-- TODO: Agregar autenticación real y autorización por rol para `/quiniela/admin/`.
+- TODO: Migrar de Netlify Blobs a base transaccional si la operación supera el MVP.
+- TODO: Agregar autenticación real y autorización por rol para `/quiniela/admin/`; hoy usa `ADMIN_SECRET`.
 
 ## Comercial / operación
-- TODO: Integrar pagos (Stripe/Conekta) solo si la dinámica comercial lo requiere.
-- TODO: Generar QR único por folio para validación rápida en cafetería.
+- TODO: Pasar Mercado Pago de sandbox a producción cuando Better Mood lo autorice.
+- TODO: Reemplazar QR remoto por generación propia si se requiere control total del asset.
 
 ## Datos deportivos
 - TODO: Cargar calendario completo de partidos desde fuente confiable y versionada.
 - TODO: Automatizar carga de resultados reales por API o proceso batch validado.
 
 ## UX / negocio
-- TODO: Panel admin completo con filtros, exportación y auditoría de cambios.
+- TODO: Panel admin con login real, roles y buscador avanzado.
 - TODO: Flujos de recuperación de folio por WhatsApp/email con validación segura.
