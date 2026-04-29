@@ -1,25 +1,27 @@
 import { MOCK_MATCHES, PHASES } from './data/mockData.js';
 import { trackEvent } from './services/analytics.js';
 
-const phaseCardsEl = document.querySelector('#phase-cards');
-const calendarResults = document.querySelector('#calendar-results');
-const calendarSearch = document.querySelector('#calendar-search');
-const calendarGroupFilter = document.querySelector('#calendar-group-filter');
-const calendarDateFilter = document.querySelector('#calendar-date-filter');
-const calendarVenueFilter = document.querySelector('#calendar-venue-filter');
-const calendarHostFilter = document.querySelector('#calendar-host-filter');
-const calendarFeedback = document.querySelector('#calendar-feedback');
-const showMexicoMatchesButton = document.querySelector('#show-mexico-matches');
-const showTodayMatchesButton = document.querySelector('#show-today-matches');
-const addCalendarReminderButton = document.querySelector('#add-calendar-reminder');
+const calendarHub = document.querySelector('.q-calendar-hub');
+const hubTabs = document.querySelectorAll('[data-calendar-tab]');
+const hubPanels = document.querySelectorAll('[data-calendar-panel]');
+const featuredResults = document.querySelector('#featured-results');
+const featuredShowMore = document.querySelector('#featured-show-more');
+const phaseChipsEl = document.querySelector('#phase-chips');
+const matchdaySummary = document.querySelector('#matchday-summary');
+const matchdayResults = document.querySelector('#matchday-results');
+const matchdayShowMore = document.querySelector('#matchday-show-more');
 const groupsGrid = document.querySelector('#groups-grid');
+const groupResults = document.querySelector('#group-results');
 const mexicoMatches = document.querySelector('#mexico-matches');
 const mexicoVenues = document.querySelector('#mexico-venues');
+const venueResults = document.querySelector('#venue-results');
+const heroMexicoCta = document.querySelector('#hero-mexico-cta');
 const registerForm = document.querySelector('#register-form');
 const registerSubmit = document.querySelector('#register-submit');
 const acceptsTerms = document.querySelector('#acceptsTerms');
 const registerSuccess = document.querySelector('#register-success');
 const successTitle = document.querySelector('#success-title');
+const kitPrimaryAction = document.querySelector('#kit-primary-action');
 const copyFolioButton = document.querySelector('#copy-folio');
 const copyFeedback = document.querySelector('#copy-feedback');
 const whatsappFolio = document.querySelector('#whatsapp-folio');
@@ -42,13 +44,17 @@ let loadedContext = { folio: '', phaseId: '' };
 let currentFolioStatus = null;
 let rankingEntries = [];
 let kitFormStarted = false;
+let activeHubTab = 'featured';
+let selectedPhaseId = 'grupos-j1';
+let selectedGroup = '';
+let selectedVenue = '';
+let featuredLimit = 6;
+let matchdayLimit = 8;
 
 trackEvent('quiniela_view', { section: 'landing' });
 
-renderPhaseCards();
 renderPhaseSelect();
-renderCalendarFilters();
-renderCalendar();
+renderCalendarHub();
 renderGroups();
 renderMexicoMatches();
 renderMexicoVenues();
@@ -72,33 +78,27 @@ function bindEvents() {
   saveProgressButton.addEventListener('click', () => saveCurrentPredictions({ requireComplete: false }));
   rankingPhaseFilter.addEventListener('change', renderRanking);
   rankingSearch.addEventListener('input', renderRanking);
-  calendarSearch.addEventListener('input', () => {
-    trackEvent('busqueda_seleccion', { query: calendarSearch.value });
-    renderCalendar();
+  hubTabs.forEach((tab) => tab.addEventListener('click', () => setHubTab(tab.dataset.calendarTab)));
+  document.querySelectorAll('[data-hub-tab-jump]').forEach((button) => {
+    button.addEventListener('click', () => setHubTab(button.dataset.hubTabJump, { scroll: true }));
   });
-  calendarGroupFilter.addEventListener('change', () => {
-    trackEvent('calendario_filtrado', { filter: 'group', value: calendarGroupFilter.value });
-    renderCalendar();
+  heroMexicoCta?.addEventListener('click', () => setHubTab('mexico', { scroll: true }));
+  featuredShowMore?.addEventListener('click', () => {
+    featuredLimit += 6;
+    renderFeaturedMatches();
   });
-  calendarDateFilter.addEventListener('change', () => {
-    trackEvent('calendario_filtrado', { filter: 'date', value: calendarDateFilter.value });
-    renderCalendar();
+  matchdayShowMore?.addEventListener('click', () => {
+    matchdayLimit += 8;
+    renderMatchdayTab();
   });
-  calendarVenueFilter.addEventListener('input', () => {
-    trackEvent('calendario_filtrado', { filter: 'venue', value: calendarVenueFilter.value });
-    renderCalendar();
-  });
-  calendarHostFilter.addEventListener('change', () => {
-    trackEvent('calendario_filtrado', { filter: 'host', value: calendarHostFilter.value });
-    renderCalendar();
-  });
-  showMexicoMatchesButton.addEventListener('click', showMexicoCalendar);
-  showTodayMatchesButton.addEventListener('click', showTodayCalendar);
-  addCalendarReminderButton.addEventListener('click', addOpeningReminder);
-  calendarResults.addEventListener('click', onPublicMatchAction);
+  calendarHub.addEventListener('click', onCalendarHubClick);
   groupsGrid.addEventListener('click', onGroupAction);
   mexicoMatches.addEventListener('click', onPublicMatchAction);
   mexicoVenues.addEventListener('click', onVenueAction);
+  groupResults?.addEventListener('click', onPublicMatchAction);
+  venueResults?.addEventListener('click', onPublicMatchAction);
+  matchdayResults?.addEventListener('click', onPublicMatchAction);
+  featuredResults?.addEventListener('click', onPublicMatchAction);
 
   document.querySelectorAll('[data-track="quiniela_register_start"]').forEach((element) => {
     element.addEventListener('click', () => trackEvent('click_crear_folio', { source: 'hero' }));
@@ -120,52 +120,70 @@ function hydrateFolioFromUrl() {
   if (input) input.value = folio.toUpperCase();
 }
 
-function renderCalendarFilters() {
-  const groups = [...new Set(getMatches().map((match) => match.group))].sort();
-  calendarGroupFilter.innerHTML = '<option value="">Todos</option>' + groups.map((group) => `<option value="${group}">Grupo ${group}</option>`).join('');
+function renderCalendarHub() {
+  renderFeaturedMatches();
+  renderPhaseChips();
+  renderMatchdayTab();
 }
 
-function renderCalendar() {
-  const query = normalize(calendarSearch.value);
-  const group = calendarGroupFilter.value;
-  const date = calendarDateFilter.value;
-  const venue = normalize(calendarVenueFilter.value);
-  const host = calendarHostFilter.value;
-
-  const filtered = getMatches().filter((match) => {
-    const matchDate = match.matchDate.slice(0, 10);
-    const teamText = normalize(`${match.homeTeam} ${match.awayTeam}`);
-    const venueText = normalize(`${match.venue} ${match.hostCity}`);
-    return (!query || teamText.includes(query))
-      && (!group || match.group === group)
-      && (!date || matchDate === date)
-      && (!venue || venueText.includes(venue))
-      && (!host || getHostCountry(match.hostCity) === host);
+function setHubTab(tabName, options = {}) {
+  activeHubTab = tabName;
+  hubTabs.forEach((tab) => {
+    const isActive = tab.dataset.calendarTab === tabName;
+    tab.classList.toggle('is-active', isActive);
+    tab.setAttribute('aria-selected', String(isActive));
   });
+  hubPanels.forEach((panel) => panel.classList.toggle('is-active', panel.dataset.calendarPanel === tabName));
+  if (options.scroll) document.querySelector('#calendario')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
 
-  calendarResults.innerHTML = filtered.slice(0, 72).map(renderPublicMatchCard).join('');
-  calendarFeedback.textContent = `${filtered.length} partidos encontrados.`;
+function renderFeaturedMatches() {
+  const mexico = getMexicoMatches()[0];
+  const today = getMatches().filter((match) => getMatchStatusLabel(match) === 'Hoy');
+  const upcoming = getMatches().filter((match) => new Date(match.matchDate).getTime() > Date.now());
+  const list = uniqueMatches([mexico, ...today, ...upcoming]);
+  featuredResults.innerHTML = list.slice(0, featuredLimit).map(renderCompactMatchCard).join('');
+  featuredShowMore.hidden = featuredLimit >= list.length;
+}
+
+function renderPhaseChips() {
+  phaseChipsEl.innerHTML = getPhases().map((phase) => {
+    const matches = getMatchesByPhase(phase.id);
+    const status = matches.length ? phase.status : 'por-confirmar';
+    const label = phase.name.replace('Fase de grupos - ', '').replace('Ronda de ', 'Ronda ');
+    return `<button type="button" class="q-phase-chip ${phase.id === selectedPhaseId ? 'is-active' : ''}" data-phase-chip="${phase.id}"><span>${label}</span><small>${normalizeStatusLabel(status)}</small></button>`;
+  }).join('');
+}
+
+function renderMatchdayTab() {
+  const phase = getPhases().find((item) => item.id === selectedPhaseId) || getPhases()[0];
+  const matches = getMatchesByPhase(phase.id);
+  const progress = getPhaseProgress(loadedContext.folio || latestCreatedFolio, phase.id);
+  const deadline = getPhaseDeadline(phase.id);
+  const status = matches.length ? phase.status : 'por-confirmar';
+  matchdaySummary.innerHTML = `
+    <article><span class="q-phase-status" data-status="${status}">${normalizeStatusLabel(status)}</span><h4>${phase.name}</h4><p>${matches.length ? `${matches.length} partidos · límite ${formatMatchDate(deadline)}` : 'Cruces por confirmar.'}</p></article>
+    <article><strong>${progress.saved}/${progress.total || matches.length}</strong><span>predicciones guardadas</span></article>
+    <article><a class="q-btn q-btn-primary" href="#predicciones">${matches.length ? 'Registrar predicciones' : 'Disponible cuando se definan los cruces'}</a></article>`;
+  matchdayResults.innerHTML = matches.slice(0, matchdayLimit).map(renderCompactMatchCard).join('') || '<p class="q-empty-state">Fase por confirmar.</p>';
+  matchdayShowMore.hidden = matchdayLimit >= matches.length;
 }
 
 function renderGroups() {
   const groups = buildGroups();
   groupsGrid.innerHTML = Object.entries(groups).map(([group, teams]) => `
-    <article class="q-group-card">
-      <h3>Grupo ${group}</h3>
-      <ul>${teams.map((team) => `<li><span>${team.flag}</span>${team.name}</li>`).join('')}</ul>
-      <div class="q-card-actions">
-        <button class="q-btn q-btn-secondary" type="button" data-group-filter="${group}">Ver partidos del grupo</button>
-        <button class="q-btn q-btn-primary" type="button" data-group-predict="${group}">Predecir grupo</button>
-      </div>
-    </article>
-  `).join('');
+    <article class="q-group-card ${selectedGroup === group ? 'is-active' : ''}"><h3>Grupo ${group}</h3><ul>${teams.map((team) => `<li><span>${team.flag}</span>${team.name}</li>`).join('')}</ul><div class="q-card-actions"><button class="q-btn q-btn-secondary" type="button" data-group-filter="${group}">Ver partidos</button><button class="q-btn q-btn-primary" type="button" data-group-predict="${group}">Predecir grupo</button></div></article>`).join('');
+  renderGroupResults();
+}
+
+function renderGroupResults() {
+  if (!selectedGroup) { groupResults.innerHTML = ''; return; }
+  const matches = getMatches().filter((match) => match.group === selectedGroup);
+  groupResults.innerHTML = `<h4>Partidos del Grupo ${selectedGroup}</h4>` + matches.map(renderCompactMatchCard).join('');
 }
 
 function renderMexicoMatches() {
-  mexicoMatches.innerHTML = getMatches()
-    .filter((match) => match.homeTeam === 'México' || match.awayTeam === 'México')
-    .map(renderPublicMatchCard)
-    .join('');
+  mexicoMatches.innerHTML = getMexicoMatches().map(renderCompactMatchCard).join('');
 }
 
 function renderMexicoVenues() {
@@ -174,73 +192,29 @@ function renderMexicoVenues() {
     const stadiums = [...new Set(matches.map((match) => match.venue))].join(' / ');
     return { city, matches, stadiums };
   });
-
-  mexicoVenues.innerHTML = venues.map((venue) => `
-    <article class="q-venue-card">
-      <span class="q-venue-mark" aria-hidden="true"></span>
-      <h3>${venue.city}</h3>
-      <p>${venue.stadiums || 'Sede por confirmar'}</p>
-      <strong>${venue.matches.length} partidos cargados</strong>
-      <button class="q-btn q-btn-secondary" type="button" data-venue-city="${venue.city}">Ver partidos en esta sede</button>
-    </article>
-  `).join('');
+  mexicoVenues.innerHTML = venues.map((venue) => `<article class="q-venue-card ${selectedVenue === venue.city ? 'is-active' : ''}"><span class="q-venue-mark" aria-hidden="true"></span><h3>${venue.city}</h3><p>${venue.stadiums || 'Sede por confirmar'}</p><strong>${venue.matches.length} partidos cargados</strong><button class="q-btn q-btn-secondary" type="button" data-venue-city="${venue.city}">Ver partidos</button></article>`).join('');
+  renderVenueResults();
 }
 
-function renderPublicMatchCard(match) {
-  return `
-    <article class="q-public-match-card">
-      <div class="q-public-match-meta">
-        <span>Grupo ${match.group}</span>
-        <span>${getMatchStatusLabel(match)}</span>
-      </div>
-      <h3>${match.homeFlag || ''} ${match.homeTeam} <span>vs</span> ${match.awayFlag || ''} ${match.awayTeam}</h3>
-      <p>${formatMatchDate(match.matchDate)}</p>
-      <p>${match.venue}, ${match.hostCity}</p>
-      <button class="q-btn q-btn-primary" type="button" data-predict-match="${match.id}" data-phase="${match.phase}">Predecir marcador</button>
-    </article>
-  `;
+function renderVenueResults() {
+  if (!selectedVenue) { venueResults.innerHTML = ''; return; }
+  const matches = getMatches().filter((match) => match.hostCity === selectedVenue);
+  venueResults.innerHTML = `<h4>Partidos en ${selectedVenue}</h4>` + matches.map(renderCompactMatchCard).join('');
 }
 
-function renderPhaseCards() {
-  const phases = getPhases();
-  const activeFolio = loadedContext.folio || latestCreatedFolio;
+function renderCompactMatchCard(match) {
+  return `<article class="q-compact-match-card"><div class="q-compact-meta"><span>Grupo ${match.group}</span><span>${formatShortDate(match.matchDate)}</span></div><div class="q-compact-scoreline"><strong>${match.homeFlag || ''} ${match.homeTeam}</strong><span>vs</span><strong>${match.awayFlag || ''} ${match.awayTeam}</strong></div><p>${match.venue} · ${match.hostCity}</p><div class="q-compact-actions"><span>${loadedContext.folio ? 'Folio listo para capturar' : 'Activa tu kit para guardar marcador.'}</span><button class="q-btn q-btn-primary" type="button" data-predict-match="${match.id}" data-phase="${match.phase}">Predecir</button></div></article>`;
+}
 
-  phaseCardsEl.innerHTML = phases.map((phase) => {
-    const matches = getMatchesByPhase(phase.id);
-    const progress = getPhaseProgress(activeFolio, phase.id);
-    const deadline = getPhaseDeadline(phase.id);
-    const visibleStatus = matches.length === 0 ? 'por-confirmar' : progress.complete ? 'completada' : phase.status;
-    const disabled = matches.length === 0 || phase.status === 'cerrada';
-
-    return `
-      <article class="q-phase-card">
-        <div>
-          <span class="q-phase-status" data-status="${visibleStatus}">${normalizeStatusLabel(visibleStatus)}</span>
-          <h3>${phase.name}</h3>
-        </div>
-        <dl class="q-phase-meta">
-          <div><dt>Partidos</dt><dd>${matches.length}</dd></div>
-          <div><dt>Límite</dt><dd>${deadline ? formatMatchDate(deadline) : 'Por confirmar'}</dd></div>
-          <div><dt>Progreso</dt><dd>${progress.saved}/${progress.total || matches.length} predicciones</dd></div>
-        </dl>
-        <button
-          type="button"
-          class="q-btn q-btn-secondary"
-          data-phase-select="${phase.id}"
-          ${disabled ? 'disabled aria-disabled="true"' : ''}
-        >
-          ${matches.length === 0 ? 'Disponible cuando se definan los cruces' : 'Registrar predicciones'}
-        </button>
-      </article>
-    `;
-  }).join('');
-
-  phaseCardsEl.querySelectorAll('[data-phase-select]').forEach((button) => {
-    button.addEventListener('click', () => {
-      phaseSelect.value = button.dataset.phaseSelect;
-      document.querySelector('#predicciones').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-  });
+function onCalendarHubClick(event) {
+  const phaseId = event.target.closest('[data-phase-chip]')?.dataset.phaseChip;
+  if (phaseId) {
+    selectedPhaseId = phaseId;
+    phaseSelect.value = phaseId;
+    matchdayLimit = 8;
+    renderPhaseChips();
+    renderMatchdayTab();
+  }
 }
 
 function renderPhaseSelect() {
@@ -438,7 +412,7 @@ async function onPredictionAccess(event) {
   predictionFeedback.textContent = `Tu folio está activo. Ya puedes registrar marcadores.`;
 
   await renderMatchInputs(folio, phaseId, matches);
-  renderPhaseCards();
+  renderCalendarHub();
   trackEvent('quiniela_prediction_start', { folio, phaseId });
 }
 
@@ -580,7 +554,7 @@ async function saveCurrentPredictions({ requireComplete }) {
   trackEvent('prediccion_guardada', { folio: loadedContext.folio, phaseId: loadedContext.phaseId, savedCount: result.savedCount });
   trackEvent('prediction_saved', { folio: loadedContext.folio, phaseId: loadedContext.phaseId, savedCount: result.savedCount });
 
-  renderPhaseCards();
+  renderCalendarHub();
   renderRanking();
   renderMatchInputs(loadedContext.folio, loadedContext.phaseId, matches);
 }
@@ -606,9 +580,9 @@ function onGroupAction(event) {
   const group = event.target.dataset.groupFilter || event.target.dataset.groupPredict;
   if (!group) return;
 
-  calendarGroupFilter.value = group;
-  renderCalendar();
-  document.querySelector('#calendario').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  selectedGroup = group;
+  setHubTab('groups', { scroll: true });
+  renderGroups();
 
   if (event.target.dataset.groupPredict) {
     trackEvent('click_predecir_marcador', { group });
@@ -619,28 +593,9 @@ function onVenueAction(event) {
   const city = event.target.dataset.venueCity;
   if (!city) return;
 
-  calendarVenueFilter.value = city;
-  renderCalendar();
-  document.querySelector('#calendario').scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-function showMexicoCalendar() {
-  calendarSearch.value = 'México';
-  renderCalendar();
-  trackEvent('click_partidos_mexico', {});
-}
-
-function showTodayCalendar() {
-  calendarDateFilter.value = new Date().toISOString().slice(0, 10);
-  renderCalendar();
-}
-
-function addOpeningReminder() {
-  const start = '20260611T190000Z';
-  const end = '20260611T210000Z';
-  const text = encodeURIComponent('México vs Sudáfrica - Quiniela Better Mood 2026');
-  const details = encodeURIComponent('Predice tu marcador y vive el partido con café y buen mood.');
-  window.open(`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${text}&dates=${start}/${end}&details=${details}`, '_blank', 'noopener');
+  selectedVenue = city;
+  setHubTab('venues', { scroll: true });
+  renderMexicoVenues();
 }
 
 function updatePredictionCount() {
@@ -750,6 +705,29 @@ function formatMatchDate(isoDate) {
   }).format(date);
 }
 
+function formatShortDate(isoDate) {
+  const date = new Date(isoDate);
+  return new Intl.DateTimeFormat('es-MX', {
+    day: '2-digit',
+    month: 'short',
+    hour: 'numeric',
+    minute: '2-digit'
+  }).format(date);
+}
+
+function getMexicoMatches() {
+  return getMatches().filter((match) => match.homeTeam === 'México' || match.awayTeam === 'México');
+}
+
+function uniqueMatches(matches) {
+  const seen = new Set();
+  return matches.filter((match) => {
+    if (!match || seen.has(match.id)) return false;
+    seen.add(match.id);
+    return true;
+  });
+}
+
 function normalize(value) {
   return String(value || '')
     .normalize('NFD')
@@ -845,10 +823,16 @@ function showReservedKit(folio, options = {}) {
       ? 'Paga tu Kit Better Mood Futbolero en barra. Nuestro equipo activará tu folio.'
       : 'Completa el pago de $99 MXN en Mercado Pago para activar tu folio automáticamente.';
   }
+  if (kitPrimaryAction) {
+    kitPrimaryAction.textContent = options.inStore ? 'Ver predicciones' : 'Pagar con Mercado Pago';
+    kitPrimaryAction.href = options.checkoutUrl || '#predicciones';
+    kitPrimaryAction.toggleAttribute('target', Boolean(options.checkoutUrl));
+    if (options.checkoutUrl) kitPrimaryAction.rel = 'noopener';
+  }
 
   trackEvent('quiniela_register_success', { folio, status: 'pending_payment' });
   trackEvent('folio_generado', { folio, status: 'reserved' });
-  renderPhaseCards();
+  renderCalendarHub();
 }
 
 function showPredictionBlockModal(message) {

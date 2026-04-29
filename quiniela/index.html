@@ -70,7 +70,7 @@
       <nav class="q-nav" aria-label="Navegación principal quiniela">
         <a href="#top">Inicio</a>
         <a href="#calendario">Calendario</a>
-        <a href="#grupos">Grupos</a>
+        <a href="#calendario">Grupos</a>
         <a href="#registro">Quiniela</a>
         <a href="#puntos">Puntos</a>
         <a href="#ranking">Ranking</a>
@@ -80,24 +80,44 @@
   </header>
 
   <main>
-    <section class="q-hero" id="top" aria-labelledby="hero-title">
+    <section class="q-hero q-hero-world" id="top" aria-labelledby="hero-title">
       <div class="q-tricolor" aria-hidden="true"></div>
-      <div class="q-container q-hero-inner">
-        <p class="q-chip">Temporada futbolera 2026</p>
-        <h1 id="hero-title">La Quiniela Better Mood 2026</h1>
-        <p class="q-lead">Predice marcadores, consulta el calendario futbolero y vive cada partido con café, comunidad y buen mood.</p>
-        <div class="q-hero-score" aria-label="México contra Sudáfrica">
-          <span>🇲🇽 México</span>
-          <strong>vs</strong>
-          <span>🇿🇦 Sudáfrica</span>
-          <small>11 junio · 1:00 p.m.</small>
+      <div class="q-container q-hero-world-inner">
+        <div class="q-hero-copy">
+          <p class="q-chip">Temporada futbolera 2026</p>
+          <h1 id="hero-title">La Quiniela Better Mood 2026</h1>
+          <p class="q-lead">Calendario, marcadores y ranking para vivir la temporada futbolera con café y comunidad.</p>
+          <div class="q-hero-actions">
+            <a href="#registro" class="q-btn q-btn-primary" data-track="quiniela_register_start">Comprar kit</a>
+            <a href="#calendario" class="q-btn q-btn-secondary" data-track="click_ver_calendario">Ver calendario</a>
+            <button class="q-btn q-btn-secondary" type="button" id="hero-mexico-cta">Partidos de México</button>
+          </div>
+          <p class="q-note">Dinámica de comunidad. Sin premios en efectivo.</p>
         </div>
-        <div class="q-hero-actions">
-          <a href="#registro" class="q-btn q-btn-primary" data-track="quiniela_register_start">Comprar kit y activar folio</a>
-          <a href="#calendario" class="q-btn q-btn-secondary" data-track="click_ver_calendario">Ver calendario gratis</a>
-          <a href="#grupos" class="q-btn q-btn-secondary" data-track="click_ver_grupos">Ver grupos</a>
+
+        <div class="q-hero-board" aria-label="Resumen Quiniela Better Mood">
+          <article class="q-opening-card q-opening-card-hero" aria-label="México contra Sudáfrica">
+            <div class="q-flag-strip" aria-hidden="true"></div>
+            <span class="q-phase-status" data-status="abierta">Partido destacado</span>
+            <div class="q-scoreline">
+              <strong><span>🇲🇽</span> México</strong>
+              <span>vs</span>
+              <strong><span>🇿🇦</span> Sudáfrica</strong>
+            </div>
+            <p>11 junio · 1:00 p.m. · Estadio Azteca</p>
+            <div class="q-inline-actions">
+              <a href="#predicciones" class="q-btn q-btn-primary">Predecir marcador</a>
+              <button class="q-btn q-btn-secondary" type="button" data-hub-tab-jump="mexico">Ver México</button>
+            </div>
+          </article>
+
+          <article class="q-kit-mini-card">
+            <span>Kit Better Mood Futbolero</span>
+            <strong>$99</strong>
+            <p>Folio digital · Cartón físico · QR personal · Ranking</p>
+            <a href="#registro" class="q-btn q-btn-primary">Activar folio</a>
+          </article>
         </div>
-        <p class="q-note">Dinámica de comunidad. Sin premios en efectivo.</p>
       </div>
     </section>
 
@@ -107,62 +127,72 @@
       </div>
     </section>
 
-    <section class="q-section q-mexico-section" aria-labelledby="mexico-title">
-      <div class="q-container q-grid-2 q-grid-middle">
-        <div>
-          <p class="q-eyebrow">Partido inaugural para México</p>
-          <h2 id="mexico-title">Arrancamos con México</h2>
-          <p>México abre la temporada futbolera el 11 de junio. Compra tu Kit Better Mood Futbolero y deja tu marcador antes del silbatazo.</p>
-          <a href="#predicciones" class="q-btn q-btn-primary">Predecir marcador</a>
-          <a href="#calendario" class="q-btn q-btn-secondary">Ver calendario completo</a>
+    <section id="calendario" class="q-section q-calendar-hub-section">
+      <div class="q-container">
+        <div class="q-section-head q-hub-head">
+          <p class="q-eyebrow">Calendario y predicciones</p>
+          <h2>Calendario y predicciones</h2>
+          <p>Consulta partidos gratis. Activa tu Kit Better Mood Futbolero para guardar marcadores.</p>
         </div>
-        <article class="q-opening-card" aria-label="México contra Sudáfrica">
-          <div class="q-flag-strip" aria-hidden="true"></div>
-          <span class="q-phase-status" data-status="abierta">Abierta</span>
-          <div class="q-opening-teams">
-            <strong><span>🇲🇽</span> México</strong>
-            <span class="q-versus">vs</span>
-            <strong><span>🇿🇦</span> Sudáfrica</strong>
+
+        <div class="q-hub-stats" aria-label="Resumen calendario futbolero">
+          <span><strong>72</strong> partidos de grupos</span>
+          <span><strong>12</strong> grupos</span>
+          <span><strong>3</strong> partidos de México</span>
+          <span><strong>3</strong> sedes en México</span>
+        </div>
+
+        <div class="q-calendar-hub">
+          <div class="q-hub-tabs" role="tablist" aria-label="Calendario y predicciones">
+            <button class="q-hub-tab is-active" type="button" role="tab" aria-selected="true" data-calendar-tab="featured">Destacados</button>
+            <button class="q-hub-tab" type="button" role="tab" aria-selected="false" data-calendar-tab="matchday">Por jornada</button>
+            <button class="q-hub-tab" type="button" role="tab" aria-selected="false" data-calendar-tab="groups">Por grupo</button>
+            <button class="q-hub-tab" type="button" role="tab" aria-selected="false" data-calendar-tab="mexico">México</button>
+            <button class="q-hub-tab" type="button" role="tab" aria-selected="false" data-calendar-tab="venues">Sedes</button>
           </div>
-          <p>11 junio 2026 · 1:00 p.m.</p>
-          <p>Mexico City Stadium / Estadio Azteca</p>
-        </article>
-      </div>
-    </section>
 
-    <section id="calendario" class="q-section q-section-alt">
-      <div class="q-container">
-        <div class="q-section-head">
-          <p class="q-eyebrow">Calendario público</p>
-          <h2>Calendario futbolero 2026: partidos, grupos y fechas clave</h2>
-          <p>Consulta fechas, grupos y sedes. El calendario es público; para guardar tus marcadores solo necesitas crear tu folio.</p>
-        </div>
-        <div class="q-calendar-tools">
-          <label class="q-form-field">Buscar selección<input id="calendar-search" type="search" placeholder="México, Argentina, Canadá..." /></label>
-          <label class="q-form-field">Grupo<select id="calendar-group-filter"><option value="">Todos</option></select></label>
-          <label class="q-form-field">Fecha<input id="calendar-date-filter" type="date" /></label>
-          <label class="q-form-field">Sede<input id="calendar-venue-filter" type="search" placeholder="Estadio o ciudad" /></label>
-          <label class="q-form-field">País anfitrión<select id="calendar-host-filter"><option value="">Todos</option><option value="México">México</option><option value="Estados Unidos">Estados Unidos</option><option value="Canadá">Canadá</option></select></label>
-        </div>
-        <div class="q-quick-filters">
-          <button id="show-mexico-matches" class="q-btn q-btn-secondary" type="button">Ver partidos de México</button>
-          <button id="show-today-matches" class="q-btn q-btn-secondary" type="button">Ver partidos de hoy</button>
-          <button id="add-calendar-reminder" class="q-btn q-btn-secondary" type="button">Agregar recordatorio</button>
-          <a href="#registro" class="q-btn q-btn-primary">Comprar kit y activar folio</a>
-        </div>
-        <div id="calendar-results" class="q-public-match-grid"></div>
-        <p id="calendar-feedback" class="q-feedback" aria-live="polite"></p>
-      </div>
-    </section>
+          <section class="q-hub-panel is-active" data-calendar-panel="featured">
+            <div class="q-panel-title">
+              <div><h3>Partidos destacados</h3><p>Próximo México, partidos de hoy y próximos juegos.</p></div>
+              <button class="q-btn q-btn-secondary" id="featured-show-more" type="button">Ver más partidos</button>
+            </div>
+            <div id="featured-results" class="q-compact-match-list"></div>
+          </section>
 
-    <section id="grupos" class="q-section">
-      <div class="q-container">
-        <div class="q-section-head">
-          <p class="q-eyebrow">Grupos</p>
-          <h2>Grupos de la temporada futbolera 2026</h2>
-          <p>Explora los grupos y encuentra rápido los partidos que quieres seguir.</p>
+          <section class="q-hub-panel" data-calendar-panel="matchday">
+            <div class="q-panel-title">
+              <div><h3>Por jornada</h3><p>Selecciona una jornada y deja tus marcadores antes del inicio de cada partido.</p></div>
+            </div>
+            <div id="phase-chips" class="q-phase-chip-row" aria-label="Jornadas"></div>
+            <div id="matchday-summary" class="q-matchday-summary"></div>
+            <div id="matchday-results" class="q-compact-match-list"></div>
+            <button class="q-btn q-btn-secondary q-show-more" id="matchday-show-more" type="button">Mostrar más partidos</button>
+          </section>
+
+          <section class="q-hub-panel" data-calendar-panel="groups">
+            <div class="q-panel-title"><div><h3>Por grupo</h3><p>Explora los grupos y encuentra rápido los partidos que quieres seguir.</p></div></div>
+            <div id="groups-grid" class="q-groups-grid q-groups-grid-compact"></div>
+            <div id="group-results" class="q-compact-match-list q-filter-results"></div>
+          </section>
+
+          <section class="q-hub-panel" data-calendar-panel="mexico">
+            <div class="q-mexico-panel-head">
+              <span class="q-mexico-flag">🇲🇽</span>
+              <div>
+                <h3>Partidos de México</h3>
+                <p>Los partidos de México son el punto de reunión: café, marcador y comunidad.</p>
+              </div>
+              <a href="#registro" class="q-btn q-btn-primary">Activar mi kit</a>
+            </div>
+            <div id="mexico-matches" class="q-compact-match-list"></div>
+          </section>
+
+          <section class="q-hub-panel" data-calendar-panel="venues">
+            <div class="q-panel-title"><div><h3>Sedes en México</h3><p>Ciudad de México, Guadalajara y Monterrey en una vista compacta.</p></div></div>
+            <div id="mexico-venues" class="q-venues-grid"></div>
+            <div id="venue-results" class="q-compact-match-list q-filter-results"></div>
+          </section>
         </div>
-        <div id="groups-grid" class="q-groups-grid"></div>
       </div>
     </section>
 
@@ -187,33 +217,12 @@
       </div>
     </section>
 
-    <section id="mexico-partidos" class="q-section">
-      <div class="q-container">
-        <div class="q-section-head">
-          <p class="q-eyebrow">México</p>
-          <h2>Partidos de México en la temporada futbolera 2026</h2>
-          <p>Los partidos de México son el punto de reunión perfecto: café, comunidad y marcador listo.</p>
-        </div>
-        <div id="mexico-matches" class="q-public-match-grid"></div>
-      </div>
-    </section>
-
-    <section id="sedes-mexico" class="q-section q-section-alt">
-      <div class="q-container">
-        <div class="q-section-head">
-          <p class="q-eyebrow">Sedes</p>
-          <h2>Sedes en México</h2>
-        </div>
-        <div id="mexico-venues" class="q-venues-grid"></div>
-      </div>
-    </section>
-
     <section id="como-funciona" class="q-section">
       <div class="q-container">
         <div class="q-section-head">
           <p class="q-eyebrow">Cómo funciona</p>
           <h2>Cómo funciona la quiniela</h2>
-          <p>Crea tu folio, llena tus marcadores por fase y revisa tu posición en el ranking.</p>
+          <p>Compra tu kit, activa tu folio, llena tus marcadores por jornada y revisa tu posición.</p>
         </div>
         <div class="q-steps">
           <article class="q-step-card"><span>🎟</span><h3>Activa tu kit</h3><p>Reserva tu Kit Better Mood Futbolero, paga $99 MXN y conserva tu folio.</p></article>
@@ -307,22 +316,12 @@
           <h3 id="success-title"></h3>
           <p>Completa el pago de $99 MXN para activar tu folio automáticamente.</p>
           <div class="q-inline-actions">
-            <a href="#predicciones" class="q-btn q-btn-primary">Registrar predicciones</a>
+            <a id="kit-primary-action" href="#predicciones" class="q-btn q-btn-primary">Completar pago</a>
             <button id="copy-folio" type="button" class="q-btn q-btn-secondary">Copiar folio</button>
             <a id="whatsapp-folio" href="#" class="q-btn q-btn-secondary" target="_blank" rel="noopener">Enviar por WhatsApp</a>
           </div>
           <small id="copy-feedback" class="q-feedback"></small>
         </section>
-      </div>
-    </section>
-
-    <section id="fases" class="q-section q-section-alt">
-      <div class="q-container">
-        <div class="q-section-head">
-          <p class="q-eyebrow">Calendario</p>
-          <h2>Calendario por fases</h2>
-        </div>
-        <div id="phase-cards" class="q-phase-grid"></div>
       </div>
     </section>
 
@@ -440,6 +439,8 @@
       <a href="/" class="q-link">Volver a la landing</a>
     </div>
   </footer>
+
+  <a class="q-mobile-sticky-cta" href="#registro">Kit $99 · Activar folio</a>
 
   <script type="module" src="app.js"></script>
 </body>
