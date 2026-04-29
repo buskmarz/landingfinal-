@@ -5272,71 +5272,186 @@ body.home-page {
   padding-top: 20px;
 }
 
-.home-page .coffee-origin-home {
-  background: #231f20;
-  color: #fff;
+.home-page .lavado-home {
+  background: #fff8e7;
+  color: #4b4b4b;
+  padding: 64px 0;
 }
 
-.home-page .coffee-origin-home__grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
-  gap: 52px;
-  align-items: start;
+.home-page .lavado-home__inner {
+  width: min(960px, calc(100% - 32px));
+  margin: 0 auto;
 }
 
-.home-page .coffee-origin-home .eyebrow,
-.home-page .coffee-origin-home h2,
-.home-page .coffee-origin-home h3 {
-  color: #ffde00;
-}
-
-.home-page .coffee-origin-home p {
-  color: rgba(255, 255, 255, 0.82);
-}
-
-.home-page .coffee-origin-home__facts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 24px 0 16px;
-}
-
-.home-page .coffee-origin-home__facts span {
-  border: 1px solid rgba(255, 222, 0, 0.42);
-  border-radius: 999px;
-  color: #ffde00;
-  font-weight: 800;
-  padding: 9px 12px;
-}
-
-.home-page .coffee-origin-home__note {
-  max-width: 58ch;
-}
-
-.home-page .coffee-origin-home__process {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  border-top: 1px solid rgba(255, 255, 255, 0.18);
-  border-left: 1px solid rgba(255, 255, 255, 0.18);
-}
-
-.home-page .coffee-origin-home__process article {
-  min-height: 180px;
-  padding: 24px;
-  border-right: 1px solid rgba(255, 255, 255, 0.18);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
-}
-
-.home-page .coffee-origin-home__process span {
+.home-page .lavado-home__logo {
   display: block;
-  color: rgba(255, 222, 0, 0.78);
-  font-weight: 900;
-  margin-bottom: 34px;
+  width: min(200px, 55vw);
+  margin: 0 auto 22px;
 }
 
-.home-page .coffee-origin-home__process p {
-  margin-bottom: 0;
-  font-size: 0.95rem;
+.home-page .lavado-home__section {
+  padding: 38px 0;
+  text-align: center;
+}
+
+.home-page .lavado-home__section h2 {
+  color: #000;
+  font-size: clamp(2rem, 5vw, 2.6rem);
+  line-height: 1.04;
+  margin: 0 0 28px;
+  text-align: center;
+}
+
+.home-page .lavado-home__lead,
+.home-page .lavado-home__story p,
+.home-page .lavado-home__quote p {
+  color: #4b4b4b;
+  font-size: 18px;
+  line-height: 1.8;
+  letter-spacing: 0.01em;
+  text-align: center;
+}
+
+.home-page .lavado-home__lead {
+  max-width: 760px;
+  margin: 0 auto 36px;
+  font-size: 20px;
+}
+
+.home-page .lavado-home__steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 22px;
+  justify-content: center;
+}
+
+.home-page .lavado-home__step,
+.home-page .lavado-home__cards article {
+  min-height: 240px;
+  padding: 28px 20px;
+  border: 1px solid #ffd74b;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  color: #000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.home-page .lavado-home__step img {
+  width: 100%;
+  max-width: 240px;
+  height: auto;
+  display: block;
+  margin: 0 auto 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.10);
+}
+
+.home-page .lavado-home__number {
+  width: 28px;
+  height: 28px;
+  margin-bottom: 10px;
+  border-radius: 50%;
+  background: #ffd74b;
+  color: #000;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.home-page .lavado-home__icon,
+.home-page .lavado-home__cards article div {
+  color: #ffd74b;
+  font-size: 2rem;
+  line-height: 1;
+  margin-bottom: 16px;
+}
+
+.home-page .lavado-home__step p,
+.home-page .lavado-home__cards p {
+  margin: 0;
+  color: #000;
+  font-size: 1rem;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.home-page .lavado-home__actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px;
+}
+
+.home-page .lavado-home__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 2px solid #ffd74b;
+  border-radius: 999px;
+  background: #ffd74b;
+  color: #000;
+  font-weight: 800;
+  padding: 15px 30px;
+  text-decoration: none;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.18);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.home-page .lavado-home__button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
+}
+
+.home-page .lavado-home__producer {
+  width: 280px;
+  max-width: 100%;
+  border-radius: 10px;
+  margin: 0 auto 28px;
+  display: block;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.10);
+}
+
+.home-page .lavado-home__story {
+  max-width: 800px;
+  margin: 0 auto;
+  display: grid;
+  gap: 18px;
+}
+
+.home-page .lavado-home__story p {
+  margin: 0;
+}
+
+.home-page .lavado-home__story span {
+  color: #d6a900;
+  font-weight: 800;
+}
+
+.home-page .lavado-home__cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 24px;
+}
+
+.home-page .lavado-home__cards article {
+  min-height: 170px;
+}
+
+.home-page .lavado-home__quote {
+  padding: 46px 16px 16px;
+}
+
+.home-page .lavado-home__quote p {
+  max-width: 700px;
+  margin: 0 auto;
+  font-size: 1.4rem;
+  font-style: italic;
 }
 
 .home-page .rewards-home {
@@ -5528,7 +5643,6 @@ body.home-page {
   .home-page .hero--conversion .hero__grid,
   .home-page .rewards-home__grid,
   .home-page .wellness-home__grid,
-  .home-page .coffee-origin-home__grid,
   .home-page .location-home .section__grid {
     grid-template-columns: 1fr;
     gap: 28px;
@@ -5589,16 +5703,35 @@ body.home-page {
     height: 236px;
   }
 
-  .home-page .coffee-origin-home__process {
-    grid-template-columns: 1fr;
+  .home-page .lavado-home {
+    padding: 48px 0;
   }
 
-  .home-page .coffee-origin-home__process article {
+  .home-page .lavado-home__section {
+    padding: 28px 0;
+  }
+
+  .home-page .lavado-home__steps,
+  .home-page .lavado-home__cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .home-page .lavado-home__step,
+  .home-page .lavado-home__cards article {
     min-height: auto;
+    padding: 18px 14px;
   }
 
-  .home-page .coffee-origin-home__process span {
-    margin-bottom: 18px;
+  .home-page .lavado-home__step img {
+    max-width: 190px;
+  }
+
+  .home-page .lavado-home__lead,
+  .home-page .lavado-home__story p,
+  .home-page .lavado-home__quote p {
+    font-size: 16px;
+    line-height: 1.6;
   }
 
   .home-page .footer__grid {

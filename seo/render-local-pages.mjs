@@ -12,6 +12,7 @@ const staticSitemapEntries = [
   "https://bmoodcoffee.com/bienestar/",
   "https://bmoodcoffee.com/arcade/",
   "https://bmoodcoffee.com/recomendador/",
+  "https://bmoodcoffee.com/recorrido-cafe/",
   "https://bmoodcoffee.com/cafe-de-especialidad-puebla/",
   "https://bmoodcoffee.com/cbd-en-el-cafe/",
   "https://bmoodcoffee.com/como-preparar-cafe-en-casa/",
