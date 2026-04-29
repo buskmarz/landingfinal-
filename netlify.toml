@@ -45,6 +45,16 @@
   force = true
 
 [[redirects]]
+  from = "/origen-cafe"
+  to = "/origen-cafe/"
+  status = 301
+
+[[redirects]]
+  from = "/recorrido-cafe"
+  to = "/recorrido-cafe/"
+  status = 301
+
+[[redirects]]
   from = "/recompensas"
   to = "/recompensas/"
   status = 301

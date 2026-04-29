@@ -5272,6 +5272,49 @@ body.home-page {
   padding-top: 20px;
 }
 
+.home-page .coffee-origin-home {
+  background: #231f20;
+  color: #fff;
+}
+
+.home-page .coffee-origin-home__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(240px, 0.65fr);
+  gap: 44px;
+  align-items: center;
+}
+
+.home-page .coffee-origin-home .eyebrow,
+.home-page .coffee-origin-home h2 {
+  color: #ffde00;
+}
+
+.home-page .coffee-origin-home p {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.home-page .coffee-origin-home__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 22px 0;
+}
+
+.home-page .coffee-origin-home__facts span {
+  border: 1px solid rgba(255, 222, 0, 0.42);
+  border-radius: 999px;
+  color: #ffde00;
+  font-weight: 800;
+  padding: 9px 12px;
+}
+
+.home-page .coffee-origin-home__image {
+  width: 100%;
+  border-radius: 24px;
+  object-fit: cover;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.26);
+}
+
 .home-page .lavado-home {
   background: #fff8e7;
   color: #4b4b4b;
@@ -5294,12 +5337,17 @@ body.home-page {
   text-align: center;
 }
 
+.home-page .lavado-home__section h1,
 .home-page .lavado-home__section h2 {
   color: #000;
   font-size: clamp(2rem, 5vw, 2.6rem);
   line-height: 1.04;
   margin: 0 0 28px;
   text-align: center;
+}
+
+.origin-page__main {
+  padding-top: 98px;
 }
 
 .home-page .lavado-home__lead,
@@ -5643,6 +5691,7 @@ body.home-page {
   .home-page .hero--conversion .hero__grid,
   .home-page .rewards-home__grid,
   .home-page .wellness-home__grid,
+  .home-page .coffee-origin-home__grid,
   .home-page .location-home .section__grid {
     grid-template-columns: 1fr;
     gap: 28px;
@@ -5701,6 +5750,10 @@ body.home-page {
 
   .home-page .product-card__image {
     height: 236px;
+  }
+
+  .home-page .coffee-origin-home__image {
+    max-height: 260px;
   }
 
   .home-page .lavado-home {
