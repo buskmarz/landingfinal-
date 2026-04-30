@@ -16,6 +16,10 @@ const mexicoMatches = document.querySelector('#mexico-matches');
 const mexicoVenues = document.querySelector('#mexico-venues');
 const venueResults = document.querySelector('#venue-results');
 const heroMexicoCta = document.querySelector('#hero-mexico-cta');
+const openKitModalButton = document.querySelector('#open-kit-modal');
+const openKitModalInStoreButton = document.querySelector('#open-kit-modal-instore');
+const kitModal = document.querySelector('#kit-modal');
+const closeKitModalButton = document.querySelector('#close-kit-modal');
 const registerForm = document.querySelector('#register-form');
 const registerSubmit = document.querySelector('#register-submit');
 const acceptsTerms = document.querySelector('#acceptsTerms');
@@ -30,6 +34,7 @@ const predictionForm = document.querySelector('#prediction-form');
 const saveProgressButton = document.querySelector('#save-progress');
 const predictionFeedback = document.querySelector('#prediction-access-feedback');
 const predictionSaveFeedback = document.querySelector('#prediction-save-feedback');
+const predictionEmptyState = document.querySelector('#prediction-empty-state');
 const matchesContainer = document.querySelector('#matches-container');
 const rankingBody = document.querySelector('#ranking-body');
 const rankingPodium = document.querySelector('#ranking-podium');
@@ -63,6 +68,15 @@ hydrateFolioFromUrl();
 bindEvents();
 
 function bindEvents() {
+  openKitModalButton?.addEventListener('click', () => openKitModal('mercado_pago'));
+  openKitModalInStoreButton?.addEventListener('click', () => openKitModal('in_store'));
+  closeKitModalButton?.addEventListener('click', closeKitModal);
+  kitModal?.addEventListener('click', (event) => {
+    if (event.target === kitModal) closeKitModal();
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !kitModal?.classList.contains('q-hidden')) closeKitModal();
+  });
   registerForm.addEventListener('submit', onRegisterSubmit);
   registerForm.addEventListener('input', () => {
     if (!kitFormStarted) {
@@ -101,7 +115,18 @@ function bindEvents() {
   featuredResults?.addEventListener('click', onPublicMatchAction);
 
   document.querySelectorAll('[data-track="quiniela_register_start"]').forEach((element) => {
-    element.addEventListener('click', () => trackEvent('click_crear_folio', { source: 'hero' }));
+    element.addEventListener('click', (event) => {
+      event.preventDefault();
+      document.querySelector('#registro')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      openKitModal('mercado_pago');
+      trackEvent('click_crear_folio', { source: 'hero' });
+    });
+  });
+
+  document.querySelector('.q-mobile-sticky-cta')?.addEventListener('click', (event) => {
+    event.preventDefault();
+    document.querySelector('#registro')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    openKitModal('mercado_pago');
   });
 
   document.querySelectorAll('[data-track="click_ver_calendario"]').forEach((element) => {
@@ -395,6 +420,8 @@ async function onPredictionAccess(event) {
     predictionFeedback.textContent = folioStatus === 'pending_payment'
       ? 'Tu folio está reservado. Completa tu pago para activarlo.'
       : 'Para guardar marcadores necesitas activar tu Kit Better Mood Futbolero.';
+    predictionForm.classList.add('q-hidden');
+    if (predictionEmptyState) predictionEmptyState.textContent = 'Carga una jornada para empezar.';
     showPredictionBlockModal(predictionFeedback.textContent);
     trackEvent('prediction_attempt_without_active_folio', { folio, status: folioStatus });
     return;
@@ -403,12 +430,18 @@ async function onPredictionAccess(event) {
   const matches = getMatchesByPhase(phaseId);
   if (!matches.length) {
     predictionFeedback.textContent = 'Todavía no hay partidos cargados para esta fase.';
+    predictionForm.classList.add('q-hidden');
+    if (predictionEmptyState) {
+      predictionEmptyState.textContent = 'Esta jornada todavía no tiene partidos cargados.';
+      predictionEmptyState.classList.remove('q-hidden');
+    }
     return;
   }
 
   currentFolioStatus = status;
   loadedContext = { folio, phaseId };
   predictionForm.classList.remove('q-hidden');
+  predictionEmptyState?.classList.add('q-hidden');
   predictionFeedback.textContent = `Tu folio está activo. Ya puedes registrar marcadores.`;
 
   await renderMatchInputs(folio, phaseId, matches);
@@ -460,6 +493,7 @@ async function renderMatchInputs(folio, phaseId, matches) {
       </article>
     `;
   }).join('');
+  predictionEmptyState?.classList.add('q-hidden');
   updatePredictionCount();
   matchesContainer.querySelectorAll('input').forEach((input) => input.addEventListener('input', updatePredictionCount));
 }
@@ -606,7 +640,7 @@ function updatePredictionCount() {
     const awayInput = predictionForm.querySelector(`[name="away-${match.id}"]`);
     if (homeInput?.value !== '' && awayInput?.value !== '') captured += 1;
   });
-  predictionCount.textContent = `${captured}/${matches.length} predicciones capturadas`;
+  predictionCount.textContent = `${captured}/${matches.length} marcadores`;
 }
 
 function buildGroups() {
@@ -638,6 +672,19 @@ function getHostCountry(city) {
 
 function updateRegisterButtonState() {
   registerSubmit.disabled = !acceptsTerms.checked || !registerForm.checkValidity();
+}
+
+function openKitModal(paymentMethod = 'mercado_pago') {
+  const paymentInput = registerForm.querySelector(`[name="paymentMethod"][value="${paymentMethod}"]`);
+  if (paymentInput) paymentInput.checked = true;
+  kitModal?.classList.remove('q-hidden');
+  document.body.classList.add('q-modal-open');
+  setTimeout(() => registerForm.querySelector('#name')?.focus(), 40);
+}
+
+function closeKitModal() {
+  kitModal?.classList.add('q-hidden');
+  document.body.classList.remove('q-modal-open');
 }
 
 function setRegisterLoading(isLoading) {
@@ -809,23 +856,27 @@ async function apiFetch(url, options = {}) {
 }
 
 function showReservedKit(folio, options = {}) {
-  successTitle.textContent = folio;
+  successTitle.textContent = `Folio: ${folio}`;
   registerSuccess.classList.remove('q-hidden');
+  registerSuccess.classList.toggle('q-status-active', Boolean(options.active));
   registerForm.reset();
+  closeKitModal();
   updateRegisterButtonState();
   updateWhatsappLink(folio);
 
   const eyebrow = registerSuccess.querySelector('.q-eyebrow');
   const body = registerSuccess.querySelector('p:not(.q-eyebrow)');
-  if (eyebrow) eyebrow.textContent = options.inStore ? 'Tu kit está reservado' : 'Tu kit está reservado';
+  const chip = registerSuccess.querySelector('.q-status-chip');
+  if (eyebrow) eyebrow.textContent = options.active ? 'Folio activo' : 'Kit reservado';
+  if (chip) chip.textContent = options.active ? 'Activo' : 'Pendiente';
   if (body) {
     body.textContent = options.inStore
       ? 'Paga tu Kit Better Mood Futbolero en barra. Nuestro equipo activará tu folio.'
       : 'Completa el pago de $99 MXN en Mercado Pago para activar tu folio automáticamente.';
   }
   if (kitPrimaryAction) {
-    kitPrimaryAction.textContent = options.inStore ? 'Ver predicciones' : 'Pagar con Mercado Pago';
-    kitPrimaryAction.href = options.checkoutUrl || '#predicciones';
+    kitPrimaryAction.textContent = options.inStore ? 'Ver instrucciones' : 'Completar pago';
+    kitPrimaryAction.href = options.checkoutUrl || '#registro';
     kitPrimaryAction.toggleAttribute('target', Boolean(options.checkoutUrl));
     if (options.checkoutUrl) kitPrimaryAction.rel = 'noopener';
   }
