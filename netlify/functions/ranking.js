@@ -15,6 +15,18 @@ exports.handler = async (event) => {
 
   const phase = String(event.queryStringParameters?.phase || "general");
   const matches = await getMatches();
+  const hasOfficialResults = matches.some((match) => (
+    match.homeScoreResult !== null &&
+    match.homeScoreResult !== undefined &&
+    match.awayScoreResult !== null &&
+    match.awayScoreResult !== undefined
+  ));
+  if (!hasOfficialResults) {
+    const key = phase === "general" ? "ranking_cache/general.json" : `ranking_cache/${phase}.json`;
+    await setJSON("ranking_cache", key, { phase, generatedAt: new Date().toISOString(), ranking: [] });
+    return json(200, { phase, ranking: [] });
+  }
+
   const matchesById = Object.fromEntries(matches.map((match) => [match.id, match]));
   const activeFolios = await getActiveFolios();
   const rows = [];
