@@ -1,235 +1,228 @@
 <!doctype html>
-<html lang="es">
+<html lang="es-MX">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Recorrido del café | Better Mood Coffee</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Recorrido del café hasta tu taza | Better Mood Coffee</title>
     <meta
       name="description"
-      content="Recorre el proceso del café Better Mood: finca, cosecha, lavado, secado, tueste, empaque y taza final."
+      content="Descubre el recorrido del café desde su origen hasta la taza: cultivo, proceso, tostado y preparación en Better Mood Coffee."
     />
     <meta name="robots" content="index,follow" />
     <link rel="canonical" href="https://bmoodcoffee.com/recorrido-cafe/" />
-    <meta property="og:title" content="Recorrido del café | Better Mood Coffee" />
+
+    <meta property="og:locale" content="es_MX" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Better Mood Coffee" />
+    <meta property="og:title" content="Recorrido del café hasta tu taza | Better Mood Coffee" />
     <meta
       property="og:description"
-      content="El viaje visual del café Better Mood desde Finca Santa Cruz hasta tu taza."
+      content="Descubre el recorrido del café desde su origen hasta la taza: cultivo, proceso, tostado y preparación en Better Mood Coffee."
     />
-    <meta property="og:type" content="website" />
     <meta property="og:url" content="https://bmoodcoffee.com/recorrido-cafe/" />
     <meta property="og:image" content="https://bmoodcoffee.com/assets/landing-lavado/08-droppy-cafe.png" />
+    <meta property="og:image:alt" content="Recorrido del café hasta la taza" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Recorrido del café | Better Mood Coffee" />
+    <meta name="twitter:title" content="Recorrido del café hasta tu taza | Better Mood Coffee" />
     <meta
       name="twitter:description"
-      content="El viaje visual del café Better Mood desde Finca Santa Cruz hasta tu taza."
+      content="Descubre el recorrido del café desde su origen hasta la taza: cultivo, proceso, tostado y preparación en Better Mood Coffee."
     />
+    <meta name="twitter:url" content="https://bmoodcoffee.com/recorrido-cafe/" />
     <meta name="twitter:image" content="https://bmoodcoffee.com/assets/landing-lavado/08-droppy-cafe.png" />
-    <style>
-      body {
-        background-color: #fff8e7;
-        font-family: Montserrat, Arial, sans-serif;
-        color: #4b4b4b;
-        margin: 0;
-        padding: 2rem 1rem;
-        text-align: center;
-      }
 
-      .viaje-better-mood {
-        max-width: 800px;
-        margin: auto;
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebPage",
+            "@id": "https://bmoodcoffee.com/recorrido-cafe/#webpage",
+            "url": "https://bmoodcoffee.com/recorrido-cafe/",
+            "name": "Recorrido del café hasta tu taza | Better Mood Coffee",
+            "description": "Descubre el recorrido del café desde su origen hasta la taza: cultivo, proceso, tostado y preparación en Better Mood Coffee.",
+            "isPartOf": { "@id": "https://bmoodcoffee.com/#website" },
+            "inLanguage": "es-MX"
+          },
+          {
+            "@type": "Article",
+            "@id": "https://bmoodcoffee.com/recorrido-cafe/#article",
+            "headline": "El recorrido del café hasta tu taza",
+            "description": "Guía educativa sobre cultivo, cosecha, beneficio, secado, tostado, molienda y extracción del café.",
+            "mainEntityOfPage": { "@id": "https://bmoodcoffee.com/recorrido-cafe/#webpage" },
+            "publisher": { "@id": "https://bmoodcoffee.com/#organization" },
+            "inLanguage": "es-MX"
+          },
+          {
+            "@type": "BreadcrumbList",
+            "@id": "https://bmoodcoffee.com/recorrido-cafe/#breadcrumb",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://bmoodcoffee.com/" },
+              { "@type": "ListItem", "position": 2, "name": "Recorrido del café", "item": "https://bmoodcoffee.com/recorrido-cafe/" }
+            ]
+          },
+          {
+            "@type": "Organization",
+            "@id": "https://bmoodcoffee.com/#organization",
+            "name": "Better Mood Coffee",
+            "url": "https://bmoodcoffee.com/"
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://bmoodcoffee.com/#website",
+            "url": "https://bmoodcoffee.com/",
+            "name": "Better Mood Coffee"
+          }
+        ]
       }
+    </script>
 
-      .paso {
-        margin-bottom: 2rem;
-      }
-
-      .imagen-paso {
-        width: 100%;
-        max-width: 260px;
-        border-radius: 10px;
-        margin-bottom: 1rem;
-      }
-
-      .especial-ultimo-paso {
-        background-color: #fff;
-        border-radius: 12px;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-        padding: 1rem;
-        max-width: 300px;
-        margin: auto;
-      }
-
-      .numero-paso {
-        background-color: #ffd74b;
-        color: #000;
-        font-weight: bold;
-        font-size: 1.1rem;
-        border-radius: 50%;
-        width: 28px;
-        height: 28px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: 0 auto 10px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
-      }
-
-      .thanks {
-        margin-top: 3rem;
-      }
-
-      .thanks h2 {
-        font-size: 1.8rem;
-        color: #000;
-      }
-
-      .thanks p {
-        font-size: 1.1rem;
-        max-width: 600px;
-        margin: 1rem auto;
-      }
-
-      .back-link {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        margin: 1rem auto 2rem;
-        padding: 0.8rem 1.4rem;
-        border-radius: 999px;
-        background: #ffd74b;
-        color: #000;
-        font-weight: 700;
-        text-decoration: none;
-      }
-
-      footer {
-        margin-top: 2rem;
-        font-size: 0.9rem;
-        color: #666;
-      }
-
-      #toggle-audio {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        width: 50px;
-        height: 50px;
-        background-color: #ffd74b;
-        border: none;
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        cursor: pointer;
-        z-index: 1000;
-      }
-    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="icon" href="../assets/logo-better-mood.png" />
   </head>
-  <body>
-    <a class="back-link" href="/#origen-cafe">Volver al origen del café</a>
+  <body class="local-guide-page">
+    <a class="skip-link" href="#main">Saltar al contenido</a>
 
-    <main>
-      <section class="viaje-better-mood" aria-labelledby="recorrido-title">
-        <h1 id="recorrido-title">Recorrido completo del café Better Mood</h1>
+    <header class="header" id="top">
+      <div class="container header__inner">
+        <a class="logo" href="/" aria-label="Better Mood Coffee">
+          <img src="../assets/logo-better-mood.png" alt="Better Mood Coffee" />
+        </a>
+        <button class="nav-toggle" aria-controls="primary-nav" aria-expanded="false">
+          <span class="nav-toggle__icon" aria-hidden="true"></span>
+          <span class="nav-toggle__label" aria-hidden="true">Menú</span>
+          <span class="sr-only">Abrir navegación</span>
+        </button>
+        <nav class="nav" id="primary-nav">
+          <a href="/origen-cafe/">Origen</a>
+          <a href="/como-preparar-cafe-en-casa/">Preparar café</a>
+          <a href="/talleres-de-cafe-puebla/">Talleres</a>
+          <a href="/eventos/">Eventos</a>
+          <a class="btn btn--sm btn--primary" href="/#quick-order">Pedir ahora</a>
+        </nav>
+      </div>
+    </header>
 
-        <div class="paso">
-          <div class="numero-paso">1</div>
-          <img src="/assets/landing-lavado/01-finca.png" alt="Finca Santa Cruz" class="imagen-paso" />
-          <h2>Finca Santa Cruz</h2>
-          <p>El origen fértil donde todo comienza.</p>
-        </div>
-
-        <div class="paso">
-          <div class="numero-paso">2</div>
-          <img src="/assets/landing-lavado/02-cosecha.png" alt="Cosecha Manual" class="imagen-paso" />
-          <h2>Cosecha Manual</h2>
-          <p>Cada grano seleccionado a mano con dedicación.</p>
-        </div>
-
-        <div class="paso">
-          <div class="numero-paso">3</div>
-          <img src="/assets/landing-lavado/03-lavado.png" alt="Lavado Artesanal" class="imagen-paso" />
-          <h2>Lavado Artesanal</h2>
-          <p>Purificando el alma de cada grano.</p>
-        </div>
-
-        <div class="paso">
-          <div class="numero-paso">4</div>
-          <img src="/assets/landing-lavado/04-secado.png" alt="Secado Natural" class="imagen-paso" />
-          <h2>Secado Natural</h2>
-          <p>Paciencia y sol para perfeccionar cada detalle.</p>
-        </div>
-
-        <div class="paso">
-          <div class="numero-paso">5</div>
-          <img src="/assets/landing-lavado/05-tueste.png" alt="Tueste Perfecto" class="imagen-paso" />
-          <h2>Tueste Perfecto</h2>
-          <p>Maestría en pequeños lotes para revelar magia.</p>
-        </div>
-
-        <div class="paso">
-          <div class="numero-paso">6</div>
-          <img src="/assets/landing-lavado/06-empaque.png" alt="Empaque Premium" class="imagen-paso" />
-          <h2>Empaque Premium</h2>
-          <p>Frescura y calidad selladas con amor.</p>
-        </div>
-
-        <div class="paso">
-          <div class="numero-paso">7</div>
-          <img src="/assets/landing-lavado/07-hogar.png" alt="Better Mood en tu Hogar" class="imagen-paso" />
-          <h2>Better Mood en tu Hogar</h2>
-          <p>El viaje termina donde el café cobra vida.</p>
-        </div>
-
-        <div class="paso especial-ultimo-paso">
-          <div class="numero-paso">8</div>
-          <img src="/assets/landing-lavado/08-droppy-cafe.png" alt="Momento Better Mood" class="imagen-paso" />
-          <h2>Momento Better Mood</h2>
-          <p>Droppy saborea el resultado de todo el viaje.</p>
+    <main id="main">
+      <section class="page-hero page-hero--content" aria-labelledby="content-title">
+        <div class="container page-hero__grid">
+          <div class="page-hero__content">
+            <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Inicio</a><span>/</span><span aria-current="page">Recorrido del café</span></nav>
+            <p class="eyebrow">Educación cafetera</p>
+            <h1 id="content-title">El recorrido del café hasta tu taza</h1>
+            <p class="hero__text">
+              Antes de llegar a la barra, el café pasa por una cadena de decisiones que definen aroma, dulzura, cuerpo y claridad en taza.
+            </p>
+            <div class="hero__actions">
+              <a class="btn btn--primary" href="/talleres-de-cafe-puebla/">Ver talleres</a>
+              <a class="btn btn--secondary" href="/assets/menu-better-mood.pdf" target="_blank" rel="noopener">Ver menú</a>
+            </div>
+          </div>
+          <div class="content-hero__media">
+            <img src="../assets/landing-lavado/08-droppy-cafe.png" alt="Taza final del recorrido del café" loading="eager" decoding="async" width="960" height="1080" />
+          </div>
         </div>
       </section>
 
-      <section class="thanks">
-        <h2>Gracias por acompañarnos</h2>
-        <p>
-          Miles de manos, una sola taza. Cada paso es un acto de amor por el café.
-          <strong>Ahora es tu turno de darle vida a esta historia.</strong>
-        </p>
+      <section class="section section--compact">
+        <div class="container article-shell">
+          <article class="article-content">
+            <section class="local-section">
+              <h2>Del cultivo a la experiencia en cafetería</h2>
+              <p>El recorrido del café empieza en el campo y termina en una taza preparada con intención. En café de especialidad, cada etapa importa porque puede sumar claridad o restarla: cultivo, cosecha, beneficio, secado, tostado, molienda y extracción.</p>
+              <p>Entender ese camino ayuda a valorar mejor lo que ocurre en cafetería. Una bebida bien preparada no depende solo de una máquina o una receta; depende de todo lo que pasó antes.</p>
+            </section>
+
+            <section class="local-section">
+              <h2>Las etapas del recorrido</h2>
+              <div class="recommended-grid">
+                <article class="article-card recommended-card"><p class="article-card__eyebrow">1</p><h3>Cultivo</h3><p>La planta crece en un entorno específico de clima, suelo, altitud y manejo agrícola.</p></article>
+                <article class="article-card recommended-card"><p class="article-card__eyebrow">2</p><h3>Cosecha</h3><p>Seleccionar cerezas maduras ayuda a construir dulzura y consistencia.</p></article>
+                <article class="article-card recommended-card"><p class="article-card__eyebrow">3</p><h3>Beneficio</h3><p>El proceso separa la semilla de la fruta y define parte del perfil sensorial.</p></article>
+                <article class="article-card recommended-card"><p class="article-card__eyebrow">4</p><h3>Secado</h3><p>Un secado cuidado protege el grano y evita defectos antes del almacenamiento.</p></article>
+                <article class="article-card recommended-card"><p class="article-card__eyebrow">5</p><h3>Tostado</h3><p>El tostado desarrolla aroma y sabor sin borrar la identidad del origen.</p></article>
+                <article class="article-card recommended-card"><p class="article-card__eyebrow">6</p><h3>Molienda</h3><p>El tamaño de molido ajusta cómo el agua extrae los compuestos del café.</p></article>
+                <article class="article-card recommended-card"><p class="article-card__eyebrow">7</p><h3>Extracción</h3><p>La receta final convierte el recorrido en una taza: espresso, filtrado o bebida con leche.</p></article>
+              </div>
+            </section>
+
+            <section class="local-section">
+              <h2>Café de especialidad: una cadena de cuidado</h2>
+              <p>El valor del café de especialidad está en cuidar la cadena completa. Si una etapa falla, la taza lo muestra. Si cada etapa se trabaja con intención, la experiencia se vuelve más limpia, expresiva y fácil de recordar.</p>
+              <p>En Better Mood Coffee buscamos que esa explicación sea accesible. Puedes empezar por el <a href="/origen-cafe/">origen del café</a>, practicar recetas con la guía para <a href="/como-preparar-cafe-en-casa/">preparar café en casa</a> o sumarte a próximos <a href="/talleres-de-cafe-puebla/">talleres de café en Puebla</a>.</p>
+            </section>
+          </article>
+
+          <aside class="article-sidebar">
+            <div class="article-card local-benefits">
+              <p class="article-card__eyebrow">Idea clave</p>
+              <h2>La taza no empieza en la barra</h2>
+              <ul class="local-benefits__list">
+                <li>El origen aporta identidad.</li>
+                <li>El proceso define parte del sabor.</li>
+                <li>La preparación traduce todo ese trabajo en experiencia.</li>
+              </ul>
+            </div>
+            <div class="article-card article-card--links">
+              <p class="article-card__eyebrow">Enlaces útiles</p>
+              <a href="/origen-cafe/">Origen del café</a>
+              <a href="/como-preparar-cafe-en-casa/">Cómo preparar café en casa</a>
+              <a href="/talleres-de-cafe-puebla/">Talleres de café Puebla</a>
+              <a href="/eventos/">Eventos Better Mood</a>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section section--cta section--cta-tight">
+        <div class="container">
+          <div class="section__header">
+            <p class="eyebrow">Siguiente paso</p>
+            <h2>Vive el recorrido en una taza.</h2>
+            <p>Visita Better Mood, revisa el menú o entra a la lista de próximas experiencias cafeteras.</p>
+          </div>
+          <div class="section__cta local-cta__actions">
+            <a class="btn btn--primary" href="/talleres-de-cafe-puebla/">Ver talleres</a>
+            <a class="btn btn--secondary" href="/eventos/">Eventos</a>
+            <a class="btn btn--secondary" href="https://wa.me/message/WQWEEODGY6H2P1" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+          </div>
+        </div>
       </section>
     </main>
 
-    <footer>© Better Mood Coffee. Todos los derechos reservados.</footer>
-
-    <audio id="audio-recorrido" loop>
-      <source src="/assets/landing-lavado/musica-recorrido.mp3" type="audio/mpeg" />
-      Tu navegador no soporta audio HTML5.
-    </audio>
-
-    <button id="toggle-audio" type="button" aria-label="Activar o pausar audio">
-      <span id="audio-icon" style="font-size: 24px;">🔇</span>
-    </button>
-
-    <script>
-      const audioBtn = document.getElementById("toggle-audio");
-      const audioIcon = document.getElementById("audio-icon");
-      const audio = document.getElementById("audio-recorrido");
-
-      function updateIcon() {
-        audioIcon.textContent = audio.paused ? "🔇" : "🔊";
-      }
-
-      audioBtn.addEventListener("click", () => {
-        if (audio.paused) {
-          audio.play();
-        } else {
-          audio.pause();
-        }
-        updateIcon();
-      });
-
-      updateIcon();
-    </script>
+    <footer class="footer">
+      <div class="container footer__grid">
+        <div class="footer__brand">
+          <img class="footer__logo" src="../assets/logo-better-mood.png" alt="Better Mood Coffee" />
+          <p>Better Mood Coffee — Café de especialidad y bienestar responsable en Puebla.</p>
+        </div>
+        <div class="footer__links">
+          <h3>Navegación</h3>
+          <a href="/#menu">Menú</a>
+          <a href="/eventos/">Eventos</a>
+          <a href="/talleres-de-cafe-puebla/">Talleres</a>
+          <a href="/bienestar/">Bienestar</a>
+        </div>
+        <div class="footer__links">
+          <h3>Educación cafetera</h3>
+          <a href="/origen-cafe/">Origen del café</a>
+          <a href="/recorrido-cafe/">Recorrido del café</a>
+          <a href="/como-preparar-cafe-en-casa/">Preparar café en casa</a>
+          <a href="/talleres-de-cafe-puebla/">Talleres de café Puebla</a>
+        </div>
+        <div class="footer__links">
+          <h3>Ubicación</h3>
+          <p>13 Poniente 2302/F, Col. La Paz, Puebla.</p>
+          <a href="https://maps.google.com/?q=13+Poniente+2302%2FF,+La+Paz,+Puebla,+Puebla" target="_blank" rel="noopener">Maps</a>
+        </div>
+      </div>
+      <div class="container footer__disclaimer">
+        <p class="footer__copyright">© Better Mood Coffee. Todos los derechos reservados.</p>
+      </div>
+    </footer>
+    <script src="../script.js"></script>
   </body>
 </html>

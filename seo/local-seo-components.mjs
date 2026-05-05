@@ -283,6 +283,13 @@ function renderFooter() {
           <a href="/recomendador/">Recomendador</a>
           <a href="/aviso-privacidad.html">Aviso de privacidad</a>
         </div>
+        <div class="footer__links">
+          <h3>Educación cafetera</h3>
+          <a href="/origen-cafe/">Origen del café</a>
+          <a href="/recorrido-cafe/">Recorrido del café</a>
+          <a href="/como-preparar-cafe-en-casa/">Preparar café en casa</a>
+          <a href="/talleres-de-cafe-puebla/">Talleres de café Puebla</a>
+        </div>
         <div class="footer__links footer__links--guides">
           <h3>Guías locales</h3>
           ${footerLocalGuides.map((guide) => `<a href="${guide.href}">${escapeHtml(guide.label)}</a>`).join("")}

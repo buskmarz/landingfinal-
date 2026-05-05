@@ -1,118 +1,226 @@
 <!doctype html>
-<html lang="es">
+<html lang="es-MX">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Origen del café Better Mood | Finca Santa Cruz</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Origen del café de especialidad | Better Mood Coffee</title>
     <meta
       name="description"
-      content="Conoce el origen del café Better Mood: Finca Santa Cruz, proceso lavado, historia, ficha técnica y recorrido del grano a la taza."
+      content="Conoce el origen del café de especialidad, su trazabilidad, proceso y cómo influye en el sabor de cada taza en Better Mood Coffee."
     />
     <meta name="robots" content="index,follow" />
     <link rel="canonical" href="https://bmoodcoffee.com/origen-cafe/" />
-    <meta property="og:title" content="Origen del café Better Mood | Finca Santa Cruz" />
+
+    <meta property="og:locale" content="es_MX" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Better Mood Coffee" />
+    <meta property="og:title" content="Origen del café de especialidad | Better Mood Coffee" />
     <meta
       property="og:description"
-      content="Historia, proceso y ficha técnica del café Better Mood desde Finca Santa Cruz hasta la taza."
+      content="Conoce el origen del café de especialidad, su trazabilidad, proceso y cómo influye en el sabor de cada taza en Better Mood Coffee."
     />
-    <meta property="og:type" content="website" />
     <meta property="og:url" content="https://bmoodcoffee.com/origen-cafe/" />
-    <meta property="og:image" content="https://bmoodcoffee.com/assets/landing-lavado/08-droppy-cafe.png" />
+    <meta property="og:image" content="https://bmoodcoffee.com/assets/landing-lavado/01-finca.png" />
+    <meta property="og:image:alt" content="Finca y origen del café de especialidad" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Origen del café Better Mood | Finca Santa Cruz" />
+    <meta name="twitter:title" content="Origen del café de especialidad | Better Mood Coffee" />
     <meta
       name="twitter:description"
-      content="Historia, proceso y ficha técnica del café Better Mood desde Finca Santa Cruz hasta la taza."
+      content="Conoce el origen del café de especialidad, su trazabilidad, proceso y cómo influye en el sabor de cada taza en Better Mood Coffee."
     />
-    <meta name="twitter:image" content="https://bmoodcoffee.com/assets/landing-lavado/08-droppy-cafe.png" />
-    <link rel="stylesheet" href="/styles.css" />
+    <meta name="twitter:url" content="https://bmoodcoffee.com/origen-cafe/" />
+    <meta name="twitter:image" content="https://bmoodcoffee.com/assets/landing-lavado/01-finca.png" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebPage",
+            "@id": "https://bmoodcoffee.com/origen-cafe/#webpage",
+            "url": "https://bmoodcoffee.com/origen-cafe/",
+            "name": "Origen del café de especialidad | Better Mood Coffee",
+            "description": "Conoce el origen del café de especialidad, su trazabilidad, proceso y cómo influye en el sabor de cada taza en Better Mood Coffee.",
+            "isPartOf": { "@id": "https://bmoodcoffee.com/#website" },
+            "inLanguage": "es-MX"
+          },
+          {
+            "@type": "Article",
+            "@id": "https://bmoodcoffee.com/origen-cafe/#article",
+            "headline": "Origen del café de especialidad",
+            "description": "Guía educativa sobre origen, trazabilidad, finca, variedad, proceso, tostado y sabor del café de especialidad.",
+            "mainEntityOfPage": { "@id": "https://bmoodcoffee.com/origen-cafe/#webpage" },
+            "publisher": { "@id": "https://bmoodcoffee.com/#organization" },
+            "inLanguage": "es-MX"
+          },
+          {
+            "@type": "BreadcrumbList",
+            "@id": "https://bmoodcoffee.com/origen-cafe/#breadcrumb",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://bmoodcoffee.com/" },
+              { "@type": "ListItem", "position": 2, "name": "Origen del café", "item": "https://bmoodcoffee.com/origen-cafe/" }
+            ]
+          },
+          {
+            "@type": "Organization",
+            "@id": "https://bmoodcoffee.com/#organization",
+            "name": "Better Mood Coffee",
+            "url": "https://bmoodcoffee.com/"
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://bmoodcoffee.com/#website",
+            "url": "https://bmoodcoffee.com/",
+            "name": "Better Mood Coffee"
+          }
+        ]
+      }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="icon" href="../assets/logo-better-mood.png" />
   </head>
-  <body class="home-page origin-page">
-    <header class="header">
+  <body class="local-guide-page">
+    <a class="skip-link" href="#main">Saltar al contenido</a>
+
+    <header class="header" id="top">
       <div class="container header__inner">
-        <a class="logo" href="/" aria-label="Ir al inicio">
-          <img src="/assets/logo-better-mood.png" alt="Better Mood Coffee" />
+        <a class="logo" href="/" aria-label="Better Mood Coffee">
+          <img src="../assets/logo-better-mood.png" alt="Better Mood Coffee" />
         </a>
-        <nav class="nav" aria-label="Navegación principal">
+        <button class="nav-toggle" aria-controls="primary-nav" aria-expanded="false">
+          <span class="nav-toggle__icon" aria-hidden="true"></span>
+          <span class="nav-toggle__label" aria-hidden="true">Menú</span>
+          <span class="sr-only">Abrir navegación</span>
+        </button>
+        <nav class="nav" id="primary-nav">
           <a href="/#menu">Menú</a>
-          <a href="/recompensas/">Recompensas</a>
-          <a href="/bienestar/">Bienestar</a>
-          <a href="/#location">Ubicación</a>
+          <a href="/recorrido-cafe/">Recorrido</a>
+          <a href="/como-preparar-cafe-en-casa/">Preparar café</a>
+          <a href="/talleres-de-cafe-puebla/">Talleres</a>
+          <a class="btn btn--sm btn--primary" href="/#quick-order">Pedir ahora</a>
         </nav>
-        <a class="btn btn--primary header__cta" href="/">Inicio</a>
       </div>
     </header>
 
-    <main class="lavado-home origin-page__main">
-      <div class="lavado-home__inner">
-        <img
-          class="lavado-home__logo"
-          src="/assets/landing-lavado/better-mood-logo-r.png"
-          alt="Logo Better Mood Coffee"
-        />
-
-        <section class="lavado-home__section lavado-home__section--intro">
-          <h1>Un recorrido por el corazón del café</h1>
-          <div class="lavado-home__steps">
-            <article class="lavado-home__step"><div class="lavado-home__number">1</div><img src="/assets/landing-lavado/01-finca.png" alt="Finca Santa Cruz" loading="lazy" /><p><strong>Finca Santa Cruz</strong><br />El origen fértil.</p></article>
-            <article class="lavado-home__step"><div class="lavado-home__number">2</div><img src="/assets/landing-lavado/02-cosecha.png" alt="Cosecha Manual" loading="lazy" /><p><strong>Cosecha Manual</strong><br />Selección cuidadosa.</p></article>
-            <article class="lavado-home__step"><div class="lavado-home__number">3</div><img src="/assets/landing-lavado/03-lavado.png" alt="Lavado Artesanal" loading="lazy" /><p><strong>Lavado Artesanal</strong><br />Pureza en el proceso.</p></article>
-            <article class="lavado-home__step"><div class="lavado-home__number">4</div><img src="/assets/landing-lavado/04-secado.png" alt="Secado Natural" loading="lazy" /><p><strong>Secado Natural</strong><br />Tiempo y sol.</p></article>
-            <article class="lavado-home__step"><div class="lavado-home__number">5</div><img src="/assets/landing-lavado/05-tueste.png" alt="Tueste Perfecto" loading="lazy" /><p><strong>Tueste Perfecto</strong><br />Revela la esencia.</p></article>
-            <article class="lavado-home__step"><div class="lavado-home__number">6</div><img src="/assets/landing-lavado/06-empaque.png" alt="Empaque Premium" loading="lazy" /><p><strong>Empaque Premium</strong><br />Sello de frescura.</p></article>
-            <article class="lavado-home__step"><div class="lavado-home__number">7</div><img src="/assets/landing-lavado/07-hogar.png" alt="Better Mood en tu hogar" loading="lazy" /><p><strong>En tu Hogar</strong><br />La experiencia final.</p></article>
-            <article class="lavado-home__step"><div class="lavado-home__number">8</div><img src="/assets/landing-lavado/08-droppy-cafe.png" alt="Momento Better Mood" loading="lazy" /><p><strong>Momento Better Mood</strong><br />Droppy saborea el resultado.</p></article>
+    <main id="main">
+      <section class="page-hero page-hero--content" aria-labelledby="content-title">
+        <div class="container page-hero__grid">
+          <div class="page-hero__content">
+            <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Inicio</a><span>/</span><span aria-current="page">Origen del café</span></nav>
+            <p class="eyebrow">Educación cafetera</p>
+            <h1 id="content-title">Origen del café de especialidad</h1>
+            <p class="hero__text">
+              El origen del café explica de dónde viene el grano, quién lo cultiva y qué decisiones hacen que una taza tenga identidad propia.
+            </p>
+            <div class="hero__actions">
+              <a class="btn btn--primary" href="/assets/menu-better-mood.pdf" target="_blank" rel="noopener">Ver menú</a>
+              <a class="btn btn--secondary" href="https://wa.me/message/WQWEEODGY6H2P1" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+            </div>
           </div>
-          <div class="lavado-home__actions">
-            <a class="lavado-home__button" href="/recorrido-cafe/">☕ Ver recorrido completo</a>
+          <div class="content-hero__media">
+            <img src="../assets/landing-lavado/01-finca.png" alt="Finca y origen del café de especialidad" loading="eager" decoding="async" width="960" height="1080" />
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section class="lavado-home__section">
-          <h2>¿Qué es café de especialidad?</h2>
-          <p class="lavado-home__lead">De la tierra a tus sentidos: un viaje tejido por manos sabias, dedicación y un amor incondicional al café.</p>
-          <div class="lavado-home__steps">
-            <article class="lavado-home__step"><div class="lavado-home__icon">🌱</div><p><strong>Cultivo de origen</strong><br />Crece en tierras únicas, en armonía con la naturaleza.</p></article>
-            <article class="lavado-home__step"><div class="lavado-home__icon">🤲</div><p><strong>Cosecha selectiva</strong><br />Cada cereza madura es elegida a mano con dedicación.</p></article>
-            <article class="lavado-home__step"><div class="lavado-home__icon">💧</div><p><strong>Procesamiento artesanal</strong><br />Técnicas cuidadosas que conservan la esencia del grano.</p></article>
-            <article class="lavado-home__step"><div class="lavado-home__icon">🔥</div><p><strong>Tueste de precisión</strong><br />Un arte que realza cada nota y matiz de sabor.</p></article>
-            <article class="lavado-home__step"><div class="lavado-home__icon">☕</div><p><strong>Evaluación sensorial</strong><br />Certificado por expertos SCA, debe superar los 80 puntos de calidad.</p></article>
-            <article class="lavado-home__step"><div class="lavado-home__icon">🧭</div><p><strong>Trazabilidad completa</strong><br />Sabes quién cultivó tu café y cómo fue producido.</p></article>
-            <article class="lavado-home__step"><div class="lavado-home__icon">🌍</div><p><strong>Compromiso ético</strong><br />Respeto por la tierra, las personas y el futuro.</p></article>
-            <article class="lavado-home__step"><div class="lavado-home__icon">✨</div><p><strong>Experiencia en taza</strong><br />Un café que conecta sentidos y emociones, dejando una huella en tu memoria.</p></article>
+      <section class="section section--compact">
+        <div class="container article-shell">
+          <article class="article-content">
+            <section class="local-section">
+              <h2>Qué significa el origen del café</h2>
+              <p>Cuando hablamos de origen no nos referimos solo a un país o una etiqueta bonita. El origen reúne el territorio, la finca, la altitud, la variedad, el proceso y el trabajo de las personas que hacen posible cada lote. En café de especialidad, esa información ayuda a entender por qué una taza puede sentirse más dulce, más floral, más cítrica o más intensa.</p>
+              <p>El origen también permite comparar cafés con más criterio. Dos granos pueden verse parecidos, pero cambiar mucho si vienen de regiones distintas, si fueron cosechados en otra madurez o si pasaron por procesos diferentes antes del tostado.</p>
+            </section>
+
+            <section class="local-section">
+              <h2>Trazabilidad: saber de dónde viene tu taza</h2>
+              <p>La trazabilidad conecta la taza con su historia. Puede incluir finca, productor, región, variedad, altitud, proceso y fecha de tostado. No es un lujo técnico: es una forma de darle contexto al sabor y de reconocer el trabajo que existe antes de que el café llegue a la barra.</p>
+              <p>En Better Mood Coffee buscamos que la selección de café sea clara y responsable. Eso significa comunicar mejor lo que se sabe del grano, cuidar la preparación y evitar que el café se vuelva una experiencia genérica.</p>
+            </section>
+
+            <section class="local-section">
+              <h2>Finca, variedad, proceso y tostado</h2>
+              <p>La finca aporta clima, suelo y prácticas de cultivo. La variedad influye en el potencial de sabor. El proceso, como lavado, natural o honey, modifica cómo se desarrolla la dulzura, acidez y cuerpo. Después, el tostado debe respetar ese potencial para que el café sea expresivo sin perder balance.</p>
+              <p>Por eso el café de especialidad no se entiende solo al final. El sabor de una taza es la suma de decisiones tomadas desde el cultivo hasta la extracción.</p>
+            </section>
+
+            <section class="local-section">
+              <h2>Cómo se vive en Better Mood</h2>
+              <p>En cafetería, el origen se vuelve práctico: ayuda a elegir una bebida, entender por qué un filtrado cambia respecto a un espresso y conversar con más claridad sobre lo que estás tomando. Si quieres seguir aprendiendo, puedes revisar <a href="/recorrido-cafe/">el recorrido del café hasta tu taza</a>, practicar con la guía para <a href="/como-preparar-cafe-en-casa/">preparar café en casa</a> o conocer próximos <a href="/talleres-de-cafe-puebla/">talleres de café en Puebla</a>.</p>
+            </section>
+          </article>
+
+          <aside class="article-sidebar">
+            <div class="article-card local-benefits">
+              <p class="article-card__eyebrow">Claves del origen</p>
+              <h2>Qué revisar en un café</h2>
+              <ul class="local-benefits__list">
+                <li>Región, finca o productor cuando esté disponible.</li>
+                <li>Variedad, proceso y fecha de tostado.</li>
+                <li>Notas sensoriales explicadas de forma clara.</li>
+              </ul>
+            </div>
+            <div class="article-card article-card--links">
+              <p class="article-card__eyebrow">Sigue aprendiendo</p>
+              <a href="/recorrido-cafe/">Recorrido del café</a>
+              <a href="/como-preparar-cafe-en-casa/">Cómo preparar café en casa</a>
+              <a href="/talleres-de-cafe-puebla/">Talleres de café Puebla</a>
+              <a href="/">Volver a Better Mood</a>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section section--cta section--cta-tight">
+        <div class="container">
+          <div class="section__header">
+            <p class="eyebrow">Siguiente paso</p>
+            <h2>Prueba el origen en una taza.</h2>
+            <p>Revisa el menú, visita la sucursal o escríbenos por WhatsApp para conocer qué café estamos sirviendo.</p>
           </div>
-        </section>
-
-        <section class="lavado-home__section">
-          <h2>Historia de la Finca</h2>
-          <img class="lavado-home__producer" src="/assets/landing-lavado/Josearguello-densocafe-fincasantacruz.jpg" alt="José Argüello, productor de Finca Santa Cruz" loading="lazy" />
-          <div class="lavado-home__story">
-            <p>En las montañas de La Concordia, Chiapas, donde la niebla acaricia las hojas y el sol despierta los aromas de la tierra, se encuentra <span>Finca Santa Cruz</span>.</p>
-            <p>Más que una finca, es un legado familiar forjado por la pasión y el compromiso de <span>José Argüello</span> y su familia, dedicados a cultivar un café excepcional.</p>
-            <p>Este compromiso ha sido reconocido internacionalmente: Finca Santa Cruz fue galardonada con el primer lugar en la <span>"Cup of the World 2022"</span>, organizada por la Alliance for Coffee Excellence.</p>
-            <p>Además, ha sido tricampeona nacional en la Taza de la Excelencia en México, alcanzando <span>93 puntos</span> por evaluación Q Grader.</p>
-            <p>Cada grano que nace en Finca Santa Cruz refleja el alma de la tierra y la meticulosa dedicación de sus productores, contando una historia de tradición y excelencia.</p>
+          <div class="section__cta local-cta__actions">
+            <a class="btn btn--primary" href="/assets/menu-better-mood.pdf" target="_blank" rel="noopener">Menú</a>
+            <a class="btn btn--secondary" href="https://maps.google.com/?q=13+Poniente+2302%2FF,+La+Paz,+Puebla,+Puebla" target="_blank" rel="noopener">Ubicación</a>
+            <a class="btn btn--secondary" href="https://wa.me/message/WQWEEODGY6H2P1" target="_blank" rel="noopener noreferrer">WhatsApp</a>
           </div>
-        </section>
-
-        <section class="lavado-home__section">
-          <h2>Información Técnica</h2>
-          <div class="lavado-home__cards">
-            <article><div>🏡</div><p><strong>Finca:</strong><br />Santa Cruz</p></article>
-            <article><div>👨‍🌾</div><p><strong>Productor:</strong><br />José Argüello</p></article>
-            <article><div>🗻</div><p><strong>Altitud:</strong><br />1,680 msnm</p></article>
-            <article><div>🌱</div><p><strong>Varietal:</strong><br />Typica y bourbon</p></article>
-            <article><div>💧</div><p><strong>Proceso:</strong><br />Lavado</p></article>
-            <article><div>☕</div><p><strong>Notas:</strong><br />Chocolate, caramelo. cereza, mantequilla</p></article>
-            <article><div>🏅</div><p><strong>Puntaje SCA:</strong><br />84.5</p></article>
-            <article><div>📅</div><p><strong>Fecha de Tostado:</strong><br />Ver empaque.</p></article>
-          </div>
-        </section>
-
-        <section class="lavado-home__quote">
-          <p>"Cada taza, un homenaje a la paciencia y la tierra. Better Mood Coffee."</p>
-        </section>
-      </div>
+        </div>
+      </section>
     </main>
+
+    <footer class="footer">
+      <div class="container footer__grid">
+        <div class="footer__brand">
+          <img class="footer__logo" src="../assets/logo-better-mood.png" alt="Better Mood Coffee" />
+          <p>Better Mood Coffee — Café de especialidad y bienestar responsable en Puebla.</p>
+        </div>
+        <div class="footer__links">
+          <h3>Navegación</h3>
+          <a href="/#menu">Menú</a>
+          <a href="/eventos/">Eventos</a>
+          <a href="/talleres-de-cafe-puebla/">Talleres</a>
+          <a href="/bienestar/">Bienestar</a>
+        </div>
+        <div class="footer__links">
+          <h3>Educación cafetera</h3>
+          <a href="/origen-cafe/">Origen del café</a>
+          <a href="/recorrido-cafe/">Recorrido del café</a>
+          <a href="/como-preparar-cafe-en-casa/">Preparar café en casa</a>
+          <a href="/talleres-de-cafe-puebla/">Talleres de café Puebla</a>
+        </div>
+        <div class="footer__links">
+          <h3>Ubicación</h3>
+          <p>13 Poniente 2302/F, Col. La Paz, Puebla.</p>
+          <a href="https://maps.google.com/?q=13+Poniente+2302%2FF,+La+Paz,+Puebla,+Puebla" target="_blank" rel="noopener">Maps</a>
+        </div>
+      </div>
+      <div class="container footer__disclaimer">
+        <p class="footer__copyright">© Better Mood Coffee. Todos los derechos reservados.</p>
+      </div>
+    </footer>
+    <script src="../script.js"></script>
   </body>
 </html>

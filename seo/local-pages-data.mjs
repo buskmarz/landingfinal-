@@ -43,6 +43,9 @@ const staticLinkLabels = {
   "/recomendador/": { label: "Recomendador de bebidas" },
   "/cafe-de-especialidad-puebla/": { label: "Café de especialidad en Puebla" },
   "/cbd-en-el-cafe/": { label: "CBD en el café" },
+  "/origen-cafe/": { label: "Origen del café" },
+  "/recorrido-cafe/": { label: "Recorrido del café" },
+  "/eventos/": { label: "Eventos Better Mood" },
   "/como-preparar-cafe-en-casa/": { label: "Cómo preparar café en casa" },
   "/talleres-de-cafe-puebla/": { label: "Talleres de café en Puebla" }
 };
