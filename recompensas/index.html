@@ -64,12 +64,12 @@
         <nav class="nav" id="primary-nav">
           <a href="/#menu">Menú</a>
           <a href="/#location">Ubicación</a>
-          <a href="/recompensas/" aria-current="page">Recompensas</a>
+          <a href="/recompensas/" aria-current="page" data-cta="ver-recompensas">Cashback</a>
           <a href="/arcade/">Arcade</a>
           <a href="/eventos/">Eventos</a>
           <a
             class="btn btn--sm btn--primary"
-            href="https://wa.me/?text=Me%20quiero%20registrar%20y%20ganar%20el%20cupon%20de%20%2450.%0A%0AMi%20nombre%20es%3A%0AMi%20numero%20de%20telefono%20es%3A%0AMi%20fecha%20de%20nacimiento%20es%3A"
+            href="https://wa.me/?text=Me%20quiero%20registrar%20y%20ganar%20el%20cup%C3%B3n%20de%20%2450.%0A%0AMi%20nombre%20es%3A%0AMi%20n%C3%BAmero%20de%20tel%C3%A9fono%20es%3A%0AMi%20fecha%20de%20nacimiento%20es%3A"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -84,15 +84,15 @@
         <div class="container page-hero__grid">
           <div class="page-hero__content">
             <p class="eyebrow">Cashback Better Mood</p>
-            <h1 id="rewards-page-title">Gana $50 y cashback.</h1>
+            <h1 id="rewards-page-title">Empieza con $50 + cashback en cada visita.</h1>
             <p class="hero__text">
-              Registrate por WhatsApp, compra con tu telefono y aprovecha promociones con cashback en cada visita, campañas especiales y algunas horas felices.
+              Regístrate por WhatsApp, compra con tu teléfono y acumula saldo real para usar en futuras visitas a Better Mood Coffee.
             </p>
             <div class="hero__actions">
-              <a class="btn btn--primary" href="https://wa.me/?text=Me%20quiero%20registrar%20y%20ganar%20el%20cupon%20de%20%2450.%0A%0AMi%20nombre%20es%3A%0AMi%20numero%20de%20telefono%20es%3A%0AMi%20fecha%20de%20nacimiento%20es%3A" target="_blank" rel="noopener">
-                Registrar ahora
+              <a class="btn btn--primary" href="https://wa.me/?text=Me%20quiero%20registrar%20y%20ganar%20el%20cup%C3%B3n%20de%20%2450.%0A%0AMi%20nombre%20es%3A%0AMi%20n%C3%BAmero%20de%20tel%C3%A9fono%20es%3A%0AMi%20fecha%20de%20nacimiento%20es%3A" target="_blank" rel="noopener noreferrer" data-cta="activar-cashback">
+                Activar cashback
               </a>
-              <a class="btn btn--secondary" href="#portal-title">
+              <a class="btn btn--secondary" href="#consulta-saldo" data-cta="consultar-saldo">
                 Consultar saldo
               </a>
             </div>
@@ -165,7 +165,7 @@
                   <p class="rewards-quick__label">Como consultar tu saldo</p>
                   <strong>En esta pagina</strong>
                 </div>
-                <a class="btn btn--secondary" href="#portal-title">
+                <a class="btn btn--secondary" href="#consulta-saldo" data-cta="consultar-saldo">
                   Consultar saldo
                 </a>
               </div>
@@ -273,7 +273,7 @@
                   Nombre, telefono y fecha de nacimiento. Nuevo registro = cupon de $50.
                 </p>
                 <div class="hero__actions">
-                  <a class="btn btn--secondary" href="https://wa.me/?text=Me%20quiero%20registrar%20y%20ganar%20el%20cupon%20de%20%2450.%0A%0AMi%20nombre%20es%3A%0AMi%20numero%20de%20telefono%20es%3A%0AMi%20fecha%20de%20nacimiento%20es%3A" target="_blank" rel="noopener">
+                  <a class="btn btn--secondary" href="https://wa.me/?text=Me%20quiero%20registrar%20y%20ganar%20el%20cup%C3%B3n%20de%20%2450.%0A%0AMi%20nombre%20es%3A%0AMi%20n%C3%BAmero%20de%20tel%C3%A9fono%20es%3A%0AMi%20fecha%20de%20nacimiento%20es%3A" target="_blank" rel="noopener" data-cta="activar-cashback">
                     Registrar ahora
                   </a>
                 </div>
@@ -283,7 +283,7 @@
         </div>
       </section>
 
-      <section class="section rewards-portal rewards-portal--compact" aria-labelledby="portal-title">
+      <section class="section rewards-portal rewards-portal--compact" id="consulta-saldo" aria-labelledby="portal-title">
         <div class="container">
           <div class="section__header rewards-portal__header">
             <p class="eyebrow">Consulta tu saldo</p>
@@ -311,7 +311,7 @@
                 </div>
 
                 <div class="rewards-portal__actions">
-                  <button class="btn btn--primary" type="submit" data-portal-submit>Consultar saldo</button>
+                  <button class="btn btn--primary" type="submit" data-portal-submit data-cta="consultar-saldo">Consultar saldo</button>
                   <a class="btn btn--secondary" href="https://wa.me/?text=Quiero%20consultar%20mi%20saldo." target="_blank" rel="noopener">WhatsApp</a>
                   <button class="btn btn--secondary" type="button" data-portal-reset hidden>Salir</button>
                 </div>
@@ -443,8 +443,8 @@
             <p>Nombre, telefono y fecha de nacimiento. Nuevo registro = cupon de $50.</p>
           </div>
           <div class="section__cta">
-            <a class="btn btn--primary" href="https://wa.me/?text=Me%20quiero%20registrar%20y%20ganar%20el%20cupon%20de%20%2450.%0A%0AMi%20nombre%20es%3A%0AMi%20numero%20de%20telefono%20es%3A%0AMi%20fecha%20de%20nacimiento%20es%3A" target="_blank" rel="noopener">
-              Registrar ahora
+            <a class="btn btn--primary" href="https://wa.me/?text=Me%20quiero%20registrar%20y%20ganar%20el%20cup%C3%B3n%20de%20%2450.%0A%0AMi%20nombre%20es%3A%0AMi%20n%C3%BAmero%20de%20tel%C3%A9fono%20es%3A%0AMi%20fecha%20de%20nacimiento%20es%3A" target="_blank" rel="noopener noreferrer" data-cta="activar-cashback">
+              Activar cashback
             </a>
             <a class="btn btn--secondary" href="/">Volver a la landing</a>
           </div>
@@ -491,8 +491,8 @@
 
     <nav class="mobile-bar" aria-label="Accesos rápidos">
       <a class="mobile-bar__item" href="/">Inicio</a>
-      <a class="mobile-bar__item is-primary" href="/recompensas/">Recompensas</a>
-      <a class="mobile-bar__item" href="https://wa.me/?text=Me%20quiero%20registrar%20y%20ganar%20el%20cupon%20de%20%2450.%0A%0AMi%20nombre%20es%3A%0AMi%20numero%20de%20telefono%20es%3A%0AMi%20fecha%20de%20nacimiento%20es%3A" target="_blank" rel="noopener noreferrer">Registrar</a>
+      <a class="mobile-bar__item is-primary" href="/recompensas/" data-cta="ver-recompensas">Cashback</a>
+      <a class="mobile-bar__item" href="https://wa.me/?text=Me%20quiero%20registrar%20y%20ganar%20el%20cup%C3%B3n%20de%20%2450.%0A%0AMi%20nombre%20es%3A%0AMi%20n%C3%BAmero%20de%20tel%C3%A9fono%20es%3A%0AMi%20fecha%20de%20nacimiento%20es%3A" target="_blank" rel="noopener noreferrer" data-cta="activar-cashback">Registrar</a>
     </nav>
 
     <a
