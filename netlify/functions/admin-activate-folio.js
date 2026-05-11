@@ -10,7 +10,7 @@ const {
   parseBody,
   requireAdmin,
   setJSON,
-} = require("./quiniela-shared");
+} = require("./football-shared");
 
 exports.handler = async (event) => {
   initNetlifyBlobs(event);

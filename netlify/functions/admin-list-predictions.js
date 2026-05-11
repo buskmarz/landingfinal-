@@ -1,5 +1,5 @@
 const {
-  initNetlifyBlobs, json, listJSON, requireAdmin } = require("./quiniela-shared");
+  initNetlifyBlobs, json, listJSON, requireAdmin } = require("./football-shared");
 
 exports.handler = async (event) => {
   initNetlifyBlobs(event);

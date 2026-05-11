@@ -38,6 +38,24 @@
   force = true
 
 # 3) Normalizar rutas legacy que hoy compiten con sus versiones bonitas
+
+[[redirects]]
+  from = "/quiniela/*"
+  to = "/calendario-futbolero/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/quiniela"
+  to = "/calendario-futbolero/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/calendario-futbolero"
+  to = "/calendario-futbolero/"
+  status = 301
+
 [[redirects]]
   from = "/recomendador.html"
   to = "/recomendador/"

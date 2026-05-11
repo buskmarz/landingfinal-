@@ -9,7 +9,7 @@ const {
   json,
   parseBody,
   setJSON,
-} = require("./quiniela-shared");
+} = require("./football-shared");
 
 exports.handler = async (event) => {
   initNetlifyBlobs(event);
@@ -49,14 +49,14 @@ exports.handler = async (event) => {
       participantId,
       folioId: folio.id,
       folioCode,
-      source: "quiniela_2026",
+      source: "calendario_futbolero_2026",
       product: "kit_better_mood_futbolero",
       paymentId,
     },
     back_urls: {
-      success: `${SITE_URL}/quiniela/pago-exitoso/?folio=${encodeURIComponent(folioCode)}`,
-      failure: `${SITE_URL}/quiniela/pago-error/?folio=${encodeURIComponent(folioCode)}`,
-      pending: `${SITE_URL}/quiniela/pago-pendiente/?folio=${encodeURIComponent(folioCode)}`,
+      success: `${SITE_URL}/calendario-futbolero/pago-exitoso/?folio=${encodeURIComponent(folioCode)}`,
+      failure: `${SITE_URL}/calendario-futbolero/pago-error/?folio=${encodeURIComponent(folioCode)}`,
+      pending: `${SITE_URL}/calendario-futbolero/pago-pendiente/?folio=${encodeURIComponent(folioCode)}`,
     },
     auto_return: "approved",
     notification_url: `${SITE_URL}/.netlify/functions/mercadopago-webhook`,

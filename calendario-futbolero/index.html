@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calendario futbolero 2026 | Partidos, grupos y sedes | Better Mood Coffee</title>
+  <meta name="description" content="Consulta partidos, grupos, sedes, fechas clave y partidos de México en la Guía Futbolera 2026 de Better Mood Coffee. Información pública para vivir la temporada con café." />
+  <meta name="robots" content="index,follow" />
+  <link rel="canonical" href="https://bmoodcoffee.com/calendario-futbolero/" />
+  <meta property="og:title" content="Guía futbolera 2026 | Better Mood Coffee" />
+  <meta property="og:description" content="Calendario, grupos, partidos de México, sedes y fechas clave para vivir la temporada futbolera con café y comunidad." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://bmoodcoffee.com/calendario-futbolero/" />
+  <meta property="og:image" content="https://bmoodcoffee.com/assets/hero-coffee.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="calendario.css" />
+</head>
+<body>
+  <header class="bm-header">
+    <div class="bm-container bm-topbar">
+      <a class="bm-brand" href="/">Better Mood Coffee</a>
+      <nav class="bm-nav" aria-label="Navegación guía futbolera">
+        <a href="#calendario">Calendario</a><a href="#mexico">México</a><a href="#grupos">Grupos</a><a href="#sedes">Sedes</a><a href="#faq">FAQ</a>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <section class="bm-hero" id="top" aria-labelledby="hero-title">
+      <div class="bm-container bm-hero-grid">
+        <div class="bm-hero-copy">
+          <p class="bm-pill">Temporada futbolera 2026</p>
+          <h1 id="hero-title">Guía futbolera 2026 para vivir cada partido con café.</h1>
+          <p class="bm-lead">Calendario, grupos, sedes y partidos de México en una experiencia pública, clara y fácil de consultar.</p>
+          <div class="bm-hero-actions">
+            <a class="bm-btn bm-btn-primary" href="#calendario">Ver calendario</a>
+            <button class="bm-btn bm-btn-secondary" type="button" id="hero-mexico-cta">Partidos de México</button>
+            <a class="bm-btn bm-btn-secondary" href="/#quick-order">Pedir café</a>
+          </div>
+          <p class="bm-note">Guía informativa independiente. Better Mood Coffee no está afiliado a organizadores oficiales del torneo.</p>
+        </div>
+        <div class="bm-hero-panel" aria-label="Resumen de la guía futbolera">
+          <div class="bm-score-card"><span class="bm-card-kicker">Partido que abre la conversación</span><div class="bm-scoreline"><strong>🇲🇽 México</strong><span>vs</span><strong>🇿🇦 Sudáfrica</strong></div><p>11 junio · 1:00 p.m. · Estadio Azteca</p></div>
+          <div class="bm-stats-board"><article><strong>72</strong><span>partidos cargados</span></article><article><strong>12</strong><span>grupos</span></article><article><strong>3</strong><span>sedes en México</span></article><article><strong>104</strong><span>partidos totales</span></article></div>
+          <div class="bm-coffee-card"><span>Plan Better Mood</span><p>Elige partido, arma el plan y ven por tu bebida antes del silbatazo.</p><a href="/#location">Ver ubicación</a></div>
+        </div>
+      </div>
+    </section>
+    <section id="calendario" class="bm-section bm-calendar-section">
+      <div class="bm-container">
+        <div class="bm-section-head"><p class="bm-pill">Calendario público</p><h2>Partidos, grupos y sedes en una sola vista.</h2><p>Usa las pestañas para consultar solo lo que necesitas. No hay registro ni formulario: solo información útil.</p></div>
+        <div class="bm-tabs" role="tablist" aria-label="Filtros de calendario"><button class="bm-tab is-active" type="button" role="tab" aria-selected="true" data-calendar-tab="featured">Destacados</button><button class="bm-tab" type="button" role="tab" aria-selected="false" data-calendar-tab="matchday">Por jornada</button><button class="bm-tab" type="button" role="tab" aria-selected="false" data-calendar-tab="mexico">México</button><button class="bm-tab" type="button" role="tab" aria-selected="false" data-calendar-tab="groups">Grupos</button><button class="bm-tab" type="button" role="tab" aria-selected="false" data-calendar-tab="venues">Sedes</button></div>
+        <section class="bm-panel is-active" data-calendar-panel="featured"><div class="bm-panel-head"><div><h3>Partidos destacados</h3><p>El primer partido de México y próximos juegos cargados.</p></div><button class="bm-btn bm-btn-secondary" id="featured-show-more" type="button">Ver más</button></div><div id="featured-results" class="bm-match-grid"></div></section>
+        <section class="bm-panel" data-calendar-panel="matchday"><div class="bm-panel-head"><div><h3>Calendario por jornada</h3><p>Consulta solo una jornada para evitar listas largas.</p></div></div><div id="phase-chips" class="bm-chip-row" aria-label="Jornadas"></div><div id="matchday-summary" class="bm-summary-grid"></div><div id="matchday-results" class="bm-match-grid"></div><button class="bm-btn bm-btn-secondary bm-show-more" id="matchday-show-more" type="button">Mostrar más partidos</button></section>
+        <section class="bm-panel" data-calendar-panel="mexico" id="mexico"><div class="bm-mexico-head"><span>🇲🇽</span><div><h3>Partidos de México</h3><p>El punto de reunión perfecto: café, comunidad y calendario listo.</p></div><a class="bm-btn bm-btn-primary" href="/#quick-order">Ven por tu bebida del partido</a></div><div id="mexico-matches" class="bm-match-grid"></div></section>
+        <section class="bm-panel" data-calendar-panel="groups" id="grupos"><div class="bm-panel-head"><div><h3>Grupos de la temporada futbolera 2026</h3><p>Explora selecciones y partidos por grupo.</p></div></div><div id="groups-grid" class="bm-group-grid"></div><div id="group-results" class="bm-match-grid bm-filter-results"></div></section>
+        <section class="bm-panel" data-calendar-panel="venues" id="sedes"><div class="bm-panel-head"><div><h3>Sedes en México</h3><p>Ciudad de México, Guadalajara y Monterrey en formato compacto.</p></div></div><div id="mexico-venues" class="bm-venue-grid"></div><div id="venue-results" class="bm-match-grid bm-filter-results"></div></section>
+      </div>
+    </section>
+    <section class="bm-section bm-quick-guide" id="guia"><div class="bm-container bm-guide-grid"><div><p class="bm-pill">Guía rápida</p><h2>Lo esencial para entender la temporada en menos de un minuto.</h2><p>Fechas, formato y datos clave sin saturarte de texto.</p></div><div class="bm-fact-grid"><article><strong>11 jun</strong><span>inicio</span></article><article><strong>19 jul</strong><span>final</span></article><article><strong>48</strong><span>selecciones</span></article><article><strong>104</strong><span>partidos</span></article><article><strong>12</strong><span>grupos</span></article><article><strong>16</strong><span>ciudades sede</span></article></div></div></section>
+    <section class="bm-section bm-plans-section"><div class="bm-container"><div class="bm-section-head"><p class="bm-pill">Planes con café</p><h2>Del calendario al plan del día.</h2><p>La página está pensada para que cualquier persona encuentre el partido y conecte rápido con Better Mood.</p></div><div class="bm-plan-grid"><article><span>01</span><h3>Encuentra el partido</h3><p>Filtra por jornada, grupo, México o sede.</p></article><article><span>02</span><h3>Arma el plan</h3><p>Revisa hora y sede para decidir si lo ves en casa, oficina o con amigos.</p></article><article><span>03</span><h3>Suma Better Mood</h3><p>Pide café, pasa por tu bebida o consulta ubicación antes del juego.</p></article></div></div></section>
+    <section id="faq" class="bm-section bm-faq-section"><div class="bm-container"><div class="bm-section-head"><p class="bm-pill">Preguntas útiles</p><h2>Preguntas frecuentes para planear la temporada.</h2><p>Respuestas cortas, prácticas y enfocadas en lo que realmente busca la gente.</p></div><div class="bm-faq-grid"><details open><summary>¿Qué encuentro en esta guía futbolera?</summary><p>Calendario por jornada, grupos, partidos de México, sedes en México y datos rápidos para seguir la temporada 2026.</p></details><details><summary>¿Necesito registrarme para consultar partidos?</summary><p>No. La guía es pública, gratuita y está pensada para consulta rápida desde móvil.</p></details><details><summary>¿Cómo veo solo los partidos de México?</summary><p>Entra a la pestaña “México” o toca el botón del hero. Ahí aparecen los partidos cargados del grupo de México.</p></details><details><summary>¿Qué hago si una fase aparece por confirmar?</summary><p>Significa que todavía no hay cruces definidos. No inventamos partidos; la página queda lista para actualizarse cuando haya datos confirmados.</p></details><details><summary>¿Cómo conecto esto con Better Mood?</summary><p>Usa el calendario para planear tu bebida del partido, pedir por delivery o pasar por café antes de verlo con amigos.</p></details><details><summary>¿Esta guía es oficial?</summary><p>No. Es una guía informativa independiente de Better Mood Coffee para clientes y comunidad.</p></details></div></div></section>
+  </main>
+  <footer class="bm-footer"><div class="bm-container bm-footer-inner"><p>Better Mood Coffee · Café, comunidad y temporada futbolera.</p><div><a href="/">Home</a><a href="/#quick-order">Pedir café</a><a href="/#location">Ubicación</a></div></div></footer>
+  <a class="bm-mobile-cta" href="#calendario">Ver calendario</a>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

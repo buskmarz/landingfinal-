@@ -8,7 +8,7 @@ const {
   parseBody,
   setJSON,
   verifyMercadoPagoSignature,
-} = require("./quiniela-shared");
+} = require("./football-shared");
 
 exports.handler = async (event) => {
   initNetlifyBlobs(event);

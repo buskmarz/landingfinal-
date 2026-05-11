@@ -1,5 +1,5 @@
 const {
-  initNetlifyBlobs, json, listJSON, requireAdmin } = require("./quiniela-shared");
+  initNetlifyBlobs, json, listJSON, requireAdmin } = require("./football-shared");
 
 exports.handler = async (event) => {
   initNetlifyBlobs(event);
@@ -24,7 +24,7 @@ exports.handler = async (event) => {
     statusCode: 200,
     headers: {
       "Content-Type": "text/csv; charset=utf-8",
-      "Content-Disposition": 'attachment; filename="quiniela-better-mood-participantes.csv"',
+      "Content-Disposition": 'attachment; filename="calendario-futbolero-better-mood-participantes.csv"',
       "Cache-Control": "no-store",
     },
     body: csv,

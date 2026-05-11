@@ -1,6 +1,6 @@
 const crypto = require("crypto");
 const { connectLambda, getStore } = require("@netlify/blobs");
-const { MOCK_MATCHES, PHASES } = require("./quiniela-static-data");
+const { MOCK_MATCHES, PHASES } = require("./football-static-data");
 
 const KIT_PRICE = 99;
 const CURRENCY = "MXN";
@@ -123,7 +123,7 @@ async function generateFolioCode() {
 }
 
 function makeQrUrl(folioCode) {
-  const target = encodeURIComponent(`${SITE_URL}/quiniela/?folio=${folioCode}#predicciones`);
+  const target = encodeURIComponent(`${SITE_URL}/calendario-futbolero/?folio=${folioCode}#predicciones`);
   return `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${target}`;
 }
 

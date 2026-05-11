@@ -1,6 +1,6 @@
 const crypto = require("crypto");
 const {
-  initNetlifyBlobs, getJSON, json, normalizeFolio, parseBody, requireAdmin, setJSON } = require("./quiniela-shared");
+  initNetlifyBlobs, getJSON, json, normalizeFolio, parseBody, requireAdmin, setJSON } = require("./football-shared");
 
 exports.handler = async (event) => {
   initNetlifyBlobs(event);

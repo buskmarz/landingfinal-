@@ -8,7 +8,7 @@ const {
   normalizeFolio,
   parseBody,
   setJSON,
-} = require("./quiniela-shared");
+} = require("./football-shared");
 const crypto = require("crypto");
 
 exports.handler = async (event) => {

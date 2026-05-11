@@ -1,5 +1,5 @@
 const {
-  initNetlifyBlobs, getJSON, getMatches, json, listJSON, normalizeFolio } = require("./quiniela-shared");
+  initNetlifyBlobs, getJSON, getMatches, json, listJSON, normalizeFolio } = require("./football-shared");
 
 exports.handler = async (event) => {
   initNetlifyBlobs(event);
