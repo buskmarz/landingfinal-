@@ -35,6 +35,7 @@
 
   const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
   const STORAGE_KEY = "better-mood-pinball-high";
+  const CAPTURED_KEY_CODES = new Set(["ArrowLeft", "ArrowRight", "ArrowUp", "Space", "KeyA", "KeyD", "KeyP", "KeyM", "KeyF", "Enter"]);
 
   const world = {
     width: 0,
@@ -96,6 +97,16 @@
   let rafId = 0;
   let lastRealNow = 0;
   let isActive = !root.closest("[hidden]");
+  const activePointers = new Map();
+
+  root.tabIndex = root.tabIndex >= 0 ? root.tabIndex : 0;
+
+  function focusGame() {
+    if (document.activeElement instanceof HTMLElement && root.contains(document.activeElement)) {
+      document.activeElement.blur();
+    }
+    root.focus({ preventScroll: true });
+  }
 
   function setOverlay(which) {
     if (startOverlay) startOverlay.hidden = which !== "start";
@@ -163,15 +174,15 @@
     const isLeft = side === "left";
     const pivot = {
       x: world.width * (isLeft ? 0.38 : 0.62),
-      y: world.height * 0.86,
+      y: world.height * 0.845,
     };
     const restAngle = isLeft ? 0.5 : Math.PI - 0.5;
-    const activeAngle = isLeft ? -0.38 : Math.PI + 0.38;
+    const activeAngle = isLeft ? -0.55 : Math.PI + 0.55;
     return {
       side,
       pivot,
-      length: world.width * 0.2,
-      width: world.width * 0.028,
+      length: world.width * 0.255,
+      width: world.width * 0.034,
       angle: restAngle,
       previousAngle: restAngle,
       restAngle,
@@ -218,11 +229,31 @@
 
   function resizeCanvas() {
     const rect = canvas.getBoundingClientRect();
+    const oldWorld = { width: world.width, height: world.height };
+    const hadPlayableSize = oldWorld.width >= 40 && oldWorld.height >= 40;
+    const preserveBall =
+      hadPlayableSize && state.mode === "playing" && !state.waitingLaunch;
+    const ballRatio = preserveBall
+      ? {
+          x: state.ball.x / oldWorld.width,
+          y: state.ball.y / oldWorld.height,
+          vx: state.ball.vx / oldWorld.width,
+          vy: state.ball.vy / oldWorld.height,
+        }
+      : null;
+
     if (rect.width < 40 || rect.height < 40) {
       world.width = 360;
       world.height = 560;
       createTable();
-      setBallAtLaunch();
+      if (ballRatio) {
+        state.ball.x = world.width * ballRatio.x;
+        state.ball.y = world.height * ballRatio.y;
+        state.ball.vx = world.width * ballRatio.vx;
+        state.ball.vy = world.height * ballRatio.vy;
+      } else {
+        setBallAtLaunch();
+      }
       return;
     }
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -233,7 +264,15 @@
     world.height = rect.height;
     background.resize(world);
     createTable();
-    setBallAtLaunch();
+    if (ballRatio) {
+      state.ball.x = world.width * ballRatio.x;
+      state.ball.y = world.height * ballRatio.y;
+      state.ball.vx = world.width * ballRatio.vx;
+      state.ball.vy = world.height * ballRatio.vy;
+      state.waitingLaunch = false;
+    } else {
+      setBallAtLaunch();
+    }
     draw();
   }
 
@@ -247,16 +286,17 @@
   }
 
   function applyLaunchVelocity() {
-    state.ball.vx = -world.width * 0.24;
-    state.ball.vy = -world.height * 1.42;
+    state.ball.vx = -world.width * 0.2;
+    state.ball.vy = -world.height * 1.32;
     state.waitingLaunch = false;
-    state.launchAssistTime = 0.65;
+    state.launchAssistTime = 1;
   }
 
   function launchBall() {
     if (state.mode !== "playing" || !state.waitingLaunch) return;
+    focusGame();
     applyLaunchVelocity();
-    state.ballSaveTime = 6;
+    state.ballSaveTime = 10;
     updateHud();
   }
 
@@ -286,6 +326,7 @@
 
   function startGame() {
     if (!isActive) return;
+    focusGame();
     audio.ensureStarted();
     if (!state.muted) {
       audio.resume();
@@ -315,6 +356,8 @@
   function pauseGame() {
     if (state.mode !== "playing") return;
     state.mode = "paused";
+    state.input.left = false;
+    state.input.right = false;
     state.running = false;
     cancelAnimationFrame(rafId);
     if (!state.muted) {
@@ -327,6 +370,7 @@
 
   function resumeGame() {
     if (!isActive || state.mode !== "paused") return;
+    focusGame();
     state.mode = "playing";
     state.running = true;
     if (!state.muted) {
@@ -442,7 +486,7 @@
     if (state.ballSaveTime > 0) {
       setBallAtLaunch();
       applyLaunchVelocity();
-      state.ballSaveTime = Math.max(state.ballSaveTime - 1.5, 0);
+      state.ballSaveTime = Math.max(state.ballSaveTime - 2, 0);
       updateHud();
       return;
     }
@@ -506,7 +550,7 @@
         }
       }
 
-      state.ball.vy += world.height * 0.94 * stepDt;
+      state.ball.vy += world.height * 0.82 * stepDt;
       state.ball.vx *= 0.999;
       state.ball.vy *= 0.999;
       state.ball.x += state.ball.vx * stepDt;
@@ -517,11 +561,11 @@
       });
 
       [state.flippers.left, state.flippers.right].forEach((flipper) => {
-        const fling = Math.abs(flipper.angle - flipper.previousAngle) * world.width * 8;
+        const fling = Math.abs(flipper.angle - flipper.previousAngle) * world.width * 10;
         const boost = flipper.pressed ? fling : 0;
         if (collideSegment(flipper.segment, flipper.width * 0.54, boost)) {
           if (flipper.pressed) {
-            state.ball.vy -= world.height * 0.1;
+            state.ball.vy -= world.height * 0.16;
           }
         }
       });
@@ -639,6 +683,7 @@
 
   function handleAction(action) {
     if (!isActive) return;
+    focusGame();
     if (action === "launch") {
       launchBall();
       return;
@@ -659,6 +704,9 @@
 
   document.addEventListener("keydown", (event) => {
     if (!isActive) return;
+    if (CAPTURED_KEY_CODES.has(event.code) && state.mode !== "idle") {
+      event.preventDefault();
+    }
     if (state.mode === "idle" && (event.code === "Enter" || event.code === "Space")) {
       event.preventDefault();
       startGame();
@@ -704,6 +752,9 @@
 
   document.addEventListener("keyup", (event) => {
     if (!isActive) return;
+    if (CAPTURED_KEY_CODES.has(event.code)) {
+      event.preventDefault();
+    }
     if (event.code === "ArrowLeft" || event.code === "KeyA") {
       pressControl("left", false);
     }
@@ -725,7 +776,10 @@
       });
       return;
     }
-    const release = () => pressControl(action, false);
+    const release = (event) => {
+      event?.preventDefault?.();
+      pressControl(action, false);
+    };
     button.addEventListener("pointerdown", (event) => {
       event.preventDefault();
       audio.ensureStarted();
@@ -733,11 +787,52 @@
         audio.resume();
       }
       pressControl(action, true);
+      button.setPointerCapture?.(event.pointerId);
     });
     button.addEventListener("pointerup", release);
     button.addEventListener("pointerleave", release);
     button.addEventListener("pointercancel", release);
   });
+
+  canvas.addEventListener("pointerdown", (event) => {
+    if (!isActive) return;
+    event.preventDefault();
+    audio.ensureStarted();
+    if (!state.muted) {
+      audio.resume();
+    }
+    focusGame();
+    if (state.mode === "idle") {
+      startGame();
+      return;
+    }
+    if (state.mode === "paused") {
+      resumeGame();
+      return;
+    }
+    if (state.mode !== "playing") return;
+    if (state.waitingLaunch) {
+      launchBall();
+      return;
+    }
+    const rect = canvas.getBoundingClientRect();
+    const side = event.clientX - rect.left < rect.width / 2 ? "left" : "right";
+    activePointers.set(event.pointerId, side);
+    canvas.setPointerCapture?.(event.pointerId);
+    pressControl(side, true);
+  });
+
+  function releaseCanvasPointer(event) {
+    const side = activePointers.get(event.pointerId);
+    if (!side) return;
+    event.preventDefault();
+    activePointers.delete(event.pointerId);
+    pressControl(side, false);
+  }
+
+  canvas.addEventListener("pointerup", releaseCanvasPointer);
+  canvas.addEventListener("pointercancel", releaseCanvasPointer);
+  canvas.addEventListener("pointerleave", releaseCanvasPointer);
 
   startBtn?.addEventListener("click", startGame);
   resumeBtn?.addEventListener("click", resumeGame);
@@ -751,8 +846,12 @@
 
   window.addEventListener("resize", resizeCanvas);
   document.addEventListener("visibilitychange", () => {
-    if (document.hidden && state.mode === "playing") {
-      pauseGame();
+    if (document.hidden) {
+      state.input.left = false;
+      state.input.right = false;
+      audio.suspend();
+    } else if (state.mode === "playing" && !state.muted) {
+      audio.resume();
     }
   });
 
