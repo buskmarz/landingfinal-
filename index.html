@@ -182,7 +182,7 @@
 
         <nav class="nav" id="primary-nav">
           <a href="#menu">Menú</a>
-          <a href="/recompensas/" data-cta="ver-recompensas">Cashback</a>
+          <a href="/recompensas/" data-cta="ver-recompensas" data-event="click_rewards">Cashback</a>
           <a href="/bienestar/">Bienestar</a>
           <a href="/calendario-futbolero/">Calendario 2026</a>
           <a href="#location">Ubicación</a>
@@ -198,7 +198,7 @@
                 data-cta="pedir-ubereats"
                 target="_blank"
                 rel="noopener noreferrer"
-              >
+               data-event="click_ubereats">
                 Uber Eats
               </a>
               <a
@@ -208,7 +208,7 @@
                 data-cta="pedir-rappi"
                 target="_blank"
                 rel="noopener noreferrer"
-              >
+               data-event="click_rappi">
                 Rappi
               </a>
             </div>
@@ -223,18 +223,17 @@
           <div class="hero__content">
             <p class="eyebrow">Better Mood Coffee · Puebla</p>
             <h1 id="hero-title">Café de especialidad y bienestar real en taza.</h1>
-            <p class="hero__subtitle">Bebidas funcionales, CBD no psicoactivo y una experiencia cuidada en Puebla.</p>
+            <p class="hero__subtitle">Café, bebidas funcionales y cashback en Puebla.</p>
             <p class="hero__support">Café de especialidad + bebidas funcionales + bienestar responsable</p>
-            <a class="hero-cashback-badge" href="/recompensas/" data-cta="ver-recompensas" aria-label="Conoce el cashback Better Mood">
+            <a class="hero-cashback-badge" href="/recompensas/" data-cta="ver-recompensas" aria-label="Conoce el cashback Better Mood" data-event="click_rewards">
               <span>Nuevo</span>
               <strong>Recibe $50 y gana cashback en cada visita</strong>
             </a>
 
-            <div class="hero__actions">
-              <a class="btn btn--primary" href="#local-visit" data-cta="como-llegar">Cómo llegar</a>
-              <a class="btn btn--secondary" href="#quick-order" data-cta="pedir-ahora">Pedir ahora</a>
-              <a class="btn btn--secondary" href="assets/menu-better-mood.pdf" target="_blank" rel="noopener" data-cta="ver-menu">Ver menú</a>
-              <a class="btn btn--ghost hero__cashback-link" href="https://wa.me/?text=Me%20quiero%20registrar%20y%20ganar%20el%20cup%C3%B3n%20de%20%2450.%0A%0AMi%20nombre%20es%3A%0AMi%20n%C3%BAmero%20de%20tel%C3%A9fono%20es%3A%0AMi%20fecha%20de%20nacimiento%20es%3A" target="_blank" rel="noopener noreferrer" data-cta="activar-cashback">Activar cashback</a>
+            <div class="hero__actions hero__actions--priority">
+              <a class="btn btn--primary" href="https://maps.google.com/?q=13+Poniente+2302%2FF,+La+Paz,+Puebla,+Puebla" target="_blank" rel="noopener" data-cta="abrir-google-maps" data-event="click_maps">Cómo llegar</a>
+              <a class="btn btn--secondary" href="https://www.ubereats.com/store/better-mood-coffee/hPA2fzGUX9WLGGvkeNwCrg?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer" data-cta="pedir-ubereats" data-event="click_ubereats">Pedir por Uber Eats</a>
+              <a class="btn btn--ghost hero__cashback-link" href="https://wa.me/?text=Hola%2C%20quiero%20activar%20mi%20cashback%20de%20Better%20Mood%20y%20recibir%20mi%20cup%C3%B3n%20de%20bienvenida%20de%20%2450." target="_blank" rel="noopener noreferrer" data-cta="activar-cashback" data-event="click_cashback_activate">Activar cashback</a>
             </div>
           </div>
 
@@ -260,68 +259,125 @@
       <section class="cashback-promo-band" aria-label="Promoción de cashback Better Mood">
         <div class="container cashback-promo-band__inner">
           <p>Regístrate hoy y recibe <strong>$50 de bienvenida</strong> + cashback en tus compras.</p>
-          <a href="https://wa.me/?text=Me%20quiero%20registrar%20y%20ganar%20el%20cup%C3%B3n%20de%20%2450.%0A%0AMi%20nombre%20es%3A%0AMi%20n%C3%BAmero%20de%20tel%C3%A9fono%20es%3A%0AMi%20fecha%20de%20nacimiento%20es%3A" target="_blank" rel="noopener noreferrer" data-cta="activar-cashback">Activar ahora</a>
+          <a href="https://wa.me/?text=Hola%2C%20quiero%20activar%20mi%20cashback%20de%20Better%20Mood%20y%20recibir%20mi%20cup%C3%B3n%20de%20bienvenida%20de%20%2450." target="_blank" rel="noopener noreferrer" data-cta="activar-cashback" data-event="click_cashback_activate">Activar ahora</a>
         </div>
       </section>
 
-      <section class="section section--compact value-strip" id="quick-order" aria-labelledby="value-title">
+      <section class="section section--compact value-strip value-strip--actions" id="quick-order" aria-labelledby="value-title">
         <div class="container">
           <div class="value-strip__header">
-            <h2 id="value-title">Lo esencial, claro desde el inicio.</h2>
-            <p>Pide en minutos y entiende rápido por qué Better Mood es diferente.</p>
+            <h2 id="value-title">Elige qué quieres hacer ahora.</h2>
+            <p>Ruta rápida para llegar, pedir a domicilio, revisar menú o activar tu cashback.</p>
           </div>
 
-          <div class="value-strip__grid" aria-label="Beneficios principales">
-            <article class="value-item">
+          <div class="value-strip__grid" aria-label="Acciones principales">
+            <a class="value-item value-item--link" href="https://maps.google.com/?q=13+Poniente+2302%2FF,+La+Paz,+Puebla,+Puebla" target="_blank" rel="noopener" data-cta="abrir-google-maps" data-event="click_maps">
               <span class="value-item__icon" aria-hidden="true">●</span>
-              <h3>Café de especialidad</h3>
-              <p>Selección cuidada y sabor limpio en cada taza.</p>
-            </article>
-            <article class="value-item">
+              <h3>Cómo llegar</h3>
+              <p>Abre Google Maps y ven a La Paz.</p>
+            </a>
+            <a class="value-item value-item--link" href="https://www.ubereats.com/store/better-mood-coffee/hPA2fzGUX9WLGGvkeNwCrg?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer" data-cta="pedir-ubereats" data-event="click_ubereats">
               <span class="value-item__icon" aria-hidden="true">●</span>
-              <h3>Funcionales claros</h3>
-              <p>CBD y adaptógenos explicados con criterio y responsabilidad.</p>
-            </article>
-            <article class="value-item">
+              <h3>Pedir a domicilio</h3>
+              <p>Uber Eats y Rappi disponibles.</p>
+            </a>
+            <a class="value-item value-item--link" href="https://wa.me/?text=Hola%2C%20quiero%20activar%20mi%20cashback%20de%20Better%20Mood%20y%20recibir%20mi%20cup%C3%B3n%20de%20bienvenida%20de%20%2450." target="_blank" rel="noopener noreferrer" data-cta="activar-cashback" data-event="click_cashback_activate">
               <span class="value-item__icon" aria-hidden="true">●</span>
-              <h3>Recompensas con cashback</h3>
-              <p>Cupón de bienvenida y saldo fácil de consultar.</p>
-            </article>
+              <h3>Activar cashback</h3>
+              <p>Recibe $50 y acumula saldo.</p>
+            </a>
           </div>
 
-          <div class="quick-order" aria-label="Opciones para pedir">
-            <a class="btn btn--primary" href="https://www.ubereats.com/store/better-mood-coffee/hPA2fzGUX9WLGGvkeNwCrg?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer" data-cta="pedir-ubereats">Pedir por Uber Eats</a>
-            <a class="btn btn--secondary" href="https://www.rappi.com.mx/restaurantes/delivery/495986-better-mood-coffee?utm_source=app&amp;utm_medium=deeplink&amp;utm_campaign=share" target="_blank" rel="noopener noreferrer" data-cta="pedir-rappi">Pedir por Rappi</a>
+          <div class="quick-order" aria-label="Opciones rápidas">
+            <a class="btn btn--primary" href="https://www.ubereats.com/store/better-mood-coffee/hPA2fzGUX9WLGGvkeNwCrg?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer" data-cta="pedir-ubereats" data-event="click_ubereats">Pedir por Uber Eats</a>
+            <a class="btn btn--secondary" href="https://www.rappi.com.mx/restaurantes/delivery/495986-better-mood-coffee?utm_source=app&amp;utm_medium=deeplink&amp;utm_campaign=share" target="_blank" rel="noopener noreferrer" data-cta="pedir-rappi" data-event="click_rappi">Pedir por Rappi</a>
+            <a class="btn btn--secondary" href="assets/menu-better-mood.pdf" target="_blank" rel="noopener" data-cta="ver-menu" data-event="click_menu">Ver menú</a>
           </div>
         </div>
       </section>
-
-
-      <section class="section local-visit-home" id="local-visit" aria-labelledby="local-visit-title">
-        <div class="container local-visit-home__grid">
-          <div class="local-visit-home__copy">
-            <p class="eyebrow">Cafetería en La Paz, Puebla</p>
-            <h2 id="local-visit-title">Ven hoy por café de especialidad, matcha o una bebida funcional.</h2>
-            <p>Estamos en 13 Poniente 2302/F, Col. La Paz. Ideal para una pausa, trabajar con Wi‑Fi, pedir para llevar o descubrir una bebida Better Mood antes de seguir tu día.</p>
-            <div class="local-visit-home__actions">
-              <a class="btn btn--primary" href="https://maps.google.com/?q=13+Poniente+2302%2FF,+La+Paz,+Puebla,+Puebla" target="_blank" rel="noopener" data-cta="abrir-google-maps">Abrir Google Maps</a>
-              <a class="btn btn--secondary" href="https://waze.com/ul?q=13%20Poniente%202302%20F%20La%20Paz%20Puebla" target="_blank" rel="noopener" data-cta="abrir-waze">Abrir Waze</a>
-              <a class="btn btn--secondary" href="assets/menu-better-mood.pdf" target="_blank" rel="noopener" data-cta="ver-menu">Ver menú</a>
+<section class="section featured-home" id="featured">
+        <div class="container">
+          <div class="section__header section__header--split">
+            <div>
+              <p class="eyebrow">Bebidas estrella</p>
+              <h2>Lo más pedido en Better Mood.</h2>
+              <p>Cuatro bebidas para entender rápido la carta y pedir sin complicarte. Compra con tu número y acumula cashback.</p>
+            </div>
+            <div class="section__cta section__cta--left">
+              <a class="btn btn--secondary" href="assets/menu-better-mood.pdf" target="_blank" rel="noopener" data-cta="ver-menu" data-event="click_menu">Ver menú completo</a>
             </div>
           </div>
-          <aside class="local-visit-card" aria-label="Razones para visitar Better Mood Coffee">
-            <div class="local-visit-card__headline">
-              <span>Hoy en Better Mood</span>
-              <strong>La Paz · Puebla</strong>
-            </div>
-            <div class="local-visit-card__grid">
-              <div><strong>Wi‑Fi</strong><span>para trabajar</span></div>
-              <div><strong>Pet friendly</strong><span>visita cómoda</span></div>
-              <div><strong>Cashback</strong><span>saldo por compra</span></div>
-              <div><strong>Delivery</strong><span>Uber Eats y Rappi</span></div>
-            </div>
-            <p>Tip: compra con tu número para acumular saldo y volver por más café.</p>
-          </aside>
+
+          <div class="featured-home__grid">
+            <article class="product-card product-card--featured">
+              <p class="product-card__flag">Más pedida</p>
+              <img class="product-card__image" src="assets/dragon.jpg" alt="Dragon's Blood" loading="lazy" decoding="async" width="640" height="760" />
+              <div class="product-card__body">
+                <div class="product-card__top">
+                  <h3>Dragon's Blood</h3>
+                  <span class="product-card__price">$99</span>
+                </div>
+                <p>Mango, fresa y durazno en agua mineral.</p>
+                <div class="product-card__meta">
+                  <span>Frío</span>
+                  <span>Calma</span>
+                </div>
+                <p class="product-card__cashback">Acumula cashback</p>
+                <a class="btn btn--primary btn--sm" href="https://www.ubereats.com/store/better-mood-coffee/hPA2fzGUX9WLGGvkeNwCrg?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer" data-cta="pedir-ubereats" data-event="click_product_order">Pedir esta bebida</a>
+              </div>
+            </article>
+
+            <article class="product-card">
+              <img class="product-card__image" src="assets/Coldbarry.jpg" alt="Cold Berry Days, bebida fría de Better Mood Coffee" loading="lazy" decoding="async" width="640" height="760" />
+              <div class="product-card__body">
+                <div class="product-card__top">
+                  <h3>Cold Berry Days</h3>
+                  <span class="product-card__price">$122</span>
+                </div>
+                <p>Fresa, hierbabuena y ginger ale.</p>
+                <div class="product-card__meta">
+                  <span>Frío</span>
+                  <span>Calma</span>
+                </div>
+                <p class="product-card__cashback">Acumula cashback</p>
+                <a class="btn btn--primary btn--sm" href="https://www.ubereats.com/store/better-mood-coffee/hPA2fzGUX9WLGGvkeNwCrg?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer" data-cta="pedir-ubereats" data-event="click_product_order">Pedir esta bebida</a>
+              </div>
+            </article>
+
+            <article class="product-card">
+              <img class="product-card__image" src="assets/sweettrip.jpg" alt="Sweet Trip, bebida funcional Better Mood Coffee" loading="lazy" decoding="async" width="640" height="760" />
+              <div class="product-card__body">
+                <div class="product-card__top">
+                  <h3>Sweet Trip</h3>
+                  <span class="product-card__price">$195</span>
+                </div>
+                <p>Fresa mineral con perlas explosivas.</p>
+                <div class="product-card__meta">
+                  <span>Frío</span>
+                  <span>Energía</span>
+                </div>
+                <p class="product-card__cashback">Cuenta para tu nivel</p>
+                <a class="btn btn--primary btn--sm" href="https://www.ubereats.com/store/better-mood-coffee/hPA2fzGUX9WLGGvkeNwCrg?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer" data-cta="pedir-ubereats" data-event="click_product_order">Pedir esta bebida</a>
+              </div>
+            </article>
+
+            <article class="product-card">
+              <img class="product-card__image" src="assets/spaceman.jpg" alt="Spaceman, bebida cítrica Better Mood Coffee" loading="lazy" decoding="async" width="640" height="760" />
+              <div class="product-card__body">
+                <div class="product-card__top">
+                  <h3>Spaceman</h3>
+                  <span class="product-card__price">$195</span>
+                </div>
+                <p>Lavanda y limón en agua mineral.</p>
+                <div class="product-card__meta">
+                  <span>Frío</span>
+                  <span>Calma</span>
+                </div>
+                <p class="product-card__cashback">Acumula cashback</p>
+                <a class="btn btn--primary btn--sm" href="https://www.ubereats.com/store/better-mood-coffee/hPA2fzGUX9WLGGvkeNwCrg?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer" data-cta="pedir-ubereats" data-event="click_product_order">Pedir esta bebida</a>
+              </div>
+            </article>
+          </div>
         </div>
       </section>
 
@@ -338,8 +394,8 @@
               <span>Consulta tu saldo en línea</span>
             </div>
             <div class="hero__actions">
-              <a class="btn btn--primary" href="https://wa.me/?text=Me%20quiero%20registrar%20y%20ganar%20el%20cup%C3%B3n%20de%20%2450.%0A%0AMi%20nombre%20es%3A%0AMi%20n%C3%BAmero%20de%20tel%C3%A9fono%20es%3A%0AMi%20fecha%20de%20nacimiento%20es%3A" target="_blank" rel="noopener noreferrer" data-cta="activar-cashback">Activar mi cashback</a>
-              <a class="btn btn--secondary" href="/recompensas/#consulta-saldo" data-cta="consultar-saldo">Consultar saldo</a>
+              <a class="btn btn--primary" href="https://wa.me/?text=Hola%2C%20quiero%20activar%20mi%20cashback%20de%20Better%20Mood%20y%20recibir%20mi%20cup%C3%B3n%20de%20bienvenida%20de%20%2450." target="_blank" rel="noopener noreferrer" data-cta="activar-cashback" data-event="click_cashback_activate">Activar mi cashback</a>
+              <a class="btn btn--secondary" href="/recompensas/#consulta-saldo" data-cta="consultar-saldo" data-event="click_cashback_balance">Consultar saldo</a>
             </div>
           </div>
 
@@ -369,92 +425,6 @@
         </div>
       </section>
 
-      <section class="section featured-home" id="featured">
-        <div class="container">
-          <div class="section__header section__header--split">
-            <div>
-              <p class="eyebrow">Bebidas estrella</p>
-              <h2>Lo más pedido en Better Mood.</h2>
-              <p>Cuatro bebidas para entender rápido la carta y pedir sin complicarte. Compra con tu número y acumula cashback.</p>
-            </div>
-            <div class="section__cta section__cta--left">
-              <a class="btn btn--secondary" href="assets/menu-better-mood.pdf" target="_blank" rel="noopener" data-cta="ver-menu">Ver menú completo</a>
-            </div>
-          </div>
-
-          <div class="featured-home__grid">
-            <article class="product-card product-card--featured">
-              <p class="product-card__flag">Más pedida</p>
-              <img class="product-card__image" src="assets/dragon.jpg" alt="Dragon's Blood" loading="eager" fetchpriority="high" decoding="async" width="640" height="760" />
-              <div class="product-card__body">
-                <div class="product-card__top">
-                  <h3>Dragon's Blood</h3>
-                  <span class="product-card__price">$99</span>
-                </div>
-                <p>Mango, fresa y durazno en agua mineral.</p>
-                <div class="product-card__meta">
-                  <span>Frío</span>
-                  <span>Calma</span>
-                </div>
-                <p class="product-card__cashback">Acumula cashback</p>
-                <a class="btn btn--primary btn--sm" href="https://www.ubereats.com/store/better-mood-coffee/hPA2fzGUX9WLGGvkeNwCrg?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer" data-cta="pedir-ubereats">Pedir</a>
-              </div>
-            </article>
-
-            <article class="product-card">
-              <img class="product-card__image" src="assets/Coldbarry.jpg" alt="Cold Berry Days, bebida fría de Better Mood Coffee" loading="lazy" decoding="async" width="640" height="760" />
-              <div class="product-card__body">
-                <div class="product-card__top">
-                  <h3>Cold Berry Days</h3>
-                  <span class="product-card__price">$122</span>
-                </div>
-                <p>Fresa, hierbabuena y ginger ale.</p>
-                <div class="product-card__meta">
-                  <span>Frío</span>
-                  <span>Calma</span>
-                </div>
-                <p class="product-card__cashback">Acumula cashback</p>
-                <a class="btn btn--primary btn--sm" href="https://www.ubereats.com/store/better-mood-coffee/hPA2fzGUX9WLGGvkeNwCrg?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer" data-cta="pedir-ubereats">Pedir</a>
-              </div>
-            </article>
-
-            <article class="product-card">
-              <img class="product-card__image" src="assets/sweettrip.jpg" alt="Sweet Trip, bebida funcional Better Mood Coffee" loading="lazy" decoding="async" width="640" height="760" />
-              <div class="product-card__body">
-                <div class="product-card__top">
-                  <h3>Sweet Trip</h3>
-                  <span class="product-card__price">$195</span>
-                </div>
-                <p>Fresa mineral con perlas explosivas.</p>
-                <div class="product-card__meta">
-                  <span>Frío</span>
-                  <span>Energía</span>
-                </div>
-                <p class="product-card__cashback">Cuenta para tu nivel</p>
-                <a class="btn btn--primary btn--sm" href="https://www.ubereats.com/store/better-mood-coffee/hPA2fzGUX9WLGGvkeNwCrg?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer" data-cta="pedir-ubereats">Pedir</a>
-              </div>
-            </article>
-
-            <article class="product-card">
-              <img class="product-card__image" src="assets/spaceman.jpg" alt="Spaceman, bebida cítrica Better Mood Coffee" loading="lazy" decoding="async" width="640" height="760" />
-              <div class="product-card__body">
-                <div class="product-card__top">
-                  <h3>Spaceman</h3>
-                  <span class="product-card__price">$195</span>
-                </div>
-                <p>Lavanda y limón en agua mineral.</p>
-                <div class="product-card__meta">
-                  <span>Frío</span>
-                  <span>Calma</span>
-                </div>
-                <p class="product-card__cashback">Acumula cashback</p>
-                <a class="btn btn--primary btn--sm" href="https://www.ubereats.com/store/better-mood-coffee/hPA2fzGUX9WLGGvkeNwCrg?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer" data-cta="pedir-ubereats">Pedir</a>
-              </div>
-            </article>
-          </div>
-        </div>
-      </section>
-
       <section class="section home-menu" id="menu">
         <div class="container">
           <div class="section__header section__header--split">
@@ -464,7 +434,7 @@
               <p>La carta está pensada para elegir rápido, sin perder claridad ni personalidad.</p>
             </div>
             <div class="section__cta section__cta--left">
-              <a class="btn btn--primary" href="assets/menu-better-mood.pdf" target="_blank" rel="noopener" data-cta="ver-menu">Abrir menú</a>
+              <a class="btn btn--primary" href="assets/menu-better-mood.pdf" target="_blank" rel="noopener" data-cta="ver-menu" data-event="click_menu">Abrir menú</a>
             </div>
           </div>
 
@@ -496,6 +466,113 @@
         </div>
       </section>
 
+
+      <section class="section location-home" id="location">
+        <div class="container location section__grid">
+          <div>
+            <p class="eyebrow">Visítanos</p>
+            <h2>Better Mood Coffee en La Paz, Puebla.</h2>
+            <div class="location__info">
+              <p><strong>Dirección:</strong> <span>13 poniente 2302/F, Col. La Paz</span></p>
+              <div class="hours">
+                <strong class="hours__label">Horarios</strong>
+                <dl class="hours__list">
+                  <div class="hours__row">
+                    <dt>Lunes a Viernes</dt>
+                    <dd>8:00 – 21:00</dd>
+                  </div>
+                  <div class="hours__row">
+                    <dt>Sábado</dt>
+                    <dd>9:00 – 20:00</dd>
+                  </div>
+                  <div class="hours__row">
+                    <dt>Domingo</dt>
+                    <dd>10:00 – 18:00</dd>
+                  </div>
+                </dl>
+              </div>
+              <div class="location__amenities" aria-label="Amenidades">
+                <span>Wi-Fi</span>
+                <span>Enchufes</span>
+                <span>Pet friendly</span>
+                <span>Estacionamiento</span>
+              </div>
+            </div>
+            <div class="hero__actions location__actions">
+              <a class="btn btn--primary" href="https://maps.google.com/?q=13+Poniente+2302%2FF,+La+Paz,+Puebla,+Puebla" target="_blank" rel="noopener" data-cta="abrir-google-maps" data-event="click_maps">Maps</a>
+              <a class="btn btn--secondary" href="https://waze.com/ul?q=13%20Poniente%202302%20F%20La%20Paz%20Puebla" target="_blank" rel="noopener" data-cta="abrir-waze" data-event="click_waze">Waze</a>
+            </div>
+          </div>
+
+          <div class="map">
+            <iframe
+              title="Mapa Better Mood Coffee"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7542.69884057009!2d-98.22048322456946!3d19.04836868215056!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85cfc14fac2039a3%3A0xa75d980fe5516d27!2sBetter%20Mood%20Coffee!5e0!3m2!1ses!2sca!4v1765492116929!5m2!1ses!2sca"
+              width="100%"
+              height="360"
+              style="border:0"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
+        </div>
+      </section>
+
+      <section class="section social-proof" id="testimonials">
+        <div class="container">
+          <div class="section__header">
+            <p class="eyebrow">Reseñas</p>
+            <h2>Confianza construida en tienda.</h2>
+            <p>Opiniones reales que respaldan la experiencia Better Mood.</p>
+          </div>
+
+          <div class="review-summary" aria-label="Calificación en Google">
+            <div class="review-summary__meta">
+              <p class="review-summary__rating">
+                <span aria-hidden="true">⭐</span> <strong>4.4/5</strong>
+                <span class="review-summary__count">en 168 reseñas</span>
+              </p>
+              <p class="review-summary__note">Lee reseñas verificadas en Google.</p>
+            </div>
+            <a
+              class="btn btn--secondary btn--sm"
+              href="https://maps.app.goo.gl/qeipDG96kXREwB8JA?g_st=ic"
+              target="_blank"
+              rel="noopener"
+              data-cta="ver-resenas"
+              data-event="click_reviews"
+            >
+              Ver reseñas
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section wellness-home" id="wellness-home">
+        <div class="container wellness-home__grid">
+          <div>
+            <p class="eyebrow">Bienestar y CBD</p>
+            <h2>Información clara. Tono responsable.</h2>
+            <p>Explicamos CBD no psicoactivo, adaptógenos y uso responsable con un lenguaje simple, serio y fácil de consultar.</p>
+            <div class="hero__actions">
+              <a class="btn btn--primary" href="/bienestar/">Ver guía</a>
+              <a class="btn btn--secondary" href="https://drive.google.com/drive/folders/17h4TmJz7SYwpuY8gR-75qDLrflPmosqd?usp=share_link" target="_blank" rel="noopener noreferrer">Ver productos</a>
+            </div>
+          </div>
+
+          <div class="wellness-home__card">
+            <p class="wellness-home__label">Qué encontrarás</p>
+            <ul class="hero__bullets">
+              <li>Qué es cada ingrediente</li>
+              <li>Qué conviene revisar antes de probar</li>
+              <li>Preguntas frecuentes en un solo lugar</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+
       <section class="section coffee-origin-home" id="origen-cafe" aria-labelledby="coffee-origin-title">
         <div class="container coffee-origin-home__grid">
           <div>
@@ -524,55 +601,16 @@
         </div>
       </section>
 
-      <section class="section section--alt rewards-home" id="rewards-home" aria-labelledby="rewards-home-title">
-        <div class="container rewards-home__grid">
+      <section class="section experiences-home" id="experiencias" aria-labelledby="experiences-title">
+        <div class="container experiences-home__grid">
           <div>
-            <p class="eyebrow">Recompensas Better Mood</p>
-            <h2 id="rewards-home-title">No son puntos. Es saldo para volver por más café.</h2>
-            <p>Recibe $50 al registrarte, acumula cashback en cada compra registrada con tu teléfono y consulta tu saldo cuando quieras.</p>
-            <div class="rewards-home__points" aria-label="Beneficios de recompensas">
-              <span>Cupón $50</span>
-              <span>Cashback real</span>
-              <span>Saldo consultable</span>
-              <span>Hasta 50% en promos</span>
-            </div>
-            <div class="hero__actions">
-              <a class="btn btn--primary" href="https://wa.me/?text=Me%20quiero%20registrar%20y%20ganar%20el%20cup%C3%B3n%20de%20%2450.%0A%0AMi%20nombre%20es%3A%0AMi%20n%C3%BAmero%20de%20tel%C3%A9fono%20es%3A%0AMi%20fecha%20de%20nacimiento%20es%3A" target="_blank" rel="noopener noreferrer" data-cta="activar-cashback">Activar cashback</a>
-              <a class="btn btn--secondary" href="/recompensas/#consulta-saldo" data-cta="consultar-saldo">Consultar mi saldo</a>
-            </div>
+            <p class="eyebrow">Eventos y experiencias</p>
+            <h2 id="experiences-title">Catas, talleres y momentos Better Mood.</h2>
+            <p>Experiencias para conocer café, bienestar responsable y nuevas bebidas sin saturar la agenda de la home.</p>
           </div>
-
-          <div class="rewards-home__card rewards-home__card--cashback">
-            <p class="rewards-home__label">Compra con tu número</p>
-            <ol class="rewards-home__steps">
-              <li>Te registras una sola vez y recibes $50.</li>
-              <li>Das tu teléfono en caja al comprar.</li>
-              <li>Tu café te regresa saldo para futuras visitas.</li>
-            </ol>
-            <p class="rewards-home__note">Mientras más vienes, más cashback ganas.</p>
-          </div>
-        </div>
-      </section>
-
-      <section class="section wellness-home" id="wellness-home">
-        <div class="container wellness-home__grid">
-          <div>
-            <p class="eyebrow">Bienestar y CBD</p>
-            <h2>Información clara. Tono responsable.</h2>
-            <p>Explicamos CBD no psicoactivo, adaptógenos y uso responsable con un lenguaje simple, serio y fácil de consultar.</p>
-            <div class="hero__actions">
-              <a class="btn btn--primary" href="/bienestar/">Ver guía</a>
-              <a class="btn btn--secondary" href="https://drive.google.com/drive/folders/17h4TmJz7SYwpuY8gR-75qDLrflPmosqd?usp=share_link" target="_blank" rel="noopener noreferrer">Ver productos</a>
-            </div>
-          </div>
-
-          <div class="wellness-home__card">
-            <p class="wellness-home__label">Qué encontrarás</p>
-            <ul class="hero__bullets">
-              <li>Qué es cada ingrediente</li>
-              <li>Qué conviene revisar antes de probar</li>
-              <li>Preguntas frecuentes en un solo lugar</li>
-            </ul>
+          <div class="experiences-home__actions">
+            <a class="btn btn--primary" href="/eventos/" data-cta="ver-eventos" data-event="click_events">Ver eventos</a>
+            <a class="btn btn--secondary" href="/talleres-de-cafe-puebla/" data-cta="ver-talleres" data-event="click_workshops">Talleres de café</a>
           </div>
         </div>
       </section>
@@ -652,7 +690,7 @@
             <p class="eyebrow">Antes de venir</p>
             <h2 id="home-faq-title">Respuestas rápidas para decidir tu visita.</h2>
             <p>Preguntas pensadas para búsquedas reales en Google y para que llegar, pedir o registrarte sea más sencillo.</p>
-            <a class="btn btn--primary" href="https://maps.google.com/?q=13+Poniente+2302%2FF,+La+Paz,+Puebla,+Puebla" target="_blank" rel="noopener" data-cta="abrir-google-maps">Ir a Better Mood</a>
+            <a class="btn btn--primary" href="https://maps.google.com/?q=13+Poniente+2302%2FF,+La+Paz,+Puebla,+Puebla" target="_blank" rel="noopener" data-cta="abrir-google-maps" data-event="click_maps">Ir a Better Mood</a>
           </div>
           <div class="home-faq__items">
             <details open>
@@ -679,85 +717,18 @@
         </div>
       </section>
 
-      <section class="section location-home" id="location">
-        <div class="container location section__grid">
-          <div>
-            <p class="eyebrow">Visítanos</p>
-            <h2>Better Mood Coffee en La Paz, Puebla.</h2>
-            <div class="location__info">
-              <p><strong>Dirección:</strong> <span>13 poniente 2302/F, Col. La Paz</span></p>
-              <div class="hours">
-                <strong class="hours__label">Horarios</strong>
-                <dl class="hours__list">
-                  <div class="hours__row">
-                    <dt>Lunes a Viernes</dt>
-                    <dd>8:00 – 21:00</dd>
-                  </div>
-                  <div class="hours__row">
-                    <dt>Sábado</dt>
-                    <dd>9:00 – 20:00</dd>
-                  </div>
-                  <div class="hours__row">
-                    <dt>Domingo</dt>
-                    <dd>10:00 – 18:00</dd>
-                  </div>
-                </dl>
-              </div>
-              <div class="location__amenities" aria-label="Amenidades">
-                <span>Wi-Fi</span>
-                <span>Enchufes</span>
-                <span>Pet friendly</span>
-                <span>Estacionamiento</span>
-              </div>
-            </div>
-            <div class="hero__actions location__actions">
-              <a class="btn btn--primary" href="https://maps.google.com/?q=13+Poniente+2302%2FF,+La+Paz,+Puebla,+Puebla" target="_blank" rel="noopener" data-cta="abrir-google-maps">Maps</a>
-              <a class="btn btn--secondary" href="https://waze.com/ul?q=13%20Poniente%202302%20F%20La%20Paz%20Puebla" target="_blank" rel="noopener" data-cta="abrir-waze">Waze</a>
-            </div>
-          </div>
-
-          <div class="map">
-            <iframe
-              title="Mapa Better Mood Coffee"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7542.69884057009!2d-98.22048322456946!3d19.04836868215056!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85cfc14fac2039a3%3A0xa75d980fe5516d27!2sBetter%20Mood%20Coffee!5e0!3m2!1ses!2sca!4v1765492116929!5m2!1ses!2sca"
-              width="100%"
-              height="360"
-              style="border:0"
-              allowfullscreen=""
-              loading="lazy"
-              referrerpolicy="no-referrer-when-downgrade"
-            ></iframe>
+      <section class="section final-cta-home" aria-labelledby="final-cta-title">
+        <div class="container final-cta-home__card">
+          <p class="eyebrow">Better Mood Coffee · La Paz</p>
+          <h2 id="final-cta-title">Ven por tu café hoy o pídelo en minutos.</h2>
+          <div class="final-cta-home__actions">
+            <a class="btn btn--primary" href="https://maps.google.com/?q=13+Poniente+2302%2FF,+La+Paz,+Puebla,+Puebla" target="_blank" rel="noopener" data-cta="abrir-google-maps" data-event="click_maps">Cómo llegar</a>
+            <a class="btn btn--secondary" href="https://www.ubereats.com/store/better-mood-coffee/hPA2fzGUX9WLGGvkeNwCrg?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer" data-cta="pedir-ubereats" data-event="click_ubereats">Pedir por Uber Eats</a>
+            <a class="btn btn--secondary" href="https://wa.me/?text=Hola%2C%20quiero%20pedir%20informaci%C3%B3n%20sobre%20Better%20Mood%20Coffee.%20%C2%BFMe%20pueden%20ayudar%20con%20men%C3%BA%2C%20ubicaci%C3%B3n%20y%20pedidos%3F" target="_blank" rel="noopener noreferrer" data-cta="whatsapp-general" data-event="click_whatsapp">Enviar WhatsApp</a>
           </div>
         </div>
       </section>
 
-      <section class="section social-proof" id="testimonials">
-        <div class="container">
-          <div class="section__header">
-            <p class="eyebrow">Reseñas</p>
-            <h2>Confianza construida en tienda.</h2>
-            <p>Opiniones reales que respaldan la experiencia Better Mood.</p>
-          </div>
-
-          <div class="review-summary" aria-label="Calificación en Google">
-            <div class="review-summary__meta">
-              <p class="review-summary__rating">
-                <span aria-hidden="true">⭐</span> <strong>4.4/5</strong>
-                <span class="review-summary__count">en 168 reseñas</span>
-              </p>
-              <p class="review-summary__note">Lee reseñas verificadas en Google.</p>
-            </div>
-            <a
-              class="btn btn--secondary btn--sm"
-              href="https://maps.app.goo.gl/qeipDG96kXREwB8JA?g_st=ic"
-              target="_blank"
-              rel="noopener"
-            >
-              Ver reseñas
-            </a>
-          </div>
-        </div>
-      </section>
     </main>
 
     <footer class="footer">
@@ -770,7 +741,7 @@
         <div class="footer__links">
           <h3>Navegación</h3>
           <a href="#menu">Menú</a>
-          <a href="/recompensas/" data-cta="ver-recompensas">Cashback</a>
+          <a href="/recompensas/" data-cta="ver-recompensas" data-event="click_rewards">Cashback</a>
           <a href="/bienestar/">Bienestar</a>
           <a href="/calendario-futbolero/">Calendario 2026</a>
           <a href="#location">Ubicación</a>
@@ -796,25 +767,25 @@
 
         <div class="footer__links">
           <h3>Pedir</h3>
-          <a href="https://www.ubereats.com/store/better-mood-coffee/hPA2fzGUX9WLGGvkeNwCrg?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer" data-cta="pedir-ubereats">Uber Eats</a>
-          <a href="https://www.rappi.com.mx/restaurantes/delivery/495986-better-mood-coffee?utm_source=app&utm_medium=deeplink&utm_campaign=share" target="_blank" rel="noopener noreferrer" data-cta="pedir-rappi">Rappi</a>
-          <a href="assets/menu-better-mood.pdf" target="_blank" rel="noopener" data-cta="ver-menu">Menú PDF</a>
+          <a href="https://www.ubereats.com/store/better-mood-coffee/hPA2fzGUX9WLGGvkeNwCrg?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer" data-cta="pedir-ubereats" data-event="click_ubereats">Uber Eats</a>
+          <a href="https://www.rappi.com.mx/restaurantes/delivery/495986-better-mood-coffee?utm_source=app&utm_medium=deeplink&utm_campaign=share" target="_blank" rel="noopener noreferrer" data-cta="pedir-rappi" data-event="click_rappi">Rappi</a>
+          <a href="assets/menu-better-mood.pdf" target="_blank" rel="noopener" data-cta="ver-menu" data-event="click_menu">Menú PDF</a>
         </div>
 
         <div class="footer__links">
           <h3>Ubicación</h3>
           <p>13 poniente 2302/F, Col. La Paz, Puebla.</p>
           <p>Lun-Vie 8:00–21:00 · Sáb 9:00–20:00 · Dom 10:00–18:00</p>
-          <a href="https://maps.google.com/?q=13+Poniente+2302%2FF,+La+Paz,+Puebla,+Puebla" target="_blank" rel="noopener" data-cta="abrir-google-maps">Maps</a>
-          <a href="https://waze.com/ul?q=13%20Poniente%202302%20F%20La%20Paz%20Puebla" target="_blank" rel="noopener" data-cta="abrir-waze">Waze</a>
+          <a href="https://maps.google.com/?q=13+Poniente+2302%2FF,+La+Paz,+Puebla,+Puebla" target="_blank" rel="noopener" data-cta="abrir-google-maps" data-event="click_maps">Maps</a>
+          <a href="https://waze.com/ul?q=13%20Poniente%202302%20F%20La%20Paz%20Puebla" target="_blank" rel="noopener" data-cta="abrir-waze" data-event="click_waze">Waze</a>
         </div>
 
         <div class="footer__links" id="contacto">
           <h3>Redes</h3>
-          <a href="https://wa.me/message/WQWEEODGY6H2P1" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+          <a href="https://wa.me/?text=Hola%2C%20quiero%20pedir%20informaci%C3%B3n%20sobre%20Better%20Mood%20Coffee.%20%C2%BFMe%20pueden%20ayudar%20con%20men%C3%BA%2C%20ubicaci%C3%B3n%20y%20pedidos%3F" target="_blank" rel="noopener noreferrer" data-cta="whatsapp-general" data-event="click_whatsapp">WhatsApp</a>
           <a href="https://instagram.com/bettermood.coffee" target="_blank" rel="noopener">Instagram</a>
           <a href="https://facebook.com/bettermoodcoffee" target="_blank" rel="noopener">Facebook</a>
-          <a href="https://g.page/r/Coffee/review" target="_blank" rel="noopener">Google Reviews</a>
+          <a href="https://g.page/r/Coffee/review" target="_blank" rel="noopener" data-cta="ver-resenas" data-event="click_reviews">Google Reviews</a>
         </div>
 
         <div class="footer__links">
@@ -836,9 +807,9 @@
     <div id="certificados" class="sr-only">Certificados y COA disponibles en tienda.</div>
 
     <nav class="mobile-bar mobile-bar--conversion" aria-label="Accesos rápidos para visitar o pedir">
-      <a class="mobile-bar__item is-primary" href="https://maps.google.com/?q=13+Poniente+2302%2FF,+La+Paz,+Puebla,+Puebla" target="_blank" rel="noopener" data-cta="abrir-google-maps">Cómo llegar</a>
-      <a class="mobile-bar__item" href="#quick-order" data-cta="pedir-ahora">Pedir</a>
-      <a class="mobile-bar__item" href="https://wa.me/?text=Me%20quiero%20registrar%20y%20ganar%20el%20cup%C3%B3n%20de%20%2450.%0A%0AMi%20nombre%20es%3A%0AMi%20n%C3%BAmero%20de%20tel%C3%A9fono%20es%3A%0AMi%20fecha%20de%20nacimiento%20es%3A" target="_blank" rel="noopener noreferrer" data-cta="activar-cashback">Cashback</a>
+      <a class="mobile-bar__item is-primary" href="https://maps.google.com/?q=13+Poniente+2302%2FF,+La+Paz,+Puebla,+Puebla" target="_blank" rel="noopener" data-cta="abrir-google-maps" data-event="click_maps">Cómo llegar</a>
+      <a class="mobile-bar__item" href="https://www.ubereats.com/store/better-mood-coffee/hPA2fzGUX9WLGGvkeNwCrg?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer" data-cta="pedir-ubereats" data-event="click_ubereats">Pedir</a>
+      <a class="mobile-bar__item" href="https://wa.me/?text=Hola%2C%20quiero%20activar%20mi%20cashback%20de%20Better%20Mood%20y%20recibir%20mi%20cup%C3%B3n%20de%20bienvenida%20de%20%2450." target="_blank" rel="noopener noreferrer" data-cta="activar-cashback" data-event="click_cashback_activate">Cashback</a>
     </nav>
 
     <a

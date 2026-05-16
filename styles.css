@@ -7120,3 +7120,119 @@ body.home-page {
     display: grid;
   }
 }
+
+/* Conversion refinement pass */
+.home-page .hero__actions--priority {
+  align-items: center;
+}
+
+.home-page .value-strip--actions {
+  padding-top: 42px;
+  padding-bottom: 42px;
+}
+
+.home-page .value-item--link {
+  color: inherit;
+  text-decoration: none;
+  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+}
+
+.home-page .value-item--link:hover {
+  transform: translateY(-2px);
+  border-color: rgba(35, 31, 32, 0.18);
+  box-shadow: 0 16px 34px rgba(35, 31, 32, 0.08);
+}
+
+.home-page .experiences-home,
+.home-page .final-cta-home {
+  padding: 54px 0;
+}
+
+.home-page .experiences-home {
+  background: #fffdf6;
+  border-top: 1px solid rgba(35, 31, 32, 0.06);
+  border-bottom: 1px solid rgba(35, 31, 32, 0.06);
+}
+
+.home-page .experiences-home__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 24px;
+  align-items: center;
+}
+
+.home-page .experiences-home__grid h2 {
+  max-width: 760px;
+}
+
+.home-page .experiences-home__grid p {
+  max-width: 62ch;
+  color: rgba(35, 31, 32, 0.72);
+  font-weight: 600;
+}
+
+.home-page .experiences-home__actions,
+.home-page .final-cta-home__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.home-page .final-cta-home {
+  background:
+    radial-gradient(circle at 20% 0%, rgba(255, 222, 0, 0.22), transparent 32%),
+    linear-gradient(135deg, #231f20, #171314);
+  color: #fffdf6;
+}
+
+.home-page .final-cta-home__card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 28px;
+  align-items: center;
+}
+
+.home-page .final-cta-home h2 {
+  margin: 0;
+  max-width: 780px;
+  color: #fffdf6;
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  line-height: 1.02;
+}
+
+.home-page .final-cta-home .eyebrow {
+  color: var(--yellow);
+}
+
+.home-page .final-cta-home .btn--secondary {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.28);
+  color: #fffdf6;
+}
+
+@media (max-width: 900px) {
+  .home-page .experiences-home__grid,
+  .home-page .final-cta-home__card {
+    grid-template-columns: 1fr;
+  }
+
+  .home-page .experiences-home__actions,
+  .home-page .final-cta-home__actions {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 720px) {
+  .home-page .hero__actions--priority,
+  .home-page .experiences-home__actions,
+  .home-page .final-cta-home__actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .home-page .experiences-home,
+  .home-page .final-cta-home {
+    padding: 42px 0;
+  }
+}
