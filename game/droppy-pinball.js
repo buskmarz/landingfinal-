@@ -1,6 +1,8 @@
 (() => {
   const root = document.querySelector("[data-pinball-game]");
   if (!root) return;
+  if (root.__droppyPinballInitialized) return;
+  root.__droppyPinballInitialized = true;
 
   const canvas = root.querySelector("#pinball-canvas");
   const ctx = canvas?.getContext("2d");
@@ -36,6 +38,15 @@
   const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
   const STORAGE_KEY = "better-mood-pinball-high";
   const CAPTURED_KEY_CODES = new Set(["ArrowLeft", "ArrowRight", "ArrowUp", "Space", "KeyA", "KeyD", "KeyP", "KeyM", "KeyF", "Enter"]);
+  const GAME_MODE = Object.freeze({
+    IDLE: "idle",
+    READY_TO_LAUNCH: "readyToLaunch",
+    LAUNCHING: "launching",
+    PLAYING: "playing",
+    PAUSED: "paused",
+    GAME_OVER: "gameOver",
+  });
+  const ACTIVE_MODES = new Set([GAME_MODE.READY_TO_LAUNCH, GAME_MODE.LAUNCHING, GAME_MODE.PLAYING]);
 
   const world = {
     width: 0,
@@ -57,13 +68,13 @@
   });
 
   const state = {
-    mode: "idle",
+    mode: GAME_MODE.IDLE,
+    modeBeforePause: GAME_MODE.READY_TO_LAUNCH,
     running: false,
     score: 0,
     highScore: Number.parseInt(window.localStorage.getItem(STORAGE_KEY) || "0", 10) || 0,
     ballsLeft: 3,
     muted: false,
-    waitingLaunch: true,
     launchAssistTime: 0,
     ballSaveTime: 0,
     flipperAssistCooldown: 0,
@@ -101,6 +112,33 @@
   const activePointers = new Map();
 
   root.tabIndex = root.tabIndex >= 0 ? root.tabIndex : 0;
+
+  function isReadyToLaunch() {
+    return state.mode === GAME_MODE.READY_TO_LAUNCH;
+  }
+
+  function isBallLive() {
+    return state.mode === GAME_MODE.LAUNCHING || state.mode === GAME_MODE.PLAYING;
+  }
+
+  function isActiveMode() {
+    return ACTIVE_MODES.has(state.mode);
+  }
+
+  function releaseControls() {
+    state.input.left = false;
+    state.input.right = false;
+    activePointers.clear();
+  }
+
+  function capturePointer(target, pointerId) {
+    if (!target?.setPointerCapture || pointerId == null) return;
+    try {
+      target.setPointerCapture(pointerId);
+    } catch {
+      // Some synthetic or interrupted touch events cannot be captured. Controls should still work.
+    }
+  }
 
   function focusGame() {
     if (document.activeElement instanceof HTMLElement && root.contains(document.activeElement)) {
@@ -209,9 +247,15 @@
     state.ball.y = world.height * 0.82;
     state.ball.vx = 0;
     state.ball.vy = 0;
-    state.waitingLaunch = true;
     state.launchAssistTime = 0;
     state.ballSaveTime = 0;
+    state.flipperAssistCooldown = 0;
+    releaseControls();
+  }
+
+  function setReadyToLaunch() {
+    setBallAtLaunch();
+    state.mode = GAME_MODE.READY_TO_LAUNCH;
   }
 
   function resetGameState() {
@@ -225,7 +269,7 @@
     state.targets.forEach((target) => {
       target.active = true;
     });
-    setBallAtLaunch();
+    setReadyToLaunch();
   }
 
   function resizeCanvas() {
@@ -233,7 +277,7 @@
     const oldWorld = { width: world.width, height: world.height };
     const hadPlayableSize = oldWorld.width >= 40 && oldWorld.height >= 40;
     const preserveBall =
-      hadPlayableSize && state.mode === "playing" && !state.waitingLaunch;
+      hadPlayableSize && isBallLive();
     const ballRatio = preserveBall
       ? {
           x: state.ball.x / oldWorld.width,
@@ -270,7 +314,6 @@
       state.ball.y = world.height * ballRatio.y;
       state.ball.vx = world.width * ballRatio.vx;
       state.ball.vy = world.height * ballRatio.vy;
-      state.waitingLaunch = false;
     } else {
       setBallAtLaunch();
     }
@@ -287,18 +330,29 @@
   }
 
   function applyLaunchVelocity() {
-    state.ball.vx = -world.width * 0.2;
-    state.ball.vy = -world.height * 1.32;
-    state.waitingLaunch = false;
+    const safeWidth = Math.max(world.width, 320);
+    const safeHeight = Math.max(world.height, 520);
+    state.ball.vx = -safeWidth * 0.2;
+    state.ball.vy = -safeHeight * 1.32;
+    if (Math.hypot(state.ball.vx, state.ball.vy) < safeHeight * 0.45) {
+      state.ball.vx = -safeWidth * 0.22;
+      state.ball.vy = -safeHeight * 1.18;
+    }
+    state.mode = GAME_MODE.LAUNCHING;
     state.launchAssistTime = 1;
   }
 
   function launchBall() {
-    if (state.mode !== "playing" || !state.waitingLaunch) return;
+    if (!isReadyToLaunch()) return false;
     focusGame();
+    setBallAtLaunch();
     applyLaunchVelocity();
     state.ballSaveTime = 10;
+    state.running = true;
+    setOverlay(null);
     updateHud();
+    startLoop();
+    return true;
   }
 
   function updateHud() {
@@ -307,17 +361,17 @@
     if (ballsEl) ballsEl.textContent = String(state.ballsLeft);
     if (stateEl) {
       stateEl.textContent =
-        state.mode === "playing"
-          ? state.waitingLaunch
-            ? "Launch"
-            : "Live"
-          : state.mode === "paused"
+        state.mode === GAME_MODE.READY_TO_LAUNCH
+          ? "Launch"
+          : state.mode === GAME_MODE.LAUNCHING || state.mode === GAME_MODE.PLAYING
+            ? "Live"
+          : state.mode === GAME_MODE.PAUSED
             ? "Pausa"
-            : state.mode === "gameover"
+            : state.mode === GAME_MODE.GAME_OVER
               ? "Over"
               : "Listo";
     }
-    if (pauseBtn) pauseBtn.disabled = state.mode === "idle" || state.mode === "gameover";
+    if (pauseBtn) pauseBtn.disabled = state.mode === GAME_MODE.IDLE || state.mode === GAME_MODE.GAME_OVER;
     if (muteBtn) muteBtn.textContent = state.muted ? "×" : "♪";
   }
 
@@ -333,7 +387,6 @@
       audio.resume();
     }
     resetGameState();
-    state.mode = "playing";
     state.running = true;
     setOverlay(null);
     updateHud();
@@ -342,8 +395,9 @@
   }
 
   function endGame() {
-    state.mode = "gameover";
+    state.mode = GAME_MODE.GAME_OVER;
     state.running = false;
+    releaseControls();
     cancelAnimationFrame(rafId);
     saveHighScore();
     setOverlay("gameover");
@@ -355,10 +409,10 @@
   }
 
   function pauseGame() {
-    if (state.mode !== "playing") return;
-    state.mode = "paused";
-    state.input.left = false;
-    state.input.right = false;
+    if (!isActiveMode()) return;
+    state.modeBeforePause = state.mode;
+    state.mode = GAME_MODE.PAUSED;
+    releaseControls();
     state.running = false;
     cancelAnimationFrame(rafId);
     if (!state.muted) {
@@ -370,9 +424,9 @@
   }
 
   function resumeGame() {
-    if (!isActive || state.mode !== "paused") return;
+    if (!isActive || state.mode !== GAME_MODE.PAUSED) return;
     focusGame();
-    state.mode = "playing";
+    state.mode = state.modeBeforePause || GAME_MODE.READY_TO_LAUNCH;
     state.running = true;
     if (!state.muted) {
       audio.resume();
@@ -519,7 +573,7 @@
       endGame();
       return;
     }
-    setBallAtLaunch();
+    setReadyToLaunch();
     state.lastOrbit.left = false;
     state.lastOrbit.right = false;
     state.lastOrbit.center = false;
@@ -550,14 +604,14 @@
     state.bumpPulse = Math.max(0, state.bumpPulse - dt);
     audio.setIntensity(state.muted ? 0 : clamp(0.24 + state.environmentProgress * 0.54, 0, 1));
 
-    if (state.mode !== "playing") return;
+    if (!isActiveMode()) return;
 
     state.ballSaveTime = Math.max(0, state.ballSaveTime - dt);
     state.flipperAssistCooldown = Math.max(0, state.flipperAssistCooldown - dt);
 
     updateFlippers(dt);
 
-    if (state.waitingLaunch) {
+    if (isReadyToLaunch()) {
       state.ball.x = world.width * 0.83;
       state.ball.y = world.height * 0.82;
       return;
@@ -569,6 +623,9 @@
     for (let i = 0; i < substeps; i += 1) {
       if (state.launchAssistTime > 0) {
         state.launchAssistTime = Math.max(0, state.launchAssistTime - stepDt);
+        if (state.mode === GAME_MODE.LAUNCHING && state.launchAssistTime <= 0.55) {
+          state.mode = GAME_MODE.PLAYING;
+        }
         if (state.ball.x > world.width * 0.58 && state.ball.y < world.height * 0.36) {
           state.ball.vx -= world.width * 2.5 * stepDt;
           state.ball.vy -= world.height * 0.18 * stepDt;
@@ -626,15 +683,15 @@
       walls: state.walls,
       targets: state.targets,
       bumpPulse: state.bumpPulse,
-      waitingLaunch: state.waitingLaunch,
+      waitingLaunch: isReadyToLaunch(),
       modeLabel:
-        state.mode === "playing"
-          ? state.waitingLaunch
-            ? "Lista para launch"
-            : "Pinball en juego"
-          : state.mode === "paused"
+        state.mode === GAME_MODE.READY_TO_LAUNCH
+          ? "Lista para launch"
+          : state.mode === GAME_MODE.LAUNCHING || state.mode === GAME_MODE.PLAYING
+            ? "Pinball en juego"
+          : state.mode === GAME_MODE.PAUSED
             ? "Pausa"
-            : state.mode === "gameover"
+            : state.mode === GAME_MODE.GAME_OVER
               ? "Fin de partida"
               : "Better Mood Arcade",
       controlsLabel: "A / D · Flechas · Space",
@@ -669,7 +726,8 @@
   function renderGameToText() {
     return JSON.stringify({
       mode: state.mode,
-      waitingLaunch: state.waitingLaunch,
+      waitingLaunch: isReadyToLaunch(),
+      canLaunch: isReadyToLaunch(),
       score: state.score,
       highScore: state.highScore,
       ballsLeft: state.ballsLeft,
@@ -701,6 +759,7 @@
   }
 
   function pressControl(key, pressed) {
+    if (!isActiveMode()) return;
     if (key === "left") {
       state.input.left = pressed;
     } else if (key === "right") {
@@ -723,7 +782,7 @@
     state.muted = !state.muted;
     if (state.muted) {
       audio.suspend();
-    } else if (state.mode === "playing") {
+    } else if (isActiveMode()) {
       audio.resume();
     }
     updateHud();
@@ -731,18 +790,18 @@
 
   document.addEventListener("keydown", (event) => {
     if (!isActive) return;
-    if (CAPTURED_KEY_CODES.has(event.code) && state.mode !== "idle") {
+    if (CAPTURED_KEY_CODES.has(event.code)) {
       event.preventDefault();
     }
-    if (state.mode === "idle" && (event.code === "Enter" || event.code === "Space")) {
+    if (state.mode === GAME_MODE.IDLE && event.code === "Enter") {
       event.preventDefault();
       startGame();
       return;
     }
     if (event.code === "KeyP") {
       event.preventDefault();
-      if (state.mode === "playing") pauseGame();
-      else if (state.mode === "paused") resumeGame();
+      if (isActiveMode()) pauseGame();
+      else if (state.mode === GAME_MODE.PAUSED) resumeGame();
       return;
     }
     if (event.code === "KeyM") {
@@ -755,7 +814,6 @@
       toggleFullscreen();
       return;
     }
-    if (state.mode !== "playing") return;
     switch (event.code) {
       case "ArrowLeft":
       case "KeyA":
@@ -794,7 +852,17 @@
     const action = button.dataset.pinballAction;
     if (!action) return;
     if (action === "launch") {
-      button.addEventListener("click", () => {
+      button.addEventListener("pointerdown", (event) => {
+        event.preventDefault();
+        audio.ensureStarted();
+        if (!state.muted) {
+          audio.resume();
+        }
+        capturePointer(button, event.pointerId);
+        handleAction(action);
+      });
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
         audio.ensureStarted();
         if (!state.muted) {
           audio.resume();
@@ -814,7 +882,7 @@
         audio.resume();
       }
       pressControl(action, true);
-      button.setPointerCapture?.(event.pointerId);
+      capturePointer(button, event.pointerId);
     });
     button.addEventListener("pointerup", release);
     button.addEventListener("pointerleave", release);
@@ -829,23 +897,23 @@
       audio.resume();
     }
     focusGame();
-    if (state.mode === "idle") {
+    if (state.mode === GAME_MODE.IDLE) {
       startGame();
       return;
     }
-    if (state.mode === "paused") {
+    if (state.mode === GAME_MODE.PAUSED) {
       resumeGame();
       return;
     }
-    if (state.mode !== "playing") return;
-    if (state.waitingLaunch) {
+    if (isReadyToLaunch()) {
       launchBall();
       return;
     }
+    if (!isBallLive()) return;
     const rect = canvas.getBoundingClientRect();
     const side = event.clientX - rect.left < rect.width / 2 ? "left" : "right";
     activePointers.set(event.pointerId, side);
-    canvas.setPointerCapture?.(event.pointerId);
+    capturePointer(canvas, event.pointerId);
     pressControl(side, true);
   });
 
@@ -861,12 +929,23 @@
   canvas.addEventListener("pointercancel", releaseCanvasPointer);
   canvas.addEventListener("pointerleave", releaseCanvasPointer);
 
-  startBtn?.addEventListener("click", startGame);
-  resumeBtn?.addEventListener("click", resumeGame);
-  restartButtons.forEach((button) => button.addEventListener("click", startGame));
+  startBtn?.addEventListener("click", (event) => {
+    event.preventDefault();
+    startGame();
+  });
+  resumeBtn?.addEventListener("click", (event) => {
+    event.preventDefault();
+    resumeGame();
+  });
+  restartButtons.forEach((button) => {
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      startGame();
+    });
+  });
   pauseBtn?.addEventListener("click", () => {
-    if (state.mode === "playing") pauseGame();
-    else if (state.mode === "paused") resumeGame();
+    if (isActiveMode()) pauseGame();
+    else if (state.mode === GAME_MODE.PAUSED) resumeGame();
   });
   muteBtn?.addEventListener("click", toggleMute);
   fullscreenBtn?.addEventListener("click", toggleFullscreen);
@@ -874,10 +953,9 @@
   window.addEventListener("resize", resizeCanvas);
   document.addEventListener("visibilitychange", () => {
     if (document.hidden) {
-      state.input.left = false;
-      state.input.right = false;
+      releaseControls();
       audio.suspend();
-    } else if (state.mode === "playing" && !state.muted) {
+    } else if (isActiveMode() && !state.muted) {
       audio.resume();
     }
   });
@@ -888,7 +966,7 @@
     advanceTime: (ms) => advanceSimulation(ms),
     setActive(next) {
       isActive = Boolean(next);
-      if (!isActive && state.mode === "playing") {
+      if (!isActive && isActiveMode()) {
         pauseGame();
       }
       if (isActive) {
