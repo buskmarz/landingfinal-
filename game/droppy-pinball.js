@@ -66,6 +66,7 @@
     waitingLaunch: true,
     launchAssistTime: 0,
     ballSaveTime: 0,
+    flipperAssistCooldown: 0,
     bumpPulse: 0,
     environmentProgress: 0,
     input: {
@@ -173,16 +174,16 @@
   function createFlipper(side) {
     const isLeft = side === "left";
     const pivot = {
-      x: world.width * (isLeft ? 0.38 : 0.62),
-      y: world.height * 0.845,
+      x: world.width * (isLeft ? 0.31 : 0.69),
+      y: world.height * 0.84,
     };
-    const restAngle = isLeft ? 0.5 : Math.PI - 0.5;
-    const activeAngle = isLeft ? -0.55 : Math.PI + 0.55;
+    const restAngle = isLeft ? -0.12 : Math.PI + 0.12;
+    const activeAngle = isLeft ? -0.72 : Math.PI + 0.72;
     return {
       side,
       pivot,
-      length: world.width * 0.255,
-      width: world.width * 0.034,
+      length: world.width * 0.285,
+      width: world.width * 0.04,
       angle: restAngle,
       previousAngle: restAngle,
       restAngle,
@@ -450,6 +451,29 @@
     });
   }
 
+  function applyManualFlipperHit(flipper) {
+    if (!flipper.pressed || state.flipperAssistCooldown > 0) return false;
+    const isLeft = flipper.side === "left";
+    const inHorizontalZone = isLeft
+      ? state.ball.x >= world.width * 0.1 && state.ball.x <= world.width * 0.58
+      : state.ball.x >= world.width * 0.42 && state.ball.x <= world.width * 0.9;
+    const inVerticalZone =
+      state.ball.y >= world.height * 0.62 && state.ball.y <= world.height * 0.9;
+    const ballIsPlayable = state.ball.vy > -world.height * 0.18;
+
+    if (!inHorizontalZone || !inVerticalZone || !ballIsPlayable) return false;
+
+    const sidePush = isLeft ? 1 : -1;
+    const centerPull = (world.width * 0.5 - state.ball.x) * 0.5;
+    state.ball.x = clamp(state.ball.x, world.width * 0.14, world.width * 0.86);
+    state.ball.y = Math.min(state.ball.y, world.height * 0.78);
+    state.ball.vx = sidePush * world.width * 0.42 + centerPull;
+    state.ball.vy = -world.height * 1.08;
+    state.flipperAssistCooldown = 0.18;
+    awardScore(5, state.ball.x, state.ball.y, "bean");
+    return true;
+  }
+
   function scoreLanes() {
     const leftOrbit = state.ball.x < world.width * 0.2 && state.ball.y < world.height * 0.32;
     if (leftOrbit && !state.lastOrbit.left) {
@@ -529,6 +553,7 @@
     if (state.mode !== "playing") return;
 
     state.ballSaveTime = Math.max(0, state.ballSaveTime - dt);
+    state.flipperAssistCooldown = Math.max(0, state.flipperAssistCooldown - dt);
 
     updateFlippers(dt);
 
@@ -568,6 +593,7 @@
             state.ball.vy -= world.height * 0.16;
           }
         }
+        applyManualFlipperHit(flipper);
       });
 
       state.bumpers.forEach((bumper) => {
@@ -669,6 +695,7 @@
         left: Number(state.flippers.left.angle.toFixed(2)),
         right: Number(state.flippers.right.angle.toFixed(2)),
       },
+      input: { ...state.input },
       origin: "top-left, x-right, y-down",
     });
   }
