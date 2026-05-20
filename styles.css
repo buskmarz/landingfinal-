@@ -5110,7 +5110,7 @@ body.home-page {
 
 .home-page .value-strip__grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 18px;
   padding: 26px 0;
   border-top: 1px solid var(--home-line);
@@ -7234,5 +7234,349 @@ body.home-page {
   .home-page .experiences-home,
   .home-page .final-cta-home {
     padding: 42px 0;
+  }
+}
+/* Coffee lavado commerce */
+.coffee-product-page {
+  background:
+    radial-gradient(circle at 10% 8%, rgba(255, 222, 0, 0.16), transparent 28%),
+    radial-gradient(circle at 86% 16%, rgba(102, 139, 88, 0.16), transparent 26%),
+    linear-gradient(180deg, #fff8e7 0%, #f6efdf 100%);
+  color: #231f20;
+  font-family: "Montserrat", sans-serif;
+}
+
+.coffee-product-page .header {
+  background: rgba(255, 248, 231, 0.92);
+  backdrop-filter: blur(14px);
+}
+
+.coffee-product-page .nav.is-static {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.coffee-shop-hero {
+  padding: calc(var(--header-offset, 86px) + 42px) 0 54px;
+  overflow: hidden;
+}
+
+.coffee-shop-hero__grid,
+.coffee-shop-product__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(340px, 0.82fr);
+  gap: clamp(28px, 5vw, 64px);
+  align-items: center;
+}
+
+.coffee-shop-hero__copy h1 {
+  margin: 12px 0 18px;
+  font-size: clamp(3rem, 7vw, 6.5rem);
+  line-height: 0.92;
+  letter-spacing: -0.08em;
+  max-width: 840px;
+}
+
+.coffee-shop-hero__lead {
+  max-width: 680px;
+  color: rgba(35, 31, 32, 0.72);
+  font-size: clamp(1.05rem, 2vw, 1.28rem);
+  line-height: 1.6;
+}
+
+.coffee-shop-hero__facts,
+.coffee-shop-card__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 22px 0 28px;
+}
+
+.coffee-shop-hero__facts span,
+.coffee-shop-card__facts span {
+  border: 1px solid rgba(35, 31, 32, 0.12);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.68);
+  padding: 9px 12px;
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
+.coffee-shop-hero__media {
+  position: relative;
+  margin: 0;
+  border-radius: 32px;
+  overflow: hidden;
+  background: #231f20;
+  box-shadow: 0 26px 70px rgba(35, 31, 32, 0.18);
+}
+
+.coffee-shop-hero__media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 48%, rgba(35, 31, 32, 0.58));
+  pointer-events: none;
+}
+
+.coffee-shop-hero__media img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+}
+
+.coffee-shop-hero__media figcaption {
+  position: absolute;
+  left: 22px;
+  right: 22px;
+  bottom: 20px;
+  z-index: 1;
+  color: #fff8e7;
+  font-weight: 800;
+}
+
+.coffee-shop-product {
+  padding-top: 32px;
+}
+
+.coffee-shop-card,
+.coffee-checkout,
+.coffee-return__card {
+  border: 1px solid rgba(35, 31, 32, 0.1);
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: 0 18px 54px rgba(35, 31, 32, 0.08);
+}
+
+.coffee-shop-card {
+  padding: clamp(24px, 4vw, 38px);
+}
+
+.coffee-shop-card h2,
+.coffee-checkout h2,
+.coffee-return__card h1 {
+  margin: 8px 0 14px;
+  font-size: clamp(2rem, 4vw, 3.6rem);
+  line-height: 1;
+  letter-spacing: -0.055em;
+}
+
+.coffee-shop-card p {
+  color: rgba(35, 31, 32, 0.72);
+  line-height: 1.65;
+}
+
+.coffee-shop-card__price {
+  margin: 20px 0;
+  color: #231f20;
+  font-size: clamp(2.4rem, 5vw, 4.4rem);
+  font-weight: 900;
+  letter-spacing: -0.06em;
+}
+
+.coffee-shop-card__price small {
+  font-size: 1rem;
+  letter-spacing: 0;
+  color: rgba(35, 31, 32, 0.56);
+}
+
+.coffee-shop-list {
+  display: grid;
+  gap: 10px;
+  margin: 20px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.coffee-shop-list li {
+  position: relative;
+  padding-left: 26px;
+  color: rgba(35, 31, 32, 0.78);
+  font-weight: 650;
+}
+
+.coffee-shop-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ffde00;
+  box-shadow: 0 0 0 4px rgba(255, 222, 0, 0.2);
+}
+
+.coffee-shop-note {
+  margin-top: 20px;
+  border-left: 4px solid #ffde00;
+  padding: 12px 0 12px 16px;
+  font-size: 0.94rem;
+}
+
+.coffee-checkout {
+  display: grid;
+  gap: 14px;
+  padding: clamp(22px, 4vw, 34px);
+}
+
+.coffee-checkout label {
+  display: grid;
+  gap: 7px;
+  color: rgba(35, 31, 32, 0.72);
+  font-size: 0.92rem;
+  font-weight: 800;
+}
+
+.coffee-checkout input,
+.coffee-checkout select,
+.coffee-checkout textarea {
+  width: 100%;
+  border: 1px solid rgba(35, 31, 32, 0.16);
+  border-radius: 16px;
+  background: #fffdf7;
+  color: #231f20;
+  font: inherit;
+  font-weight: 650;
+  padding: 13px 14px;
+  outline: none;
+}
+
+.coffee-checkout input:focus,
+.coffee-checkout select:focus,
+.coffee-checkout textarea:focus {
+  border-color: #ffba00;
+  box-shadow: 0 0 0 4px rgba(255, 186, 0, 0.18);
+}
+
+.coffee-checkout__check {
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  font-weight: 650;
+}
+
+.coffee-checkout__check input {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+}
+
+.coffee-checkout__total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 4px;
+  border-radius: 18px;
+  background: #231f20;
+  color: #fff8e7;
+  padding: 14px 16px;
+}
+
+.coffee-checkout__total strong {
+  color: #ffde00;
+  font-size: 1.28rem;
+}
+
+.coffee-checkout__status,
+.coffee-return__status {
+  min-height: 24px;
+  margin: 0;
+  color: rgba(35, 31, 32, 0.72);
+  font-weight: 700;
+}
+
+.coffee-checkout__status[data-tone="error"],
+.coffee-return__status[data-tone="error"] {
+  color: #a6322c;
+}
+
+.coffee-checkout__status[data-tone="success"],
+.coffee-return__status[data-tone="success"] {
+  color: #2f6b3a;
+}
+
+.coffee-shop-info {
+  padding-top: 34px;
+}
+
+.coffee-shop-info__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.coffee-shop-info__grid article {
+  border: 1px solid rgba(35, 31, 32, 0.1);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.64);
+  padding: 22px;
+}
+
+.coffee-shop-info__grid strong {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  margin-bottom: 16px;
+  border-radius: 50%;
+  background: #ffde00;
+}
+
+.coffee-shop-info__grid h3 {
+  margin: 0 0 8px;
+}
+
+.coffee-shop-info__grid p {
+  margin: 0;
+  color: rgba(35, 31, 32, 0.72);
+  line-height: 1.55;
+}
+
+.coffee-return {
+  min-height: 70vh;
+  display: grid;
+  align-items: center;
+  padding: calc(var(--header-offset, 86px) + 54px) 0 72px;
+}
+
+.coffee-return__card {
+  max-width: 760px;
+  padding: clamp(26px, 5vw, 48px);
+}
+
+.coffee-return__card p {
+  color: rgba(35, 31, 32, 0.72);
+  line-height: 1.65;
+}
+
+.coffee-return__status {
+  margin: 22px 0;
+  border-radius: 18px;
+  background: rgba(255, 222, 0, 0.16);
+  padding: 14px 16px;
+}
+
+@media (max-width: 860px) {
+  .coffee-shop-hero__grid,
+  .coffee-shop-product__grid,
+  .coffee-shop-info__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .coffee-shop-hero {
+    padding-top: calc(var(--header-offset, 76px) + 22px);
+  }
+
+  .coffee-shop-hero__copy h1 {
+    font-size: clamp(2.6rem, 13vw, 4.4rem);
+  }
+
+  .coffee-product-page .hero__actions .btn,
+  .coffee-checkout .btn,
+  .coffee-return__card .btn {
+    width: 100%;
   }
 }

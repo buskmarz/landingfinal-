@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="es-MX">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pago no confirmado | Café lavado Better Mood</title>
+    <meta name="robots" content="noindex,follow" />
+    <link rel="canonical" href="https://bmoodcoffee.com/cafe-lavado/pago-error/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="icon" href="../../assets/logo-better-mood.png" />
+  </head>
+  <body class="coffee-product-page coffee-return-page">
+    <header class="header" id="top">
+      <div class="container header__inner">
+        <a class="logo" href="/" aria-label="Better Mood Coffee"><img src="../../assets/logo-better-mood.png" alt="Better Mood Coffee" /></a>
+        <nav class="nav is-static"><a href="/cafe-lavado/">Café lavado</a><a href="/">Inicio</a></nav>
+      </div>
+    </header>
+    <main id="main">
+      <section class="coffee-return" aria-labelledby="return-title">
+        <div class="container coffee-return__card">
+          <p class="eyebrow">Café lavado Better Mood</p>
+          <h1 id="return-title">No pudimos confirmar el pago.</h1>
+          <p>Puedes intentar comprar de nuevo o escribirnos por WhatsApp para ayudarte con tu pedido.</p>
+          <div class="coffee-return__status" data-order-status>Consultando estado del pedido...</div>
+          <div class="hero__actions">
+            <button class="btn btn--primary" type="button" data-refresh-order>Verificar estado</button>
+            <a class="btn btn--secondary" href="/cafe-lavado/">Volver al producto</a>
+            <a class="btn btn--secondary" href="https://wa.me/?text=Hola%2C%20quiero%20ayuda%20con%20mi%20pedido%20de%20caf%C3%A9%20lavado%20Better%20Mood." target="_blank" rel="noopener noreferrer">WhatsApp</a>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script>
+      (() => {
+        const params = new URLSearchParams(window.location.search);
+        const order = params.get('order');
+        const statusEl = document.querySelector('[data-order-status]');
+        const button = document.querySelector('[data-refresh-order]');
+        const render = (message, tone = 'neutral') => {
+          statusEl.textContent = message;
+          statusEl.dataset.tone = tone;
+        };
+        const check = async () => {
+          if (!order) {
+            render('No encontramos el identificador del pedido en la URL.', 'error');
+            return;
+          }
+          render('Consultando estado del pedido...', 'neutral');
+          try {
+            const res = await fetch(`/api/coffee-payment-status?order=${encodeURIComponent(order)}`);
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) throw new Error(data.error || 'No pudimos consultar el pedido.');
+            const info = data.order;
+            if (info.paymentStatus === 'paid' || info.status === 'paid') {
+              render(`Pago confirmado. Pedido ${info.id}. Te esperamos para recoger ${info.quantity} bolsa(s) en Better Mood La Paz.`, 'success');
+            } else if (info.paymentStatus === 'failed' || info.status === 'payment_failed') {
+              render(`El pago no fue aprobado. Pedido ${info.id}. Puedes intentar de nuevo o escribirnos por WhatsApp.`, 'error');
+            } else {
+              render(`Pedido ${info.id} pendiente de confirmación. Mercado Pago puede tardar unos segundos en avisarnos.`, 'neutral');
+            }
+          } catch (error) {
+            render(error.message || 'No pudimos consultar el pedido.', 'error');
+          }
+        };
+        button.addEventListener('click', check);
+        check();
+      })();
+    </script>
+  </body>
+</html>

@@ -63,6 +63,11 @@
   force = true
 
 [[redirects]]
+  from = "/cafe-lavado"
+  to = "/cafe-lavado/"
+  status = 301
+
+[[redirects]]
   from = "/origen-cafe"
   to = "/origen-cafe/"
   status = 301
