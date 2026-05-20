@@ -86,12 +86,13 @@
             <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Inicio</a><span>/</span><span aria-current="page">Café lavado</span></nav>
             <p class="eyebrow">Café de especialidad Better Mood</p>
             <h1 id="coffee-shop-title">Café lavado para llevar Better Mood a casa.</h1>
-            <p class="coffee-shop-hero__lead">Un café limpio, dulce y balanceado de Finca Santa Cruz. Compra en línea con Mercado Pago y recoge tu bolsa en nuestra sucursal de La Paz, Puebla.</p>
+            <p class="coffee-shop-hero__lead">Un café limpio, dulce y balanceado de Finca Santa Cruz. Bolsa de 250 g por $280 MXN. Compra en línea con Mercado Pago y elige recolección en tienda o entrega a domicilio.</p>
             <div class="coffee-shop-hero__facts" aria-label="Ficha rápida del café">
               <span>Proceso lavado</span>
               <span>Typica y Bourbon</span>
               <span>84.5 SCA</span>
-              <span>Recolección en tienda</span>
+              <span>250 g</span>
+              <span>Entrega o recolección</span>
             </div>
             <div class="hero__actions">
               <a class="btn btn--primary" href="#comprar" data-event="click_buy_coffee">Comprar ahora</a>
@@ -115,10 +116,11 @@
             <ul class="coffee-shop-list">
               <li>Pago seguro por Mercado Pago.</li>
               <li>Tu pedido queda registrado automáticamente.</li>
-              <li>Recoge en Better Mood Coffee La Paz.</li>
-              <li>Te pedimos WhatsApp para confirmar disponibilidad y entrega.</li>
+              <li>Recoge en Better Mood Coffee La Paz o pide entrega a domicilio.</li>
+              <li>El envío se cobra separado dentro de Mercado Pago.</li>
+              <li>Te pedimos WhatsApp para confirmar disponibilidad, horario y entrega.</li>
             </ul>
-            <p class="coffee-shop-note">Si necesitas envío o mayoreo, compra una unidad o escríbenos por WhatsApp para coordinar antes de pagar.</p>
+            <p class="coffee-shop-note">Entrega a domicilio disponible en Puebla con costo fijo configurable. Si necesitas mayoreo o envío fuera de zona, escríbenos por WhatsApp antes de pagar.</p>
           </article>
 
           <form class="coffee-checkout" data-coffee-checkout-form>
@@ -145,13 +147,42 @@
                 <option value="4">4 bolsas</option>
               </select>
             </label>
+            <fieldset class="coffee-checkout__fieldset">
+              <legend>Entrega</legend>
+              <label class="coffee-checkout__option">
+                <input type="radio" name="fulfillmentMethod" value="pickup" checked />
+                <span><strong>Recoger en tienda</strong><small>Better Mood Coffee La Paz</small></span>
+              </label>
+              <label class="coffee-checkout__option">
+                <input type="radio" name="fulfillmentMethod" value="delivery" />
+                <span><strong>Entrega a domicilio</strong><small data-delivery-fee-label>+$60 MXN en Puebla</small></span>
+              </label>
+            </fieldset>
+            <div class="coffee-checkout__delivery" data-delivery-fields hidden>
+              <label>
+                Calle, número e interior
+                <input name="deliveryStreet" autocomplete="street-address" placeholder="Ej. 13 Poniente 2302/F" />
+              </label>
+              <label>
+                Colonia
+                <input name="deliveryNeighborhood" autocomplete="address-level3" placeholder="Ej. La Paz" />
+              </label>
+              <label>
+                Ciudad
+                <input name="deliveryCity" autocomplete="address-level2" value="Puebla" />
+              </label>
+              <label>
+                Referencias de entrega
+                <textarea name="deliveryReferences" rows="2" placeholder="Ej. Portón negro, entregar en recepción"></textarea>
+              </label>
+            </div>
             <label>
               Nota opcional
               <textarea name="notes" rows="3" placeholder="Ej. Paso por mi pedido el sábado"></textarea>
             </label>
             <label class="coffee-checkout__check">
               <input type="checkbox" name="acceptsTerms" required />
-              <span>Acepto que mi compra es para recoger en Better Mood Coffee La Paz y que el pago se procesa con Mercado Pago.</span>
+              <span>Acepto que mi compra se procesa con Mercado Pago y que Better Mood confirmará disponibilidad y entrega por WhatsApp.</span>
             </label>
             <div class="coffee-checkout__total" aria-live="polite">
               <span>Total</span>
@@ -214,25 +245,45 @@
         const totalEl = document.querySelector('[data-coffee-total]');
         const priceEl = document.querySelector('[data-product-price]');
         let unitPrice = 280;
+        let deliveryFee = 60;
         const money = (value) => `$${Number(value || 0).toLocaleString('es-MX')} MXN`;
+        const deliveryFields = document.querySelector('[data-delivery-fields]');
+        const deliveryFeeLabel = document.querySelector('[data-delivery-fee-label]');
         const setStatus = (message, tone = 'neutral') => {
           status.textContent = message || '';
           status.dataset.tone = tone;
         };
+        const isDelivery = () => form.fulfillmentMethod.value === 'delivery';
+        const syncDeliveryFields = () => {
+          const enabled = isDelivery();
+          deliveryFields.hidden = !enabled;
+          deliveryFields.querySelectorAll('input, textarea').forEach((input) => {
+            input.required = enabled && ['deliveryStreet', 'deliveryNeighborhood'].includes(input.name);
+          });
+        };
         const updateTotal = () => {
           const quantity = Number.parseInt(form.quantity.value || '1', 10) || 1;
-          totalEl.textContent = money(unitPrice * quantity);
+          totalEl.textContent = money((unitPrice * quantity) + (isDelivery() ? deliveryFee : 0));
         };
         fetch('/api/coffee-product')
           .then((res) => res.ok ? res.json() : null)
           .then((data) => {
             if (!data?.product?.unitPrice) return;
             unitPrice = Number(data.product.unitPrice);
+            deliveryFee = Number(data.shipping?.deliveryFee || deliveryFee);
             priceEl.textContent = money(unitPrice).replace(' MXN', '');
+            if (deliveryFeeLabel) deliveryFeeLabel.textContent = `+${money(deliveryFee)} en Puebla`;
             updateTotal();
           })
           .catch(() => {});
         form.quantity.addEventListener('change', updateTotal);
+        form.querySelectorAll('input[name="fulfillmentMethod"]').forEach((input) => {
+          input.addEventListener('change', () => {
+            syncDeliveryFields();
+            updateTotal();
+          });
+        });
+        syncDeliveryFields();
         updateTotal();
         form.addEventListener('submit', async (event) => {
           event.preventDefault();

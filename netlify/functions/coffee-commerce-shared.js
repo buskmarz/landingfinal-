@@ -9,12 +9,13 @@ const PRODUCT = Object.freeze({
   title: process.env.COFFEE_LAVADO_TITLE || "Café lavado Finca Santa Cruz",
   description:
     process.env.COFFEE_LAVADO_DESCRIPTION ||
-    "Café lavado de especialidad Better Mood Coffee. Bolsa de 250 g para recoger en sucursal.",
+    "Café lavado de especialidad Better Mood Coffee. Bolsa de 250 g.",
   unitPrice: Number.parseInt(process.env.COFFEE_LAVADO_PRICE || "280", 10),
   currency: CURRENCY,
   weight: process.env.COFFEE_LAVADO_WEIGHT || "250 g",
-  fulfillment: "pickup",
 });
+const DELIVERY_FEE = Number.parseInt(process.env.COFFEE_DELIVERY_FEE || "60", 10);
+const DELIVERY_LABEL = process.env.COFFEE_DELIVERY_LABEL || "Entrega a domicilio en Puebla";
 
 function initNetlifyBlobs(event) {
   connectLambda(event);
@@ -154,8 +155,11 @@ function publicOrder(order, payment = null) {
     pickupStatus: order.pickupStatus || null,
     product: order.product,
     quantity: order.quantity,
+    unitPrice: order.unitPrice,
+    shippingFee: order.shippingFee || 0,
     totalAmount: order.totalAmount,
     currency: order.currency,
+    fulfillment: order.fulfillment,
     customerName: order.customer?.name || null,
     createdAt: order.createdAt,
     paidAt: order.paidAt || null,
@@ -164,6 +168,8 @@ function publicOrder(order, payment = null) {
 
 module.exports = {
   CURRENCY,
+  DELIVERY_FEE,
+  DELIVERY_LABEL,
   PAYMENT_MODE,
   PRODUCT,
   SITE_URL,

@@ -7451,6 +7451,58 @@ body.home-page {
   box-shadow: 0 0 0 4px rgba(255, 186, 0, 0.18);
 }
 
+.coffee-checkout__fieldset {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  border: 0;
+  padding: 0;
+}
+
+.coffee-checkout__fieldset legend {
+  margin-bottom: 4px;
+  color: rgba(35, 31, 32, 0.72);
+  font-size: 0.92rem;
+  font-weight: 800;
+}
+
+.coffee-checkout__option {
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  border: 1px solid rgba(35, 31, 32, 0.12);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.62);
+  padding: 12px;
+}
+
+.coffee-checkout__option input {
+  width: 18px;
+  height: 18px;
+}
+
+.coffee-checkout__option strong,
+.coffee-checkout__option small {
+  display: block;
+}
+
+.coffee-checkout__option small {
+  margin-top: 3px;
+  color: rgba(35, 31, 32, 0.58);
+  font-weight: 700;
+}
+
+.coffee-checkout__delivery {
+  display: grid;
+  gap: 12px;
+  border-radius: 20px;
+  background: rgba(255, 222, 0, 0.12);
+  padding: 14px;
+}
+
+.coffee-checkout__delivery[hidden] {
+  display: none;
+}
+
 .coffee-checkout__check {
   grid-template-columns: auto 1fr;
   align-items: start;

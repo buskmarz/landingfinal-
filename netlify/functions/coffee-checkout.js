@@ -1,5 +1,7 @@
 const {
   CURRENCY,
+  DELIVERY_FEE,
+  DELIVERY_LABEL,
   PAYMENT_MODE,
   PRODUCT,
   SITE_URL,
@@ -33,6 +35,13 @@ exports.handler = async (event) => {
   const phone = normalizePhone(body.phone);
   const email = normalizeEmail(body.email);
   const quantity = Math.min(Math.max(Number.parseInt(body.quantity || "1", 10) || 1, 1), 6);
+  const fulfillmentMethod = ["pickup", "delivery"].includes(body.fulfillmentMethod) ? body.fulfillmentMethod : "pickup";
+  const deliveryAddress = {
+    street: sanitizeText(body.deliveryStreet, 160),
+    neighborhood: sanitizeText(body.deliveryNeighborhood, 120),
+    city: sanitizeText(body.deliveryCity || "Puebla", 80),
+    references: sanitizeText(body.deliveryReferences, 220),
+  };
   const notes = sanitizeText(body.notes, 240);
   const acceptsTerms = body.acceptsTerms === true;
 
@@ -40,12 +49,16 @@ exports.handler = async (event) => {
   if (!phone || phone.length < 8) return json(400, { error: "Ingresa un WhatsApp válido." });
   if (!email || !isValidEmail(email)) return json(400, { error: "Ingresa un email válido." });
   if (!acceptsTerms) return json(400, { error: "Acepta las condiciones de compra." });
+  if (fulfillmentMethod === "delivery" && (!deliveryAddress.street || !deliveryAddress.neighborhood)) {
+    return json(400, { error: "Ingresa calle y colonia para entrega a domicilio." });
+  }
   if (!Number.isFinite(PRODUCT.unitPrice) || PRODUCT.unitPrice <= 0) return json(500, { error: "Precio del producto no configurado." });
 
   const now = new Date().toISOString();
   const orderId = createOrderId();
   const paymentId = createPaymentId();
-  const totalAmount = PRODUCT.unitPrice * quantity;
+  const shippingFee = fulfillmentMethod === "delivery" ? DELIVERY_FEE : 0;
+  const totalAmount = (PRODUCT.unitPrice * quantity) + shippingFee;
 
   const order = {
     id: orderId,
@@ -56,12 +69,14 @@ exports.handler = async (event) => {
     product: PRODUCT,
     quantity,
     unitPrice: PRODUCT.unitPrice,
+    shippingFee,
     totalAmount,
     currency: CURRENCY,
     fulfillment: {
-      method: "pickup",
-      label: "Recoger en Better Mood Coffee La Paz",
+      method: fulfillmentMethod,
+      label: fulfillmentMethod === "delivery" ? DELIVERY_LABEL : "Recoger en Better Mood Coffee La Paz",
       address: "13 Poniente 2302/F, Col. La Paz, Puebla",
+      deliveryAddress: fulfillmentMethod === "delivery" ? deliveryAddress : null,
     },
     customer: { name, phone, email },
     notes,
@@ -98,8 +113,14 @@ exports.handler = async (event) => {
       pending: `${SITE_URL}/cafe-lavado/pago-pendiente/?order=${encodeURIComponent(orderId)}`,
     },
     auto_return: "approved",
-    notification_url: `${SITE_URL}/.netlify/functions/coffee-mercadopago-webhook`,
+    notification_url: `${SITE_URL}/.netlify/functions/coffee-mercadopago-webhook?source_news=webhooks`,
   };
+  if (shippingFee > 0) {
+    preferenceBody.shipments = {
+      cost: shippingFee,
+      mode: "not_specified",
+    };
+  }
 
   const response = await fetch("https://api.mercadopago.com/checkout/preferences", {
     method: "POST",

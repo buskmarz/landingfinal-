@@ -56,7 +56,8 @@
             if (!res.ok) throw new Error(data.error || 'No pudimos consultar el pedido.');
             const info = data.order;
             if (info.paymentStatus === 'paid' || info.status === 'paid') {
-              render(`Pago confirmado. Pedido ${info.id}. Te esperamos para recoger ${info.quantity} bolsa(s) en Better Mood La Paz.`, 'success');
+              const method = info.fulfillment?.method === 'delivery' ? 'Entrega a domicilio solicitada' : 'Recolección en Better Mood La Paz';
+              render(`Pago confirmado. Pedido ${info.id}. ${method}. Bolsa(s): ${info.quantity}.`, 'success');
             } else if (info.paymentStatus === 'failed' || info.status === 'payment_failed') {
               render(`El pago no fue aprobado. Pedido ${info.id}. Puedes intentar de nuevo o escribirnos por WhatsApp.`, 'error');
             } else {
