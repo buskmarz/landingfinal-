@@ -37,7 +37,20 @@
   status = 301
   force = true
 
-# 3) Normalizar rutas legacy que hoy compiten con sus versiones bonitas
+# 3) Acceso al sistema interno sin mover datos operativos
+[[redirects]]
+  from = "/sistema"
+  to = "https://tareascontrol.netlify.app/"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "/sistema/*"
+  to = "https://tareascontrol.netlify.app/:splat"
+  status = 302
+  force = true
+
+# 4) Normalizar rutas legacy que hoy compiten con sus versiones bonitas
 
 [[redirects]]
   from = "/quiniela/*"
