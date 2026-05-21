@@ -5,19 +5,24 @@
 [functions]
   external_node_modules = ["@netlify/blobs"]
 
-# Sistema interno: abrir la app operativa completa, no embebida, para que se vea y opere identica.
-# Cuando el DNS publico de sistema.bmoodcoffee.com apunte al proyecto tareascontrol,
-# este destino puede cambiarse a https://sistema.bmoodcoffee.com/.
+# Sistema interno: proxy/rewrite sin cambiar la URL visible.
+# El frontend vive en /sistema/ y los datos siguen saliendo del mismo backend de tareascontrol.
 [[redirects]]
   from = "/sistema"
   to = "https://tareascontrol.netlify.app/"
-  status = 302
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/sistema/"
+  to = "https://tareascontrol.netlify.app/"
+  status = 200
   force = true
 
 [[redirects]]
   from = "/sistema/*"
   to = "https://tareascontrol.netlify.app/:splat"
-  status = 302
+  status = 200
   force = true
 
 # 1) Cerrar el subdominio Netlify productivo sin afectar deploy previews
