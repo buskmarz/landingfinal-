@@ -37,14 +37,7 @@
   status = 301
   force = true
 
-# 3) Acceso al sistema interno desde la landing sin mover datos operativos
-[[redirects]]
-  from = "/sistema"
-  to = "/sistema/"
-  status = 301
-  force = true
-
-# 4) Normalizar rutas legacy que hoy compiten con sus versiones bonitas
+# 3) Normalizar rutas legacy que hoy compiten con sus versiones bonitas
 
 [[redirects]]
   from = "/quiniela/*"
