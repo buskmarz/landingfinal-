@@ -182,10 +182,12 @@
 
         <nav class="nav" id="primary-nav">
           <a href="/menu/">Menú</a>
+          <a href="/kombucha/">Kombucha</a>
           <a href="/cafe-lavado/" data-cta="comprar-cafe-lavado" data-event="click_buy_coffee">Café lavado</a>
           <a href="/recompensas/" data-cta="ver-recompensas" data-event="click_rewards">Cashback</a>
           <a href="/bienestar/">Bienestar</a>
-          <a href="/calendario-futbolero/">Calendario 2026</a>
+          <a href="/arcade/">Arcade</a>
+          <a href="/calendario-futbolero/">Guía mundialera</a>
           <a href="#location">Ubicación</a>
           <a href="/sistema/" data-cta="abrir-sistema-interno">Sistema</a>
           <details class="order-dropdown">
@@ -236,6 +238,7 @@
               <a class="btn btn--primary" href="https://maps.google.com/?q=13+Poniente+2302%2FF,+La+Paz,+Puebla,+Puebla" target="_blank" rel="noopener" data-cta="abrir-google-maps" data-event="click_maps">Cómo llegar</a>
               <a class="btn btn--secondary" href="https://www.ubereats.com/store/better-mood-coffee/hPA2fzGUX9WLGGvkeNwCrg?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer" data-cta="pedir-ubereats" data-event="click_ubereats">Pedir por Uber Eats</a>
               <a class="btn btn--secondary" href="/cafe-lavado/" data-cta="comprar-cafe-lavado" data-event="click_buy_coffee">Comprar café lavado</a>
+              <a class="btn btn--secondary" href="/arcade/" data-cta="jugar-arcade">Jugar arcade</a>
               <a class="btn btn--ghost hero__cashback-link" href="https://wa.me/?text=Hola%2C%20quiero%20activar%20mi%20cashback%20de%20Better%20Mood%20y%20recibir%20mi%20cup%C3%B3n%20de%20bienvenida%20de%20%2450." target="_blank" rel="noopener noreferrer" data-cta="activar-cashback" data-event="click_cashback_activate">Activar cashback</a>
             </div>
           </div>
@@ -270,7 +273,7 @@
         <div class="container">
           <div class="value-strip__header">
             <h2 id="value-title">Elige qué quieres hacer ahora.</h2>
-            <p>Ruta rápida para llegar, pedir a domicilio, revisar menú o activar tu cashback.</p>
+            <p>Ruta rápida para llegar, pedir a domicilio, jugar arcade o activar tu cashback.</p>
           </div>
 
           <div class="value-strip__grid" aria-label="Acciones principales">
@@ -294,16 +297,54 @@
               <h3>Comprar café lavado</h3>
               <p>Paga en línea y recoge en tienda.</p>
             </a>
+            <a class="value-item value-item--link" href="/kombucha/" data-cta="ver-kombucha" data-event="click_kombucha">
+              <span class="value-item__icon" aria-hidden="true">●</span>
+              <h3>Kombucha de mango</h3>
+              <p>Pide información por WhatsApp.</p>
+            </a>
           </div>
 
           <div class="quick-order" aria-label="Opciones rápidas">
             <a class="btn btn--primary" href="https://www.ubereats.com/store/better-mood-coffee/hPA2fzGUX9WLGGvkeNwCrg?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer" data-cta="pedir-ubereats" data-event="click_ubereats">Pedir por Uber Eats</a>
             <a class="btn btn--secondary" href="https://www.rappi.com.mx/restaurantes/delivery/495986-better-mood-coffee?utm_source=app&amp;utm_medium=deeplink&amp;utm_campaign=share" target="_blank" rel="noopener noreferrer" data-cta="pedir-rappi" data-event="click_rappi">Pedir por Rappi</a>
             <a class="btn btn--secondary" href="/menu/" data-cta="ver-menu" data-event="click_menu">Ver menú</a>
+            <a class="btn btn--secondary" href="/kombucha/" data-cta="ver-kombucha" data-event="click_kombucha">Kombucha mango</a>
           </div>
         </div>
       </section>
-<section class="section featured-home" id="featured">
+
+      <section class="section section--compact home-arcade" aria-labelledby="home-arcade-title">
+        <div class="container home-arcade__grid">
+          <div class="home-arcade__copy">
+            <p class="eyebrow">Better Mood Arcade</p>
+            <h2 id="home-arcade-title">Pinball, Stacks y Dash para entrar al mood.</h2>
+            <p>El arcade ahora vive como una experiencia principal: partidas rápidas, controles móviles y una ruta directa para volver a pedir o activar cashback.</p>
+            <div class="home-arcade__actions">
+              <a class="btn btn--primary" href="/arcade/#pinball" data-cta="jugar-pinball">Jugar Pinball</a>
+              <a class="btn btn--secondary" href="/arcade/" data-cta="ver-arcade">Ver arcade</a>
+            </div>
+          </div>
+          <div class="home-arcade__cards" aria-label="Juegos Better Mood Arcade">
+            <a href="/arcade/#pinball">
+              <span>01</span>
+              <strong>Droppy Pinball</strong>
+              <small>Bumpers, launch y flippers</small>
+            </a>
+            <a href="/arcade/#stacks">
+              <span>02</span>
+              <strong>Droppy Stacks</strong>
+              <small>Puzzle de filas rápidas</small>
+            </a>
+            <a href="/arcade/#dash">
+              <span>03</span>
+              <strong>Droppy Dash</strong>
+              <small>Runner móvil integrado</small>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section featured-home" id="featured">
         <div class="container">
           <div class="section__header section__header--split">
             <div>
@@ -750,9 +791,10 @@
         <div class="footer__links">
           <h3>Navegación</h3>
           <a href="/menu/">Menú</a>
+          <a href="/kombucha/">Kombucha</a>
           <a href="/recompensas/" data-cta="ver-recompensas" data-event="click_rewards">Cashback</a>
           <a href="/bienestar/">Bienestar</a>
-          <a href="/calendario-futbolero/">Calendario 2026</a>
+          <a href="/calendario-futbolero/">Guía mundialera</a>
           <a href="#location">Ubicación</a>
           <a href="/recomendador/">Recomendador</a>
           <a href="/eventos/">Eventos</a>
@@ -781,6 +823,7 @@
           <a href="https://www.ubereats.com/store/better-mood-coffee/hPA2fzGUX9WLGGvkeNwCrg?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer" data-cta="pedir-ubereats" data-event="click_ubereats">Uber Eats</a>
           <a href="https://www.rappi.com.mx/restaurantes/delivery/495986-better-mood-coffee?utm_source=app&utm_medium=deeplink&utm_campaign=share" target="_blank" rel="noopener noreferrer" data-cta="pedir-rappi" data-event="click_rappi">Rappi</a>
           <a href="/menu/" data-cta="ver-menu" data-event="click_menu">Menú digital</a>
+          <a href="/kombucha/" data-cta="ver-kombucha" data-event="click_kombucha">Kombucha de mango</a>
         </div>
 
         <div class="footer__links">
