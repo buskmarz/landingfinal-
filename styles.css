@@ -8316,42 +8316,15 @@ body.home-page {
 .kombucha-hero {
   position: relative;
   overflow: hidden;
-  padding: clamp(52px, 8vw, 86px) 0 48px;
-}
-
-.kombucha-hero::before,
-.kombucha-hero::after {
-  content: "";
-  position: absolute;
-  pointer-events: none;
-}
-
-.kombucha-hero::before {
-  inset: 80px auto auto max(18px, calc(50% - 690px));
-  width: 138px;
-  height: 138px;
-  border: 1px solid rgba(32, 25, 20, 0.1);
-  border-radius: 999px;
-  background:
-    radial-gradient(circle at 34% 30%, rgba(255, 255, 255, 0.78) 0 10px, transparent 11px),
-    rgba(255, 181, 46, 0.25);
-}
-
-.kombucha-hero::after {
-  right: max(24px, calc(50% - 620px));
-  bottom: 22px;
-  width: 210px;
-  height: 14px;
-  border-radius: 999px;
-  background: linear-gradient(90deg, var(--kombucha-mango), #ffe7a0, var(--kombucha-green));
+  padding: clamp(34px, 5vw, 62px) 0 clamp(30px, 4vw, 46px);
 }
 
 .kombucha-hero__grid {
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: minmax(0, 1.04fr) minmax(280px, 430px);
-  gap: clamp(34px, 7vw, 84px);
+  grid-template-columns: minmax(300px, 0.72fr) minmax(390px, 1fr);
+  gap: clamp(24px, 4vw, 58px);
   align-items: center;
 }
 
@@ -8363,14 +8336,16 @@ body.home-page {
 }
 
 .kombucha-hero h1 {
-  max-width: 9.8ch;
+  max-width: 10.8ch;
   margin: 0;
-  font-size: clamp(3.25rem, 7.8vw, 6.65rem);
+  font-size: clamp(3.05rem, 6vw, 5.25rem);
   font-weight: 900;
-  line-height: 0.86;
+  line-height: 0.88;
   letter-spacing: 0;
   text-transform: uppercase;
   text-wrap: balance;
+  overflow-wrap: normal;
+  word-break: normal;
 }
 
 .kombucha-hero__lead {
@@ -8397,129 +8372,10 @@ body.home-page {
   margin-top: 28px;
 }
 
-.kombucha-hero__note {
-  max-width: 520px;
-  margin: 20px 0 0;
-  padding-left: 16px;
-  border-left: 4px solid var(--kombucha-mango);
-  color: rgba(32, 25, 20, 0.74);
-  font-weight: 800;
-  line-height: 1.45;
-}
-
 .kombucha-hero__visual {
   display: grid;
-  min-height: 480px;
+  min-height: 0;
   place-items: center;
-}
-
-.kombucha-launch-card {
-  position: relative;
-  display: grid;
-  width: min(440px, 100%);
-  aspect-ratio: 0.95;
-  place-items: center;
-  overflow: hidden;
-  border: 1px solid rgba(32, 25, 20, 0.12);
-  border-radius: 8px;
-  background:
-    radial-gradient(circle at 28% 18%, rgba(255, 255, 255, 0.82) 0 10px, transparent 11px),
-    radial-gradient(circle at 76% 74%, rgba(255, 255, 255, 0.34) 0 42px, transparent 43px),
-    linear-gradient(145deg, rgba(255, 218, 104, 0.94), rgba(243, 118, 45, 0.9));
-  box-shadow: 0 28px 82px rgba(96, 54, 15, 0.18);
-}
-
-.kombucha-launch-card::before {
-  content: "";
-  position: absolute;
-  inset: 14% auto auto 12%;
-  width: 58%;
-  height: 58%;
-  border: 2px solid rgba(32, 25, 20, 0.12);
-  border-radius: 999px;
-}
-
-.kombucha-launch-card::after {
-  content: "";
-  position: absolute;
-  right: -20%;
-  bottom: -16%;
-  width: 66%;
-  height: 52%;
-  border-radius: 70% 46% 58% 42%;
-  background: rgba(255, 248, 232, 0.42);
-  transform: rotate(-14deg);
-}
-
-.kombucha-launch-card__sun,
-.kombucha-launch-card__bubble {
-  position: absolute;
-  border-radius: 999px;
-}
-
-.kombucha-launch-card__sun {
-  right: 16%;
-  top: 15%;
-  width: 94px;
-  height: 94px;
-  background: linear-gradient(145deg, #fff3b2, var(--kombucha-mango));
-  box-shadow: 0 18px 48px rgba(104, 56, 14, 0.16);
-}
-
-.kombucha-launch-card__bubble {
-  border: 2px solid rgba(255, 255, 255, 0.68);
-  background: rgba(255, 255, 255, 0.16);
-}
-
-.kombucha-launch-card__bubble--one {
-  left: 22%;
-  top: 24%;
-  width: 32px;
-  height: 32px;
-}
-
-.kombucha-launch-card__bubble--two {
-  right: 20%;
-  bottom: 28%;
-  width: 24px;
-  height: 24px;
-}
-
-.kombucha-launch-card__bubble--three {
-  left: 24%;
-  bottom: 18%;
-  width: 18px;
-  height: 18px;
-}
-
-.kombucha-launch-card__content {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  gap: 10px;
-  width: min(300px, 78%);
-  padding: 24px;
-  border: 1px solid rgba(32, 25, 20, 0.13);
-  border-radius: 8px;
-  background: rgba(255, 248, 232, 0.74);
-  backdrop-filter: blur(14px);
-}
-
-.kombucha-launch-card__content span,
-.kombucha-launch-card__content small {
-  color: rgba(32, 25, 20, 0.68);
-  font-size: 0.78rem;
-  font-weight: 900;
-  line-height: 1;
-  text-transform: uppercase;
-}
-
-.kombucha-launch-card__content strong {
-  color: var(--kombucha-ink);
-  font-size: clamp(1.75rem, 4vw, 2.8rem);
-  font-weight: 900;
-  line-height: 0.95;
-  text-transform: uppercase;
 }
 
 .kombucha-photo {
@@ -8541,6 +8397,12 @@ body.home-page {
   height: 100%;
   object-fit: contain;
   max-width: 100%;
+  display: block;
+}
+
+.kombucha-photo--hero {
+  aspect-ratio: 2;
+  max-width: 640px;
 }
 
 .kombucha-photo--wide {
@@ -8589,6 +8451,19 @@ body.home-page {
 .kombucha-notify,
 .kombucha-final {
   padding: clamp(48px, 7vw, 86px) 0;
+}
+
+.kombucha-education {
+  padding: clamp(26px, 3.2vw, 38px) 0 clamp(16px, 2.2vw, 24px);
+}
+
+.kombucha-education + .kombucha-soon {
+  padding-top: clamp(18px, 2.8vw, 30px);
+}
+
+.kombucha-soon,
+.kombucha-product {
+  padding-block: clamp(34px, 5vw, 58px);
 }
 
 .kombucha-soon__grid,
@@ -8785,8 +8660,14 @@ body.home-page {
   grid-template-columns: 1.4fr repeat(2, minmax(0, 1fr));
 }
 
+.kombucha-footer .footer__brand p,
+.kombucha-footer .footer__disclaimer p,
+.coldbrew-footer .footer__brand p,
+.coldbrew-footer .footer__disclaimer p {
+  color: rgba(255, 249, 240, 0.78);
+}
+
 @media (max-width: 980px) {
-  .kombucha-hero__grid,
   .kombucha-soon__grid,
   .kombucha-product__grid,
   .kombucha-local__grid,
@@ -8794,8 +8675,17 @@ body.home-page {
     grid-template-columns: 1fr;
   }
 
-  .kombucha-hero__visual {
-    min-height: 380px;
+  .kombucha-hero__grid {
+    grid-template-columns: minmax(260px, 0.72fr) minmax(320px, 1fr);
+    gap: 22px;
+  }
+
+  .kombucha-hero h1 {
+    font-size: clamp(3rem, 7.4vw, 4.25rem);
+  }
+
+  .kombucha-hero__lead {
+    max-width: 24ch;
   }
 
   .kombucha-notify__card .btn {
@@ -8803,14 +8693,14 @@ body.home-page {
   }
 }
 
-@media (max-width: 720px) {
+@media (max-width: 760px) {
   .kombucha-hero {
     padding-top: 42px;
   }
 
-  .kombucha-hero::before,
-  .kombucha-hero::after {
-    display: none;
+  .kombucha-hero__grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
   }
 
   .kombucha-hero h1 {
@@ -8824,12 +8714,8 @@ body.home-page {
     font-size: 1.08rem;
   }
 
-  .kombucha-hero__copy > p:not(.kombucha-hero__lead):not(.kombucha-hero__note) {
+  .kombucha-hero__copy > p:not(.kombucha-hero__lead) {
     max-width: 34ch;
-  }
-
-  .kombucha-hero__note {
-    max-width: 31ch;
   }
 
   .kombucha-hero__actions {
@@ -8846,11 +8732,6 @@ body.home-page {
     min-height: auto;
   }
 
-  .kombucha-launch-card {
-    width: 100%;
-    max-width: calc(100vw - 32px);
-  }
-
   .kombucha-soon h2,
   .kombucha-product h2,
   .kombucha-education h2,
@@ -8861,6 +8742,446 @@ body.home-page {
   }
 
   .kombucha-footer .footer__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Cold brew landing page */
+.coldbrew-page {
+  --coldbrew-ink: #17120f;
+  --coldbrew-muted: rgba(23, 18, 15, 0.68);
+  --coldbrew-line: rgba(23, 18, 15, 0.12);
+  --coldbrew-cream: #fff9ea;
+  --coldbrew-coffee: #3b2115;
+  --coldbrew-caramel: #c67a38;
+  --coldbrew-ice: #dcecf0;
+  --coldbrew-blue: #b8d7dc;
+  background:
+    radial-gradient(circle at 10% 5%, rgba(198, 122, 56, 0.25), transparent 24rem),
+    radial-gradient(circle at 90% 12%, rgba(184, 215, 220, 0.42), transparent 24rem),
+    linear-gradient(180deg, #fffdf6 0%, var(--coldbrew-cream) 44%, #fffaf0 100%);
+  color: var(--coldbrew-ink);
+  overflow-x: hidden;
+}
+
+.coldbrew-page .header {
+  background: rgba(255, 253, 246, 0.92);
+  border-bottom-color: var(--coldbrew-line);
+}
+
+.coldbrew-hero {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(34px, 5vw, 62px) 0 clamp(30px, 4vw, 46px);
+}
+
+.coldbrew-hero__grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(300px, 0.72fr) minmax(390px, 1fr);
+  gap: clamp(24px, 4vw, 58px);
+  align-items: center;
+}
+
+.coldbrew-hero__copy,
+.coldbrew-hero__visual {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+
+.coldbrew-hero h1 {
+  max-width: 9.6ch;
+  margin: 0;
+  font-size: clamp(3.05rem, 6vw, 5.25rem);
+  font-weight: 900;
+  line-height: 0.88;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.coldbrew-hero__lead {
+  max-width: 680px;
+  margin: 24px 0 0;
+  font-size: clamp(1.18rem, 2.2vw, 1.5rem);
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.coldbrew-hero__copy > p:not(.coldbrew-hero__lead):not(.coldbrew-hero__note) {
+  max-width: 650px;
+  margin: 18px 0 0;
+  color: var(--coldbrew-muted);
+  font-size: clamp(1rem, 1.7vw, 1.2rem);
+  line-height: 1.6;
+}
+
+.coldbrew-hero__actions,
+.coldbrew-final__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.coldbrew-hero__visual {
+  display: grid;
+  min-height: 0;
+  place-items: center;
+}
+
+.coldbrew-photo {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  max-width: calc(100vw - 32px);
+  margin: 0;
+  border-radius: 8px;
+  box-shadow: 0 28px 82px rgba(59, 33, 21, 0.16);
+}
+
+.coldbrew-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  border-radius: 8px;
+}
+
+.coldbrew-photo--hero,
+.coldbrew-photo--wide {
+  aspect-ratio: 2;
+}
+
+.coldbrew-photo--hero {
+  max-width: 640px;
+}
+
+.coldbrew-index {
+  position: sticky;
+  top: var(--header-offset, 72px);
+  z-index: 20;
+  border-block: 1px solid var(--coldbrew-line);
+  background: rgba(255, 253, 246, 0.94);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 12px 28px rgba(23, 18, 15, 0.06);
+}
+
+.coldbrew-index__inner {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  scrollbar-width: none;
+}
+
+.coldbrew-index__inner::-webkit-scrollbar {
+  display: none;
+}
+
+.coldbrew-index a {
+  flex: 0 0 auto;
+  padding: 10px 13px;
+  border: 1px solid var(--coldbrew-line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.78);
+  color: rgba(23, 18, 15, 0.78);
+  font-size: 0.82rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.coldbrew-marquee {
+  overflow: hidden;
+  border-bottom: 1px solid rgba(23, 18, 15, 0.12);
+  background: var(--coldbrew-ink);
+  color: var(--coldbrew-cream);
+}
+
+.coldbrew-marquee__track {
+  display: flex;
+  width: max-content;
+  min-width: 200%;
+  animation: coldbrew-marquee 28s linear infinite;
+}
+
+.coldbrew-marquee__track span {
+  flex: 0 0 auto;
+  padding: 13px 24px;
+  color: var(--coldbrew-cream);
+  font-size: 0.9rem;
+  font-weight: 900;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.coldbrew-marquee__track span::after {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-left: 24px;
+  border-radius: 999px;
+  background: var(--coldbrew-caramel);
+  vertical-align: 1px;
+}
+
+@keyframes coldbrew-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .coldbrew-marquee__track {
+    animation: none;
+  }
+}
+
+.coldbrew-intro,
+.coldbrew-profile,
+.coldbrew-education,
+.coldbrew-local,
+.coldbrew-whatsapp,
+.coldbrew-final {
+  padding: clamp(48px, 7vw, 86px) 0;
+}
+
+.coldbrew-education {
+  padding: clamp(26px, 3.2vw, 38px) 0 clamp(16px, 2.2vw, 24px);
+}
+
+.coldbrew-education + .coldbrew-intro {
+  padding-top: clamp(18px, 2.8vw, 30px);
+}
+
+.coldbrew-intro,
+.coldbrew-profile {
+  padding-block: clamp(34px, 5vw, 58px);
+}
+
+.coldbrew-intro__grid,
+.coldbrew-profile__grid,
+.coldbrew-local__grid,
+.coldbrew-whatsapp__card,
+.coldbrew-final__inner {
+  display: grid;
+  gap: clamp(22px, 4vw, 42px);
+  min-width: 0;
+}
+
+.coldbrew-intro__grid,
+.coldbrew-profile__grid,
+.coldbrew-local__grid,
+.coldbrew-whatsapp__card {
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.72fr);
+  align-items: center;
+}
+
+.coldbrew-intro h2,
+.coldbrew-profile h2,
+.coldbrew-education h2,
+.coldbrew-local h2,
+.coldbrew-whatsapp h2,
+.coldbrew-final h2 {
+  margin: 0;
+  font-size: clamp(2.15rem, 5vw, 4.4rem);
+  font-weight: 900;
+  line-height: 0.92;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.coldbrew-intro p,
+.coldbrew-profile p,
+.coldbrew-education p,
+.coldbrew-local p,
+.coldbrew-whatsapp p {
+  max-width: 720px;
+  margin: 18px 0 0;
+  color: var(--coldbrew-muted);
+  font-size: clamp(1rem, 1.65vw, 1.18rem);
+  line-height: 1.65;
+}
+
+.coldbrew-traits {
+  display: grid;
+  gap: 10px;
+}
+
+.coldbrew-traits span,
+.coldbrew-local__panel {
+  border: 1px solid var(--coldbrew-line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.68);
+  box-shadow: 0 18px 48px rgba(23, 18, 15, 0.07);
+}
+
+.coldbrew-traits span {
+  padding: 18px 20px;
+  color: var(--coldbrew-ink);
+  font-size: clamp(1.1rem, 2vw, 1.35rem);
+  font-weight: 900;
+}
+
+.coldbrew-profile {
+  background:
+    radial-gradient(circle at 18% 45%, rgba(198, 122, 56, 0.16), transparent 20rem),
+    linear-gradient(135deg, rgba(184, 215, 220, 0.32), rgba(255, 255, 255, 0.26));
+}
+
+.coldbrew-education__inner {
+  max-width: 880px;
+}
+
+.coldbrew-local {
+  background: var(--coldbrew-ink);
+  color: var(--coldbrew-cream);
+}
+
+.coldbrew-local p {
+  color: rgba(255, 249, 234, 0.76);
+}
+
+.coldbrew-local__panel {
+  display: grid;
+  gap: 12px;
+  padding: 24px;
+  background:
+    radial-gradient(circle at 92% 10%, rgba(198, 122, 56, 0.28), transparent 10rem),
+    rgba(255, 249, 234, 0.08);
+  color: var(--coldbrew-cream);
+}
+
+.coldbrew-local__panel strong {
+  font-size: 1.35rem;
+  font-weight: 900;
+}
+
+.coldbrew-local__panel span {
+  color: rgba(255, 249, 234, 0.78);
+  line-height: 1.5;
+}
+
+.coldbrew-whatsapp__card {
+  padding: clamp(28px, 5vw, 46px);
+  border: 1px solid var(--coldbrew-line);
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(184, 215, 220, 0.38), transparent 16rem),
+    rgba(255, 255, 255, 0.74);
+  box-shadow: 0 24px 70px rgba(23, 18, 15, 0.09);
+}
+
+.coldbrew-whatsapp__card .btn {
+  justify-self: end;
+}
+
+.coldbrew-final {
+  padding-top: 18px;
+}
+
+.coldbrew-final__inner {
+  justify-items: center;
+  text-align: center;
+}
+
+.coldbrew-footer .footer__grid {
+  grid-template-columns: 1.4fr repeat(2, minmax(0, 1fr));
+}
+
+@media (max-width: 980px) {
+  .coldbrew-intro__grid,
+  .coldbrew-profile__grid,
+  .coldbrew-local__grid,
+  .coldbrew-whatsapp__card {
+    grid-template-columns: 1fr;
+  }
+
+  .coldbrew-hero__grid {
+    grid-template-columns: minmax(260px, 0.72fr) minmax(320px, 1fr);
+    gap: 22px;
+  }
+
+  .coldbrew-hero h1 {
+    font-size: clamp(3rem, 7.4vw, 4.25rem);
+  }
+
+  .coldbrew-hero__lead {
+    max-width: 24ch;
+  }
+
+  .coldbrew-whatsapp__card .btn {
+    justify-self: start;
+  }
+}
+
+@media (max-width: 760px) {
+  .coldbrew-hero {
+    padding-top: 42px;
+  }
+
+  .coldbrew-hero__grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .coldbrew-hero::before,
+  .coldbrew-hero::after {
+    display: none;
+  }
+
+  .coldbrew-hero h1 {
+    max-width: 10.8ch;
+    font-size: clamp(2.18rem, 9.2vw, 2.72rem);
+    line-height: 0.92;
+  }
+
+  .coldbrew-hero__lead {
+    max-width: 30ch;
+    font-size: 1.08rem;
+  }
+
+  .coldbrew-hero__copy > p:not(.coldbrew-hero__lead):not(.coldbrew-hero__note) {
+    max-width: 34ch;
+  }
+
+  .coldbrew-hero__note {
+    max-width: 31ch;
+  }
+
+  .coldbrew-hero__actions {
+    display: grid;
+    max-width: 260px;
+  }
+
+  .coldbrew-hero__actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .coldbrew-hero__visual {
+    min-height: auto;
+  }
+
+
+  .coldbrew-intro h2,
+  .coldbrew-profile h2,
+  .coldbrew-education h2,
+  .coldbrew-local h2,
+  .coldbrew-whatsapp h2,
+  .coldbrew-final h2 {
+    font-size: clamp(2rem, 10vw, 3rem);
+  }
+
+  .coldbrew-footer .footer__grid {
     grid-template-columns: 1fr;
   }
 }
