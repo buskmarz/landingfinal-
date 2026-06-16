@@ -8290,6 +8290,271 @@ body.home-page {
   }
 }
 
+/* Cholula menu */
+.menu-cholula-page {
+  background:
+    radial-gradient(circle at 16% 6%, rgba(255, 204, 0, 0.22), transparent 24rem),
+    linear-gradient(180deg, #fffdf4 0%, #fff8e5 46%, #fffaf0 100%);
+}
+
+.cholula-hero {
+  padding: clamp(44px, 7vw, 84px) 0 clamp(30px, 5vw, 60px);
+  overflow: hidden;
+}
+
+.cholula-hero__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.48fr);
+  gap: clamp(24px, 5vw, 72px);
+  align-items: center;
+}
+
+.cholula-hero__label {
+  margin: 0 0 16px;
+  color: rgba(35, 31, 32, 0.62);
+  font-size: 0.84rem;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+}
+
+.cholula-hero h1 {
+  max-width: 9ch;
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(4rem, 11vw, 9rem);
+  font-weight: 900;
+  letter-spacing: 0;
+  line-height: 0.82;
+  text-transform: uppercase;
+}
+
+.cholula-hero p {
+  max-width: 760px;
+  margin: 24px 0 0;
+  color: rgba(35, 31, 32, 0.72);
+  font-size: clamp(1.05rem, 2vw, 1.32rem);
+  line-height: 1.55;
+}
+
+.cholula-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.cholula-hero__card {
+  display: grid;
+  gap: 18px;
+  padding: clamp(24px, 4vw, 36px);
+  border: 1px solid rgba(35, 31, 32, 0.1);
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 92% 10%, rgba(255, 204, 0, 0.42), transparent 9rem),
+    rgba(255, 255, 255, 0.72);
+  box-shadow: 0 24px 70px rgba(35, 31, 32, 0.1);
+}
+
+.cholula-hero__card img {
+  width: 132px;
+  height: auto;
+}
+
+.cholula-hero__card p {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.cholula-hero__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.cholula-hero__tags span,
+.cholula-section__head p {
+  border-radius: 999px;
+  background: rgba(255, 204, 0, 0.2);
+  color: rgba(35, 31, 32, 0.72);
+  font-size: 0.76rem;
+  font-weight: 900;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.cholula-hero__tags span {
+  padding: 9px 11px;
+}
+
+.cholula-index {
+  top: var(--header-offset, 72px);
+}
+
+.cholula-board {
+  padding: clamp(28px, 5vw, 62px) 0;
+}
+
+.cholula-board--light {
+  padding-top: 0;
+}
+
+.cholula-board__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  align-items: start;
+}
+
+.cholula-section {
+  display: grid;
+  gap: 14px;
+  padding: clamp(18px, 3vw, 26px);
+  border: 1px solid rgba(35, 31, 32, 0.1);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.74);
+  box-shadow: 0 18px 48px rgba(35, 31, 32, 0.07);
+}
+
+.cholula-section--purple {
+  --section-accent: #b97ae6;
+}
+
+.cholula-section--blue {
+  --section-accent: #0699b9;
+}
+
+.cholula-section--orange {
+  --section-accent: #ff6d2d;
+}
+
+.cholula-section--gold,
+.cholula-section--panera {
+  --section-accent: #ffc400;
+}
+
+.cholula-section__head {
+  display: grid;
+  gap: 10px;
+}
+
+.cholula-section__head p {
+  justify-self: start;
+  margin: 0;
+  padding: 8px 10px;
+}
+
+.cholula-section__head h2 {
+  margin: 0;
+  padding: 15px 18px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--section-accent, #ffc400), #ffd84a);
+  color: #fff;
+  font-size: clamp(1.55rem, 3vw, 2.55rem);
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.cholula-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(35, 31, 32, 0.1);
+}
+
+.cholula-item:first-of-type {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.cholula-item h3 {
+  margin: 0;
+  color: var(--section-accent, var(--ink));
+  font-size: clamp(1rem, 1.5vw, 1.22rem);
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+.cholula-item h3 span {
+  color: rgba(35, 31, 32, 0.48);
+  font-size: 0.72em;
+  font-weight: 700;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+.cholula-item p,
+.cholula-item em,
+.cholula-note {
+  margin: 5px 0 0;
+  color: rgba(35, 31, 32, 0.68);
+  font-size: 0.94rem;
+  line-height: 1.42;
+}
+
+.cholula-item em {
+  display: block;
+  font-style: normal;
+  color: rgba(35, 31, 32, 0.55);
+}
+
+.cholula-item strong {
+  color: #2c2928;
+  font-size: clamp(1.1rem, 1.8vw, 1.35rem);
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.cholula-note {
+  padding: 14px;
+  border-radius: 8px;
+  background: rgba(255, 204, 0, 0.14);
+  font-weight: 800;
+}
+
+@media (max-width: 980px) {
+  .cholula-hero__grid,
+  .cholula-board__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cholula-hero h1 {
+    max-width: 8ch;
+  }
+}
+
+@media (max-width: 720px) {
+  .cholula-hero {
+    padding-top: 34px;
+  }
+
+  .cholula-hero h1 {
+    font-size: clamp(3rem, 17vw, 4.8rem);
+  }
+
+  .cholula-hero__actions {
+    display: grid;
+  }
+
+  .cholula-hero__actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .cholula-section {
+    padding: 16px;
+  }
+
+  .cholula-item {
+    gap: 10px;
+  }
+}
+
 /* Kombucha launch page */
 .kombucha-page {
   --kombucha-ink: #201914;
