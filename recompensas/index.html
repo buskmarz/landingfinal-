@@ -92,8 +92,8 @@
               <a class="btn btn--primary" href="https://wa.me/?text=Me%20quiero%20registrar%20y%20ganar%20el%20cup%C3%B3n%20de%20%2450.%0A%0AMi%20nombre%20es%3A%0AMi%20n%C3%BAmero%20de%20tel%C3%A9fono%20es%3A%0AMi%20fecha%20de%20nacimiento%20es%3A" target="_blank" rel="noopener noreferrer" data-cta="activar-cashback">
                 Activar cashback
               </a>
-              <a class="btn btn--secondary" href="#consulta-saldo" data-cta="consultar-saldo">
-                Consultar saldo
+              <a class="btn btn--primary rewards-hero-balance-cta" href="#consulta-saldo" data-cta="consultar-saldo">
+                Consultar mi saldo ahora
               </a>
             </div>
             <ul class="hero__bullets">
@@ -165,8 +165,8 @@
                   <p class="rewards-quick__label">Como consultar tu saldo</p>
                   <strong>En esta pagina</strong>
                 </div>
-                <a class="btn btn--secondary" href="#consulta-saldo" data-cta="consultar-saldo">
-                  Consultar saldo
+                <a class="btn btn--primary rewards-hero-balance-cta" href="#consulta-saldo" data-cta="consultar-saldo">
+                  Consultar mi saldo
                 </a>
               </div>
             </div>
@@ -287,8 +287,8 @@
         <div class="container">
           <div class="section__header rewards-portal__header">
             <p class="eyebrow">Consulta tu saldo</p>
-            <h2 id="portal-title">Hazlo aqui.</h2>
-            <p>Telefono y fecha de nacimiento.</p>
+            <h2 id="portal-title">Consulta tu saldo y agrega tu tarjeta.</h2>
+            <p>Ingresa tu teléfono y cumpleaños. En cuanto aparezca tu saldo verás Apple Wallet y Google Wallet sin bajar más.</p>
           </div>
 
           <div class="rewards-portal__grid" data-rewards-portal>
@@ -311,8 +311,8 @@
                 </div>
 
                 <div class="rewards-portal__actions">
-                  <button class="btn btn--primary" type="submit" data-portal-submit data-cta="consultar-saldo">Consultar saldo</button>
-                  <a class="btn btn--secondary" href="https://wa.me/?text=Quiero%20consultar%20mi%20saldo." target="_blank" rel="noopener">WhatsApp</a>
+                  <button class="btn btn--primary rewards-portal__submit" type="submit" data-portal-submit data-cta="consultar-saldo">Consultar saldo</button>
+                  <a class="btn btn--secondary" href="https://wa.me/?text=Quiero%20consultar%20mi%20saldo." target="_blank" rel="noopener">Ayuda por WhatsApp</a>
                   <button class="btn btn--secondary" type="button" data-portal-reset hidden>Salir</button>
                 </div>
                 <p class="rewards-portal__status" data-portal-status aria-live="polite">
@@ -342,6 +342,12 @@
                 </div>
               </div>
 
+              <div class="rewards-portal__wallet" data-portal-wallet hidden>
+                <p class="rewards-portal__eyebrow">Agregar tarjeta digital</p>
+                <div class="rewards-portal__wallet-links" data-portal-wallet-links></div>
+                <p class="rewards-portal__wallet-note" data-portal-wallet-note>Elige Apple Wallet si usas iPhone o Google Wallet si usas Android.</p>
+              </div>
+
               <div class="rewards-portal__stats">
                 <article>
                   <span>Consumo del mes</span>
@@ -361,11 +367,6 @@
               <div class="rewards-portal__meta">
                 <p data-portal-expiry>Sin vencimientos cercanos.</p>
                 <p data-portal-session></p>
-              </div>
-
-              <div class="rewards-portal__wallet" data-portal-wallet hidden>
-                <p class="rewards-portal__eyebrow">Tu tarjeta digital</p>
-                <div class="rewards-portal__wallet-links" data-portal-wallet-links></div>
               </div>
 
               <div class="rewards-portal__movements">

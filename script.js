@@ -800,6 +800,7 @@ if (rewardsPortalRoot) {
     session: rewardsPortalRoot.querySelector("[data-portal-session]"),
   };
   const PORTAL_STORAGE_KEY = "bmood_rewards_portal_token";
+  let currentPortalToken = "";
 
   const formatMoney = (value) => {
     const amount = Number(value || 0);
@@ -868,24 +869,61 @@ if (rewardsPortalRoot) {
       .join("");
   };
 
+  const walletPassUrl = (passes = [], platform) => {
+    const target = String(platform || "").toLowerCase();
+    return (Array.isArray(passes) ? passes : []).find((pass) => String(pass.platform || "").toLowerCase() === target && pass.installUrl)?.installUrl || "";
+  };
+
+  const walletBadgeMarkup = (platform, url = "") => {
+    const isApple = platform === "apple";
+    const label = isApple ? "Apple Wallet" : "Google Wallet";
+    const iconClass = isApple ? "wallet-badge__icon--apple" : "wallet-badge__icon--google";
+    return `
+      <button class="wallet-badge wallet-badge--${platform}" type="button" data-wallet-platform="${platform}" data-wallet-url="${escapeHtml(url)}" aria-label="Agregar a ${label}">
+        <span class="wallet-badge__icon ${iconClass}" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="wallet-badge__text"><small>Add to</small><strong>${label}</strong></span>
+      </button>
+    `;
+  };
+
   const renderWalletLinks = (passes = []) => {
     if (!portalWallet || !portalWalletLinks) return;
-    const validPasses = Array.isArray(passes) ? passes.filter((pass) => pass.installUrl) : [];
-    if (!validPasses.length) {
-      portalWallet.setAttribute("hidden", "hidden");
-      portalWalletLinks.innerHTML = "";
-      return;
-    }
-    portalWalletLinks.innerHTML = validPasses
-      .map((pass) => {
-        const label = String(pass.platform || "").toLowerCase() === "apple" ? "Apple Wallet" : "Google Wallet";
-        return `<a href="${escapeHtml(pass.installUrl)}" target="_blank" rel="noopener noreferrer">${label}</a>`;
-      })
-      .join("");
+    const appleUrl = walletPassUrl(passes, "apple");
+    const googleUrl = walletPassUrl(passes, "google");
+    portalWalletLinks.innerHTML = `${walletBadgeMarkup("apple", appleUrl)}${walletBadgeMarkup("google", googleUrl)}`;
     portalWallet.removeAttribute("hidden");
   };
 
-  const renderPortalCustomer = (payload, token) => {
+  const issueWalletPass = async (platform) => {
+    if (!currentPortalToken) {
+      setPortalStatus("Primero consulta tu saldo.", "error");
+      return;
+    }
+    const target = platform === "apple" ? "apple" : "google";
+    const button = portalWalletLinks?.querySelector(`[data-wallet-platform="${target}"]`);
+    if (button) button.setAttribute("disabled", "disabled");
+    setPortalStatus(target === "apple" ? "Preparando Apple Wallet..." : "Preparando Google Wallet...");
+    try {
+      const res = await fetch(`${API_BASE}/recompensas-consulta`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: target === "apple" ? "issue_apple_wallet" : "issue_google_wallet", token: currentPortalToken }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data?.ok) throw new Error(data.error || "No se pudo generar tu tarjeta digital.");
+      if (data.customer) renderPortalCustomer(data, currentPortalToken, { skipScroll: true });
+      const installUrl = data.installUrl || walletPassUrl(data.customer?.wallet?.passes || [], target);
+      if (!installUrl) throw new Error("No se recibió el enlace de Wallet.");
+      setPortalStatus("Tarjeta lista. Abriendo Wallet...", "success");
+      window.location.href = installUrl;
+    } catch (error) {
+      setPortalStatus(error.message || "No se pudo generar tu tarjeta digital.", "error");
+    } finally {
+      if (button) button.removeAttribute("disabled");
+    }
+  };
+
+  const renderPortalCustomer = (payload, token, options = {}) => {
     const customer = payload?.customer;
     if (!customer) return;
     const profile = customer.profile || {};
@@ -924,7 +962,13 @@ if (rewardsPortalRoot) {
     renderMovements(customer.movements || []);
     portalResults?.removeAttribute("hidden");
     portalReset?.removeAttribute("hidden");
-    if (token) window.localStorage.setItem(PORTAL_STORAGE_KEY, token);
+    if (token) {
+      currentPortalToken = token;
+      window.localStorage.setItem(PORTAL_STORAGE_KEY, token);
+    }
+    if (!options.skipScroll) {
+      window.requestAnimationFrame(() => portalResults?.scrollIntoView({ block: "start", behavior: "auto" }));
+    }
   };
 
   const loadPortalSession = async (token, options = {}) => {
@@ -942,6 +986,7 @@ if (rewardsPortalRoot) {
       return true;
     } catch (error) {
       clearPortalSession();
+      currentPortalToken = "";
       if (!options.silent) setPortalStatus(error.message || "No se pudo abrir tu consulta.", "error");
       return false;
     }
@@ -986,8 +1031,16 @@ if (rewardsPortalRoot) {
 
   portalReset?.addEventListener("click", () => {
     portalForm?.reset();
+    currentPortalToken = "";
     clearPortalSession();
     setPortalStatus("Consulta cerrada. Puedes volver a ingresar tus datos cuando quieras.");
+  });
+
+  portalWalletLinks?.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-wallet-platform]");
+    if (!button) return;
+    event.preventDefault();
+    issueWalletPass(button.getAttribute("data-wallet-platform"));
   });
 
   const existingPortalToken = window.localStorage.getItem(PORTAL_STORAGE_KEY);

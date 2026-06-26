@@ -9450,3 +9450,125 @@ body.home-page {
     grid-template-columns: 1fr;
   }
 }
+
+/* Rewards Wallet CTA badges */
+.rewards-hero-balance-cta,
+.rewards-portal__submit {
+  box-shadow: 0 14px 30px rgba(35, 31, 32, 0.18);
+}
+
+.rewards-portal__wallet {
+  padding: 14px;
+  border-radius: 18px;
+  background: #fff7c7;
+  border: 1px solid rgba(35, 31, 32, 0.1);
+  color: var(--color-ink, #231f20);
+}
+
+.rewards-portal__wallet-links {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.wallet-badge {
+  min-height: 58px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.24);
+  background: #111;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 8px 12px;
+  cursor: pointer;
+  box-shadow: 0 12px 24px rgba(17, 17, 17, 0.2);
+  text-align: left;
+}
+
+.wallet-badge:hover,
+.wallet-badge:focus-visible {
+  background: #000;
+  transform: translateY(-1px);
+}
+
+.wallet-badge[disabled] {
+  opacity: 0.62;
+  cursor: wait;
+}
+
+.wallet-badge__icon {
+  width: 34px;
+  height: 26px;
+  flex: 0 0 34px;
+  border-radius: 7px;
+  background: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+.wallet-badge__icon i {
+  position: absolute;
+  left: 5px;
+  right: 5px;
+  height: 5px;
+  border-radius: 999px;
+}
+
+.wallet-badge__icon--apple i:nth-child(1) { top: 5px; background: #60c4e8; }
+.wallet-badge__icon--apple i:nth-child(2) { top: 11px; background: #f2c94c; }
+.wallet-badge__icon--apple i:nth-child(3) { top: 17px; background: #f36f56; }
+.wallet-badge__icon--google i:nth-child(1) { top: 5px; background: #34a853; }
+.wallet-badge__icon--google i:nth-child(2) { top: 11px; background: #fbbc04; }
+.wallet-badge__icon--google i:nth-child(3) { top: 17px; background: #4285f4; }
+
+.wallet-badge__text small,
+.wallet-badge__text strong {
+  display: block;
+  line-height: 1;
+  color: #fff;
+}
+
+.wallet-badge__text small {
+  font-size: 0.74rem;
+  font-weight: 650;
+  opacity: 0.92;
+}
+
+.wallet-badge__text strong {
+  margin-top: 3px;
+  font-size: clamp(0.92rem, 2.5vw, 1.1rem);
+  font-weight: 850;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+.rewards-portal__wallet-note {
+  margin: 10px 0 0;
+  color: rgba(35, 31, 32, 0.7);
+  font-size: 0.92rem;
+}
+
+@media (max-width: 560px) {
+  .rewards-portal__wallet-links {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .wallet-badge {
+    min-height: 54px;
+    gap: 7px;
+    padding: 7px 8px;
+  }
+
+  .wallet-badge__icon {
+    width: 30px;
+    height: 23px;
+    flex-basis: 30px;
+  }
+
+  .wallet-badge__text small { font-size: 0.68rem; }
+  .wallet-badge__text strong { font-size: 0.9rem; }
+}
