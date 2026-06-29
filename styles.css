@@ -9572,3 +9572,336 @@ body.home-page {
   .wallet-badge__text small { font-size: 0.68rem; }
   .wallet-badge__text strong { font-size: 0.9rem; }
 }
+
+/* Conversion refresh: Better Mood home + rewards, 2026-06 */
+.hero-trust-badge,
+.social-proof-strip__inner,
+.cashback-example,
+.responsible-note {
+  border: 1px solid rgba(35, 31, 32, 0.12);
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 18px 48px rgba(35, 31, 32, 0.06);
+}
+
+.hero-trust-badge {
+  display: inline-flex;
+  width: fit-content;
+  margin: 0.35rem 0 1.1rem;
+  padding: 0.72rem 1rem;
+  border-radius: 999px;
+  color: #231f20;
+  font-weight: 800;
+}
+
+.social-proof-strip {
+  padding: 0.8rem 0 0;
+  background: var(--color-cream, #fff7dc);
+}
+
+.social-proof-strip__inner {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 0.8rem 1rem;
+  border-radius: 999px;
+  color: #231f20;
+  font-weight: 800;
+}
+
+.social-proof-strip__inner a {
+  color: #0f5b3d;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.home-page .hero--conversion .hero__actions--priority {
+  grid-template-columns: repeat(3, minmax(0, auto));
+  align-items: center;
+}
+
+.home-page .value-strip--actions {
+  padding-top: clamp(2.25rem, 4vw, 4rem);
+}
+
+.cashback-home__grid--clear {
+  align-items: stretch;
+}
+
+.cashback-steps {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+  margin: 1.5rem 0;
+}
+
+.cashback-steps article {
+  display: grid;
+  gap: 0.35rem;
+  padding: 1rem;
+  border: 1px solid rgba(35, 31, 32, 0.1);
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.cashback-steps span {
+  display: inline-grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: #ffde00;
+  color: #231f20;
+  font-weight: 900;
+}
+
+.cashback-steps strong {
+  color: #231f20;
+  font-size: 1.02rem;
+}
+
+.cashback-steps p {
+  margin: 0;
+  color: rgba(35, 31, 32, 0.72);
+  font-size: 0.94rem;
+  line-height: 1.45;
+}
+
+.cashback-example {
+  display: flex;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 1rem 0 1.35rem;
+  padding: 0.85rem;
+  border-radius: 1.25rem;
+}
+
+.cashback-example strong,
+.cashback-example span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.35rem;
+  padding: 0.45rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(255, 222, 0, 0.26);
+  color: #231f20;
+  font-weight: 800;
+}
+
+.cashback-example strong {
+  background: #231f20;
+  color: #ffde00;
+}
+
+.cashback-wallet__metrics small {
+  display: block;
+  margin-top: 0.22rem;
+  color: rgba(35, 31, 32, 0.62);
+  font-size: 0.76rem;
+  line-height: 1.25;
+}
+
+.cashback-wallet__microcopy,
+.rewards-rule-note {
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.menu-summary--categories {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.responsible-note {
+  margin: 1rem 0 1.25rem;
+  padding: 1rem;
+  border-radius: 1.25rem;
+  color: rgba(35, 31, 32, 0.78);
+  line-height: 1.55;
+}
+
+.work-friendly-home {
+  padding-block: clamp(2.5rem, 6vw, 5rem);
+  background: linear-gradient(135deg, rgba(255, 222, 0, 0.14), rgba(255, 255, 255, 0));
+}
+
+.work-friendly-home__card {
+  display: grid;
+  grid-template-columns: 1.5fr auto;
+  gap: 1.25rem;
+  align-items: center;
+  padding: clamp(1.25rem, 4vw, 2.25rem);
+  border: 1px solid rgba(35, 31, 32, 0.12);
+  border-radius: 2rem;
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: 0 24px 70px rgba(35, 31, 32, 0.08);
+}
+
+.work-friendly-home__card h2 {
+  margin: 0 0 0.5rem;
+  max-width: 13ch;
+}
+
+.work-friendly-home__card p:last-child {
+  margin-bottom: 0;
+}
+
+.work-friendly-home__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.rewards-page-redesign .page-hero__grid {
+  align-items: stretch;
+}
+
+.rewards-hero-bullets {
+  margin-top: 1rem;
+}
+
+.rewards-wallet-preview {
+  min-height: 100%;
+}
+
+.rewards-steps-clear {
+  margin-top: 1.5rem;
+}
+
+.cashback-example--wide {
+  margin-block: 1.25rem 1.75rem;
+}
+
+.rewards-rule-note {
+  margin-top: 1.5rem;
+}
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid rgba(255, 222, 0, 0.9);
+  outline-offset: 3px;
+  border-color: #231f20;
+}
+
+@media (max-width: 900px) {
+  .home-page .hero--conversion .hero__actions--priority,
+  .cashback-steps,
+  .menu-summary--categories,
+  .work-friendly-home__card {
+    grid-template-columns: 1fr;
+  }
+
+  .social-proof-strip__inner {
+    justify-content: flex-start;
+    border-radius: 1.25rem;
+  }
+
+  .work-friendly-home__actions {
+    justify-content: stretch;
+  }
+
+  .work-friendly-home__actions .btn,
+  .home-page .hero--conversion .hero__actions--priority .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-trust-badge {
+    width: 100%;
+    justify-content: center;
+    border-radius: 1rem;
+    text-align: center;
+  }
+
+  .cashback-example {
+    display: grid;
+  }
+
+  .mobile-bar {
+    padding-bottom: calc(0.55rem + env(safe-area-inset-bottom));
+  }
+
+  .floating-whatsapp {
+    display: none;
+  }
+}
+
+/* Cholula branch additions */
+.branch-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1.25rem 0;
+}
+
+.branch-cards--single {
+  grid-template-columns: 1fr;
+}
+
+.branch-card {
+  padding: 1rem;
+  border: 1px solid rgba(35, 31, 32, 0.12);
+  border-radius: 1.4rem;
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: 0 18px 48px rgba(35, 31, 32, 0.06);
+}
+
+.branch-card--new {
+  background: linear-gradient(135deg, rgba(255, 222, 0, 0.25), rgba(255, 255, 255, 0.82));
+}
+
+.branch-card > span {
+  display: inline-flex;
+  margin-bottom: 0.45rem;
+  padding: 0.28rem 0.65rem;
+  border-radius: 999px;
+  background: #ffde00;
+  color: #231f20;
+  font-size: 0.75rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.branch-card h3 {
+  margin: 0 0 0.45rem;
+}
+
+.branch-card p {
+  margin: 0.25rem 0;
+  color: rgba(35, 31, 32, 0.72);
+  line-height: 1.45;
+}
+
+.branch-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-top: 0.85rem;
+}
+
+.branch-card__actions a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.6rem;
+  padding: 0.55rem 0.85rem;
+  border: 1px solid rgba(35, 31, 32, 0.16);
+  border-radius: 999px;
+  color: #231f20;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.branch-hero .hero__subtitle {
+  max-width: 62ch;
+}
+
+@media (max-width: 760px) {
+  .branch-cards {
+    grid-template-columns: 1fr;
+  }
+}

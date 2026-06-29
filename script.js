@@ -4,6 +4,27 @@ const header = document.querySelector(".header");
 const API_BASE = "/api";
 const IS_LOCAL_PREVIEW = ["127.0.0.1", "localhost"].includes(window.location.hostname);
 
+const applySiteDataLinks = () => {
+  const siteData = window.BETTER_MOOD_SITE_DATA;
+  if (!siteData?.links) return;
+
+  document.querySelectorAll("[data-site-link]").forEach((element) => {
+    const key = element.getAttribute("data-site-link");
+    const href = siteData.links[key];
+    if (href) element.setAttribute("href", href);
+  });
+
+  document.querySelectorAll('[data-site-text="googleTrust"]').forEach((element) => {
+    const business = siteData.business || {};
+    const rating = business.googleRating || "4.4";
+    const reviews = business.googleReviewCount || "168";
+    const place = `${business.neighborhood || "La Paz"}, ${business.city || "Puebla"}`;
+    element.textContent = `⭐ ${rating}/5 en Google · ${reviews} reseñas · ${place}`;
+  });
+};
+
+applySiteDataLinks();
+
 const setHeaderOffset = () => {
   if (!header) return;
   document.documentElement.style.setProperty("--header-offset", `${header.offsetHeight}px`);

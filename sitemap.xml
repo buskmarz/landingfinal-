@@ -2,137 +2,127 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://bmoodcoffee.com/</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-06-28</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://bmoodcoffee.com/recompensas/</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-06-28</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://bmoodcoffee.com/cholula/</loc>
+    <lastmod>2026-06-28</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://bmoodcoffee.com/eventos/</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-06-28</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://bmoodcoffee.com/bienestar/</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-06-28</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://bmoodcoffee.com/arcade/</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-06-28</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://bmoodcoffee.com/recomendador/</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-06-28</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://bmoodcoffee.com/calendario-futbolero/</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-06-28</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://bmoodcoffee.com/cafe-lavado/</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-06-28</lastmod>
     <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://bmoodcoffee.com/kombucha/</loc>
-    <lastmod>2026-06-04</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://bmoodcoffee.com/cold-brew/</loc>
-    <lastmod>2026-06-05</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://bmoodcoffee.com/menu-cholula/</loc>
-    <lastmod>2026-06-16</lastmod>
-    <priority>0.9</priority>
   </url>
   <url>
     <loc>https://bmoodcoffee.com/origen-cafe/</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-06-28</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://bmoodcoffee.com/recorrido-cafe/</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-06-28</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://bmoodcoffee.com/cafe-de-especialidad-puebla/</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-06-28</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://bmoodcoffee.com/cbd-en-el-cafe/</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-06-28</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://bmoodcoffee.com/como-preparar-cafe-en-casa/</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-06-28</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://bmoodcoffee.com/talleres-de-cafe-puebla/</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-06-28</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://bmoodcoffee.com/cafeteria-en-la-paz-puebla/</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-06-28</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://bmoodcoffee.com/cafeteria-pet-friendly-puebla/</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-06-28</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://bmoodcoffee.com/cafeteria-para-trabajar-puebla/</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-06-28</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://bmoodcoffee.com/cafeteria-con-wifi-puebla/</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-06-28</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://bmoodcoffee.com/matcha-en-puebla/</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-06-28</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://bmoodcoffee.com/cold-brew-en-puebla/</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-06-28</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://bmoodcoffee.com/brunch-en-puebla/</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-06-28</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://bmoodcoffee.com/bebidas-funcionales-puebla/</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-06-28</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://bmoodcoffee.com/cbd-no-psicoactivo-puebla/</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-06-28</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://bmoodcoffee.com/adaptogenos-en-bebidas-puebla/</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-06-28</lastmod>
     <priority>0.8</priority>
   </url>
 </urlset>
