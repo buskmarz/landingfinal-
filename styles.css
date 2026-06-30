@@ -9905,3 +9905,366 @@ textarea:focus-visible {
     grid-template-columns: 1fr;
   }
 }
+
+/* Rewards 2026 Wallet polish */
+.rewards-page .page-hero--rewards {
+  background:
+    radial-gradient(circle at 14% 18%, rgba(255, 204, 0, 0.28), transparent 24%),
+    radial-gradient(circle at 86% 10%, rgba(255, 255, 255, 0.18), transparent 22%),
+    linear-gradient(135deg, #15120f 0%, #241b16 52%, #f3df99 160%);
+}
+
+.rewards-page .page-hero--rewards h1 {
+  font-size: clamp(3rem, 7.8vw, 6.45rem);
+  line-height: 0.94;
+  letter-spacing: -0.075em;
+  max-width: 9.2em;
+}
+
+.rewards-page .page-hero--rewards .hero__text {
+  max-width: 620px;
+  font-size: clamp(1rem, 1.6vw, 1.18rem);
+  color: rgba(255, 255, 255, 0.86);
+}
+
+.bm-wallet-stage {
+  width: min(100%, 560px);
+  justify-self: end;
+  padding: clamp(14px, 2vw, 22px);
+  border-radius: 34px;
+  background:
+    linear-gradient(145deg, rgba(255,255,255,0.18), rgba(255,255,255,0.04)),
+    rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255,255,255,0.18);
+  box-shadow: 0 34px 90px rgba(0,0,0,0.36), inset 0 1px 0 rgba(255,255,255,0.2);
+  backdrop-filter: blur(18px);
+}
+
+.bm-wallet-card {
+  position: relative;
+  min-height: 690px;
+  overflow: hidden;
+  border-radius: 28px;
+  padding: clamp(22px, 4vw, 34px);
+  color: #101010;
+  background:
+    radial-gradient(circle at 18% 12%, rgba(255,255,255,0.34), transparent 10%),
+    radial-gradient(circle at 84% 82%, rgba(255,180,0,0.55), transparent 24%),
+    linear-gradient(180deg, #ffd900 0%, #ffcc00 100%);
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.06), 0 26px 60px rgba(0,0,0,0.32);
+}
+
+.bm-wallet-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,0.16) 0 1px, transparent 1.5px),
+    radial-gradient(circle, rgba(0,0,0,0.035) 0 1px, transparent 1.5px);
+  background-size: 28px 28px, 42px 42px;
+  opacity: 0.48;
+  pointer-events: none;
+}
+
+.bm-wallet-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.bm-wallet-card__brand {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  min-height: 58px;
+}
+
+.bm-wallet-card__brand img {
+  width: 82px;
+  height: auto;
+  filter: brightness(0) invert(1) drop-shadow(0 2px 8px rgba(0,0,0,0.12));
+}
+
+.bm-wallet-card__brand span {
+  font-weight: 850;
+  font-size: clamp(1.4rem, 2.8vw, 2rem);
+  letter-spacing: -0.04em;
+}
+
+.bm-wallet-card__balance {
+  margin-top: clamp(64px, 8vw, 86px);
+}
+
+.bm-wallet-card__balance strong {
+  display: block;
+  font-size: clamp(4rem, 10vw, 7.7rem);
+  line-height: 0.88;
+  letter-spacing: -0.09em;
+  font-weight: 500;
+}
+
+.bm-wallet-card__balance span {
+  display: block;
+  margin-top: 8px;
+  font-size: clamp(1.25rem, 2.4vw, 1.9rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.bm-wallet-card__details {
+  display: grid;
+  grid-template-columns: 1.1fr 1.1fr 1.1fr 0.72fr;
+  gap: clamp(14px, 2vw, 28px);
+  margin-top: clamp(92px, 12vw, 138px);
+}
+
+.bm-wallet-card__details span {
+  display: block;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  font-size: clamp(0.72rem, 1.2vw, 0.88rem);
+  letter-spacing: -0.02em;
+  font-weight: 900;
+}
+
+.bm-wallet-card__details strong {
+  display: block;
+  font-size: clamp(0.86rem, 1.55vw, 1.08rem);
+  line-height: 1.15;
+  font-weight: 500;
+}
+
+.bm-wallet-card__qr {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(26px, 5vw, 42px);
+  transform: translateX(-50%);
+  width: min(210px, 46%);
+  aspect-ratio: 1 / 1.12;
+  padding: 14px 14px 30px;
+  border-radius: 9px;
+  background: #fff;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 9px;
+  box-shadow: 0 16px 32px rgba(0,0,0,0.14);
+}
+
+.bm-wallet-card__qr span {
+  background:
+    linear-gradient(90deg, #000 20%, transparent 20% 38%, #000 38% 58%, transparent 58% 72%, #000 72%),
+    linear-gradient(#000 18%, transparent 18% 36%, #000 36% 52%, transparent 52% 68%, #000 68%);
+}
+
+.bm-wallet-card__qr span:nth-child(1),
+.bm-wallet-card__qr span:nth-child(3),
+.bm-wallet-card__qr span:nth-child(4) {
+  border: 8px solid #000;
+  background: #fff;
+  box-shadow: inset 0 0 0 8px #fff, inset 0 0 0 17px #000;
+}
+
+.bm-wallet-card__qr small {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: 7px;
+  text-align: center;
+  font-size: clamp(0.68rem, 1.4vw, 0.9rem);
+  color: #111;
+}
+
+.bm-wallet-stage__caption {
+  margin: 14px 4px 0;
+  color: rgba(255,255,255,0.82);
+  font-size: 0.94rem;
+}
+
+.rewards-page .rewards-portal {
+  background:
+    radial-gradient(circle at 6% 16%, rgba(255, 204, 0, 0.22), transparent 26%),
+    radial-gradient(circle at 96% 12%, rgba(255, 255, 255, 0.9), transparent 22%),
+    linear-gradient(180deg, #fffaf0 0%, #f5f1e8 100%);
+}
+
+.rewards-page .rewards-portal__grid {
+  grid-template-columns: minmax(280px, 340px) minmax(0, 1fr);
+  gap: 18px;
+}
+
+.rewards-page .rewards-portal__card {
+  border-radius: 24px;
+  border: 1px solid rgba(20, 17, 13, 0.08);
+  box-shadow: 0 18px 50px rgba(25, 20, 14, 0.08);
+}
+
+.rewards-page .rewards-portal__balance > div,
+.rewards-page .rewards-portal__stats article,
+.rewards-page .rewards-portal__movement {
+  border-radius: 18px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
+}
+
+.rewards-page .rewards-portal__wallet {
+  background: linear-gradient(180deg, #fff8c9 0%, #fff0a8 100%);
+  border: 1px solid rgba(174, 132, 0, 0.18);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.82), 0 16px 34px rgba(140, 100, 0, 0.12);
+}
+
+.wallet-badge {
+  min-height: 62px;
+  border-radius: 12px;
+  background: #050505;
+  border: 1px solid rgba(255,255,255,0.18);
+  box-shadow: 0 12px 26px rgba(0,0,0,0.24);
+}
+
+.wallet-badge__icon {
+  width: 37px;
+  height: 29px;
+  flex-basis: 37px;
+  border-radius: 8px;
+  background: #f6f6f6;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.08);
+}
+
+.wallet-badge__icon::before {
+  content: "";
+  position: absolute;
+  inset: 4px 6px auto;
+  height: 5px;
+  border-radius: 999px;
+  background: #5ac8fa;
+}
+
+.wallet-badge__icon::after {
+  content: "";
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  top: 12px;
+  height: 5px;
+  border-radius: 999px;
+  background: #ffcc02;
+  box-shadow: 0 8px 0 #ff3b30;
+}
+
+.wallet-badge__icon--google::before { background: #34a853; }
+.wallet-badge__icon--google::after { background: #fbbc04; box-shadow: 0 8px 0 #4285f4; }
+.wallet-badge__icon i { display: none; }
+
+.wallet-badge__text small {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.wallet-badge__text strong {
+  font-size: clamp(0.95rem, 1.7vw, 1.15rem);
+  letter-spacing: -0.035em;
+}
+
+@media (max-width: 900px) {
+  .rewards-page .page-hero--rewards h1 {
+    font-size: clamp(2.8rem, 13vw, 4.7rem);
+  }
+
+  .bm-wallet-stage {
+    justify-self: stretch;
+    width: 100%;
+  }
+
+  .bm-wallet-card {
+    min-height: 610px;
+  }
+
+  .bm-wallet-card__details {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 74px;
+  }
+}
+
+@media (max-width: 560px) {
+  .bm-wallet-card {
+    min-height: 555px;
+    border-radius: 24px;
+  }
+
+  .bm-wallet-card__brand img { width: 58px; }
+  .bm-wallet-card__brand span { font-size: 1.25rem; }
+  .bm-wallet-card__balance { margin-top: 54px; }
+  .bm-wallet-card__balance strong { font-size: clamp(3.4rem, 17vw, 4.35rem); }
+  .bm-wallet-card__balance span { font-size: 1.2rem; }
+  .bm-wallet-card__details { gap: 16px; margin-top: 58px; }
+  .bm-wallet-card__qr { width: 190px; max-width: 62%; }
+  .rewards-page .rewards-portal__grid { grid-template-columns: 1fr; }
+  .wallet-badge__icon { width: 28px; height: 23px; flex-basis: 28px; }
+  .wallet-badge__text small { font-size: 0.62rem; }
+  .wallet-badge__text strong { font-size: 0.86rem; }
+}
+
+/* Rewards 2026 fit pass: keep the wallet mockup readable in first viewport */
+.bm-wallet-stage {
+  width: min(100%, 520px);
+}
+
+.bm-wallet-card {
+  min-height: 575px;
+}
+
+.bm-wallet-card__balance {
+  margin-top: clamp(42px, 5vw, 58px);
+}
+
+.bm-wallet-card__balance strong {
+  font-size: clamp(3.7rem, 7.2vw, 6rem);
+}
+
+.bm-wallet-card__details {
+  margin-top: clamp(56px, 7vw, 76px);
+  padding-right: 0;
+}
+
+.bm-wallet-card__qr {
+  width: min(164px, 36%);
+  bottom: 22px;
+  padding: 11px 11px 27px;
+  gap: 7px;
+}
+
+@media (max-width: 900px) {
+  .bm-wallet-card {
+    min-height: 560px;
+  }
+}
+
+/* Rewards 2026 fit pass 2: prevent QR/details overlap */
+.bm-wallet-card__balance {
+  margin-top: clamp(28px, 4vw, 42px);
+}
+
+.bm-wallet-card__balance strong {
+  font-size: clamp(3.35rem, 6.4vw, 5.25rem);
+}
+
+.bm-wallet-card__balance span {
+  font-size: clamp(1.08rem, 2vw, 1.55rem);
+}
+
+.bm-wallet-card__details {
+  margin-top: clamp(34px, 5vw, 48px);
+}
+
+.bm-wallet-card__qr {
+  width: min(132px, 30%);
+  bottom: 20px;
+  padding: 9px 9px 24px;
+  gap: 5px;
+}
+
+.bm-wallet-card__qr span:nth-child(1),
+.bm-wallet-card__qr span:nth-child(3),
+.bm-wallet-card__qr span:nth-child(4) {
+  border-width: 6px;
+  box-shadow: inset 0 0 0 6px #fff, inset 0 0 0 13px #000;
+}
