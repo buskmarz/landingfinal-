@@ -232,6 +232,43 @@ if (document.readyState === "complete") {
   window.addEventListener("load", sendVisitPing, { once: true });
 }
 
+const sendConversionEvent = (target) => {
+  if (IS_LOCAL_PREVIEW || !target) return;
+  const eventName = target.getAttribute("data-event");
+  if (!eventName) return;
+
+  const payload = {
+    event: eventName,
+    cta: target.getAttribute("data-cta") || "",
+    path: window.location.pathname,
+    href: target.getAttribute("href") || "",
+  };
+  const url = `${API_BASE}/track-event`;
+  const body = JSON.stringify(payload);
+
+  if (navigator.sendBeacon) {
+    navigator.sendBeacon(url, new Blob([body], { type: "application/json" }));
+    return;
+  }
+
+  fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body,
+    keepalive: true,
+  }).catch(() => {});
+};
+
+document.addEventListener(
+  "click",
+  (event) => {
+    const target = event.target.closest("[data-event]");
+    if (!target) return;
+    sendConversionEvent(target);
+  },
+  { capture: true }
+);
+
 const recomendadorRoot = document.querySelector("[data-recomendador]");
 if (recomendadorRoot) {
   const resultEl = recomendadorRoot.querySelector("[data-reco-result]");

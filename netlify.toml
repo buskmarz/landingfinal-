@@ -118,6 +118,36 @@
   status = 301
 
 [[redirects]]
+  from = "/ubicacion"
+  to = "/#location"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/ubicacion/"
+  to = "/#location"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/cashback"
+  to = "/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/cashback/"
+  to = "/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/favicon.ico"
+  to = "/assets/logo-better-mood.png"
+  status = 301
+  force = true
+
+[[redirects]]
   from = "/cafe-de-especialidad-puebla"
   to = "/cafe-de-especialidad-puebla/"
   status = 301
