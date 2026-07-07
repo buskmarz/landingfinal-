@@ -3,6 +3,12 @@ import path from "node:path";
 import { localPagesData } from "./local-pages-data.mjs";
 
 const rootDir = process.cwd();
+const requiredStaticSitemapEntries = [
+  "https://bmoodcoffee.com/",
+  "https://bmoodcoffee.com/menu/",
+  "https://bmoodcoffee.com/menu-cholula/",
+  "https://bmoodcoffee.com/cholula/",
+];
 
 function assert(condition, message) {
   if (!condition) {
@@ -24,6 +30,9 @@ async function validatePage(page) {
 
 async function validateSitemap() {
   const sitemap = await fs.readFile(path.join(rootDir, "sitemap.xml"), "utf8");
+  for (const url of requiredStaticSitemapEntries) {
+    assert(sitemap.includes(`<loc>${url}</loc>`), `Sitemap missing ${url}`);
+  }
   for (const page of localPagesData) {
     assert(
       sitemap.includes(`<loc>https://bmoodcoffee.com/${page.slug}/</loc>`),

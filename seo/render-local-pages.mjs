@@ -7,6 +7,8 @@ const rootDir = process.cwd();
 
 const staticSitemapEntries = [
   "https://bmoodcoffee.com/",
+  "https://bmoodcoffee.com/menu/",
+  "https://bmoodcoffee.com/menu-cholula/",
   "https://bmoodcoffee.com/recompensas/",
   "https://bmoodcoffee.com/cholula/",
   "https://bmoodcoffee.com/eventos/",
