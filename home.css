@@ -185,7 +185,7 @@ h1, h2, h3, p, figure { margin: 0; }
 .recipes__products { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px, 4vw, 74px); }
 .drink { position: relative; padding-bottom: 4px; }
 .drink + .drink { border-left: 1px solid var(--sun); padding-left: clamp(24px, 4vw, 74px); }
-.drink img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; object-position: center; mix-blend-mode: multiply; }
+.drink img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; object-position: center; mix-blend-mode: multiply; }
 .drink figcaption { margin-top: 16px; text-align: center; font-size: 0.9rem; }
 .drink figcaption strong, .drink figcaption span { display: block; }
 .drink figcaption strong { font-weight: 800; }
@@ -228,6 +228,7 @@ h1, h2, h3, p, figure { margin: 0; }
 .community__copy .button { margin-top: 32px; }
 .wheel-art { position: relative; min-height: 560px; align-self: stretch; display: grid; place-items: center; overflow: hidden; }
 .wheel-art__disc {
+  --wheel-name-radius: min(14vw, 156px);
   position: relative;
   width: min(43vw, 480px);
   aspect-ratio: 1;
@@ -237,13 +238,13 @@ h1, h2, h3, p, figure { margin: 0; }
   background: conic-gradient(#ffde00 0 60deg, #fff7c7 60deg 120deg, #ffba00 120deg 180deg, #fff 180deg 240deg, #ffde00 240deg 300deg, #fff7c7 300deg);
   animation: wheel-breathe 9s ease-in-out infinite alternate;
 }
-.wheel-art__name { position: absolute; left: 50%; top: 50%; width: 42%; font-size: clamp(.72rem, 1.3vw, 1rem); font-weight: 800; transform-origin: 0 0; }
-.wheel-art__name--1 { transform: rotate(-60deg) translate(28%, -50%) rotate(60deg); }
-.wheel-art__name--2 { transform: rotate(0deg) translate(28%, -50%); }
-.wheel-art__name--3 { transform: rotate(60deg) translate(28%, -50%) rotate(-60deg); }
-.wheel-art__name--4 { transform: rotate(120deg) translate(28%, -50%) rotate(-120deg); }
-.wheel-art__name--5 { transform: rotate(180deg) translate(28%, -50%) rotate(-180deg); }
-.wheel-art__name--6 { transform: rotate(240deg) translate(28%, -50%) rotate(-240deg); }
+.wheel-art__name { position: absolute; left: 50%; top: 50%; width: 76px; margin: -10px 0 0 -38px; text-align: center; font-size: clamp(.72rem, 1.3vw, 1rem); font-weight: 800; transform-origin: 38px 10px; }
+.wheel-art__name--1 { transform: rotate(-60deg) translateX(var(--wheel-name-radius)) rotate(60deg); }
+.wheel-art__name--2 { transform: translateX(var(--wheel-name-radius)); }
+.wheel-art__name--3 { transform: rotate(60deg) translateX(var(--wheel-name-radius)) rotate(-60deg); }
+.wheel-art__name--4 { transform: rotate(120deg) translateX(var(--wheel-name-radius)) rotate(-120deg); }
+.wheel-art__name--5 { transform: rotate(180deg) translateX(var(--wheel-name-radius)) rotate(-180deg); }
+.wheel-art__name--6 { transform: rotate(240deg) translateX(var(--wheel-name-radius)) rotate(-240deg); }
 .wheel-art__pointer { position: absolute; z-index: 4; top: calc(50% - min(21.5vw, 240px) - 12px); width: 0; height: 0; border-left: 18px solid transparent; border-right: 18px solid transparent; border-top: 34px solid var(--ink); }
 .wheel-art__hub {
   position: absolute;
@@ -421,7 +422,7 @@ h1, h2, h3, p, figure { margin: 0; }
   .community { min-height: auto; display: block; }
   .community__copy { position: relative; z-index: 2; padding: 68px 24px 0; }
   .wheel-art { min-height: 390px; }
-  .wheel-art__disc { width: min(82vw, 350px); }
+  .wheel-art__disc { --wheel-name-radius: min(29vw, 112px); width: min(82vw, 350px); }
   .wheel-art__pointer { top: calc(50% - min(41vw, 175px) - 10px); }
   .ingredients { padding: 72px 20px; grid-template-columns: 1fr; gap: 42px; }
   .locations { padding: 80px 20px 88px; }
