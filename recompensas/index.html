@@ -3,18 +3,14 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-
     <title>Recompensas Better Mood | Consulta tu saldo</title>
     <meta
       name="description"
-      content="Consulta tu saldo de recompensas Better Mood con tu teléfono y cumpleaños, y agrega tu tarjeta a Apple Wallet o Google Wallet."
+      content="Consulta tu saldo Better Mood con tu teléfono y cumpleaños. Si tu cuenta tiene una tarjeta disponible, agrégala a Apple Wallet o Google Wallet."
     />
     <meta name="robots" content="index,follow" />
     <link rel="canonical" href="https://bmoodcoffee.com/recompensas/" />
-    <meta
-      name="keywords"
-      content="recompensas cafetería Puebla, saldo Better Mood, programa de lealtad cafetería Puebla"
-    />
+    <meta name="theme-color" content="#fbf8ef" />
 
     <meta property="og:locale" content="es_MX" />
     <meta property="og:type" content="website" />
@@ -22,30 +18,24 @@
     <meta property="og:title" content="Recompensas Better Mood | Consulta tu saldo" />
     <meta
       property="og:description"
-      content="Envía tu nombre, teléfono y fecha de nacimiento por WhatsApp para activar tu cuenta de recompensas."
+      content="Consulta tu saldo Better Mood con tu teléfono y cumpleaños. Si tu cuenta tiene una tarjeta disponible, agrégala a Apple Wallet o Google Wallet."
     />
     <meta property="og:url" content="https://bmoodcoffee.com/recompensas/" />
-    <meta property="og:image" content="https://bmoodcoffee.com/assets/hero-coffee.jpg" />
-    <meta property="og:image:alt" content="Programa de recompensas Better Mood" />
+    <meta property="og:image" content="https://bmoodcoffee.com/assets/home/hero-community.jpg" />
+    <meta property="og:image:alt" content="Bebidas de Better Mood Coffee servidas sobre una mesa" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Recompensas Better Mood | Consulta tu saldo" />
     <meta
       name="twitter:description"
-      content="Regístrate por WhatsApp y consulta tu saldo de recompensas."
+      content="Consulta tu saldo Better Mood con tu teléfono y cumpleaños. Si tu cuenta tiene una tarjeta disponible, agrégala a Apple Wallet o Google Wallet."
     />
-    <meta name="twitter:url" content="https://bmoodcoffee.com/recompensas/" />
-    <meta name="twitter:image" content="https://bmoodcoffee.com/assets/hero-coffee.jpg" />
+    <meta name="twitter:image" content="https://bmoodcoffee.com/assets/home/hero-community.jpg" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="../styles.css" />
-    <script src="../data/site-data.js" defer></script>
-    <link rel="icon" href="../assets/logo-better-mood.png" />
+    <link rel="icon" href="/assets/bettermood_logo-10.png" />
+    <link rel="stylesheet" href="/home.css" />
+    <link rel="stylesheet" href="./rewards.css" />
+    <script src="/data/site-data.js" defer></script>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -55,7 +45,9 @@
             "@id": "https://bmoodcoffee.com/recompensas/#webpage",
             "url": "https://bmoodcoffee.com/recompensas/",
             "name": "Recompensas Better Mood | Consulta tu saldo",
-            "description": "Registra tus compras con tu teléfono y consulta el saldo de recompensas disponible para usar en Better Mood Coffee Puebla."
+            "description": "Consulta tu saldo Better Mood con tu teléfono y cumpleaños y revisa las opciones de Wallet disponibles para tu cuenta.",
+            "inLanguage": "es-MX",
+            "isPartOf": { "@id": "https://bmoodcoffee.com/#organization" }
           },
           {
             "@type": "BreadcrumbList",
@@ -67,326 +59,288 @@
           },
           {
             "@type": "FAQPage",
-            "@id": "https://bmoodcoffee.com/recompensas/#faq",
+            "@id": "https://bmoodcoffee.com/recompensas/#preguntas",
             "mainEntity": [
-              { "@type": "Question", "name": "¿Cómo activo mis recompensas?", "acceptedAnswer": { "@type": "Answer", "text": "Activa tu cuenta por WhatsApp con tus datos y registra tus compras con tu teléfono." } },
-              { "@type": "Question", "name": "¿Cómo acumulo recompensas?", "acceptedAnswer": { "@type": "Answer", "text": "Compra en caja y da tu número de teléfono antes de pagar. La compra registrada suma a tu consumo mensual y genera saldo según tu nivel." } },
-              { "@type": "Question", "name": "¿Qué porcentaje recibo?", "acceptedAnswer": { "@type": "Answer", "text": "Bronce recibe 3%, Plata 5% y Oro 7%. Las promociones seleccionadas pueden tener porcentajes mayores solo en campañas vigentes." } },
-              { "@type": "Question", "name": "¿Aplica en Uber Eats o Rappi?", "acceptedAnswer": { "@type": "Answer", "text": "Por ahora el programa se comunica para compras en tienda registradas con tu teléfono. Better Mood debe confirmar la regla oficial para delivery." } }
+              {
+                "@type": "Question",
+                "name": "¿Cómo activo mi cuenta?",
+                "acceptedAnswer": { "@type": "Answer", "text": "Solicita la activación por WhatsApp o en caja. El equipo confirmará los datos necesarios." }
+              },
+              {
+                "@type": "Question",
+                "name": "¿Cuándo puedo usar mi saldo?",
+                "acceptedAnswer": { "@type": "Answer", "text": "Cuando aparezca como disponible en tu consulta. Confirma el monto en caja antes de pagar." }
+              },
+              {
+                "@type": "Question",
+                "name": "¿Qué significa saldo pendiente?",
+                "acceptedAnswer": { "@type": "Answer", "text": "Es un movimiento que todavía no aparece como disponible. Consulta su estado antes de usarlo." }
+              },
+              {
+                "@type": "Question",
+                "name": "¿Cómo agrego la tarjeta a Wallet?",
+                "acceptedAnswer": { "@type": "Answer", "text": "Después de abrir tu cuenta, verás Apple Wallet o Google Wallet si esa opción está disponible para tu perfil." }
+              }
             ]
           }
         ]
       }
     </script>
-
   </head>
   <body class="rewards-page">
-    <a class="skip-link" href="#main">Saltar al contenido</a>
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
 
-    <header class="header" id="top">
-      <div class="container header__inner">
-        <a class="logo" href="/" aria-label="Better Mood Coffee">
-          <img src="../assets/logo-better-mood.png" alt="Better Mood Coffee" />
-        </a>
+    <header class="site-header" data-rewards-header>
+      <a class="brand" href="/" aria-label="Better Mood Coffee, inicio">
+        <img src="/assets/bettermood_logo-10.png" alt="Better Mood Coffee" width="126" height="102" />
+      </a>
 
-        <button class="nav-toggle" aria-controls="primary-nav" aria-expanded="false">
-          <span class="nav-toggle__icon" aria-hidden="true"></span>
-          <span class="nav-toggle__label" aria-hidden="true">Menú</span>
-          <span class="sr-only">Abrir navegación</span>
-        </button>
+      <button
+        class="nav-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="rewards-nav"
+        aria-label="Abrir menú"
+        data-rewards-nav-toggle
+      >
+        <span></span><span></span><span></span>
+      </button>
 
-        <nav class="nav" id="primary-nav">
-          <a href="/#menu">Menú</a>
-          <a href="/#location">Ubicación</a>
-          <a href="/recompensas/" aria-current="page" data-cta="ver-recompensas">Recompensas</a>
-          <a href="/arcade/">Arcade</a>
-          <a href="/eventos/">Eventos</a>
+      <nav class="main-nav" id="rewards-nav" aria-label="Navegación principal" data-rewards-nav>
+        <a href="/">Inicio</a>
+        <a href="/#recetas">Menú</a>
+        <a href="/#sucursales">Sucursales</a>
+      </nav>
+
+      <a
+        class="button button--primary header-cta"
+        href="#rewards-lookup"
+        data-event="click_rewards_check_balance"
+        data-cta="header-consultar-saldo"
+      >Consultar saldo</a>
+    </header>
+
+    <main id="contenido">
+      <section
+        class="rewards-hero section"
+        id="consulta-saldo"
+        aria-labelledby="rewards-title"
+        data-rewards-portal
+      >
+        <div class="rewards-hero__intro reveal">
+          <h1 id="rewards-title">Consulta tu saldo Better Mood.</h1>
+          <p>Ingresa tu teléfono y cumpleaños para abrir la cuenta asociada. Ahí verás tu saldo, movimientos y opciones de Wallet.</p>
+          <div class="rewards-hero__actions">
+            <a
+              class="button button--primary"
+              href="#rewards-lookup"
+              data-event="click_rewards_check_balance"
+              data-cta="hero-consultar-saldo"
+            >Consultar mi saldo</a>
+            <a
+              class="button button--outline"
+              href="https://wa.me/message/WQWEEODGY6H2P1"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-site-link="whatsappGeneral"
+              data-event="click_rewards_activate"
+              data-cta="hero-activar-cuenta"
+            >Activar mi cuenta</a>
+          </div>
+          <p class="rewards-hero__microcopy">¿Ya estás registrado? Consulta primero.</p>
+        </div>
+
+        <article class="rewards-lookup reveal reveal--late" id="rewards-lookup" aria-labelledby="lookup-title">
+          <div class="rewards-lookup__heading">
+            <h2 id="lookup-title">Teléfono y cumpleaños.<br />Eso es todo.</h2>
+            <p>Usaremos estos datos para buscar la cuenta asociada.</p>
+          </div>
+
+          <form class="rewards-form" data-portal-form novalidate>
+            <label class="rewards-field rewards-field--phone">
+              <span>Teléfono</span>
+              <input
+                type="tel"
+                name="phone"
+                inputmode="numeric"
+                autocomplete="tel"
+                placeholder="222 123 4567"
+                maxlength="16"
+                required
+              />
+            </label>
+
+            <div class="rewards-birthday">
+              <label class="rewards-field">
+                <span>Día</span>
+                <input type="tel" name="birthdayDay" inputmode="numeric" placeholder="21" maxlength="2" required />
+              </label>
+              <label class="rewards-field">
+                <span>Mes</span>
+                <input type="tel" name="birthdayMonth" inputmode="numeric" placeholder="08" maxlength="2" required />
+              </label>
+            </div>
+
+            <div class="rewards-form__actions">
+              <button
+                class="button button--primary rewards-form__submit"
+                type="submit"
+                data-portal-submit
+                data-cta="consultar-saldo"
+              >Consultar saldo</button>
+              <a
+                href="https://wa.me/message/WQWEEODGY6H2P1"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-site-link="whatsappGeneral"
+                data-event="rewards_help_whatsapp_click"
+                data-cta="form-ayuda-whatsapp"
+              >Ayuda por WhatsApp</a>
+              <button class="rewards-form__reset" type="button" data-portal-reset hidden>Cerrar consulta</button>
+            </div>
+
+            <p class="rewards-form__status" data-portal-status aria-live="polite">También puedes pedir ayuda en caja o por WhatsApp.</p>
+            <p class="rewards-form__privacy">
+              Tu información se usa para identificar tu cuenta y mostrar sus movimientos.
+              <a href="/aviso-privacidad.html">Ver aviso de privacidad</a>.
+            </p>
+          </form>
+        </article>
+
+        <article class="rewards-results" data-portal-results hidden aria-labelledby="results-title">
+          <div class="rewards-results__head">
+            <div>
+              <p class="rewards-label">Cuenta Better Mood</p>
+              <h2 id="results-title" data-portal-name>Cliente Better Mood</h2>
+              <p class="rewards-muted" data-portal-phone></p>
+            </div>
+            <strong class="rewards-level" data-portal-level>Pendiente</strong>
+          </div>
+
+          <div class="rewards-wallet" data-portal-wallet hidden>
+            <div>
+              <p class="rewards-label">Tu tarjeta digital</p>
+              <p data-portal-wallet-note>Si está disponible para tu cuenta, elige Apple Wallet o Google Wallet.</p>
+            </div>
+            <div class="rewards-wallet__links" data-portal-wallet-links></div>
+          </div>
+
+          <div class="rewards-balances" aria-label="Resumen de saldo">
+            <div>
+              <span>Saldo disponible</span>
+              <strong data-portal-balance>$0.00</strong>
+            </div>
+            <div>
+              <span>Saldo pendiente</span>
+              <strong data-portal-pending>$0.00</strong>
+            </div>
+            <div>
+              <span>Consumo del mes</span>
+              <strong data-portal-month-spend>$0.00</strong>
+            </div>
+          </div>
+
+          <div class="rewards-result__secondary">
+            <div>
+              <span>Saldo generado este mes</span>
+              <strong data-portal-month-earned>$0.00</strong>
+            </div>
+            <div>
+              <span>Progreso de nivel</span>
+              <strong data-portal-next-amount>$0.00</strong>
+              <small data-portal-next-label>Ya estás en el nivel más alto.</small>
+            </div>
+          </div>
+
+          <div class="rewards-result__meta">
+            <p data-portal-expiry>Sin vencimientos cercanos.</p>
+            <p data-portal-session></p>
+          </div>
+
+          <div class="rewards-movements">
+            <div class="rewards-movements__head">
+              <h3>Movimientos recientes</h3>
+              <span>Últimos 12</span>
+            </div>
+            <div class="rewards-movement-list" data-portal-movements></div>
+          </div>
+        </article>
+      </section>
+
+      <section class="rewards-how section" aria-labelledby="how-title">
+        <h2 id="how-title" class="reveal">Cómo funciona.</h2>
+        <div class="rewards-how__steps">
+          <article class="reveal">
+            <span class="rewards-how__number">1</span>
+            <svg viewBox="0 0 48 48" aria-hidden="true"><rect x="13" y="5" width="22" height="38" rx="3"/><path d="M20 10h8M21 37h6"/></svg>
+            <div><h3>Identifícate.</h3><p>Menciona tu teléfono antes de pagar.</p></div>
+          </article>
+          <article class="reveal reveal--late">
+            <span class="rewards-how__number">2</span>
+            <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 10h32v28H8zM14 17h20M14 24h13M14 31h17"/></svg>
+            <div><h3>Consulta.</h3><p>Revisa el saldo y los movimientos asociados a tu cuenta.</p></div>
+          </article>
+          <article class="reveal reveal--late">
+            <span class="rewards-how__number">3</span>
+            <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M7 15h34v25H7zM12 15V9h24v6M32 25h11v9H32z"/></svg>
+            <div><h3>Usa tu saldo.</h3><p>Confirma en caja el monto disponible antes de pagar.</p></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="rewards-help section" aria-labelledby="faq-title">
+        <div class="rewards-help__faq reveal">
+          <h2 id="faq-title">Preguntas frecuentes.</h2>
+          <div class="rewards-faq">
+            <details>
+              <summary>¿Cómo activo mi cuenta?<span aria-hidden="true"></span></summary>
+              <p>Solicita la activación por WhatsApp o en caja. El equipo confirmará los datos necesarios.</p>
+            </details>
+            <details>
+              <summary>¿Cuándo puedo usar mi saldo?<span aria-hidden="true"></span></summary>
+              <p>Cuando aparezca como disponible en tu consulta. Confirma el monto en caja antes de pagar.</p>
+            </details>
+            <details>
+              <summary>¿Qué significa saldo pendiente?<span aria-hidden="true"></span></summary>
+              <p>Es un movimiento que todavía no aparece como disponible. Consulta su estado antes de usarlo.</p>
+            </details>
+            <details>
+              <summary>¿Cómo agrego la tarjeta a Wallet?<span aria-hidden="true"></span></summary>
+              <p>Después de abrir tu cuenta, verás Apple Wallet o Google Wallet si esa opción está disponible para tu perfil.</p>
+            </details>
+          </div>
+        </div>
+
+        <aside class="rewards-help__activation reveal reveal--late">
+          <h2>¿Aún no tienes cuenta?</h2>
+          <p>Actívala por WhatsApp o pide apoyo en caja.</p>
           <a
-            class="btn btn--sm btn--primary"
+            class="button button--primary"
             href="https://wa.me/message/WQWEEODGY6H2P1"
             target="_blank"
             rel="noopener noreferrer"
-            data-site-link="whatsappCashback"
-            data-cta="activar-rewards"
+            data-site-link="whatsappGeneral"
             data-event="click_rewards_activate"
-          >
-            Activar recompensas
-          </a>
-        </nav>
-      </div>
-    </header>
-
-    <main id="main">
-      <section class="page-hero page-hero--rewards rewards-page-redesign" aria-labelledby="rewards-page-title">
-        <div class="container page-hero__grid">
-          <div>
-            <p class="eyebrow">Recompensas Better Mood</p>
-            <h1 id="rewards-page-title">Tu recompensa, en un solo lugar.</h1>
-            <p class="hero__text">
-              Ingresa tu teléfono, confirma tu cumpleaños y consulta los beneficios asociados a tu cuenta. Después podrás agregar tu tarjeta a Apple Wallet o Google Wallet.
-            </p>
-            <div class="hero__actions">
-              <a class="btn btn--secondary" href="https://wa.me/message/WQWEEODGY6H2P1" target="_blank" rel="noopener noreferrer" data-site-link="whatsappCashback" data-cta="activar-rewards" data-event="click_rewards_activate">Activar recompensas</a>
-              <a class="btn btn--primary rewards-hero-balance-cta" href="#consulta-saldo" data-cta="consultar-saldo" data-event="click_rewards_check_balance">Consultar mi saldo</a>
-            </div>
-            <ul class="hero__bullets rewards-hero-bullets">
-              <li>Consulta segura con teléfono y cumpleaños</li>
-              <li>Si ya tienes un beneficio de $50, aparecerá en tu saldo</li>
-              <li>Tarjeta para Apple Wallet o Google Wallet</li>
-            </ul>
-          </div>
-
-          <div class="bm-wallet-stage page-hero__card" aria-label="Vista previa de Better Mood Wallet">
-            <div class="bm-wallet-card bm-wallet-card--hero">
-              <div class="bm-wallet-card__brand">
-                <img src="../assets/logo-better-mood.png" alt="" aria-hidden="true" />
-                <span>Moodie Better</span>
-              </div>
-              <div class="bm-wallet-card__balance">
-                <strong>$420.02</strong>
-                <span>Saldo disponible</span>
-              </div>
-              <div class="bm-wallet-card__details" aria-label="Datos de tarjeta de ejemplo">
-                <div><span>Cliente</span><strong>Moodie Better</strong></div>
-                <div><span>Beneficio</span><strong>Consulta beneficios vigentes</strong></div>
-                <div><span>Folio</span><strong>BMC-MOODIE420</strong></div>
-                <div><span>Nivel</span><strong>Oro</strong></div>
-              </div>
-              <div class="bm-wallet-card__qr" aria-hidden="true">
-                <span></span><span></span><span></span><span></span><span></span><span></span>
-                <small>BMC-MOODIE420</small>
-              </div>
-            </div>
-            <p class="bm-wallet-stage__caption">Diseño inspirado en la tarjeta real: saldo visible, cliente, beneficio, folio y nivel sin saturar la página.</p>
-          </div>
-        </div>
-      </section>
-
-      <section class="section rewards" aria-labelledby="levels-title">
-        <div class="container">
-          <div class="section__header rewards__header">
-            <p class="eyebrow">Explicación rápida</p>
-            <h2 id="levels-title">Regístrate. Compra dando tu teléfono. Acumula. Usa tu saldo.</h2>
-            <p>Primero vendemos claridad: qué recibes, cómo acumulas y dónde se usa.</p>
-          </div>
-
-          <div class="cashback-steps rewards-steps-clear" aria-label="Cómo funciona el programa de recompensas">
-            <article><span>1</span><strong>Regístrate</strong><p>Activa tu cuenta por WhatsApp con tu número de teléfono.</p></article>
-            <article><span>2</span><strong>Compra</strong><p>Da tu teléfono en caja antes de pagar.</p></article>
-            <article><span>3</span><strong>Acumula</strong><p>Tu compra suma a tu consumo mensual y genera saldo según tu nivel.</p></article>
-            <article><span>4</span><strong>Usa tu saldo</strong><p>Consulta tu saldo y úsalo en caja en tu próxima visita.</p></article>
-          </div>
-
-          <div class="cashback-example cashback-example--wide" aria-label="Ejemplo con compra de 100 pesos">
-            <strong>Si compras $100:</strong>
-            <span>Bronce te regresa $3</span>
-            <span>Plata te regresa $5</span>
-            <span>Oro te regresa $7</span>
-          </div>
-
-          <div class="rewards-tiers" aria-label="Niveles de recompensas">
-            <article class="reward-tier reward-tier--bronze"><div class="reward-tier__badge" aria-hidden="true">B</div><p class="reward-tier__label">Bronce</p><h3>3% de saldo</h3><p>Desde tu primera compra registrada con tu número de teléfono.</p></article>
-            <article class="reward-tier reward-tier--silver"><div class="reward-tier__badge" aria-hidden="true">P</div><p class="reward-tier__label">Plata</p><h3>5% de saldo</h3><p>Desde $500 de consumo mensual acumulado.</p></article>
-            <article class="reward-tier reward-tier--gold"><div class="reward-tier__badge" aria-hidden="true">O</div><p class="reward-tier__label">Oro</p><h3>7% de saldo</h3><p>Desde $1,000 de consumo mensual acumulado.</p></article>
-          </div>
-
-          <p class="responsible-note rewards-rule-note"><strong>Reglas clave:</strong> Tu nivel se actualiza según el consumo registrado. Consulta en el portal el saldo disponible antes de usarlo en caja.</p>
-        </div>
-      </section>
-
-      <section class="section rewards-portal rewards-portal--compact" id="consulta-saldo" aria-labelledby="portal-title">
-        <div class="container">
-          <div class="section__header rewards-portal__header">
-            <p class="eyebrow">Consulta tu saldo</p>
-            <h2 id="portal-title">Ingresa tu teléfono y cumpleaños.</h2>
-            <p>Si encontramos tu número y los datos coinciden, verás tu saldo y se habilitarán los botones para agregar tu tarjeta digital.</p>
-          </div>
-
-          <div class="rewards-portal__grid" data-rewards-portal>
-            <article class="community__card rewards__panel rewards-portal__card">
-              <form class="rewards-portal__form" data-portal-form novalidate>
-                <label class="rewards-portal__field">
-                  <span>Teléfono</span>
-                  <input type="tel" name="phone" inputmode="numeric" autocomplete="tel" placeholder="2221234567" maxlength="16" required />
-                </label>
-
-                <div class="rewards-portal__birthday">
-                  <label class="rewards-portal__field">
-                    <span>Día</span>
-                    <input type="tel" name="birthdayDay" inputmode="numeric" placeholder="21" maxlength="2" required />
-                  </label>
-                  <label class="rewards-portal__field">
-                    <span>Mes</span>
-                    <input type="tel" name="birthdayMonth" inputmode="numeric" placeholder="08" maxlength="2" required />
-                  </label>
-                </div>
-
-                <div class="rewards-portal__actions">
-                  <button class="btn btn--primary rewards-portal__submit" type="submit" data-portal-submit data-cta="consultar-saldo">Consultar saldo</button>
-                  <a class="btn btn--secondary" href="https://wa.me/message/WQWEEODGY6H2P1" data-site-link="whatsappGeneral" target="_blank" rel="noopener">Ayuda por WhatsApp</a>
-                  <button class="btn btn--secondary" type="button" data-portal-reset hidden>Salir</button>
-                </div>
-                <p class="rewards-portal__status" data-portal-status aria-live="polite">
-                  Tambien en caja o por WhatsApp.
-                </p>
-              </form>
-            </article>
-
-            <article class="community__card rewards__panel rewards-portal__card rewards-portal__results" data-portal-results hidden>
-              <div class="rewards-portal__summary">
-                <div>
-                  <p class="rewards-portal__eyebrow">Cliente Better Mood</p>
-                  <h3 data-portal-name>Cliente Better Mood</h3>
-                  <p class="rewards-portal__muted" data-portal-phone></p>
-                </div>
-                <div class="rewards-portal__pill" data-portal-level>Pendiente</div>
-              </div>
-
-              <div class="rewards-portal__balance">
-                <div>
-                  <span>Saldo disponible</span>
-                  <strong data-portal-balance>$0.00</strong>
-                </div>
-                <div>
-                  <span>Saldo pendiente</span>
-                  <strong data-portal-pending>$0.00</strong>
-                </div>
-              </div>
-
-              <div class="rewards-portal__wallet" data-portal-wallet hidden>
-                <p class="rewards-portal__eyebrow">Agregar tarjeta digital</p>
-                <div class="rewards-portal__wallet-links" data-portal-wallet-links></div>
-                <p class="rewards-portal__wallet-note" data-portal-wallet-note>Elige Apple Wallet si usas iPhone o Google Wallet si usas Android.</p>
-              </div>
-
-              <div class="rewards-portal__stats">
-                <article>
-                  <span>Consumo del mes</span>
-                  <strong data-portal-month-spend>$0.00</strong>
-                </article>
-                <article>
-                  <span>Saldo del mes</span>
-                  <strong data-portal-month-earned>$0.00</strong>
-                </article>
-                <article>
-                  <span>Falta para subir</span>
-                  <strong data-portal-next-amount>$0.00</strong>
-                  <small data-portal-next-label>Estás en tu nivel más alto.</small>
-                </article>
-              </div>
-
-              <div class="rewards-portal__meta">
-                <p data-portal-expiry>Sin vencimientos cercanos.</p>
-                <p data-portal-session></p>
-              </div>
-
-              <div class="rewards-portal__movements">
-                <div class="rewards-portal__movements-head">
-                  <h4>Movimientos recientes</h4>
-                  <span>Últimos 12</span>
-                </div>
-                <div class="rewards-portal__movement-list" data-portal-movements></div>
-              </div>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section class="section section--alt" aria-labelledby="use-balance-title">
-        <div class="container">
-          <div class="section__header">
-            <p class="eyebrow">Uso de saldo</p>
-            <h2 id="use-balance-title">Cómo usar tu saldo en caja.</h2>
-            <p>Consulta tu saldo, visita la sucursal y menciona tu teléfono antes de pagar.</p>
-          </div>
-
-          <div class="rewards__details">
-            <article class="community__card rewards__panel"><p class="eyebrow rewards__mini-title">Paso 1</p><h3>Consulta tu saldo.</h3><p>Usa el formulario de esta página o pide ayuda por WhatsApp.</p></article>
-            <article class="community__card rewards__panel"><p class="eyebrow rewards__mini-title">Paso 2</p><h3>Compra en tienda.</h3><p>Menciona tu número de teléfono en caja antes de pagar.</p></article>
-            <article class="community__card rewards__panel"><p class="eyebrow rewards__mini-title">Paso 3</p><h3>Aplica saldo disponible.</h3><p>El equipo puede aplicar el saldo disponible según las reglas vigentes del programa.</p></article>
-          </div>
-
-          <div class="faq rewards__faq" aria-labelledby="rewards-faq-title">
-            <h3 id="rewards-faq-title">Preguntas frecuentes</h3>
-            <div class="faq__items">
-              <details class="faq__item"><summary>¿Cómo acumulo recompensas?</summary><p>Compra en caja y da tu número de teléfono antes de pagar. La compra registrada suma a tu consumo mensual y genera saldo según tu nivel.</p></details>
-              <details class="faq__item"><summary>¿Qué porcentaje recibo?</summary><p>Bronce recibe 3%, Plata 5% y Oro 7%. Las promociones seleccionadas pueden tener porcentajes mayores solo en campañas vigentes.</p></details>
-              <details class="faq__item"><summary>¿Cuándo subo de nivel?</summary><p>Subes según tu consumo mensual registrado: Plata desde $500 y Oro desde $1,000.</p></details>
-              <details class="faq__item"><summary>¿Cómo confirmo mi saldo vigente?</summary><p>Consulta el portal con tu teléfono y cumpleaños o pide apoyo en caja.</p></details>
-              <details class="faq__item"><summary>¿Aplica en Uber Eats o Rappi?</summary><p>El programa se comunica para compras en tienda registradas con tu teléfono.</p></details>
-              <details class="faq__item"><summary>¿Cuándo puedo usar mi saldo?</summary><p>Cuando aparezca como saldo disponible en tu consulta y lo menciones en caja antes de pagar.</p></details>
-              <details class="faq__item"><summary>¿Qué significa saldo pendiente?</summary><p>Es saldo generado que aún no está disponible para usar. Consulta su estado en el portal o en caja.</p></details>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section section--cta">
-        <div class="container">
-          <div class="section__header">
-            <p class="eyebrow">Empieza hoy</p>
-            <h2>Activa tus recompensas por WhatsApp.</h2>
-            <p>Regístrate una vez y compra con tu teléfono en caja para acumular saldo.</p>
-          </div>
-          <div class="section__cta">
-            <a class="btn btn--primary" href="https://wa.me/message/WQWEEODGY6H2P1" target="_blank" rel="noopener noreferrer" data-site-link="whatsappCashback" data-cta="activar-rewards" data-event="click_rewards_activate">Activar recompensas</a>
-            <a class="btn btn--secondary" href="/menu/" data-cta="ver-menu" data-event="click_menu">Ver menú</a>
-          </div>
-        </div>
+            data-cta="faq-activar-cuenta"
+          >Activar mi cuenta</a>
+        </aside>
       </section>
     </main>
 
-    <footer class="footer">
-      <div class="container footer__grid">
-        <div>
-          <img class="footer__logo" src="../assets/logo-better-mood.png" alt="Better Mood Coffee" />
-          <p>Better Mood Coffee — café de especialidad, recetas propias y hospitalidad.</p>
-        </div>
-
-        <div class="footer__links">
-          <h3>Navegación</h3>
-          <a href="/#menu">Menú</a>
-          <a href="/recomendador/">Recomendador</a>
-          <a href="/#location">Ubicación</a>
-          <a href="/bienestar/">Nuestra forma de servir</a>
-          <a href="/recompensas/">Recompensas</a>
-          <a href="/arcade/">Arcade</a>
-          <a href="/aviso-privacidad.html">Aviso de privacidad</a>
-        </div>
-
-        <div class="footer__links" id="contacto">
-          <h3>Redes</h3>
-          <a href="https://wa.me/message/WQWEEODGY6H2P1" target="_blank" rel="noopener noreferrer">WhatsApp</a>
-          <a href="https://instagram.com/bettermood.coffee" target="_blank" rel="noopener">Instagram</a>
-          <a href="https://facebook.com/bettermoodcoffee" target="_blank" rel="noopener">Facebook</a>
-          <a href="/#sucursales">Sucursales</a>
-        </div>
+    <footer class="site-footer rewards-footer">
+      <a class="brand brand--footer" href="/" aria-label="Better Mood Coffee, inicio">
+        <img src="/assets/bettermood_logo-10.png" alt="Better Mood Coffee" width="126" height="102" loading="lazy" />
+      </a>
+      <div class="footer-links">
+        <a href="/#recetas">Menú</a>
+        <a href="/#sucursales">Sucursales</a>
+        <a href="https://instagram.com/bettermood.coffee" target="_blank" rel="noopener noreferrer">Instagram</a>
+        <a href="/aviso-privacidad.html">Privacidad</a>
       </div>
-
-      <div class="container footer__disclaimer">
-        <p>
-          Consulta en barra ingredientes, alérgenos, tamaños, precios y disponibilidad. No atribuimos efectos médicos o fisiológicos a las bebidas.
-        </p>
-        <p class="footer__copyright">© Better Mood Coffee. Todos los derechos reservados.</p>
-      </div>
+      <p>Puebla y Cholula, México.</p>
     </footer>
 
-    <nav class="mobile-bar" aria-label="Accesos rápidos">
-      <a class="mobile-bar__item" href="/">Inicio</a>
-      <a class="mobile-bar__item is-primary" href="#consulta-saldo" data-cta="consultar-saldo" data-event="click_rewards_check_balance">Saldo</a>
-      <a class="mobile-bar__item" href="https://wa.me/message/WQWEEODGY6H2P1" target="_blank" rel="noopener noreferrer" data-site-link="whatsappCashback" data-cta="activar-rewards" data-event="click_rewards_activate">Activar</a>
-    </nav>
-
-    <a
-      class="floating-whatsapp"
-      href="https://wa.me/message/WQWEEODGY6H2P1"
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="Escríbenos por WhatsApp"
-    >
-      WhatsApp
-    </a>
-
-    <script src="../script.js" defer></script>
+    <script src="./rewards.js" defer></script>
+    <script src="/script.js" defer></script>
   </body>
 </html>

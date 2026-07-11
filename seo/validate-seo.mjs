@@ -63,6 +63,8 @@ async function validatePublicShell() {
       fs.readFile(path.join(rootDir, file), "utf8")
     )
   );
+  const rewards = sharedPages[2];
+  const rewardsCss = await fs.readFile(path.join(rootDir, "recompensas", "rewards.css"), "utf8");
 
   assert(!home.includes('"@type": "CoffeeShop"'), "Home uses invalid CoffeeShop schema type");
   assert((home.match(/"@type": "CafeOrCoffeeShop"/g) ?? []).length === 2, "Home must describe both branches");
@@ -74,6 +76,14 @@ async function validatePublicShell() {
   for (const html of sharedPages) {
     assert(!html.includes("https://g.page/r/Coffee/review"), "Broken generic Google Reviews link remains");
   }
+
+  assert(rewards.includes('<link rel="canonical" href="https://bmoodcoffee.com/recompensas/" />'), "Rewards canonical missing");
+  assert((rewards.match(/<h1\b/gi) ?? []).length === 1, "Rewards must have one H1");
+  assert(rewards.includes("Consulta tu saldo Better Mood."), "Rewards primary task is unclear");
+  assert(rewards.includes("/#recetas") && !rewards.includes("/#menu\""), "Rewards menu link does not match home anchor");
+  assert(!/\$420\.02|cashback|CBD/i.test(rewards) && !/\bTODO\b/.test(rewards), "Rewards contains legacy, fictional, or internal copy");
+  assert((rewards.match(/data-portal-[a-z-]+/g) ?? []).length >= 20, "Rewards portal contract is incomplete");
+  assert(rewardsCss.includes("[hidden] { display: none !important; }"), "Rewards hidden states can leak before authentication");
 }
 
 const pageStates = await Promise.all(localPagesData.map(validatePage));

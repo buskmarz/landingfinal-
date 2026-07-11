@@ -845,6 +845,26 @@ if (rewardsPortalRoot) {
   const PORTAL_STORAGE_KEY = "bmood_rewards_portal_token";
   let currentPortalToken = "";
 
+  const sendPortalEvent = (eventName, cta = "rewards_portal") => {
+    if (IS_LOCAL_PREVIEW || !eventName) return;
+    const body = JSON.stringify({
+      event: eventName,
+      cta,
+      path: window.location.pathname,
+      href: window.location.href,
+    });
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon(`${API_BASE}/track-event`, new Blob([body], { type: "application/json" }));
+      return;
+    }
+    fetch(`${API_BASE}/track-event`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body,
+      keepalive: true,
+    }).catch(() => {});
+  };
+
   const formatMoney = (value) => {
     const amount = Number(value || 0);
     return new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN" }).format(amount);
@@ -957,9 +977,11 @@ if (rewardsPortalRoot) {
       if (data.customer) renderPortalCustomer(data, currentPortalToken, { skipScroll: true });
       const installUrl = data.installUrl || walletPassUrl(data.customer?.wallet?.passes || [], target);
       if (!installUrl) throw new Error("No se recibió el enlace de Wallet.");
+      sendPortalEvent("wallet_issue_success", target);
       setPortalStatus("Tarjeta lista. Abriendo Wallet...", "success");
       window.location.href = installUrl;
     } catch (error) {
+      sendPortalEvent("wallet_issue_error", target);
       setPortalStatus(error.message || "No se pudo generar tu tarjeta digital.", "error");
     } finally {
       if (button) button.removeAttribute("disabled");
@@ -1049,6 +1071,7 @@ if (rewardsPortalRoot) {
       return;
     }
 
+    sendPortalEvent("rewards_check_start", "portal_form");
     setPortalStatus("Consultando saldo...");
     if (portalSubmit) portalSubmit.disabled = true;
 
@@ -1063,9 +1086,11 @@ if (rewardsPortalRoot) {
         throw new Error(data.error || "No pudimos validar tus datos.");
       }
       renderPortalCustomer(data, data.token);
+      sendPortalEvent("rewards_check_success", "portal_form");
       setPortalStatus("Consulta lista.", "success");
     } catch (error) {
       clearPortalSession();
+      sendPortalEvent("rewards_check_error", "portal_form");
       setPortalStatus(error.message || "No pudimos validar tus datos.", "error");
     } finally {
       if (portalSubmit) portalSubmit.disabled = false;
@@ -1076,6 +1101,7 @@ if (rewardsPortalRoot) {
     portalForm?.reset();
     currentPortalToken = "";
     clearPortalSession();
+    sendPortalEvent("rewards_session_close", "portal_reset");
     setPortalStatus("Consulta cerrada. Puedes volver a ingresar tus datos cuando quieras.");
   });
 
