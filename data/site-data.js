@@ -25,8 +25,6 @@
           hoursNote: 'Horarios por confirmar en Google Maps'
         }
       ],
-      googleRating: '4.4',
-      googleReviewCount: '168',
       amenities: ['Wi-Fi', 'Enchufes', 'Pet friendly', 'Estacionamiento'],
       hours: [
         { label: 'Lunes a Viernes', visible: '8:00 – 21:00', opens: '08:00', closes: '21:00' },
@@ -46,12 +44,7 @@
       rappi: 'https://www.rappi.com.mx/restaurantes/delivery/495986-better-mood-coffee?utm_source=app&utm_medium=deeplink&utm_campaign=share',
       whatsappGeneral: 'https://wa.me/message/WQWEEODGY6H2P1'
     },
-    featuredDrinks: [
-      { name: "Dragon's Blood", price: 95, source: 'menu/index.html' },
-      { name: 'Cold Berry Days', price: 95, source: 'menu/index.html' },
-      { name: 'Sweet Trip', price: null, source: 'REVISAR: no localizado en menu/index.html' },
-      { name: 'Spaceman', price: 150, source: 'menu/index.html' }
-    ],
+    featuredDrinks: [],
     notes: {
       scheduleConflict: 'OK: home, menu, schema y SEO quedan alineados a Lunes a Viernes 8:00 - 21:00. Confirmar si el negocio cambia horario oficial.',
       parking: 'REVISAR: confirmar si estacionamiento es propio, compartido o sujeto a disponibilidad.'

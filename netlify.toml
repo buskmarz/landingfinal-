@@ -5,14 +5,46 @@
 [functions]
   external_node_modules = ["@netlify/blobs"]
 
-# Sistema interno: proxy/rewrite sin cambiar la URL visible.
-# El frontend vive en /sistema/ y los datos siguen saliendo del mismo backend de tareascontrol.
+# Retirar documentos regulatorios y menús PDF obsoletos del acceso público.
+# La carta digital es la única fuente pública vigente.
 [[redirects]]
-  from = "/sistema"
-  to = "https://tareascontrol.netlify.app/"
-  status = 200
+  from = "/assets/coacalming.pdf"
+  to = "/bienestar/"
+  status = 302
   force = true
 
+[[redirects]]
+  from = "/assets/coafocus.pdf"
+  to = "/bienestar/"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "/assets/coasleep.pdf"
+  to = "/bienestar/"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "/assets/coawellness.pdf"
+  to = "/bienestar/"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "/assets/menu-better-mood.pdf"
+  to = "/menu/"
+  status = 302
+  force = true
+
+# Sistema interno: la diagonal final evita que los assets relativos apunten a /assets/.
+[[redirects]]
+  from = "/sistema"
+  to = "/sistema/"
+  status = 301
+  force = true
+
+# El frontend vive en /sistema/ y los datos siguen saliendo del mismo backend de tareascontrol.
 [[redirects]]
   from = "/sistema/"
   to = "https://tareascontrol.netlify.app/"

@@ -198,7 +198,7 @@
       <div class="tagline">Elige por mood, hora, clima o preferencia.</div>
     </header>
     <p class="tagline">
-      Una guía rápida para elegir café, matcha, cold brew o bebidas funcionales Better Mood sin revisar toda la carta.
+      Una guía rápida para elegir café, matcha, cold brew o recetas de la casa sin revisar toda la carta.
     </p>
 
     <label>1. ¿Qué tipo de bebida prefieres?</label>
@@ -222,13 +222,13 @@
       <div class="option" data-value="no" role="button" aria-pressed="false" tabindex="0">No 🧊</div>
     </div>
 
-    <label>4. ¿Cómo quieres sentirte después de tu bebida?</label>
-    <div class="hint">Opcional, potencia tu experiencia</div>
+    <label>4. ¿Qué perfil de sabor prefieres?</label>
+    <div class="hint">Opcional. Elige por sabor, no por promesas.</div>
     <div class="button-group" data-name="efecto">
-      <div class="option" data-value="ninguno" role="button" aria-pressed="false" tabindex="0">Sin efecto especial</div>
-      <div class="option" data-value="energizante" role="button" aria-pressed="false" tabindex="0">Lleno de energía ⚡</div>
-      <div class="option" data-value="relajante" role="button" aria-pressed="false" tabindex="0">Tranquilo y relajado 🌿</div>
-      <div class="option" data-value="despegue" role="button" aria-pressed="false" tabindex="0">Listo para despegar 🚀</div>
+      <div class="option" data-value="ninguno" role="button" aria-pressed="false" tabindex="0">Sin preferencia</div>
+      <div class="option" data-value="intenso" role="button" aria-pressed="false" tabindex="0">Intenso ☕</div>
+      <div class="option" data-value="suave" role="button" aria-pressed="false" tabindex="0">Suave</div>
+      <div class="option" data-value="creativo" role="button" aria-pressed="false" tabindex="0">Creativo ✦</div>
     </div>
 
     <div class="cta-row">
@@ -238,9 +238,9 @@
 
     <div id="resultado" aria-live="polite"></div>
     <div class="links-row">
-      <a class="link-btn" href="../assets/menu-better-mood.pdf" target="_blank" rel="noopener noreferrer">Ver menú completo</a>
+      <a class="link-btn" href="/menu/">Ver menú La Paz</a>
       <a class="link-btn" href="/recompensas/">Ver recompensas</a>
-      <a class="link-btn" href="/#quick-order">Pedir ahora</a>
+      <a class="link-btn" href="/#sucursales">Elegir sucursal</a>
     </div>
     <div class="home-row">
       <a class="btn btn-link home-link-bottom" href="/">Volver a la página principal</a>
@@ -272,12 +272,12 @@
   <script>
     const menu = [
   // Latte especial (con sabores)
-  { nombre: "Latte lavanda", disponible_en: ["caliente", "fría"], dulce: true, cafeina: true, efecto: ["energizante", "despegue"] },
-  { nombre: "Latte caramelo", disponible_en: ["caliente", "fría"], dulce: true, cafeina: true, efecto: ["energizante", "despegue"] },
-  { nombre: "Latte vainilla", disponible_en: ["caliente", "fría"], dulce: true, cafeina: true, efecto: ["energizante", "despegue"] },
-  { nombre: "Latte horchata", disponible_en: ["caliente", "fría"], dulce: true, cafeina: true, efecto: ["energizante", "despegue"] },
-  { nombre: "Latte pistache", disponible_en: ["caliente", "fría"], dulce: true, cafeina: true, efecto: ["energizante", "despegue"] },
-  { nombre: "Latte pumpkin", disponible_en: ["caliente", "fría"], dulce: true, cafeina: true, efecto: ["energizante", "despegue"] },
+  { nombre: "Latte lavanda", disponible_en: ["caliente", "fría"], dulce: true, cafeina: true, efecto: ["intenso", "creativo"] },
+  { nombre: "Latte caramelo", disponible_en: ["caliente", "fría"], dulce: true, cafeina: true, efecto: ["intenso", "creativo"] },
+  { nombre: "Latte vainilla", disponible_en: ["caliente", "fría"], dulce: true, cafeina: true, efecto: ["intenso", "creativo"] },
+  { nombre: "Latte horchata", disponible_en: ["caliente", "fría"], dulce: true, cafeina: true, efecto: ["intenso", "creativo"] },
+  { nombre: "Latte pistache", disponible_en: ["caliente", "fría"], dulce: true, cafeina: true, efecto: ["intenso", "creativo"] },
+  { nombre: "Latte pumpkin", disponible_en: ["caliente", "fría"], dulce: true, cafeina: true, efecto: ["intenso", "creativo"] },
 
   // Sodas italianas
   { nombre: "Soda lavanda", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "neutro" },
@@ -291,60 +291,56 @@
   { nombre: "Soda coco", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "neutro" },
 
   // Cafés de especialidad
-  { nombre: "V60", disponible_en: ["caliente"], dulce: false, cafeina: true, efecto: "energizante" },
-  { nombre: "Chemex", disponible_en: ["caliente"], dulce: false, cafeina: true, efecto: "energizante" },
-  { nombre: "Prensa francesa", disponible_en: ["caliente"], dulce: false, cafeina: true, efecto: "energizante" },
-  { nombre: "Aeropress", disponible_en: ["caliente"], dulce: false, cafeina: true, efecto: "energizante" },
-  { nombre: "Espresso", disponible_en: ["caliente"], dulce: false, cafeina: true, efecto: "energizante" },
-  { nombre: "Americano", disponible_en: ["caliente"], dulce: false, cafeina: true, efecto: "energizante" },
-  { nombre: "Cappuccino", disponible_en: ["caliente", "fría"], dulce: true, cafeina: true, efecto: "energizante" },
-  { nombre: "Flat white", disponible_en: ["caliente"], dulce: false, cafeina: true, efecto: "energizante" },
-  { nombre: "Dirty chai", disponible_en: ["caliente", "fría"], dulce: true, cafeina: true, efecto: "energizante" },
+  { nombre: "V60", disponible_en: ["caliente"], dulce: false, cafeina: true, efecto: "intenso" },
+  { nombre: "Chemex", disponible_en: ["caliente"], dulce: false, cafeina: true, efecto: "intenso" },
+  { nombre: "Prensa francesa", disponible_en: ["caliente"], dulce: false, cafeina: true, efecto: "intenso" },
+  { nombre: "Aeropress", disponible_en: ["caliente"], dulce: false, cafeina: true, efecto: "intenso" },
+  { nombre: "Espresso", disponible_en: ["caliente"], dulce: false, cafeina: true, efecto: "intenso" },
+  { nombre: "Americano", disponible_en: ["caliente"], dulce: false, cafeina: true, efecto: "intenso" },
+  { nombre: "Cappuccino", disponible_en: ["caliente", "fría"], dulce: true, cafeina: true, efecto: "intenso" },
+  { nombre: "Flat white", disponible_en: ["caliente"], dulce: false, cafeina: true, efecto: "intenso" },
+  { nombre: "Dirty chai", disponible_en: ["caliente", "fría"], dulce: true, cafeina: true, efecto: "intenso" },
 
   // Bebidas sin café
-  { nombre: "Matcha", disponible_en: ["caliente", "fría"], dulce: true, cafeina: false, efecto: "energizante" },
-    { nombre: "Matcha organico", disponible_en: ["caliente", "fría"], dulce: false, cafeina: false, efecto: "energizante" },
+  { nombre: "Matcha", disponible_en: ["caliente", "fría"], dulce: true, cafeina: false, efecto: "intenso" },
+    { nombre: "Matcha organico", disponible_en: ["caliente", "fría"], dulce: false, cafeina: false, efecto: "intenso" },
         { nombre: "Taro sin azúcar", disponible_en: ["caliente", "fría"], dulce: false, cafeina: false, efecto: "neutro" },
-  { nombre: "Mango Matcha", disponible_en: ["caliente", "fría"], dulce: true, cafeina: false, efecto: "energizante" },
-  { nombre: "Strawberry Matcha", disponible_en: ["caliente", "fría"], dulce: true, cafeina: false, efecto: "energizante" },
+  { nombre: "Mango Matcha", disponible_en: ["caliente", "fría"], dulce: true, cafeina: false, efecto: "intenso" },
+  { nombre: "Strawberry Matcha", disponible_en: ["caliente", "fría"], dulce: true, cafeina: false, efecto: "intenso" },
   { nombre: "Taro", disponible_en: ["caliente", "fría"], dulce: true, cafeina: false, efecto: "neutro" },
   { nombre: "Chai", disponible_en: ["caliente", "fría"], dulce: true, cafeina: false, efecto: "neutro" },
   { nombre: "Golden milk", disponible_en: ["caliente"], dulce: true, cafeina: false, efecto: "neutro" },
   { nombre: "Chocolate", disponible_en: ["caliente", "fría"], dulce: true, cafeina: false, efecto: "neutro" },
 
   // Nuevas bebidas
-  { nombre: "Mocha Better", disponible_en: ["fría"], dulce: true, cafeina: true, efecto: "energizante" },
-  { nombre: "Cold tonic boost", disponible_en: ["fría"], dulce: false, cafeina: true, efecto: "energizante" },
-  { nombre: "Cold brew + tonic", disponible_en: ["fría"], dulce: false, cafeina: true, efecto: "energizante" },
-  { nombre: "Cold brew", disponible_en: ["fría"], dulce: false, cafeina: true, efecto: "energizante" },
-  { nombre: "Affogato", disponible_en: ["fría"], dulce: true, cafeina: true, efecto: "energizante" },
+  { nombre: "Mocha Better", disponible_en: ["fría"], dulce: true, cafeina: true, efecto: "intenso" },
+  { nombre: "Cold tonic boost", disponible_en: ["fría"], dulce: false, cafeina: true, efecto: "intenso" },
+  { nombre: "Cold brew + tonic", disponible_en: ["fría"], dulce: false, cafeina: true, efecto: "intenso" },
+  { nombre: "Cold brew", disponible_en: ["fría"], dulce: false, cafeina: true, efecto: "intenso" },
+  { nombre: "Affogato", disponible_en: ["fría"], dulce: true, cafeina: true, efecto: "intenso" },
 
   // Nuevas 2025-09: Cocochata & Yakoold
-  { nombre: "Latte Cocochata", disponible_en: ["caliente", "fría"], dulce: true, cafeina: true, efecto: "energizante" },
-  { nombre: "Matcha Cocochata", disponible_en: ["caliente", "fría"], dulce: true, cafeina: false, efecto: "energizante" },
-  { nombre: "Yakoold Brew", disponible_en: ["fría"], dulce: true, cafeina: true, efecto: "energizante" },
+  { nombre: "Latte Cocochata", disponible_en: ["caliente", "fría"], dulce: true, cafeina: true, efecto: "intenso" },
+  { nombre: "Matcha Cocochata", disponible_en: ["caliente", "fría"], dulce: true, cafeina: false, efecto: "intenso" },
+  { nombre: "Yakoold Brew", disponible_en: ["fría"], dulce: true, cafeina: true, efecto: "intenso" },
 
   // Tés y tisanas
   { nombre: "Tisana frutos rojos", disponible_en: ["caliente", "fría"], dulce: true, cafeina: false, efecto: "neutro" },
   { nombre: "Tisana frutos dorados", disponible_en: ["caliente", "fría"], dulce: true, cafeina: false, efecto: "neutro" },
   { nombre: "Te bugambilia-canela", disponible_en: ["caliente", "fría"], dulce: false, cafeina: false, efecto: "neutro" },
-  { nombre: "Te lavanda-manzanilla", disponible_en: ["caliente", "fría"], dulce: false, cafeina: false, efecto: "relajante" },
-  { nombre: "Te verde-limon", disponible_en: ["caliente", "fría"], dulce: false, cafeina: false, efecto: "energizante" },
+  { nombre: "Te lavanda-manzanilla", disponible_en: ["caliente", "fría"], dulce: false, cafeina: false, efecto: "suave" },
+  { nombre: "Te verde-limon", disponible_en: ["caliente", "fría"], dulce: false, cafeina: false, efecto: "intenso" },
 
   // Smoothies
-  { nombre: "Smoothie energy mango", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "energizante" },
-  { nombre: "Smoothie brain taro", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "energizante" },
-  { nombre: "Smoothie strawberry relax", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "relajante" },
+  { nombre: "Smoothie energy mango", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "intenso" },
+  { nombre: "Smoothie brain taro", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "intenso" },
+  { nombre: "Smoothie strawberry relax", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "suave" },
 
   // Especiales
-  { nombre: "Spaceman", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "despegue" },
-  { nombre: "Sweet trip", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "despegue" },
-  { nombre: "Nirvana lavender", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "relajante" },
-  { nombre: "Dragon's blood", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "relajante" },
-  { nombre: "Cold Berry Days", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "relajante" },
-  { nombre: "Tango Zen", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "relajante" },
-  { nombre: "Strawberry & Mango CBD Matcha", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "relajante" },
-  { nombre: "Magic Mocha Cookies", disponible_en: ["fría"], dulce: true, cafeina: true, efecto: "despegue" }
+  { nombre: "Nirvana lavender", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "suave" },
+  { nombre: "Dragon's blood", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "suave" },
+  { nombre: "Cold Berry Days", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "suave" },
+  { nombre: "Tango Zen", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "suave" },
   
 ];
 
@@ -379,13 +375,10 @@
     // Descripciones basadas en la carta
     const DESCRIPCIONES = {
       // Creaciones
-      "Nirvana lavender": "Soda italiana de lavanda y limón con CBD calming. 430 ml.",
-      "Dragon's blood": "Soda italiana de mango, durazno y fresa con CBD calming. 430 ml.",
-      "Strawberry & Mango CBD Matcha": "Fresa o mango macerado, leche de almendra, miel de agave, matcha y CBD cúrcuma wellness. 430 ml.",
-      "Cold Berry Days": "Macerado de berries con ginger ale y CBD calming. 430 ml.",
-      "Spaceman": "Lavanda, limón y agua mineral. 240 ml.",
-      "Sweet trip": "Berries, perlas de fresa y agua mineral; perfil dulce y refrescante. 240 ml.",
-      "Tango Zen": "Refrescante soda italiana de mango y maracuyá con CBD calming. 430 ml.",
+      "Nirvana lavender": "Soda italiana de lavanda y limón. 430 ml.",
+      "Dragon's blood": "Soda italiana de mango, durazno y fresa. 430 ml.",
+      "Cold Berry Days": "Macerado de berries con ginger ale. 430 ml.",
+      "Tango Zen": "Soda italiana de mango y maracuyá. 430 ml.",
       "Mocha Better": "Chocolate artesanal de Oaxaca con espresso y miel de agave.",
       "Latte Cocochata": "Latte suave con horchata cremosa y un toque tropical de coco. 480 ml.",
       "Matcha Cocochata": "Matcha latte con horchata cremosa y un toque de coco. 480 ml (orgánico o endulzado).",
@@ -409,7 +402,7 @@
       "Aeropress": "Método versátil con notas intensas y cuerpo medio.",
       // Tés y tisanas
       "Te verde-limon": "Té verde con limón; refrescante y ligeramente cítrico.",
-      "Te lavanda-manzanilla": "Infusión relajante de lavanda y manzanilla.",
+      "Te lavanda-manzanilla": "Infusión de lavanda y manzanilla.",
       "Te bugambilia-canela": "Infusión floral con bugambilia y toque de canela.",
       "Tisana frutos rojos": "Infusión frutal de frutos rojos, sin cafeína.",
       "Tisana frutos dorados": "Infusión cálida con notas frutales, sin cafeína.",
@@ -498,12 +491,12 @@
         const h = (location && location.hostname || '').toLowerCase();
         if (!h) return false;
         if (h === 'localhost' || h === '127.0.0.1') return false;
-        return /\.netlify\.(app|com)$/.test(h);
+        return h === 'bmoodcoffee.com' || h === 'www.bmoodcoffee.com' || /\.netlify\.(app|com)$/.test(h);
       } catch (_) { return false; }
     }
 
     function submitConsultaLog(payload) {
-      if (!isNetlifyHost()) return; // Solo enviar cuando corre en Netlify
+      if (!isNetlifyHost()) return; // Enviar sólo desde los dominios públicos autorizados
       const body = encodeBody(Object.assign({ 'form-name': 'consultas' }, payload));
       try {
         fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body })
@@ -526,7 +519,7 @@
         (efecto === "ninguno" || (Array.isArray(b.efecto) ? b.efecto.includes(efecto) : b.efecto === efecto))
       );
 
-      // Si no hay recomendaciones exactas pero se pidió un efecto, sugerir bebidas similares
+      // Si no hay coincidencia exacta para el perfil, sugerir bebidas similares.
       if (recomendaciones.length === 0 && efecto !== "ninguno") {
         recomendaciones = menu.filter(b =>
           (tipo && b.disponible_en.indexOf(tipo) !== -1) &&
@@ -535,7 +528,7 @@
         );
         if (recomendaciones.length > 0) {
           recomendaciones.push({
-            nombre: "✨ Puedes personalizar esta bebida con nuestro jarabe favorito y una dosis de tintura especial para sentirte como quieres.",
+            nombre: "Pregunta en barra por una variación de sabor con ingredientes disponibles.",
             disponible_en: [tipo],
             dulce: true,
             cafeina: cafeina,
@@ -560,15 +553,6 @@
           salida += `<div class="custom-item">${b.nombre}</div>`;
         });
         salida += "</div>";
-
-        if (efecto !== "ninguno") {
-          const tinturas = {
-            relajante: "Calming",
-            energizante: "Focus",
-            despegue: "Consulta a tu capitán de viaje"
-          };
-          salida += `<p>✨ Agrega una dosis de nuestra tintura <strong>${tinturas[efecto]}</strong> para potenciar tu experiencia.</p>`;
-        }
         resultado.innerHTML = salida;
         // Botones de compartir/copiar
         const share = document.createElement('div');
@@ -743,7 +727,7 @@
       updateCTA();
     });
 
-    // Preselección por querystring: ?tipo=fría&cafeina=si&dulce=no&efecto=energizante
+    // Preselección por querystring: ?tipo=fría&cafeina=si&dulce=no&efecto=intenso
     function applyQueryParams() {
       try {
         const p = new URLSearchParams(location.search);

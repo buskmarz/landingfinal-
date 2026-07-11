@@ -1,0 +1,16 @@
+.git/
+.netlify/
+.playwright-cli/
+node_modules/
+audits/
+prospectos_puebla/
+design/
+seo/
+progress.md
+*.bak-codex-*
+.DS_Store
+game/droppy-dash-lite.js
+menu-cholula/qr-menu-cholula-6up-carta.pdf
+menu-cholula/qr-menu-cholula.png
+assets/coa*.pdf
+assets/menu-better-mood.pdf

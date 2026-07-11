@@ -346,25 +346,18 @@ if (recomendadorRoot) {
     { nombre: "Smoothie strawberry relax", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "relajante" },
 
     // Especiales
-    { nombre: "Spaceman", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "despegue" },
-    { nombre: "Sweet trip", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "despegue" },
-    { nombre: "Nirvana lavender", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "relajante" },
-    { nombre: "Dragon's blood", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "relajante" },
-    { nombre: "Cold Berry Days", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "relajante" },
-    { nombre: "Tango Zen", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "relajante" },
-    { nombre: "Strawberry & Mango CBD Matcha", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "relajante" },
-    { nombre: "Magic Mocha Cookies", disponible_en: ["fría"], dulce: true, cafeina: true, efecto: "despegue" },
+    { nombre: "Nirvana lavender", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "suave" },
+    { nombre: "Dragon's blood", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "creativo" },
+    { nombre: "Cold Berry Days", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "suave" },
+    { nombre: "Tango Zen", disponible_en: ["fría"], dulce: true, cafeina: false, efecto: "creativo" },
   ];
 
   const DESCRIPCIONES = {
     // Creaciones
-    "Nirvana lavender": "Soda italiana de lavanda y limón con CBD calming. 430 ml.",
-    "Dragon's blood": "Soda italiana de mango, durazno y fresa con CBD calming. 430 ml.",
-    "Strawberry & Mango CBD Matcha": "Fresa o mango macerado, leche de almendra, miel de agave, matcha y CBD cúrcuma wellness. 430 ml.",
-    "Cold Berry Days": "Macerado de berries con ginger ale y CBD calming. 430 ml.",
-    "Spaceman": "Lavanda, limón y agua mineral. 240 ml.",
-    "Sweet trip": "Berries, perlas de fresa y agua mineral; perfil dulce y refrescante. 240 ml.",
-    "Tango Zen": "Refrescante soda italiana de mango y maracuyá con CBD calming. 430 ml.",
+    "Nirvana lavender": "Soda italiana de lavanda y limón. 430 ml.",
+    "Dragon's blood": "Soda italiana de mango, durazno y fresa. 430 ml.",
+    "Cold Berry Days": "Macerado de berries con ginger ale. 430 ml.",
+    "Tango Zen": "Soda italiana de mango y maracuyá. 430 ml.",
     "Mocha Better": "Chocolate artesanal de Oaxaca con espresso y miel de agave.",
     "Latte Cocochata": "Latte suave con horchata cremosa y un toque tropical de coco. 480 ml.",
     "Matcha Cocochata": "Matcha latte con horchata cremosa y un toque de coco. 480 ml (orgánico o endulzado).",
@@ -649,14 +642,6 @@ if (recomendadorRoot) {
       });
       salida += "</div>";
 
-      if (efecto !== "ninguno") {
-        const tinturas = {
-          relajante: "Calming",
-          energizante: "Focus",
-          despegue: "Consulta a tu capitán de viaje",
-        };
-        salida += `<p>✨ Agrega una dosis de nuestra tintura <strong>${tinturas[efecto]}</strong> para potenciar tu experiencia.</p>`;
-      }
       resultEl.innerHTML = salida;
 
       const share = document.createElement("div");
@@ -992,7 +977,7 @@ if (rewardsPortalRoot) {
     if (portalFields.phone) portalFields.phone.textContent = publicCustomer.phoneMasked || "";
     if (portalFields.level) {
       const levelName = profile.cashbackLevelLabel || "Bronce";
-      const pct = profile.cashbackPct ? `${Number(profile.cashbackPct).toFixed(2)}% cashback` : "";
+      const pct = profile.cashbackPct ? `${Number(profile.cashbackPct).toFixed(2)}% de saldo` : "";
       portalFields.level.textContent = pct ? `${levelName} · ${pct}` : levelName;
     }
     if (portalFields.balance) portalFields.balance.textContent = formatMoney(profile.availableCashbackBalance);

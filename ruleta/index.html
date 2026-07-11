@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="es-MX">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#ffde00" />
+    <meta name="robots" content="index,follow" />
+    <title>Ruleta Better Mood</title>
+    <meta name="description" content="Ruleta comunitaria de Better Mood Coffee para realizar sorteos claros y divertidos." />
+    <link rel="canonical" href="https://bmoodcoffee.com/ruleta/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_MX" />
+    <meta property="og:title" content="Ruleta Better Mood" />
+    <meta property="og:description" content="Pega los nombres, gira y celebra en comunidad." />
+    <meta property="og:url" content="https://bmoodcoffee.com/ruleta/" />
+    <meta property="og:image" content="https://bmoodcoffee.com/assets/home/hero-community.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Ruleta Better Mood" />
+    <meta name="twitter:description" content="Pega los nombres, gira y celebra en comunidad." />
+    <meta name="twitter:image" content="https://bmoodcoffee.com/assets/home/hero-community.jpg" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2224%22 fill=%22%23ffde00%22/><text x=%2250%22 y=%2267%22 text-anchor=%22middle%22 font-size=%2254%22 font-family=%22Arial%22 font-weight=%22900%22 fill=%22%23231f20%22>B</text></svg>" />
+    <link rel="stylesheet" href="./ruleta.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="../" aria-label="Better Mood Coffee">
+        <img src="../assets/logo-better-mood.png" alt="Better Mood Coffee" />
+      </a>
+      <div class="topbar-actions">
+        <span class="preview-label">Comunidad</span>
+        <button class="sound-button" id="soundButton" type="button" aria-pressed="true" aria-label="Desactivar sonido">
+          <svg class="sound-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Zm12.5 3a4.5 4.5 0 0 0-2-3.74v7.48A4.5 4.5 0 0 0 16.5 12Z"/></svg>
+          <svg class="sound-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Zm12.8 1.6-1.4 1.4 2.1 2.1-2.1 2.1 1.4 1.4 2.1-2.1 2.1 2.1 1.4-1.4-2.1-2.1 2.1-2.1-1.4-1.4-2.1 2.1-2.1-2.1Z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <aside class="editor" id="editor" aria-label="Participantes">
+        <button class="editor-close" id="closeEditorButton" type="button" aria-label="Cerrar participantes">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6.7 5.3 5.3 5.3 5.3-5.3 1.4 1.4-5.3 5.3 5.3 5.3-1.4 1.4-5.3-5.3-5.3 5.3-1.4-1.4 5.3-5.3-5.3-5.3 1.4-1.4Z"/></svg>
+        </button>
+
+        <div>
+          <h1>Ruleta<br />Better Mood</h1>
+          <p>Pega nombres o @usuarios.</p>
+        </div>
+
+        <div class="participant-editor">
+          <label for="participants">
+            <span>Participantes</span>
+            <strong id="participantCount">8</strong>
+          </label>
+          <textarea id="participants" spellcheck="false" aria-describedby="participantsHint">@fer_mood
+@mariana.cafe
+@dany_arte
+@soy_juanpa
+@pau.con.pan
+@carlos.chill
+@mariaenpuebla
+@andrea_focus</textarea>
+          <p class="field-hint" id="participantsHint">Uno por línea o separados por comas. Puedes editarlos aquí.</p>
+
+          <div class="list-actions">
+            <button id="shuffleButton" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 3h4v4h-2V5h-2a5 5 0 0 0-4.58 2.97l-.74 1.66A7 7 0 0 1 5.29 14H3v-2h2.29a5 5 0 0 0 4.57-2.97l.74-1.66A7 7 0 0 1 17 3ZM3 7h2.29a7 7 0 0 1 6.39 4.37l.74 1.66A5 5 0 0 0 17 16h2v-2l3 3-3 3v-2h-2a7 7 0 0 1-6.4-4.37l-.74-1.66A5 5 0 0 0 5.3 9H3V7Z"/></svg>
+              Mezclar
+            </button>
+            <button id="cleanButton" type="button">Limpiar lista</button>
+            <button id="clearButton" type="button">Vaciar</button>
+          </div>
+
+          <details class="settings">
+            <summary>
+              <span>Configuración</span>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7.4 8.6 4.6 4.6 4.6-4.6L18 10l-6 6-6-6 1.4-1.4Z"/></svg>
+            </summary>
+
+            <div class="settings-list">
+              <label class="setting-select" for="spinDuration">
+                <span>Duración</span>
+                <select id="spinDuration">
+                  <option value="3000">Rápida · 3 s</option>
+                  <option value="5200" selected>Normal · 5 s</option>
+                  <option value="8000">Larga · 8 s</option>
+                </select>
+              </label>
+
+              <label class="setting-toggle" for="autoRemove">
+                <span>Sin repetidos</span>
+                <span class="switch">
+                  <input id="autoRemove" type="checkbox" />
+                  <i aria-hidden="true"></i>
+                </span>
+              </label>
+
+              <label class="setting-toggle" for="showNames">
+                <span>Mostrar nombres</span>
+                <span class="switch">
+                  <input id="showNames" type="checkbox" checked />
+                  <i aria-hidden="true"></i>
+                </span>
+              </label>
+
+              <label class="setting-toggle" for="confettiEnabled">
+                <span>Confeti</span>
+                <span class="switch">
+                  <input id="confettiEnabled" type="checkbox" checked />
+                  <i aria-hidden="true"></i>
+                </span>
+              </label>
+
+              <label class="setting-toggle" for="soundSetting">
+                <span>Sonido</span>
+                <span class="switch">
+                  <input id="soundSetting" type="checkbox" checked />
+                  <i aria-hidden="true"></i>
+                </span>
+              </label>
+
+              <button class="setting-button" id="fullscreenButton" type="button">
+                <span>Pantalla completa</span>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h6v2H6v4H4V4Zm10 0h6v6h-2V6h-4V4ZM4 14h2v4h4v2H4v-6Zm14 0h2v6h-6v-2h4v-4Z"/></svg>
+              </button>
+
+              <div class="file-actions">
+                <input id="fileInput" type="file" accept=".txt,.csv,text/plain,text/csv" hidden />
+                <button id="importButton" type="button">Importar lista</button>
+                <button id="exportButton" type="button">Descargar lista</button>
+              </div>
+            </div>
+          </details>
+
+          <details class="history" id="historyPanel">
+            <summary>
+              <span>Historial</span>
+              <strong id="historyCount">0</strong>
+            </summary>
+            <div class="history-content">
+              <ol id="historyList" aria-label="Ganadores anteriores"></ol>
+              <p id="emptyHistory">Todavía no hay ganadores.</p>
+              <button id="clearHistoryButton" type="button">Borrar historial</button>
+            </div>
+          </details>
+        </div>
+      </aside>
+
+      <button class="editor-backdrop" id="editorBackdrop" type="button" aria-label="Cerrar participantes"></button>
+
+      <section class="stage" aria-label="Ruleta de sorteo">
+        <div class="mobile-heading">
+          <p class="mobile-title">Ruleta Better Mood</p>
+          <button id="openEditorButton" type="button"><strong id="mobileParticipantCount">8</strong> <span id="mobileParticipantLabel">participantes</span></button>
+        </div>
+
+        <div class="wheel-wrap">
+          <div class="pointer" aria-hidden="true"><span></span></div>
+          <div class="wheel-shadow" aria-hidden="true"></div>
+          <canvas id="wheel" width="960" height="960" aria-label="Ruleta con participantes"></canvas>
+          <button id="wheelSpinButton" class="wheel-center" type="button" aria-label="Girar la ruleta">
+            <span>GIRAR</span>
+          </button>
+        </div>
+
+        <div class="primary-actions">
+          <button class="spin-button" id="spinButton" type="button">Girar</button>
+          <p id="wheelStatus" role="status" aria-live="polite">8 participantes</p>
+        </div>
+      </section>
+    </main>
+
+    <dialog id="winnerDialog" class="winner-dialog" aria-labelledby="winnerLabel">
+      <button id="closeDialogButton" class="dialog-close" type="button" aria-label="Cerrar resultado">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6.7 5.3 5.3 5.3 5.3-5.3 1.4 1.4-5.3 5.3 5.3 5.3-1.4 1.4-5.3-5.3-5.3 5.3-1.4-1.4 5.3-5.3-5.3-5.3 1.4-1.4Z"/></svg>
+      </button>
+      <p>Ganador</p>
+      <h2 id="winnerLabel">@usuario</h2>
+      <div class="dialog-actions">
+        <button type="button" class="primary" id="copyWinnerButton">Copiar</button>
+        <button type="button" id="removeWinnerButton">Quitar y seguir</button>
+      </div>
+      <span class="copied-message" id="copiedMessage" role="status" aria-live="polite"></span>
+    </dialog>
+
+    <div class="confetti" id="confetti" aria-hidden="true"></div>
+    <script src="./ruleta.js"></script>
+  </body>
+</html>

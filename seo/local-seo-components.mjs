@@ -303,9 +303,7 @@ function renderFooter() {
         </div>
       </div>
       <div class="container footer__disclaimer">
-        <p>
-          Uso responsable de CBD: producto derivado de cáñamo, no psicoactivo. No recomendado para menores de edad, embarazo o lactancia. Si tomas medicamentos, consulta a tu médico.
-        </p>
+        <p>Consulta en barra ingredientes, alérgenos, tamaños, precios y disponibilidad. No atribuimos efectos médicos o fisiológicos a las bebidas.</p>
         <p class="footer__copyright">© Better Mood Coffee. Todos los derechos reservados.</p>
       </div>
     </footer>

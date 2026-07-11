@@ -93,3 +93,15 @@ Original prompt: Refactorizar y mejorar el juego Droppy Dash implementando una n
   - `output/pinball-fix-test-6/state-0.json` confirmo juego activo y score acumulado (`score: 70`, `ballsLeft: 3`).
   - `output/pinball-passive-test/state-0.json` confirmo que incluso sin ayuda real del jugador la partida sigue activa despues del arranque (`waitingLaunch: false`).
 - Siguiente agente: si hace falta afinar mas la sensacion, revisar fuerza de flippers y scoring de bumpers, pero el bug principal de launch y drenaje inmediato ya no se reproduce igual.
+
+## Ruleta comunitaria Better Mood
+- Objetivo dedicado: implementar y validar `/ruleta` sin modificar los archivos raíz de la landing.
+- La ruta ya contenía una base visual premium; se completó para producción con limpieza visible de duplicados, historial de hasta 20 ganadores, persistencia local y controles de teclado seguros.
+- Se retiraron `Preview` y `noindex` de la ruta; la comunicación prioriza comunidad, nombres y usuarios sin claims funcionales ni referencias a CBD/HHC.
+- Se añadieron los hooks `window.render_game_to_text()` y `window.advanceTime(ms)` para validación determinista.
+- Se corrigió el panel móvil para quedar realmente oculto e inerte hasta abrirlo; la validación confirmó `visibility: hidden`, `pointer-events: none` y una sola cabecera visible.
+- Se corrigió el caso límite de “Sin repetidos”: cuando queda una sola persona, el CTA del resultado ahora dice `Cerrar` y el contador usa `1 participante`.
+- QA completado con Browser y Playwright en 1200x675 y 390x844: limpieza/deduplicado, sorteo, ganador, retiro manual, retiro automático, historial, persistencia, teclado Espacio y estados deterministas. Sin errores de consola.
+- El cliente oficial `develop-web-game` completó la corrida final desde una copia temporal idéntica debido a latencia de lectura de iCloud; `state-0.json` terminó en modo `winner` y no produjo archivos `errors-*.json`.
+- Evidencia temporal: `/tmp/better-mood-ruleta-mobile-ready.png`, `/tmp/better-mood-ruleta-mobile-editor.png`, `/tmp/better-mood-ruleta-mobile-winner.png`, `/tmp/better-mood-ruleta-mobile-auto-remove.png` y `/tmp/better-mood-ruleta-game-final-3/`.
+- Pendientes: ninguno dentro de `/ruleta`; integración y deploy quedan a cargo del agente raíz.

@@ -9,7 +9,7 @@ export const business = {
     "https://www.ubereats.com/store/better-mood-coffee/hPA2fzGUX9WLGGvkeNwCrg?diningMode=DELIVERY",
   rappiUrl:
     "https://www.rappi.com.mx/restaurantes/delivery/495986-better-mood-coffee?utm_source=app&utm_medium=deeplink&utm_campaign=share",
-  menuUrl: "/assets/menu-better-mood.pdf",
+  menuUrl: "/menu/",
   productsUrl: "https://drive.google.com/drive/folders/17h4TmJz7SYwpuY8gR-75qDLrflPmosqd?usp=share_link",
   instagramUrl: "https://instagram.com/bettermood.coffee",
   facebookUrl: "https://facebook.com/bettermoodcoffee",
@@ -30,19 +30,17 @@ export const footerLocalGuides = [
   { href: "/matcha-en-puebla/", label: "Matcha en Puebla" },
   { href: "/cold-brew-en-puebla/", label: "Cold brew en Puebla" },
   { href: "/brunch-en-puebla/", label: "Brunch en Puebla" },
-  { href: "/bebidas-funcionales-puebla/", label: "Bebidas funcionales Puebla" },
-  { href: "/cbd-no-psicoactivo-puebla/", label: "CBD no psicoactivo Puebla" },
-  { href: "/adaptogenos-en-bebidas-puebla/", label: "Adaptógenos en bebidas Puebla" }
+  { href: "/bebidas-funcionales-puebla/", label: "Recetas de la casa Puebla" },
+  { href: "/adaptogenos-en-bebidas-puebla/", label: "Ingredientes adaptógenos Puebla" }
 ];
 
 const guideLookup = Object.fromEntries(footerLocalGuides.map((entry) => [entry.href, entry]));
 
 const staticLinkLabels = {
-  "/bienestar/": { label: "Bienestar y CBD" },
+  "/bienestar/": { label: "Nuestra forma de servir" },
   "/recompensas/": { label: "Recompensas Better Mood" },
   "/recomendador/": { label: "Recomendador de bebidas" },
   "/cafe-de-especialidad-puebla/": { label: "Café de especialidad en Puebla" },
-  "/cbd-en-el-cafe/": { label: "CBD en el café" },
   "/origen-cafe/": { label: "Origen del café" },
   "/recorrido-cafe/": { label: "Recorrido del café" },
   "/eventos/": { label: "Eventos Better Mood" },
@@ -100,7 +98,7 @@ export const localPagesData = [
         heading: "Una cafetería local que convierte visita en relación",
         paragraphs: [
           "Lo valioso de una cafetería bien ubicada en La Paz no es solo que te quede cerca. Es que te dé razones para volver. Better Mood trabaja ese punto desde varios ángulos: pedir a domicilio por Uber Eats o Rappi, registrarte en recompensas, revisar el recomendador de bebidas y consultar las guías del sitio antes de elegir.",
-          "Eso hace que la experiencia no dependa de una sola visita improvisada. Puedes llegar por cercanía, quedarte por el café y seguir conectado por menú, WhatsApp, cashback o contenido educativo. Desde SEO local, esa es la diferencia entre una ficha más y una marca que sí responde a lo que la búsqueda necesita."
+          "Eso hace que la experiencia no dependa de una sola visita improvisada. Puedes llegar por cercanía, quedarte por el café y seguir conectado por menú, recompensas o contenido educativo. Desde SEO local, esa es la diferencia entre una ficha más y una marca que sí responde a lo que la búsqueda necesita."
         ]
       }
     ],
