@@ -37,13 +37,7 @@
   status = 302
   force = true
 
-# Sistema interno: la diagonal final evita que los assets relativos apunten a /assets/.
-[[redirects]]
-  from = "/sistema"
-  to = "/sistema/"
-  status = 301
-  force = true
-
+# Sistema interno: Netlify normaliza /sistema a /sistema/ por el directorio local.
 # El frontend vive en /sistema/ y los datos siguen saliendo del mismo backend de tareascontrol.
 [[redirects]]
   from = "/sistema/"
