@@ -129,11 +129,11 @@
         <div class="recipes__products">
           <figure class="drink reveal">
             <img src="/assets/Coldbarry.jpg" alt="Receta frutal de la casa con fresa y menta" width="2048" height="1365" loading="lazy" />
-            <figcaption>Frutal de la casa</figcaption>
+            <figcaption><strong>Frutal de la casa</strong><span>Fresa, menta y un final fresco.</span></figcaption>
           </figure>
           <figure class="drink reveal reveal--late">
             <img src="/assets/dragon.jpg" alt="Soda de la casa con hielo" width="2048" height="1365" loading="lazy" />
-            <figcaption>Soda de la casa</figcaption>
+            <figcaption><strong>Soda de la casa</strong><span>Ligera, brillante y hecha al momento.</span></figcaption>
           </figure>
         </div>
       </section>
@@ -156,18 +156,38 @@
 
       <section class="community section" aria-labelledby="community-title">
         <div class="community__copy reveal">
-          <h2 id="community-title">La mesa elige.</h2>
-          <p>Pega los nombres. Gira.<br />Celebra en comunidad.</p>
+          <h2 id="community-title">¿Quién gana hoy?</h2>
+          <p>Agrega los nombres y deja<br />que la mesa elija.</p>
           <a class="button button--primary" href="/ruleta/" data-event="roulette_open" data-cta="home-abrir-ruleta">
             Abrir la ruleta
           </a>
         </div>
-        <div class="wheel-art reveal reveal--late" aria-hidden="true">
+        <div class="wheel-art reveal reveal--late" aria-label="Vista previa de una ruleta con participantes">
+          <span class="wheel-art__pointer" aria-hidden="true"></span>
           <div class="wheel-art__disc">
-            <span></span><span></span><span></span><span></span><span></span><span></span>
+            <span class="wheel-art__name wheel-art__name--1">Ana</span>
+            <span class="wheel-art__name wheel-art__name--2">Luis</span>
+            <span class="wheel-art__name wheel-art__name--3">Majo</span>
+            <span class="wheel-art__name wheel-art__name--4">Dani</span>
+            <span class="wheel-art__name wheel-art__name--5">Sofi</span>
+            <span class="wheel-art__name wheel-art__name--6">Alex</span>
           </div>
           <div class="wheel-art__hub"></div>
         </div>
+      </section>
+
+      <section class="ingredients section" aria-labelledby="ingredients-title">
+        <div class="ingredients__copy reveal">
+          <p class="ingredients__eyebrow">Ingredientes, explicados sin promesas.</p>
+          <h2 id="ingredients-title">Adaptógenos en tu bebida, con claridad.</h2>
+          <p>Te contamos qué lleva cada receta para que elijas por sabor, curiosidad y preferencia. Sin promesas médicas.</p>
+          <a class="text-link" href="/adaptogenos-en-bebidas-puebla/">Conocer los ingredientes <span aria-hidden="true">→</span></a>
+        </div>
+        <aside class="ingredients__note reveal reveal--late">
+          <strong>¿Ya eres parte de Better Mood?</strong>
+          <p>Consulta tus recompensas con tu teléfono y cumpleaños. Si tienes un beneficio disponible, lo verás ahí.</p>
+          <a class="button button--outline" href="/recompensas/">Ver mis recompensas</a>
+        </aside>
       </section>
 
       <section class="locations section" id="sucursales" aria-labelledby="locations-title">

@@ -154,8 +154,8 @@ h1, h2, h3, p, figure { margin: 0; }
 .hero__media img { width: 100%; height: 100%; object-fit: cover; object-position: 53% center; }
 
 .recipes {
-  min-height: 720px;
-  padding: 96px clamp(16px, 4vw, 64px);
+  min-height: 610px;
+  padding: 76px clamp(16px, 4vw, 64px);
   display: grid;
   grid-template-columns: minmax(240px, 0.58fr) minmax(0, 1.42fr);
   align-items: center;
@@ -185,8 +185,11 @@ h1, h2, h3, p, figure { margin: 0; }
 .recipes__products { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px, 4vw, 74px); }
 .drink { position: relative; padding-bottom: 4px; }
 .drink + .drink { border-left: 1px solid var(--sun); padding-left: clamp(24px, 4vw, 74px); }
-.drink img { width: 100%; aspect-ratio: 1 / 1.04; object-fit: cover; object-position: center; mix-blend-mode: multiply; }
-.drink figcaption { margin-top: 16px; text-align: center; font-size: 0.9rem; font-weight: 800; }
+.drink img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; object-position: center; mix-blend-mode: multiply; }
+.drink figcaption { margin-top: 16px; text-align: center; font-size: 0.9rem; }
+.drink figcaption strong, .drink figcaption span { display: block; }
+.drink figcaption strong { font-weight: 800; }
+.drink figcaption span { margin-top: 5px; color: var(--muted); font-size: 0.82rem; line-height: 1.4; }
 
 .hospitality {
   display: grid;
@@ -214,7 +217,7 @@ h1, h2, h3, p, figure { margin: 0; }
 }
 
 .community {
-  min-height: 590px;
+  min-height: 560px;
   display: grid;
   grid-template-columns: 0.72fr 1.28fr;
   align-items: center;
@@ -223,37 +226,43 @@ h1, h2, h3, p, figure { margin: 0; }
 }
 .community__copy { padding: 90px clamp(24px, 5vw, 78px); }
 .community__copy .button { margin-top: 32px; }
-.wheel-art { position: relative; min-height: 590px; align-self: end; overflow: hidden; }
+.wheel-art { position: relative; min-height: 560px; align-self: stretch; display: grid; place-items: center; overflow: hidden; }
 .wheel-art__disc {
-  position: absolute;
-  right: -5%;
-  bottom: -52%;
-  width: min(68vw, 850px);
+  position: relative;
+  width: min(43vw, 480px);
   aspect-ratio: 1;
   overflow: hidden;
   border: 3px solid var(--ink);
   border-radius: 50%;
-  background: var(--sun);
+  background: conic-gradient(#ffde00 0 60deg, #fff7c7 60deg 120deg, #ffba00 120deg 180deg, #fff 180deg 240deg, #ffde00 240deg 300deg, #fff7c7 300deg);
   animation: wheel-breathe 9s ease-in-out infinite alternate;
 }
-.wheel-art__disc span { position: absolute; left: 50%; top: 0; width: 2px; height: 50%; background: var(--ink); transform-origin: bottom; }
-.wheel-art__disc span:nth-child(1) { transform: translateX(-1px) rotate(0deg); }
-.wheel-art__disc span:nth-child(2) { transform: translateX(-1px) rotate(32deg); }
-.wheel-art__disc span:nth-child(3) { transform: translateX(-1px) rotate(70deg); }
-.wheel-art__disc span:nth-child(4) { transform: translateX(-1px) rotate(112deg); }
-.wheel-art__disc span:nth-child(5) { transform: translateX(-1px) rotate(148deg); }
-.wheel-art__disc span:nth-child(6) { transform: translateX(-1px) rotate(210deg); }
+.wheel-art__name { position: absolute; left: 50%; top: 50%; width: 42%; font-size: clamp(.72rem, 1.3vw, 1rem); font-weight: 800; transform-origin: 0 0; }
+.wheel-art__name--1 { transform: rotate(-60deg) translate(28%, -50%) rotate(60deg); }
+.wheel-art__name--2 { transform: rotate(0deg) translate(28%, -50%); }
+.wheel-art__name--3 { transform: rotate(60deg) translate(28%, -50%) rotate(-60deg); }
+.wheel-art__name--4 { transform: rotate(120deg) translate(28%, -50%) rotate(-120deg); }
+.wheel-art__name--5 { transform: rotate(180deg) translate(28%, -50%) rotate(-180deg); }
+.wheel-art__name--6 { transform: rotate(240deg) translate(28%, -50%) rotate(-240deg); }
+.wheel-art__pointer { position: absolute; z-index: 4; top: calc(50% - min(21.5vw, 240px) - 12px); width: 0; height: 0; border-left: 18px solid transparent; border-right: 18px solid transparent; border-top: 34px solid var(--ink); }
 .wheel-art__hub {
   position: absolute;
   z-index: 2;
-  right: calc(47.5% - min(34vw, 425px));
-  bottom: 0;
+  left: 50%; top: 50%; transform: translate(-50%, -50%);
   width: 58px;
   height: 58px;
   border-radius: 50%;
   background: var(--ink);
 }
 @keyframes wheel-breathe { to { transform: rotate(3deg); } }
+
+.ingredients { padding: 100px clamp(24px, 7vw, 110px); border-top: 1px solid var(--line); display: grid; grid-template-columns: 1.25fr .75fr; gap: clamp(48px, 10vw, 150px); align-items: center; }
+.ingredients h2 { margin-top: 16px; max-width: 760px; font-size: clamp(2.6rem, 4.3vw, 5.3rem); line-height: .98; letter-spacing: -.055em; }
+.ingredients__copy > p:not(.ingredients__eyebrow) { max-width: 650px; margin-top: 26px; font-size: 1.05rem; line-height: 1.6; }
+.ingredients__eyebrow { font-size: .78rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.ingredients__note { padding: 34px; border: 1px solid var(--line); background: #fff; }
+.ingredients__note strong { font-size: 1.2rem; }
+.ingredients__note p { margin: 14px 0 24px; line-height: 1.55; color: var(--muted); }
 
 .locations { padding: 112px clamp(16px, 5vw, 78px) 124px; border-top: 1px solid var(--line); }
 .anchor-alias { position: relative; top: -90px; display: block; width: 1px; height: 0; overflow: hidden; visibility: hidden; }
@@ -380,6 +389,7 @@ h1, h2, h3, p, figure { margin: 0; }
   .wheel-art { min-height: 480px; }
   .locations { padding-inline: 24px; }
   .location { padding-inline: 28px; }
+  .ingredients { padding-inline: 32px; }
 }
 
 @media (max-width: 680px) {
@@ -408,11 +418,12 @@ h1, h2, h3, p, figure { margin: 0; }
   .hospitality { display: flex; flex-direction: column; }
   .hospitality__media { min-height: 350px; }
   .hospitality__copy { padding: 64px 24px 72px; }
-  .community { min-height: 660px; display: block; }
+  .community { min-height: auto; display: block; }
   .community__copy { position: relative; z-index: 2; padding: 68px 24px 0; }
-  .wheel-art { min-height: 420px; }
-  .wheel-art__disc { right: -28%; bottom: -48%; width: 125vw; }
-  .wheel-art__hub { display: none; }
+  .wheel-art { min-height: 390px; }
+  .wheel-art__disc { width: min(82vw, 350px); }
+  .wheel-art__pointer { top: calc(50% - min(41vw, 175px) - 10px); }
+  .ingredients { padding: 72px 20px; grid-template-columns: 1fr; gap: 42px; }
   .locations { padding: 80px 20px 88px; }
   .locations__heading { text-align: left; }
   .locations__heading h2::after { margin-left: 0; }

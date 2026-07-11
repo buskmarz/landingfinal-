@@ -931,47 +931,47 @@ export const localPagesData = [
     slug: "adaptogenos-en-bebidas-puebla",
     title: "Adaptógenos en bebidas en Puebla | Better Mood Coffee",
     description:
-      "Explora adaptógenos en bebidas en Puebla con Better Mood Coffee: guía responsable sobre melena de león, cordyceps, reishi, ashwagandha y más.",
+      "Qué significa adaptógeno, cómo leer estos ingredientes y cómo elegir una bebida en Better Mood Coffee sin promesas médicas.",
     keywords:
       "adaptógenos en bebidas Puebla, adaptógenos Puebla, melena de león Puebla, cordyceps Puebla, reishi Puebla, ashwagandha Puebla, rhodiola Puebla",
-    h1: "Adaptógenos en bebidas en Puebla con una guía útil antes de elegir.",
+    h1: "Adaptógenos en tu bebida, explicados con claridad.",
     heroText:
-      "Better Mood funciona como una puerta de entrada responsable al tema de adaptógenos en bebidas en Puebla, con café de especialidad, bienestar y una conversación mucho más clara.",
+      "En Better Mood nombramos lo que lleva cada receta y evitamos prometer resultados. El sabor, la preparación y una elección informada van primero.",
     eyebrow: "Adaptógenos Better Mood",
     image: "/assets/spaceman.jpg",
     imageAlt: "Experiencia Better Mood Coffee relacionada con adaptógenos y bebidas funcionales en Puebla",
     benefits: [
-      "Contexto serio para entender adaptógenos sin venderlos como solución médica.",
-      "Puente natural entre café de especialidad, bienestar responsable y bebidas funcionales.",
-      "Rutas claras hacia bienestar, CBD, recomendador y ubicación en La Paz."
+      "Una definición clara, sin convertir el término en una promesa.",
+      "Ingredientes y recetas explicados con lenguaje sencillo.",
+      "Acceso equilibrado a nuestras sucursales de La Paz y Cholula."
     ],
     sections: [
       {
-        heading: "Qué suele incluir esta búsqueda",
+        heading: "Qué significa el término adaptógeno",
         paragraphs: [
-          "La búsqueda de <strong>adaptógenos en bebidas Puebla</strong> suele venir acompañada de términos como melena de león, cordyceps, reishi, ashwagandha o rhodiola. Eso indica una intención más informada que la de una visita casual. La persona ya sabe que el tema existe, pero no siempre sabe dónde encontrar una explicación útil y responsable.",
-          "Better Mood puede capitalizar esa intención porque su ecosistema ya combina café de especialidad, bienestar responsable y un hub educativo donde los ingredientes se explican sin exagerar. No hace falta convertir cada página en una enciclopedia; basta con ordenar la conversación y conectar la búsqueda con la experiencia real de la marca."
+          "<strong>Adaptógeno</strong> es un término amplio usado para algunos ingredientes botánicos que tradicionalmente se relacionan con la respuesta del cuerpo ante distintos tipos de estrés.",
+          "No describe un efecto garantizado ni una categoría médica uniforme: la evidencia, la preparación y la seguridad cambian según cada ingrediente, extracto y cantidad."
         ]
       },
       {
-        heading: "Cómo hablar de adaptógenos sin caer en promesas vacías",
+        heading: "Lo importante está en la receta específica",
         paragraphs: [
-          "El error más común es presentar los adaptógenos como si cada ingrediente resolviera un problema clínico específico. Better Mood no necesita entrar en ese terreno. Lo correcto es hablar de apoyo al bienestar, claridad antes de elegir y uso responsable cuando hay medicamentos, embarazo, lactancia o dudas médicas.",
-          "Eso también mejora la calidad del contenido. En vez de repetir claims que cualquier competidor puede copiar, la página ayuda a leer el tema con más criterio. Esa es una mejor base para posicionar y convertir."
+          "Que un ingrediente aparezca bajo este término no permite asumir qué hará en una bebida. Importan la especie, la parte usada, el tipo de extracto, la cantidad y la combinación completa.",
+          "Por eso en Better Mood preferimos decir qué lleva una receta y cómo sabe. Si quieres revisar un ingrediente antes de pedir, pregunta a nuestro equipo."
         ]
       },
       {
-        heading: "Qué ingredientes suelen interesar más",
+        heading: "Cómo hablamos de estos ingredientes",
         paragraphs: [
-          "Dentro del interés orgánico, cinco nombres aparecen una y otra vez: <strong>ashwagandha</strong>, <strong>melena de león</strong>, <strong>cordyceps</strong>, <strong>reishi</strong> y <strong>rhodiola</strong>. Cada uno entra a la conversación desde un ángulo distinto, pero en todos los casos conviene entender contexto y no quedarse solo con el nombre del ingrediente.",
-          "Better Mood ya conecta parte de esa conversación desde su guía de bienestar. Por eso esta página funciona mejor como ruta local de entrada: te lleva del interés abstracto por adaptógenos a una marca concreta en Puebla que sí estructura la experiencia con café, menú y educación."
+          "No presentamos los adaptógenos como tratamiento ni prometemos resultados. Nuestra conversación parte del sabor, la preparación, la transparencia y la curiosidad informada.",
+          "Si tomas medicamentos, estás embarazada o lactando, tienes una condición médica o dudas sobre un ingrediente, consulta a un profesional de salud antes de consumirlo."
         ]
       },
       {
-        heading: "Dónde se vuelve útil para el usuario real",
+        heading: "Ven a conocer las recetas",
         paragraphs: [
-          "Para la mayoría de las personas, el punto práctico no está en memorizar ingredientes. Está en encontrar una cafetería donde el tema se presente con más orden y menos ruido. Better Mood resuelve esa parte al mantener visibles la guía de bienestar, las bebidas funcionales, la ubicación y el recomendador.",
-          "Eso significa que esta búsqueda no se queda solo en tráfico educativo. Puede terminar en visita, mensaje por WhatsApp, revisión del menú o una exploración más profunda del ecosistema Better Mood dentro de Puebla."
+          "La mejor forma de descubrir Better Mood sigue siendo probar una bebida y conversar con el equipo. Puedes revisar el menú antes de ir o elegir la sucursal que te quede mejor.",
+          "La Paz y Cholula tienen la misma importancia para nosotros: encuentra la ruta, consulta la carta y elige tu próxima pausa."
         ]
       }
     ],
