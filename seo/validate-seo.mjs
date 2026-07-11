@@ -55,8 +55,30 @@ async function validateRoulette() {
   assert(html.includes('<meta name="description"'), "Missing description in ruleta");
 }
 
+async function validatePublicShell() {
+  const home = await fs.readFile(path.join(rootDir, "index.html"), "utf8");
+  const netlify = await fs.readFile(path.join(rootDir, "netlify.toml"), "utf8");
+  const sharedPages = await Promise.all(
+    ["arcade/index.html", "eventos/index.html", "recompensas/index.html"].map((file) =>
+      fs.readFile(path.join(rootDir, file), "utf8")
+    )
+  );
+
+  assert(!home.includes('"@type": "CoffeeShop"'), "Home uses invalid CoffeeShop schema type");
+  assert((home.match(/"@type": "CafeOrCoffeeShop"/g) ?? []).length === 2, "Home must describe both branches");
+  assert(home.includes('"url": "https://bmoodcoffee.com/cafeteria-en-la-paz-puebla/"'), "Home schema missing La Paz URL");
+  assert(home.includes('"url": "https://bmoodcoffee.com/cholula/"'), "Home schema missing Cholula URL");
+  assert(netlify.includes('from = "/seo/*"') && netlify.includes("status = 404"), "Internal SEO sources are not blocked");
+  assert(netlify.includes('from = "/cbd-en-el-cafe/*"'), "Legacy CBD route is not consolidated");
+  assert(netlify.includes('from = "/cbd-no-psicoactivo-puebla/*"'), "Legacy CBD local route is not consolidated");
+  for (const html of sharedPages) {
+    assert(!html.includes("https://g.page/r/Coffee/review"), "Broken generic Google Reviews link remains");
+  }
+}
+
 const pageStates = await Promise.all(localPagesData.map(validatePage));
 await validateRoulette();
+await validatePublicShell();
 await validateSitemap(pageStates);
 
 console.log(`Validated ${localPagesData.length} local SEO pages and sitemap entries.`);

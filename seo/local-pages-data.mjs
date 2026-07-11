@@ -13,7 +13,7 @@ export const business = {
   productsUrl: "https://drive.google.com/drive/folders/17h4TmJz7SYwpuY8gR-75qDLrflPmosqd?usp=share_link",
   instagramUrl: "https://instagram.com/bettermood.coffee",
   facebookUrl: "https://facebook.com/bettermoodcoffee",
-  reviewsUrl: "https://g.page/r/Coffee/review",
+  reviewsUrl: "https://bmoodcoffee.com/#sucursales",
   hours: [
     { label: "Lunes a Viernes", value: "8:00 – 21:00" },
     { label: "Sábado", value: "9:00 – 20:00" },

@@ -62,13 +62,16 @@
 
   navToggle?.addEventListener('click', function () {
     const expanded = navToggle.getAttribute('aria-expanded') === 'true';
-    navToggle.setAttribute('aria-expanded', String(!expanded));
-    nav?.classList.toggle('is-open', !expanded);
+    const nextExpanded = !expanded;
+    navToggle.setAttribute('aria-expanded', String(nextExpanded));
+    navToggle.setAttribute('aria-label', nextExpanded ? 'Cerrar menú' : 'Abrir menú');
+    nav?.classList.toggle('is-open', nextExpanded);
   });
 
   nav?.querySelectorAll('a').forEach(function (link) {
     link.addEventListener('click', function () {
       navToggle?.setAttribute('aria-expanded', 'false');
+      navToggle?.setAttribute('aria-label', 'Abrir menú');
       nav.classList.remove('is-open');
     });
   });
