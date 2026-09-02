@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Café lavado Better Mood | Compra café de especialidad en Puebla</title>
+    <title>Finca Santa Cruz: café lavado | Better Mood</title>
     <meta
       name="description"
-      content="Compra café lavado de especialidad Better Mood Coffee. Finca Santa Cruz, proceso lavado, Typica y Bourbon. Pago seguro con Mercado Pago y recolección en La Paz, Puebla."
+      content="Conoce y compra el café lavado Finca Santa Cruz de Better Mood. Bolsa de 250 g, métodos V60, AeroPress y Chemex, entrega o recolección en Puebla."
     />
     <meta name="robots" content="index,follow" />
     <link rel="canonical" href="https://bmoodcoffee.com/cafe-lavado/" />
@@ -63,17 +63,16 @@
         <a class="logo" href="/" aria-label="Better Mood Coffee">
           <img src="../assets/logo-better-mood.png" alt="Better Mood Coffee" />
         </a>
-        <button class="nav-toggle" aria-controls="primary-nav" aria-expanded="false">
+        <button class="nav-toggle" type="button" aria-controls="primary-nav" aria-expanded="false">
           <span class="nav-toggle__icon" aria-hidden="true"></span>
           <span class="nav-toggle__label" aria-hidden="true">Menú</span>
           <span class="sr-only">Abrir navegación</span>
         </button>
-        <nav class="nav" id="primary-nav">
+        <nav class="nav" id="primary-nav" aria-label="Navegación principal">
           <a href="/">Inicio</a>
-          <a href="/assets/menu-better-mood.pdf" target="_blank" rel="noopener">Menú</a>
-          <a href="/origen-cafe/">Origen</a>
-          <a href="/recorrido-cafe/">Recorrido</a>
-          <a href="/#location">Ubicación</a>
+          <a href="/#sucursales">Menú</a>
+          <a href="/como-preparar-cafe-en-casa/">Métodos</a>
+          <a href="/#sucursales">Ubicación</a>
           <a class="btn btn--sm btn--primary" href="#comprar" data-event="click_buy_coffee">Comprar café</a>
         </nav>
       </div>
@@ -84,25 +83,39 @@
         <div class="container coffee-shop-hero__grid">
           <div class="coffee-shop-hero__copy">
             <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Inicio</a><span>/</span><span aria-current="page">Café lavado</span></nav>
-            <p class="eyebrow">Café de especialidad Better Mood</p>
-            <h1 id="coffee-shop-title">Café lavado para llevar Better Mood a casa.</h1>
-            <p class="coffee-shop-hero__lead">Un café limpio, dulce y balanceado de Finca Santa Cruz. Bolsa de 250 g por $280 MXN. Compra en línea con Mercado Pago y elige recolección en tienda o entrega a domicilio.</p>
+            <p class="eyebrow">Finca Santa Cruz · origen</p>
+            <h1 id="coffee-shop-title">Antes de la taza,<br />hay una historia.</h1>
+            <p class="coffee-shop-hero__lead">Este café lavado comienza en la finca y continúa en cada preparación.</p>
             <div class="coffee-shop-hero__facts" aria-label="Ficha rápida del café">
               <span>Proceso lavado</span>
-              <span>Typica y Bourbon</span>
-              <span>84.5 SCA</span>
               <span>250 g</span>
-              <span>Entrega o recolección</span>
+              <span>Café de especialidad</span>
             </div>
             <div class="hero__actions">
-              <a class="btn btn--primary" href="#comprar" data-event="click_buy_coffee">Comprar ahora</a>
-              <a class="btn btn--secondary" href="/origen-cafe/">Ver origen</a>
+              <a class="btn btn--primary" href="#recorrido">Conocer el recorrido</a>
+              <a class="btn btn--secondary" href="#comprar" data-event="click_buy_coffee">Comprar café</a>
             </div>
           </div>
           <figure class="coffee-shop-hero__media">
-            <img src="../assets/landing-lavado/Josearguello-densocafe-fincasantacruz.jpg" alt="Productor y origen del café lavado Better Mood" loading="eager" decoding="async" width="960" height="1080" />
-            <figcaption>Finca Santa Cruz · café lavado Better Mood</figcaption>
+            <img src="../assets/landing-lavado/Josearguello-densocafe-fincasantacruz.jpg" alt="Productor entre plantas de café en Finca Santa Cruz" loading="eager" decoding="async" width="960" height="1080" />
+            <figcaption>Finca Santa Cruz. Aquí comienza nuestro café lavado.</figcaption>
           </figure>
+        </div>
+      </section>
+
+      <section class="section coffee-origin-story" id="recorrido" aria-labelledby="origin-story-title">
+        <div class="container coffee-origin-story__grid">
+          <div class="coffee-origin-story__intro">
+            <p class="eyebrow">De origen a taza</p>
+            <h2 id="origin-story-title">Cada paso cuida el café.</h2>
+            <p>En la finca comienza el trabajo. Después, la fruta se retira y el grano se lava antes del secado. En Better Mood, esa historia llega a tu mesa.</p>
+            <a class="btn btn--secondary" href="/recorrido-cafe/">Ver el recorrido completo</a>
+          </div>
+          <ol class="coffee-origin-steps">
+            <li><span>01</span><div><strong>La finca</strong><p>Aquí empieza el café.</p></div></li>
+            <li><span>02</span><div><strong>Proceso lavado</strong><p>La fruta se retira y el grano se lava.</p></div></li>
+            <li><span>03</span><div><strong>Tu taza</strong><p>V60, AeroPress o Chemex.</p></div></li>
+          </ol>
         </div>
       </section>
 
@@ -111,16 +124,14 @@
           <article class="coffee-shop-card">
             <p class="eyebrow">Producto</p>
             <h2 id="buy-coffee-title">Café lavado Finca Santa Cruz</h2>
-            <p>Bolsa para preparar en casa. Perfil limpio, balanceado y fácil de disfrutar en métodos como V60, prensa francesa, Aeropress o cafetera de goteo.</p>
+            <p>Para V60, AeroPress o Chemex.</p>
             <div class="coffee-shop-card__price"><span data-product-price>$280</span> <small>MXN</small></div>
             <ul class="coffee-shop-list">
               <li>Pago seguro por Mercado Pago.</li>
-              <li>Tu pedido queda registrado automáticamente.</li>
-              <li>Recoge en Better Mood Coffee La Paz o pide entrega a domicilio.</li>
-              <li>El envío se cobra separado dentro de Mercado Pago.</li>
-              <li>Te pedimos WhatsApp para confirmar disponibilidad, horario y entrega.</li>
+              <li>Recolección en La Paz.</li>
+              <li>Entrega disponible en Puebla.</li>
             </ul>
-            <p class="coffee-shop-note">Entrega a domicilio disponible en Puebla con costo fijo configurable. Si necesitas mayoreo o envío fuera de zona, escríbenos por WhatsApp antes de pagar.</p>
+            <p class="coffee-shop-note">Confirmamos disponibilidad por WhatsApp.</p>
           </article>
 
           <form class="coffee-checkout" data-coffee-checkout-form>
@@ -128,11 +139,11 @@
             <h2>Compra con Mercado Pago</h2>
             <label>
               Nombre completo
-              <input name="name" autocomplete="name" required placeholder="Tu nombre" />
+              <input type="text" name="name" autocomplete="name" required placeholder="Tu nombre" />
             </label>
             <label>
               WhatsApp
-              <input name="phone" autocomplete="tel" inputmode="tel" required placeholder="222..." />
+              <input type="tel" name="phone" autocomplete="tel" inputmode="tel" required placeholder="222..." />
             </label>
             <label>
               Email
@@ -161,15 +172,15 @@
             <div class="coffee-checkout__delivery" data-delivery-fields hidden>
               <label>
                 Calle, número e interior
-                <input name="deliveryStreet" autocomplete="street-address" placeholder="Ej. 13 Poniente 2302/F" />
+                <input type="text" name="deliveryStreet" autocomplete="street-address" placeholder="Ej. 13 Poniente 2302/F" />
               </label>
               <label>
                 Colonia
-                <input name="deliveryNeighborhood" autocomplete="address-level3" placeholder="Ej. La Paz" />
+                <input type="text" name="deliveryNeighborhood" autocomplete="address-level3" placeholder="Ej. La Paz" />
               </label>
               <label>
                 Ciudad
-                <input name="deliveryCity" autocomplete="address-level2" value="Puebla" />
+                <input type="text" name="deliveryCity" autocomplete="address-level2" value="Puebla" />
               </label>
               <label>
                 Referencias de entrega
@@ -198,18 +209,18 @@
         <div class="container">
           <div class="section__header section__header--split">
             <div>
-              <p class="eyebrow">Por qué lavado</p>
-              <h2 id="coffee-info-title">Claridad en taza, origen trazable y preparación sencilla.</h2>
-              <p>El proceso lavado resalta una taza más limpia y estable. Es ideal si quieres preparar café en casa sin perder el carácter del origen.</p>
+              <p class="eyebrow">El último paso es tuyo</p>
+              <h2 id="coffee-info-title">Prepáralo a tu manera.</h2>
+              <p>Tres métodos. La misma historia en cada taza.</p>
             </div>
             <div class="section__cta section__cta--left">
               <a class="btn btn--secondary" href="/como-preparar-cafe-en-casa/">Cómo prepararlo</a>
             </div>
           </div>
           <div class="coffee-shop-info__grid">
-            <article><strong>1</strong><h3>Origen</h3><p>Finca Santa Cruz, selección cuidada y trazabilidad clara.</p></article>
-            <article><strong>2</strong><h3>Proceso</h3><p>Lavado para una taza limpia, balanceada y fácil de leer.</p></article>
-            <article><strong>3</strong><h3>Casa</h3><p>Funciona bien en métodos manuales y preparación diaria.</p></article>
+            <article><strong>1</strong><h3>V60</h3><p>Una preparación clara y precisa.</p></article>
+            <article><strong>2</strong><h3>AeroPress</h3><p>Versátil y fácil de explorar.</p></article>
+            <article><strong>3</strong><h3>Chemex</h3><p>Para preparar y compartir.</p></article>
           </div>
         </div>
       </section>
@@ -230,13 +241,13 @@
         <div class="footer__links">
           <h3>Visítanos</h3>
           <p>13 Poniente 2302/F, Col. La Paz, Puebla.</p>
-          <a href="https://maps.google.com/?q=13+Poniente+2302%2FF,+La+Paz,+Puebla,+Puebla" target="_blank" rel="noopener">Google Maps</a>
-          <a href="https://wa.me/?text=Hola%2C%20quiero%20comprar%20caf%C3%A9%20lavado%20Better%20Mood." target="_blank" rel="noopener noreferrer">WhatsApp</a>
+          <a href="https://maps.app.goo.gl/Cx8Rz7zSEPTYzUxr6?g_st=ic" target="_blank" rel="noopener">Google Maps</a>
+          <a href="https://wa.me/522221252321?text=Hola%2C%20quiero%20comprar%20caf%C3%A9%20lavado%20Better%20Mood." target="_blank" rel="noopener noreferrer">WhatsApp</a>
         </div>
       </div>
     </footer>
 
-    <script src="../script.js"></script>
+    <script src="../script.js?v=20260711-delivery-dock"></script>
     <script>
       (() => {
         const form = document.querySelector('[data-coffee-checkout-form]');

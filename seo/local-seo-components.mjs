@@ -47,7 +47,7 @@ export function LocalHero(page) {
             <p class="hero__text">${page.heroText}</p>
             <div class="hero__actions">
               <a class="btn btn--primary" href="${business.menuUrl}" target="_blank" rel="noopener">Ver menú</a>
-              <a class="btn btn--secondary" href="/#quick-order">Pedir ahora</a>
+              <a class="btn btn--secondary" href="/#sucursales">Pedir ahora</a>
             </div>
           </div>
 
@@ -275,7 +275,7 @@ function renderFooter() {
         </div>
         <div class="footer__links">
           <h3>Navegación</h3>
-          <a href="/#menu">Menú</a>
+          <a href="/#sucursales">Menú</a>
           <a href="/recompensas/">Recompensas</a>
           <a href="/bienestar/">Bienestar</a>
           <a href="/eventos/">Eventos</a>
@@ -387,11 +387,11 @@ export function LocalSeoPage(page) {
         </button>
 
         <nav class="nav" id="primary-nav">
-          <a href="/#menu">Menú</a>
+          <a href="/#sucursales">Menú</a>
           <a href="/recompensas/">Recompensas</a>
           <a href="/bienestar/">Bienestar</a>
-          <a href="/#location">Ubicación</a>
-          <a class="btn btn--sm btn--primary" href="/#quick-order">Pedir ahora</a>
+          <a href="/#sucursales">Ubicación</a>
+          <a class="btn btn--sm btn--primary" href="/#sucursales">Pedir ahora</a>
         </nav>
       </div>
     </header>

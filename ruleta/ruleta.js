@@ -11,6 +11,7 @@
   const mobileParticipantCount = document.querySelector("#mobileParticipantCount");
   const mobileParticipantLabel = document.querySelector("#mobileParticipantLabel");
   const wheelStatus = document.querySelector("#wheelStatus");
+  const methodsGuideLink = document.querySelector("#methodsGuideLink");
   const spinButton = document.querySelector("#spinButton");
   const wheelSpinButton = document.querySelector("#wheelSpinButton");
   const autoRemove = document.querySelector("#autoRemove");
@@ -399,6 +400,7 @@
   });
   spinButton.addEventListener("click", spin);
   wheelSpinButton.addEventListener("click", spin);
+  methodsGuideLink.addEventListener("click", () => track("roulette_guide_open", "guide-methods"));
 
   document.querySelector("#shuffleButton").addEventListener("click", () => {
     const shuffled = [...names];

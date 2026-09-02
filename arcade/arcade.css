@@ -1,0 +1,332 @@
+:root {
+  --arcade-ink: #231f20;
+  --arcade-paper: #fbf8ef;
+  --arcade-sun: #ffde00;
+  --arcade-warm: #ffba00;
+  --arcade-line: rgba(35, 31, 32, 0.16);
+  --arcade-glass: rgba(251, 248, 239, 0.76);
+  --arcade-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.arcade-page--hub {
+  color: var(--arcade-ink);
+  background: var(--arcade-paper);
+  font-family: "Metropolis", "Avenir Next", Avenir, Montserrat, Arial, sans-serif;
+}
+
+.arcade-page--hub .header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.74);
+  background: rgba(251, 248, 239, 0.84);
+  box-shadow: 0 10px 34px rgba(35, 31, 32, 0.06);
+  -webkit-backdrop-filter: blur(22px) saturate(130%);
+  backdrop-filter: blur(22px) saturate(130%);
+}
+
+.arcade-page--hub .nav a[aria-current="page"] { color: var(--arcade-ink); }
+.arcade-page--hub .nav a[aria-current="page"]::after { transform: scaleX(1); }
+
+.arcade-page--hub .btn,
+.arcade-page--hub .arcade-stage__tab,
+.arcade-page--hub .arcade-play__hud-btn,
+.arcade-page--hub .arcade-play__control {
+  border-radius: 999px;
+}
+
+.arcade-page--hub .btn--secondary {
+  border-color: rgba(35, 31, 32, 0.18);
+  background: rgba(251, 248, 239, 0.7);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.86), 0 9px 24px rgba(35, 31, 32, 0.1);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+}
+
+.arcade-hero {
+  min-height: calc(100vh - var(--header-offset, 86px));
+  padding-block: clamp(76px, 9vw, 132px);
+  display: flex;
+  align-items: center;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(255, 222, 0, 0.22), transparent 25%),
+    radial-gradient(circle at 86% 82%, rgba(255, 186, 0, 0.13), transparent 32%),
+    var(--arcade-paper);
+}
+
+.arcade-hero .page-hero__grid {
+  grid-template-columns: minmax(0, 0.9fr) minmax(480px, 1.1fr);
+  align-items: center;
+  gap: clamp(54px, 8vw, 124px);
+}
+
+.arcade-hero .page-hero__content { max-width: 760px; }
+.arcade-hero .page-hero__content h1 {
+  max-width: 760px;
+  margin-top: 18px;
+  font-size: clamp(4.2rem, 7.2vw, 8rem);
+  line-height: 0.88;
+  letter-spacing: -0.075em;
+}
+
+.arcade-hero .hero__text {
+  max-width: 540px;
+  margin-top: 30px;
+  color: rgba(35, 31, 32, 0.68);
+  font-size: clamp(1.05rem, 1.5vw, 1.28rem);
+  line-height: 1.55;
+}
+
+.arcade-hero .hero__actions { margin-top: 36px; }
+
+.arcade-hero-card {
+  min-height: 510px;
+  padding: clamp(24px, 3vw, 42px);
+  display: grid;
+  grid-template-columns: minmax(220px, 0.92fr) minmax(240px, 1.08fr);
+  align-items: stretch;
+  gap: clamp(24px, 4vw, 48px);
+  border: 1px solid rgba(255, 255, 255, 0.82);
+  border-radius: clamp(30px, 4vw, 46px);
+  background: rgba(251, 248, 239, 0.74);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 30px 90px rgba(35, 31, 32, 0.15);
+  -webkit-backdrop-filter: blur(22px) saturate(120%);
+  backdrop-filter: blur(22px) saturate(120%);
+}
+
+.arcade-hero-card__visual {
+  min-height: 420px;
+  padding: 22px;
+  display: grid;
+  place-items: end center;
+  overflow: hidden;
+  border-radius: 32px;
+  background:
+    radial-gradient(circle at 50% 74%, rgba(255, 222, 0, 0.78), transparent 36%),
+    rgba(255, 255, 255, 0.54);
+}
+
+.arcade-hero-card__visual img {
+  width: min(100%, 310px);
+  max-height: 390px;
+  object-fit: contain;
+  object-position: center bottom;
+  filter: drop-shadow(0 20px 24px rgba(35, 31, 32, 0.14));
+}
+
+.arcade-hero-card__copy { padding: 24px 6px; display: flex; flex-direction: column; justify-content: center; }
+.arcade-hero-card__copy h2 {
+  margin-top: 18px;
+  font-size: clamp(2.25rem, 3.5vw, 4.15rem);
+  line-height: 0.94;
+  letter-spacing: -0.055em;
+}
+.arcade-hero-card__copy > p:last-child { margin-top: 24px; color: rgba(35, 31, 32, 0.68); line-height: 1.55; }
+
+.arcade-games { padding-block: clamp(88px, 10vw, 148px); background: #eee8dc; }
+.arcade-games .section__header { max-width: 900px; margin-inline: 0; text-align: left; }
+.arcade-games .section__header h2 { max-width: 820px; }
+.arcade-games__grid { margin-top: 66px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+
+.arcade-game-card,
+.arcade-game-card--featured {
+  min-height: 300px;
+  padding: 24px;
+  display: grid;
+  grid-template-columns: 132px minmax(0, 1fr) auto;
+  grid-template-rows: auto auto 1fr auto;
+  column-gap: 26px;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 32px;
+  background: rgba(251, 248, 239, 0.78);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.92), 0 18px 48px rgba(35, 31, 32, 0.09);
+  -webkit-backdrop-filter: blur(18px) saturate(112%);
+  backdrop-filter: blur(18px) saturate(112%);
+}
+
+.arcade-game-card__art {
+  grid-column: 1;
+  grid-row: 1 / 5;
+  width: 132px;
+  height: 100%;
+  min-height: 238px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 24px;
+  background: rgba(255, 222, 0, 0.24);
+}
+.arcade-game-card__art img { width: 116%; height: 92%; object-fit: contain; object-position: center bottom; }
+.arcade-game-card__art--droppy img { width: 78%; height: 78%; }
+.arcade-game-card__art--wheel {
+  background:
+    radial-gradient(circle, var(--arcade-ink) 0 8%, transparent 9%),
+    conic-gradient(var(--arcade-sun) 0 60deg, #fff4aa 60deg 120deg, var(--arcade-warm) 120deg 180deg, #fff 180deg 240deg, var(--arcade-sun) 240deg 300deg, #fff4aa 300deg);
+  border: 20px solid rgba(251, 248, 239, 0.92);
+  outline: 2px solid var(--arcade-ink);
+  outline-offset: -20px;
+}
+.arcade-game-card__art--pinball { position: relative; background: linear-gradient(155deg, rgba(255, 222, 0, 0.72), rgba(255, 186, 0, 0.18)); }
+.arcade-game-card__art--pinball::before,
+.arcade-game-card__art--pinball::after { content: ""; position: absolute; border-radius: 50%; }
+.arcade-game-card__art--pinball::before { width: 58px; height: 58px; border: 8px solid var(--arcade-ink); background: #fff; box-shadow: 24px 62px 0 -8px #ff7f66, -24px 112px 0 -12px #81c7ae; }
+.arcade-game-card__art--pinball::after { bottom: 34px; width: 78px; height: 8px; border-radius: 999px; background: var(--arcade-ink); transform: rotate(-12deg); }
+
+.arcade-game-card__type { grid-column: 2; grid-row: 1; }
+.arcade-game-card h3 { grid-column: 2; grid-row: 2; margin-top: 10px; font-size: clamp(1.55rem, 2.15vw, 2.35rem); letter-spacing: -0.045em; }
+.arcade-game-card > p:not(.arcade-game-card__type) { grid-column: 2; grid-row: 3; margin-top: 14px; color: rgba(35, 31, 32, 0.65); line-height: 1.52; }
+.arcade-game-card__meta { grid-column: 2; grid-row: 4; align-self: end; }
+.arcade-game-card > .btn { grid-column: 3; grid-row: 1 / 5; align-self: end; min-width: 128px; }
+.arcade-game-card__meta span { background: rgba(255, 255, 255, 0.64); }
+
+.arcade-stage {
+  padding-block: clamp(92px, 10vw, 148px);
+  color: var(--arcade-paper);
+  background:
+    radial-gradient(circle at 82% 14%, rgba(255, 222, 0, 0.16), transparent 26%),
+    var(--arcade-ink);
+}
+.arcade-stage__wrap { max-width: 1120px; }
+.arcade-stage__top { align-items: end; }
+.arcade-stage__top h2 { color: var(--arcade-paper); }
+.arcade-stage__summary { max-width: 620px; color: rgba(251, 248, 239, 0.66); }
+.arcade-stage__switch { padding: 5px; border: 1px solid rgba(255, 255, 255, 0.14); border-radius: 999px; background: rgba(255, 255, 255, 0.08); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); }
+.arcade-stage__tab { min-height: 44px; padding-inline: 20px; color: var(--arcade-paper); background: transparent; }
+.arcade-stage__tab.is-active { color: var(--arcade-ink); background: var(--arcade-sun); }
+.arcade-stage__layout { display: block; }
+.arcade-stage__aside { display: none; }
+.arcade-stage__panels { width: min(100%, 780px); margin: 54px auto 0; }
+.arcade-panel { width: 100%; }
+.arcade-play { max-width: 780px; margin-inline: auto; }
+.arcade-play__frame { border: 1px solid rgba(255, 255, 255, 0.56); border-radius: 36px; background: var(--arcade-paper); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.88), 0 28px 74px rgba(0, 0, 0, 0.34); }
+.arcade-play__hud { border: 1px solid rgba(255, 255, 255, 0.64); border-radius: 24px; background: rgba(251, 248, 239, 0.76); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.84), 0 12px 28px rgba(35, 31, 32, 0.12); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); }
+.arcade-page--hub .arcade-play__hud-label { color: rgba(35, 31, 32, 0.72); }
+.arcade-page--hub .arcade-play__hud-value,
+.arcade-page--hub .arcade-play__hud-block--flow .arcade-play__hud-value { color: var(--arcade-ink); }
+.arcade-play__overlay { border-radius: 34px; background: rgba(251, 248, 239, 0.84); -webkit-backdrop-filter: blur(22px) saturate(120%); backdrop-filter: blur(22px) saturate(120%); }
+.arcade-play__controls { margin-top: 16px; }
+.arcade-play__control { border-color: rgba(255, 255, 255, 0.24); color: var(--arcade-paper); background: rgba(255, 255, 255, 0.1); }
+.arcade-play__control--drop,
+.arcade-play__control--launch { color: var(--arcade-ink); background: var(--arcade-sun); }
+.arcade-play__hint { color: rgba(251, 248, 239, 0.58); }
+
+.arcade-play--pinball .arcade-play__frame {
+  width: min(100%, 560px);
+  aspect-ratio: 4 / 5;
+  border: 3px solid #ffde00;
+  border-radius: 32px;
+  background: #231f20;
+  box-shadow: 0 36px 90px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 222, 0, 0.3);
+}
+.arcade-play--pinball .arcade-play__frame::before,
+.arcade-play--pinball .arcade-play__frame::after { display: none; }
+.arcade-play--pinball .arcade-play__hud {
+  top: 12px;
+  left: 18px;
+  right: 18px;
+  align-items: center;
+  padding: 7px;
+  border: 1px solid rgba(255,222,0,.38);
+  border-radius: 18px;
+  background: rgba(35,31,32,.93);
+  box-shadow: none;
+}
+.arcade-play--pinball .arcade-play__hud-main { flex-wrap: nowrap; gap: 6px; }
+.arcade-play--pinball .arcade-play__hud-block {
+  min-width: 58px;
+  padding: 6px 9px;
+  border-color: rgba(255,255,255,.14);
+  background: rgba(35,31,32,.82);
+  box-shadow: none;
+  backdrop-filter: blur(12px);
+}
+.arcade-play--pinball .arcade-play__hud-label { color: rgba(255,248,231,.58); }
+.arcade-page--hub .arcade-play--pinball .arcade-play__hud-value,
+.arcade-page--hub .arcade-play--pinball .arcade-play__hud-block--flow .arcade-play__hud-value { color: #ffde00; }
+.arcade-play--pinball .arcade-play__hud-actions { gap: 6px; }
+.arcade-play--pinball .arcade-play__hud-btn {
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(255,222,0,.72);
+  background: #231f20;
+  color: #ffde00;
+  box-shadow: none;
+}
+.arcade-play__controls--pinball { width: min(100%, 560px); }
+.arcade-play__control-grid--pinball { gap: 10px; }
+.arcade-play__control--flipper,
+.arcade-play__control--launch {
+  min-height: 58px;
+  border: 2px solid #ffde00;
+  border-radius: 999px;
+  font-weight: 900;
+  letter-spacing: .02em;
+}
+.arcade-play__control--flipper { background: #ffde00; color: #231f20; }
+.arcade-play__control--launch { background: #ffba00; color: #231f20; }
+.arcade-play--pinball .arcade-play__overlay { border-radius: 28px; background: rgba(35,31,32,.88); color: #fff8e7; }
+.arcade-play--pinball .arcade-play__overlay-title { color: #ffde00; }
+.arcade-play--pinball .arcade-play__overlay-text,
+.arcade-play--pinball .arcade-play__overlay-note { color: rgba(255,248,231,.76); }
+
+.arcade-visit { padding-block: clamp(90px, 11vw, 156px); text-align: center; background: var(--arcade-paper); }
+.arcade-visit .section__header { max-width: 880px; }
+.arcade-visit .section__header h2 { max-width: 880px; }
+.arcade-visit__actions { margin-top: 38px; justify-content: center; }
+
+.arcade-page--hub .footer { background: #171415; }
+.droppy-lock .delivery-dock { opacity: 0; pointer-events: none; }
+.arcade-stage-visible .delivery-dock { opacity: 0; pointer-events: none; }
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .arcade-game-card { transition: transform 220ms var(--arcade-ease), box-shadow 220ms ease; }
+  .arcade-game-card:hover { transform: translateY(-4px); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.94), 0 24px 58px rgba(35, 31, 32, 0.13); }
+  .arcade-hero-card__visual img { animation: moodi-breathe 4.8s ease-in-out infinite alternate; }
+}
+
+@keyframes moodi-breathe { to { transform: translateY(-7px) rotate(1deg); } }
+
+@media (max-width: 1180px) {
+  .arcade-hero .page-hero__grid { grid-template-columns: 0.82fr 1.18fr; gap: 46px; }
+  .arcade-game-card { grid-template-columns: 112px minmax(0, 1fr); }
+  .arcade-game-card__art { width: 112px; }
+  .arcade-game-card > .btn { grid-column: 2; grid-row: 5; margin-top: 18px; justify-self: start; }
+}
+
+@media (max-width: 900px) {
+  .arcade-hero { min-height: auto; }
+  .arcade-hero .page-hero__grid { grid-template-columns: 1fr; }
+  .arcade-hero-card { min-height: auto; }
+  .arcade-games__grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 680px) {
+  .arcade-hero { padding-block: 62px 78px; }
+  .arcade-hero .page-hero__content h1 { font-size: clamp(3.7rem, 19vw, 5.5rem); }
+  .arcade-hero .hero__actions { display: grid; grid-template-columns: 1fr; }
+  .arcade-hero-card { padding: 18px; grid-template-columns: 1fr; border-radius: 30px; }
+  .arcade-hero-card__visual { min-height: 330px; }
+  .arcade-hero-card__copy { padding: 10px 8px 24px; }
+  .arcade-games { padding-block: 72px; }
+  .arcade-games__grid { margin-top: 42px; }
+  .arcade-game-card,
+  .arcade-game-card--featured { min-height: auto; padding: 18px; grid-template-columns: 92px minmax(0, 1fr); column-gap: 16px; border-radius: 26px; }
+  .arcade-game-card__art { width: 92px; min-height: 168px; border-radius: 20px; }
+  .arcade-game-card__meta { display: none; }
+  .arcade-game-card > .btn { width: 100%; grid-column: 1 / -1; grid-row: 5; }
+  .arcade-stage { padding-block: 72px 92px; }
+  .arcade-stage__top { align-items: flex-start; }
+  .arcade-stage__switch { width: 100%; display: grid; grid-template-columns: 1fr 1fr; }
+  .arcade-stage__panels { margin-top: 38px; }
+  .arcade-play__frame { border-radius: 26px; }
+  .arcade-play--pinball .arcade-play__frame { width: 100%; aspect-ratio: 4 / 5.2; border-radius: 24px; }
+  .arcade-play--pinball .arcade-play__hud { left: 10px; right: 10px; top: 10px; }
+  .arcade-play--pinball .arcade-play__hud-block { min-width: 52px; padding: 5px 7px; }
+  .arcade-play--pinball .arcade-play__hud-actions { gap: 4px; }
+  .arcade-play--pinball .arcade-play__hud-btn { width: 32px; height: 32px; }
+  .arcade-visit { padding-block: 78px 104px; }
+  .arcade-visit__actions { display: grid; grid-template-columns: 1fr; }
+  .arcade-page--hub .footer { padding-bottom: 96px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arcade-game-card,
+  .arcade-hero-card__visual img { animation: none !important; transition: none !important; }
+}

@@ -34,6 +34,26 @@ function cleanHref(value) {
   }
 }
 
+function cleanMeta(value) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return {};
+  const allowed = {
+    session_id: 80,
+    lead_id: 80,
+    lead_tier: 8,
+    business_type: 40,
+    consumption_range: 40,
+    utm_source: 80,
+    utm_medium: 80,
+    utm_campaign: 100,
+    referrer_host: 120,
+  };
+  return Object.entries(allowed).reduce((result, [key, maxLength]) => {
+    const cleaned = cleanText(value[key], "", maxLength);
+    if (cleaned) result[key] = cleaned;
+    return result;
+  }, {});
+}
+
 function increment(map, key) {
   if (!key) return;
   map[key] = Number(map[key] || 0) + 1;
@@ -55,6 +75,7 @@ exports.handler = async (event) => {
   const cta = cleanText(payload.cta, "unknown", 80);
   const path = cleanText(payload.path, "/", 120);
   const href = cleanHref(payload.href);
+  const meta = cleanMeta(payload.meta);
   const now = new Date();
   const dayKey = getDateKey(now);
 
@@ -72,6 +93,9 @@ exports.handler = async (event) => {
       byEvent: {},
       byCta: {},
       byPath: {},
+      byLeadTier: {},
+      byBusinessType: {},
+      byUtmSource: {},
       recent: [],
     };
   }
@@ -82,12 +106,18 @@ exports.handler = async (event) => {
   stats.byEvent = stats.byEvent || {};
   stats.byCta = stats.byCta || {};
   stats.byPath = stats.byPath || {};
+  stats.byLeadTier = stats.byLeadTier || {};
+  stats.byBusinessType = stats.byBusinessType || {};
+  stats.byUtmSource = stats.byUtmSource || {};
   stats.recent = Array.isArray(stats.recent) ? stats.recent : [];
 
   increment(stats.byDay, dayKey);
   increment(stats.byEvent, eventName);
   increment(stats.byCta, cta);
   increment(stats.byPath, path);
+  increment(stats.byLeadTier, meta.lead_tier);
+  increment(stats.byBusinessType, meta.business_type);
+  increment(stats.byUtmSource, meta.utm_source);
 
   stats.recent.unshift({
     ts: now.toISOString(),
@@ -95,6 +125,7 @@ exports.handler = async (event) => {
     cta,
     path,
     href,
+    meta,
   });
   stats.recent = stats.recent.slice(0, MAX_RECENT_EVENTS);
 

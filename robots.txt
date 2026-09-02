@@ -1,6 +1,8 @@
 User-agent: *
 Allow: /
 Disallow: /.netlify/
+Disallow: /api/
+Disallow: /sistema/
 
 Host: bmoodcoffee.com
 Sitemap: https://bmoodcoffee.com/sitemap.xml

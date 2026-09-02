@@ -49,18 +49,18 @@
         <a class="logo" href="/" aria-label="Better Mood Coffee">
           <img src="../assets/logo-better-mood.png" alt="Better Mood Coffee" />
         </a>
-        <button class="nav-toggle" aria-controls="primary-nav" aria-expanded="false">
+        <button class="nav-toggle" type="button" aria-controls="primary-nav" aria-expanded="false">
           <span class="nav-toggle__icon" aria-hidden="true"></span>
           <span class="nav-toggle__label" aria-hidden="true">Menú</span>
           <span class="sr-only">Abrir navegación</span>
         </button>
-        <nav class="nav" id="primary-nav">
+        <nav class="nav" id="primary-nav" aria-label="Navegación principal">
           <a href="/menu/">Menú</a>
           <a href="/kombucha/" aria-current="page">Kombucha</a>
           <a href="/cafe-lavado/" data-cta="comprar-cafe-lavado" data-event="click_buy_coffee">Nuestro café</a>
           <a href="/recompensas/" data-cta="ver-recompensas" data-event="click_rewards">Recompensas</a>
           <a href="/bienestar/">Bienestar</a>
-          <a href="#location">Ubicación</a>
+          <a href="/#sucursales">Ubicación</a>
           <details class="order-dropdown">
             <summary class="btn btn--sm btn--primary" aria-label="Pedir ahora">Pedir ahora</summary>
             <div class="order-dropdown__menu" role="menu" aria-label="Opciones para pedir a domicilio">
@@ -79,7 +79,7 @@
             <h1 id="kombucha-title">Kombucha de Mango Better Mood</h1>
             <p class="kombucha-hero__lead">Mango, fermentación y burbuja ligera.</p>
             <div class="kombucha-hero__actions" aria-label="Acciones principales">
-              <a class="btn btn--primary" href="https://wa.me/?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20la%20kombucha%20de%20mango%20de%20Better%20Mood.%20%C2%BFMe%20pueden%20decir%20c%C3%B3mo%20probarla%3F" target="_blank" rel="noopener noreferrer" data-cta="info-kombucha" data-event="click_kombucha_info">Pedir información</a>
+              <a class="btn btn--primary" href="https://wa.me/522221252321?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20la%20kombucha%20de%20mango%20de%20Better%20Mood.%20%C2%BFMe%20pueden%20decir%20c%C3%B3mo%20probarla%3F" target="_blank" rel="noopener noreferrer" data-cta="info-kombucha" data-event="click_kombucha_info">Pedir información</a>
               <a class="btn btn--secondary" href="/menu/" data-cta="ver-menu" data-event="click_menu">Ver menú</a>
             </div>
           </div>
@@ -159,7 +159,7 @@
           <div class="kombucha-local__panel">
             <strong>Better Mood Coffee</strong>
             <span>Consulta nuestra ubicación para visitarnos.</span>
-            <a class="btn btn--secondary" href="https://maps.google.com/?q=Better+Mood+Coffee" target="_blank" rel="noopener" data-cta="abrir-google-maps" data-event="click_maps">Cómo llegar</a>
+            <a class="btn btn--secondary" href="/ubicaciones/" target="_blank" rel="noopener" data-cta="abrir-google-maps" data-event="click_maps">Cómo llegar</a>
           </div>
         </div>
       </section>
@@ -170,7 +170,7 @@
             <h2 id="whatsapp-title">Pide información por WhatsApp</h2>
             <p>Te respondemos disponibilidad y cómo probarla.</p>
           </div>
-          <a class="btn btn--primary" href="https://wa.me/?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20la%20kombucha%20de%20mango%20de%20Better%20Mood.%20%C2%BFMe%20pueden%20decir%20c%C3%B3mo%20probarla%3F" target="_blank" rel="noopener noreferrer" data-cta="info-kombucha" data-event="click_kombucha_info">Pedir información</a>
+          <a class="btn btn--primary" href="https://wa.me/522221252321?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20la%20kombucha%20de%20mango%20de%20Better%20Mood.%20%C2%BFMe%20pueden%20decir%20c%C3%B3mo%20probarla%3F" target="_blank" rel="noopener noreferrer" data-cta="info-kombucha" data-event="click_kombucha_info">Pedir información</a>
         </div>
       </section>
 
@@ -178,7 +178,7 @@
         <div class="container kombucha-final__inner">
           <h2 id="kombucha-final-title">Kombucha de mango Better Mood</h2>
           <div class="kombucha-final__actions">
-            <a class="btn btn--primary" href="https://wa.me/?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20la%20kombucha%20de%20mango%20de%20Better%20Mood.%20%C2%BFMe%20pueden%20decir%20c%C3%B3mo%20probarla%3F" target="_blank" rel="noopener noreferrer" data-cta="info-kombucha" data-event="click_kombucha_info">Pedir por WhatsApp</a>
+            <a class="btn btn--primary" href="https://wa.me/522221252321?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20la%20kombucha%20de%20mango%20de%20Better%20Mood.%20%C2%BFMe%20pueden%20decir%20c%C3%B3mo%20probarla%3F" target="_blank" rel="noopener noreferrer" data-cta="info-kombucha" data-event="click_kombucha_info">Pedir por WhatsApp</a>
             <a class="btn btn--secondary" href="/menu/" data-cta="ver-menu" data-event="click_menu">Ver menú Better Mood</a>
           </div>
         </div>
@@ -201,8 +201,8 @@
         </div>
         <div class="footer__links">
           <h3>Contacto</h3>
-          <a href="https://wa.me/?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20la%20kombucha%20de%20mango%20de%20Better%20Mood.%20%C2%BFMe%20pueden%20decir%20c%C3%B3mo%20probarla%3F" target="_blank" rel="noopener noreferrer" data-cta="info-kombucha" data-event="click_kombucha_info">WhatsApp kombucha</a>
-          <a href="https://maps.google.com/?q=Better+Mood+Coffee" target="_blank" rel="noopener" data-cta="abrir-google-maps" data-event="click_maps">Maps</a>
+          <a href="https://wa.me/522221252321?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20la%20kombucha%20de%20mango%20de%20Better%20Mood.%20%C2%BFMe%20pueden%20decir%20c%C3%B3mo%20probarla%3F" target="_blank" rel="noopener noreferrer" data-cta="info-kombucha" data-event="click_kombucha_info">WhatsApp kombucha</a>
+          <a href="/ubicaciones/" target="_blank" rel="noopener" data-cta="abrir-google-maps" data-event="click_maps">Maps</a>
           <a href="https://instagram.com/bettermood.coffee" target="_blank" rel="noopener">Instagram</a>
         </div>
       </div>
@@ -211,6 +211,6 @@
         <p class="footer__copyright">© Better Mood Coffee. Todos los derechos reservados.</p>
       </div>
     </footer>
-    <script src="../script.js" defer></script>
+    <script src="../script.js?v=20260711-delivery-dock" defer></script>
   </body>
 </html>

@@ -1,0 +1,674 @@
+:root {
+  --takeover-cream: #f8f3e8;
+  --takeover-paper: #fffaf0;
+  --takeover-ink: #231f20;
+  --takeover-yellow: #ffde00;
+  --takeover-gold: #ffba00;
+}
+
+body {
+  background: var(--takeover-cream);
+  color: var(--takeover-ink);
+}
+
+.takeover-hero {
+  min-height: calc(100svh - 96px);
+  display: grid;
+  grid-template-columns: minmax(420px, 0.9fr) minmax(0, 1.1fr);
+  overflow: hidden;
+  background: var(--takeover-cream);
+  border-bottom: 1px solid rgba(35, 31, 32, 0.16);
+}
+
+.takeover-hero__copy {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: clamp(56px, 7vw, 116px) clamp(34px, 6vw, 94px);
+}
+
+.takeover-lockup,
+.takeover-partner-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  width: fit-content;
+  border-radius: 999px;
+  background: var(--takeover-ink);
+  color: #fff;
+}
+
+.takeover-lockup {
+  margin-bottom: clamp(34px, 5vh, 64px);
+  padding: 10px 16px 10px 18px;
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.takeover-lockup__partner {
+  display: inline-flex;
+  align-items: center;
+  min-width: 104px;
+  height: 34px;
+  overflow: hidden;
+}
+
+.takeover-lockup__partner img,
+.takeover-partner-mark img {
+  width: 108px;
+  height: auto;
+  object-fit: contain;
+}
+
+.takeover-hero .eyebrow,
+.takeover-story .eyebrow,
+.takeover-details .eyebrow,
+.takeover-close .eyebrow {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 950;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.takeover-hero h1 {
+  max-width: 650px;
+  margin: 18px 0 0;
+  font-size: clamp(4rem, 7vw, 7.5rem);
+  line-height: 0.84;
+  letter-spacing: -0.075em;
+}
+
+.takeover-hero__intro {
+  max-width: 570px;
+  margin: clamp(26px, 3.6vh, 42px) 0 0;
+  font-size: clamp(1.08rem, 1.45vw, 1.4rem);
+  line-height: 1.55;
+}
+
+.takeover-hero__when {
+  margin: 30px 0 0;
+}
+
+.takeover-hero__when time {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  border-radius: 999px;
+  background: var(--takeover-yellow);
+  padding: 10px 18px 10px 11px;
+  color: var(--takeover-ink);
+  box-shadow: 0 18px 44px rgba(35, 31, 32, 0.12);
+}
+
+.takeover-hero__when strong {
+  display: grid;
+  min-width: 70px;
+  min-height: 48px;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--takeover-ink);
+  color: #fff;
+  font-size: 0.82rem;
+  letter-spacing: 0.09em;
+}
+
+.takeover-hero__when span {
+  padding-right: 5px;
+  font-size: 0.95rem;
+  font-weight: 950;
+  letter-spacing: 0.04em;
+}
+
+.takeover-hero__when small {
+  margin-left: 5px;
+  font-size: 0.68em;
+  letter-spacing: 0.08em;
+  opacity: 0.7;
+}
+
+.takeover-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 30px;
+}
+
+.takeover-hero__pending {
+  margin: 19px 0 0;
+  color: rgba(35, 31, 32, 0.68);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.takeover-hero__media {
+  position: relative;
+  min-height: 670px;
+  margin: 0;
+  overflow: hidden;
+  background: var(--takeover-ink);
+}
+
+.takeover-hero__media::after {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(16, 14, 14, 0.02) 48%, rgba(16, 14, 14, 0.54) 100%),
+    linear-gradient(90deg, rgba(248, 243, 232, 0.13), transparent 24%);
+  content: "";
+  pointer-events: none;
+}
+
+.takeover-hero__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 42% center;
+  animation: takeover-image-enter 1.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.takeover-hero__media figcaption {
+  position: absolute;
+  z-index: 2;
+  right: 30px;
+  bottom: 28px;
+  padding: 10px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  border-radius: 999px;
+  background: rgba(35, 31, 32, 0.44);
+  color: #fff;
+  font-size: 0.73rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  backdrop-filter: blur(16px);
+}
+
+.takeover-story {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(360px, 0.95fr);
+  gap: clamp(56px, 9vw, 150px);
+  align-items: start;
+  background: var(--takeover-yellow);
+  padding: clamp(86px, 11vw, 170px) clamp(28px, 7vw, 110px);
+}
+
+.takeover-story h2,
+.takeover-close h2 {
+  max-width: 900px;
+  margin: 24px 0 0;
+  font-size: clamp(3.2rem, 6.2vw, 7rem);
+  line-height: 0.9;
+  letter-spacing: -0.07em;
+}
+
+.takeover-story__body {
+  padding-top: 34px;
+}
+
+.takeover-story__body > p {
+  max-width: 600px;
+  margin: 0;
+  font-size: clamp(1.08rem, 1.45vw, 1.35rem);
+  line-height: 1.6;
+}
+
+.takeover-story__body .takeover-story__line {
+  margin-top: 34px;
+  font-weight: 900;
+}
+
+.takeover-preparations {
+  margin: 34px 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid rgba(35, 31, 32, 0.55);
+}
+
+.takeover-preparations li {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 18px;
+  align-items: center;
+  padding: 19px 0;
+  border-bottom: 1px solid rgba(35, 31, 32, 0.55);
+  font-size: clamp(1.15rem, 1.8vw, 1.6rem);
+  font-weight: 900;
+}
+
+.takeover-preparations span {
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+}
+
+.takeover-details {
+  display: grid;
+  grid-template-columns: minmax(320px, 0.76fr) minmax(0, 1.24fr);
+  padding: 0;
+  background: var(--takeover-ink);
+}
+
+.takeover-details__date {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 760px;
+  padding: clamp(66px, 8vw, 120px);
+  background: var(--takeover-paper);
+}
+
+.takeover-details__date h2 {
+  margin: 30px 0 0;
+  font-size: clamp(7rem, 14vw, 14rem);
+  line-height: 0.68;
+  letter-spacing: -0.09em;
+}
+
+.takeover-details__date h2 time {
+  display: flex;
+  flex-direction: column;
+}
+
+.takeover-details__date h2 span {
+  margin-top: 22px;
+  color: var(--takeover-gold);
+  font-size: 0.43em;
+  letter-spacing: -0.04em;
+}
+
+.takeover-details__time {
+  margin: 44px 0 0;
+  font-size: clamp(2rem, 4vw, 4rem);
+  font-weight: 950;
+  letter-spacing: -0.04em;
+}
+
+.takeover-details__guest {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  min-height: 760px;
+  padding: clamp(66px, 8vw, 120px);
+  color: #fff;
+}
+
+.takeover-partner-mark {
+  margin-bottom: 52px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 9px 15px 9px 17px;
+  font-size: 0.67rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.takeover-details__guest h3 {
+  max-width: 780px;
+  margin: 18px 0 0;
+  font-size: clamp(3rem, 6vw, 6.8rem);
+  line-height: 0.88;
+  letter-spacing: -0.07em;
+}
+
+.takeover-details__rank {
+  margin: 28px 0 0;
+  color: var(--takeover-yellow);
+  font-size: 1.05rem;
+  font-weight: 950;
+}
+
+.takeover-details__rank + p {
+  max-width: 700px;
+  margin: 18px 0 0;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: clamp(1rem, 1.3vw, 1.22rem);
+  line-height: 1.6;
+}
+
+.takeover-meta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 38px 0 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.28);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.28);
+}
+
+.takeover-meta div {
+  padding: 22px 18px 22px 0;
+}
+
+.takeover-meta div + div {
+  padding-left: 18px;
+  border-left: 1px solid rgba(255, 255, 255, 0.28);
+}
+
+.takeover-meta dt {
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.takeover-meta dd {
+  margin: 9px 0 0;
+  font-size: 0.94rem;
+  font-weight: 850;
+  line-height: 1.35;
+}
+
+.button--dark {
+  align-self: flex-start;
+  margin-top: 34px;
+  border: 1px solid var(--takeover-yellow);
+  background: var(--takeover-yellow);
+  color: var(--takeover-ink);
+}
+
+.button--dark:hover {
+  border-color: #fff;
+  background: #fff;
+  color: var(--takeover-ink);
+}
+
+.takeover-close {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 70px;
+  align-items: end;
+  background: var(--takeover-cream);
+  padding: clamp(88px, 11vw, 165px) clamp(28px, 7vw, 110px);
+}
+
+.takeover-close__copy > p:last-child {
+  max-width: 690px;
+  margin: 30px 0 0;
+  color: rgba(35, 31, 32, 0.7);
+  font-size: clamp(1.05rem, 1.4vw, 1.3rem);
+  line-height: 1.6;
+}
+
+.takeover-close__actions {
+  display: flex;
+  min-width: 260px;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.button--light {
+  border: 1px solid rgba(35, 31, 32, 0.22);
+  background: rgba(255, 255, 255, 0.56);
+  color: var(--takeover-ink);
+  box-shadow: 0 16px 42px rgba(35, 31, 32, 0.08);
+  backdrop-filter: blur(14px);
+}
+
+.button--light:hover {
+  border-color: var(--takeover-ink);
+  background: #fff;
+}
+
+.takeover-share-status {
+  min-height: 20px;
+  color: rgba(35, 31, 32, 0.66);
+  font-size: 0.76rem;
+  text-align: center;
+}
+
+.takeover-hero a:focus-visible,
+.takeover-close button:focus-visible,
+.takeover-details a:focus-visible {
+  outline: 3px solid var(--takeover-gold);
+  outline-offset: 4px;
+}
+
+@keyframes takeover-image-enter {
+  from {
+    opacity: 0.7;
+    transform: scale(1.045);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 980px) {
+  .takeover-hero {
+    grid-template-columns: minmax(350px, 0.92fr) minmax(0, 1.08fr);
+  }
+
+  .takeover-hero__copy {
+    padding-right: 38px;
+    padding-left: 38px;
+  }
+
+  .takeover-story {
+    grid-template-columns: 1fr;
+    gap: 44px;
+  }
+
+  .takeover-story__body {
+    max-width: 700px;
+    padding-top: 0;
+  }
+
+  .takeover-details {
+    grid-template-columns: 0.82fr 1.18fr;
+  }
+
+  .takeover-details__date,
+  .takeover-details__guest {
+    padding: 64px 42px;
+  }
+
+  .takeover-meta {
+    grid-template-columns: 1fr;
+  }
+
+  .takeover-meta div {
+    padding: 16px 0;
+  }
+
+  .takeover-meta div + div {
+    padding-left: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.28);
+    border-left: 0;
+  }
+}
+
+@media (max-width: 760px) {
+  .site-header {
+    position: relative;
+    z-index: 20;
+  }
+
+  .takeover-hero {
+    position: relative;
+    display: block;
+    min-height: calc(100svh - 82px);
+    border-bottom: 0;
+    background: var(--takeover-ink);
+    color: #fff;
+  }
+
+  .takeover-hero__copy {
+    position: relative;
+    z-index: 3;
+    min-height: calc(100svh - 82px);
+    justify-content: flex-end;
+    padding: 120px 22px 28px;
+    background:
+      linear-gradient(180deg, rgba(19, 16, 16, 0.04) 18%, rgba(19, 16, 16, 0.38) 48%, rgba(19, 16, 16, 0.96) 79%);
+  }
+
+  .takeover-hero__media {
+    position: absolute;
+    inset: 0;
+    min-height: 0;
+  }
+
+  .takeover-hero__media img {
+    object-position: 34% center;
+  }
+
+  .takeover-hero__media::after {
+    background: linear-gradient(180deg, rgba(13, 11, 11, 0.03) 42%, rgba(13, 11, 11, 0.65) 100%);
+  }
+
+  .takeover-hero__media figcaption {
+    display: none;
+  }
+
+  .takeover-lockup {
+    margin-bottom: auto;
+    background: rgba(35, 31, 32, 0.7);
+    backdrop-filter: blur(14px);
+  }
+
+  .takeover-hero h1 {
+    max-width: 420px;
+    margin-top: 12px;
+    font-size: clamp(3.5rem, 17vw, 5rem);
+  }
+
+  .takeover-hero__intro {
+    max-width: 500px;
+    margin-top: 18px;
+    font-size: 0.98rem;
+    line-height: 1.45;
+  }
+
+  .takeover-hero__when {
+    margin-top: 18px;
+  }
+
+  .takeover-hero__when time {
+    padding-top: 7px;
+    padding-bottom: 7px;
+  }
+
+  .takeover-hero__when strong {
+    min-height: 42px;
+  }
+
+  .takeover-hero__actions {
+    width: 100%;
+    margin-top: 18px;
+  }
+
+  .takeover-hero__actions .button {
+    min-height: 48px;
+    flex: 1 1 160px;
+  }
+
+  .takeover-hero__actions .button--outline {
+    border-color: rgba(255, 255, 255, 0.48);
+    background: rgba(35, 31, 32, 0.42);
+    color: #fff;
+    backdrop-filter: blur(14px);
+  }
+
+  .takeover-hero__pending {
+    margin-top: 13px;
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 0.78rem;
+    font-weight: 800;
+  }
+
+  .takeover-story {
+    padding: 84px 22px;
+  }
+
+  .takeover-story h2,
+  .takeover-close h2 {
+    font-size: clamp(3.2rem, 15vw, 5rem);
+  }
+
+  .takeover-details {
+    grid-template-columns: 1fr;
+  }
+
+  .takeover-details__date {
+    min-height: auto;
+    padding: 80px 22px 72px;
+  }
+
+  .takeover-details__date h2 {
+    font-size: clamp(8rem, 42vw, 12rem);
+  }
+
+  .takeover-details__guest {
+    min-height: auto;
+    padding: 80px 22px;
+  }
+
+  .takeover-partner-mark {
+    margin-bottom: 46px;
+  }
+
+  .takeover-details__guest h3 {
+    font-size: clamp(3.4rem, 15vw, 5.6rem);
+  }
+
+  .button--dark {
+    width: 100%;
+  }
+
+  .takeover-close {
+    grid-template-columns: 1fr;
+    gap: 46px;
+    padding: 88px 22px;
+  }
+
+  .takeover-close__actions {
+    width: 100%;
+  }
+}
+
+@media (max-width: 420px) {
+  .takeover-lockup {
+    gap: 8px;
+    padding-right: 12px;
+    padding-left: 14px;
+    font-size: 0.58rem;
+  }
+
+  .takeover-lockup__partner {
+    min-width: 89px;
+  }
+
+  .takeover-lockup__partner img {
+    width: 92px;
+  }
+
+  .takeover-hero__copy {
+    padding-bottom: 22px;
+  }
+
+  .takeover-hero__intro {
+    max-width: 340px;
+  }
+
+  .takeover-hero__actions {
+    gap: 9px;
+  }
+
+  .takeover-hero__actions .button {
+    min-height: 46px;
+    padding: 0 17px;
+    font-size: 0.76rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .takeover-hero__media img {
+    animation: none;
+  }
+}

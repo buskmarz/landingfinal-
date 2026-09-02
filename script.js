@@ -25,6 +25,96 @@ const applySiteDataLinks = () => {
 
 applySiteDataLinks();
 
+const ensureDeliveryDock = () => {
+  const path = window.location.pathname;
+  const blocked = [
+    /^\/sistema(?:\/|$)/,
+    /^\/game(?:\/|$)/,
+    /^\/ruleta(?:\/|$)/,
+    /^\/arcade(?:\/|$)/,
+    /^\/eventos(?:\/|$)/,
+    /^\/talleres-de-cafe-puebla(?:\/|$)/,
+    /^\/cafe-para-negocios-puebla(?:\/|$)/,
+    /^\/trabaja-con-nosotros(?:\/|$)/,
+    /^\/recompensas(?:\/|$)/,
+    /^\/cafe-lavado(?:\/|$)/,
+    /^\/pago-(?:exitoso|error|pendiente)(?:\/|$)/,
+  ].some((pattern) => pattern.test(path));
+  if (blocked || document.querySelector(".delivery-dock")) return;
+
+  const links = window.BETTER_MOOD_SITE_DATA?.links || {};
+  const dock = document.createElement("details");
+  dock.className = "delivery-dock";
+  const dockToggle = document.createElement("summary");
+  dockToggle.className = "delivery-dock__toggle";
+  dockToggle.textContent = "Pedir";
+  dockToggle.setAttribute("aria-label", "Abrir opciones para pedir o contactar");
+  const dockMenu = document.createElement("nav");
+  dockMenu.className = "delivery-dock__menu";
+  dockMenu.setAttribute("aria-label", "Pedidos y contacto");
+
+  const addLink = ({ brand, label, href, eventName }) => {
+    const link = document.createElement("a");
+    link.className = `delivery-dock__item delivery-dock__item--${brand}`;
+    link.href = href;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.dataset.event = eventName;
+    link.dataset.cta = `delivery-dock-${brand}`;
+    if (label) {
+      if (brand === "uber") {
+        link.appendChild(document.createTextNode("Uber"));
+        const suffix = document.createElement("span");
+        suffix.className = "delivery-dock__suffix";
+        suffix.textContent = " Eats";
+        link.appendChild(suffix);
+      } else {
+        link.textContent = label;
+      }
+    } else {
+      link.setAttribute("aria-label", "Escríbenos por WhatsApp");
+      const icon = document.createElement("img");
+      icon.src = "/assets/whatsapp.svg";
+      icon.alt = "";
+      icon.width = 30;
+      icon.height = 30;
+      link.appendChild(icon);
+    }
+    dockMenu.appendChild(link);
+  };
+
+  addLink({
+    brand: "uber",
+    label: "Uber Eats",
+    href: links.uberEats || "https://www.ubereats.com/store/better-mood-coffee/hPA2fzGUX9WLGGvkeNwCrg?diningMode=DELIVERY",
+    eventName: "click_ubereats",
+  });
+  addLink({
+    brand: "rappi",
+    label: "Rappi",
+    href: links.rappi || "https://www.rappi.com.mx/restaurantes/delivery/495986-better-mood-coffee?utm_source=app&utm_medium=deeplink&utm_campaign=share",
+    eventName: "click_rappi",
+  });
+  addLink({
+    brand: "whatsapp",
+    href: links.whatsappGeneral || "https://wa.me/message/WQWEEODGY6H2P1",
+    eventName: "click_whatsapp",
+  });
+
+  if (document.querySelector(".mobile-bar")) dock.classList.add("delivery-dock--raised");
+  document.querySelectorAll(".floating-whatsapp").forEach((element) => element.remove());
+  dock.append(dockToggle, dockMenu);
+  document.body.appendChild(dock);
+  document.addEventListener("click", (event) => {
+    if (dock.open && !dock.contains(event.target)) dock.open = false;
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") dock.open = false;
+  });
+};
+
+ensureDeliveryDock();
+
 const setHeaderOffset = () => {
   if (!header) return;
   document.documentElement.style.setProperty("--header-offset", `${header.offsetHeight}px`);
@@ -38,13 +128,23 @@ if (toggleButton && nav) {
   toggleButton.addEventListener("click", () => {
     const isOpen = nav.classList.toggle("is-open");
     toggleButton.setAttribute("aria-expanded", String(isOpen));
+    document.body.classList.toggle("nav-open", isOpen);
   });
 
   nav.querySelectorAll("a").forEach((link) => {
     link.addEventListener("click", () => {
       nav.classList.remove("is-open");
       toggleButton.setAttribute("aria-expanded", "false");
+      document.body.classList.remove("nav-open");
     });
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape" || !nav.classList.contains("is-open")) return;
+    nav.classList.remove("is-open");
+    document.body.classList.remove("nav-open");
+    toggleButton.setAttribute("aria-expanded", "false");
+    toggleButton.focus();
   });
 }
 
@@ -148,7 +248,7 @@ const getCateringWhatsappUrl = (message) => {
     const joiner = base.includes("?") ? "&" : "?";
     return `${base}${joiner}text=${text}`;
   }
-  return `https://wa.me/?text=${text}`;
+  return `https://wa.me/522221252321?text=${text}`;
 };
 
 if (cateringForm) {

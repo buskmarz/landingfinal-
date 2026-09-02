@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="es-MX">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow,noarchive" />
+    <title>Encuestas de servicio | Sistema Better Mood</title>
+    <link rel="icon" href="/assets/logo-better-mood.png" />
+    <link rel="stylesheet" href="/sistema-encuestas/dashboard.css?v=20260819" />
+  </head>
+  <body>
+    <a class="skip-link" href="#dashboard">Saltar a las métricas</a>
+
+    <main id="dashboard">
+      <section class="login" data-login hidden aria-labelledby="login-title">
+        <img src="/assets/logo-better-mood.png" alt="Better Mood Coffee" width="116" height="116" />
+        <div>
+          <p class="eyebrow">SISTEMA · ENCUESTAS</p>
+          <h1 id="login-title">Métricas de servicio.</h1>
+          <p>Usa la clave administrativa para consultar respuestas anónimas y prioridades de mejora.</p>
+          <form data-login-form>
+            <label for="admin-password">Clave administrativa</label>
+            <div class="password-row">
+              <input id="admin-password" name="password" type="password" autocomplete="current-password" required />
+              <button type="submit">Entrar</button>
+            </div>
+            <p class="form-status" data-login-status role="status"></p>
+          </form>
+          <a class="back-link" href="/sistema/">← Volver al sistema</a>
+        </div>
+      </section>
+
+      <div class="workspace" data-workspace hidden>
+        <header class="topbar">
+          <a class="brand" href="/sistema/" aria-label="Volver al sistema Better Mood">
+            <img src="/assets/logo-better-mood.png" alt="" width="58" height="58" />
+            <span><small>SISTEMA</small>Encuestas de servicio</span>
+          </a>
+          <div class="topbar__actions">
+            <p data-freshness>Actualizando…</p>
+            <button class="button button--ghost" type="button" data-refresh>Actualizar</button>
+            <button class="button button--ghost" type="button" data-logout>Salir</button>
+          </div>
+        </header>
+
+        <section class="controls" aria-label="Filtros del tablero">
+          <div>
+            <label for="range-filter">Periodo</label>
+            <select id="range-filter" data-range>
+              <option value="7">Últimos 7 días</option>
+              <option value="30" selected>Últimos 30 días</option>
+              <option value="90">Últimos 90 días</option>
+              <option value="all">Todo el historial</option>
+            </select>
+          </div>
+          <div>
+            <label for="branch-filter">Sucursal</label>
+            <select id="branch-filter" data-branch>
+              <option value="all">Ambas sucursales</option>
+              <option value="upaep">UPAEP / La Paz</option>
+              <option value="cholula">Cholula</option>
+            </select>
+          </div>
+          <p class="privacy-note">Sin nombres, teléfonos, correos ni IP.</p>
+        </section>
+
+        <section class="content" aria-live="polite">
+          <div class="loading" data-loading>Preparando métricas…</div>
+          <div data-report hidden>
+            <section class="metric-strip" aria-label="Resumen">
+              <article><span>RESPUESTAS</span><strong data-metric="responses">—</strong><small>En el periodo</small></article>
+              <article><span>CSAT</span><strong data-metric="csat">—</strong><small>Servicio general 4–5</small></article>
+              <article><span>SERVICIO</span><strong data-metric="service">—</strong><small>Promedio de 5</small></article>
+              <article><span>REGRESO</span><strong data-metric="return">—</strong><small>Intención de volver</small></article>
+              <article><span>ATENCIÓN</span><strong data-metric="critical">—</strong><small>Respuestas con 1–2</small></article>
+            </section>
+
+            <section class="decision-row">
+              <div class="section-block priority-block">
+                <div class="section-heading">
+                  <div><p class="eyebrow">SIGUIENTE DECISIÓN</p><h2>Qué debemos mejorar</h2></div>
+                  <span class="sample-state" data-sample-state></span>
+                </div>
+                <div class="recommendations" data-recommendations></div>
+              </div>
+
+              <div class="section-block trend-block">
+                <div class="section-heading"><div><p class="eyebrow">MOVIMIENTO</p><h2>Servicio por día</h2></div></div>
+                <div class="trend-chart" data-trend aria-label="Promedio diario de servicio"></div>
+              </div>
+            </section>
+
+            <section class="section-block">
+              <div class="section-heading">
+                <div><p class="eyebrow">CINCO SEÑALES</p><h2>Experiencia por dimensión</h2></div>
+                <p>La barra muestra el promedio observado sobre 5.</p>
+              </div>
+              <div class="dimension-list" data-dimensions></div>
+            </section>
+
+            <section class="section-block">
+              <div class="section-heading">
+                <div><p class="eyebrow">COMPARACIÓN</p><h2>Por sucursal</h2></div>
+                <p>Compara sólo cuando ambas tengan una muestra suficiente.</p>
+              </div>
+              <div class="branch-table-wrap">
+                <table>
+                  <thead><tr><th>Sucursal</th><th>Respuestas</th><th>Servicio</th><th>Bienvenida</th><th>Agilidad</th><th>Exactitud</th><th>Regreso</th></tr></thead>
+                  <tbody data-branches></tbody>
+                </table>
+              </div>
+            </section>
+
+            <section class="section-block">
+              <div class="section-heading">
+                <div><p class="eyebrow">VOZ DEL CLIENTE</p><h2>Comentarios recientes</h2></div>
+                <p>Úsalos como señal cualitativa, no como sustituto de las métricas.</p>
+              </div>
+              <div class="comments" data-comments></div>
+            </section>
+
+            <footer class="methodology">
+              <p><strong>Fuente:</strong> respuestas anónimas recibidas desde <a href="/encuesta/">/encuesta/</a>. Una respuesta por envío.</p>
+              <p><strong>CSAT:</strong> porcentaje que calificó el servicio general con 4 o 5. No equivale a ventas ni visitas confirmadas.</p>
+            </footer>
+          </div>
+          <div class="error" data-error hidden role="alert"></div>
+        </section>
+      </div>
+    </main>
+
+    <script src="/sistema-encuestas/dashboard.js?v=20260819" defer></script>
+  </body>
+</html>

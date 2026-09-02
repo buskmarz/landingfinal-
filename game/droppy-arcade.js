@@ -136,8 +136,27 @@
     requestAnimationFrame(() => resizeCanvas());
   }
 
-  function toggleFullscreen() {
+  async function toggleFullscreen() {
+    if (document.fullscreenElement === root) {
+      await document.exitFullscreen?.();
+      return;
+    }
+    if (root.requestFullscreen) {
+      try {
+        await root.requestFullscreen();
+        return;
+      } catch {
+        // Fallback below keeps the game usable when fullscreen permission is denied.
+      }
+    }
     setFullscreenMode(!root.classList.contains("arcade-play--fullscreen"));
+  }
+
+  function ignoreKeyboardEvent(event) {
+    const target = event.target;
+    if (!(target instanceof Element)) return false;
+    const interactive = target.closest('input, textarea, select, button, a, summary, [contenteditable="true"]');
+    return Boolean(interactive && !root.contains(interactive));
   }
 
   function createPieceState(piece) {
@@ -389,7 +408,7 @@
     if (scoreEl) scoreEl.textContent = String(model.score);
     if (linesEl) linesEl.textContent = String(model.lines);
     if (levelEl) levelEl.textContent = String(model.level);
-    if (flowEl) flowEl.textContent = model.combo > 1 ? `x${model.combo}` : model.flow > 0.16 ? "Warm" : "Ready";
+    if (flowEl) flowEl.textContent = model.combo > 1 ? `x${model.combo}` : model.flow > 0.16 ? "Cálido" : "Listo";
     if (pauseBtn) pauseBtn.disabled = state === "idle" || state === "gameover";
   }
 
@@ -574,6 +593,11 @@
 
   document.addEventListener("keydown", (event) => {
     if (!isActive) return;
+    if (ignoreKeyboardEvent(event)) return;
+    if (event.code === "Escape" && root.classList.contains("arcade-play--fullscreen") && !document.fullscreenElement) {
+      setFullscreenMode(false);
+      return;
+    }
     if (event.repeat && ["ArrowUp", "Space"].includes(event.code)) return;
 
     if (state === "idle" && (event.code === "Enter" || event.code === "Space")) {
@@ -622,6 +646,7 @@
 
   document.addEventListener("keyup", (event) => {
     if (!isActive) return;
+    if (ignoreKeyboardEvent(event)) return;
     if (event.code === "ArrowDown") {
       model.softDrop = false;
     }
@@ -642,6 +667,12 @@
     else if (state === "paused") resumeGame();
   });
   fullscreenBtn?.addEventListener("click", toggleFullscreen);
+  root.addEventListener("pointerdown", () => root.focus({ preventScroll: true }));
+
+  document.addEventListener("fullscreenchange", () => {
+    if (document.fullscreenElement === root) setFullscreenMode(true);
+    else if (root.classList.contains("arcade-play--fullscreen")) setFullscreenMode(false);
+  });
 
   window.addEventListener("resize", resizeCanvas);
   document.addEventListener("visibilitychange", () => {

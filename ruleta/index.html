@@ -27,7 +27,8 @@
         <img src="../assets/logo-better-mood.png" alt="Better Mood Coffee" />
       </a>
       <div class="topbar-actions">
-        <span class="preview-label">Comunidad</span>
+        <a class="topbar-games" href="/arcade/" data-event="arcade_open" data-cta="roulette-header-games">← Juegos</a>
+        <span class="preview-label">Ruleta</span>
         <button class="sound-button" id="soundButton" type="button" aria-pressed="true" aria-label="Desactivar sonido">
           <svg class="sound-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Zm12.5 3a4.5 4.5 0 0 0-2-3.74v7.48A4.5 4.5 0 0 0 16.5 12Z"/></svg>
           <svg class="sound-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Zm12.8 1.6-1.4 1.4 2.1 2.1-2.1 2.1 1.4 1.4 2.1-2.1 2.1 2.1 1.4-1.4-2.1-2.1 2.1-2.1-1.4-1.4-2.1 2.1-2.1-2.1Z"/></svg>
@@ -137,7 +138,7 @@
               <strong id="historyCount">0</strong>
             </summary>
             <div class="history-content">
-              <ol id="historyList" aria-label="Ganadores anteriores"></ol>
+              <ol id="historyList" aria-label="Ganadores anteriores" role="list"></ol>
               <p id="emptyHistory">Todavía no hay ganadores.</p>
               <button id="clearHistoryButton" type="button">Borrar historial</button>
             </div>
@@ -149,14 +150,19 @@
 
       <section class="stage" aria-label="Ruleta de sorteo">
         <div class="mobile-heading">
-          <p class="mobile-title">Ruleta Better Mood</p>
-          <button id="openEditorButton" type="button"><strong id="mobileParticipantCount">8</strong> <span id="mobileParticipantLabel">participantes</span></button>
+          <p class="mobile-title" aria-hidden="true">Ruleta Better Mood</p>
+          <button id="openEditorButton" type="button">
+            <span>Pegar nombres</span><span aria-hidden="true">·</span><strong id="mobileParticipantCount">8</strong>
+            <span class="mobile-count-label" id="mobileParticipantLabel">participantes</span>
+          </button>
         </div>
 
         <div class="wheel-wrap">
           <div class="pointer" aria-hidden="true"><span></span></div>
           <div class="wheel-shadow" aria-hidden="true"></div>
-          <canvas id="wheel" width="960" height="960" aria-label="Ruleta con participantes"></canvas>
+          <canvas id="wheel" width="960" height="960" role="img" aria-label="Ruleta con participantes">
+            Ruleta interactiva con la lista de participantes.
+          </canvas>
           <button id="wheelSpinButton" class="wheel-center" type="button" aria-label="Girar la ruleta">
             <span>GIRAR</span>
           </button>
@@ -165,6 +171,7 @@
         <div class="primary-actions">
           <button class="spin-button" id="spinButton" type="button">Girar</button>
           <p id="wheelStatus" role="status" aria-live="polite">8 participantes</p>
+          <a class="learn-link" id="methodsGuideLink" href="/como-preparar-cafe-en-casa/">Ver guía de métodos <span aria-hidden="true">→</span></a>
         </div>
       </section>
     </main>

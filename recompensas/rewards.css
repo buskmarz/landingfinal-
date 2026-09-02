@@ -75,12 +75,14 @@
 .rewards-form__actions > a,
 .rewards-form__reset {
   min-height: 44px;
-  padding: 0;
+  padding: 0 16px;
   display: inline-flex;
   align-items: center;
-  border: 0;
+  border: 1px solid var(--glass-line);
+  border-radius: var(--radius-pill);
   color: var(--ink);
-  background: transparent;
+  background: var(--glass-paper);
+  box-shadow: var(--shadow-control);
   font: 800 0.8rem/1 "Metropolis", "Avenir Next", Avenir, Montserrat, Arial, sans-serif;
   text-underline-offset: 6px;
   cursor: pointer;
@@ -127,7 +129,7 @@
   align-items: center;
   gap: 11px;
   border: 1px solid var(--ink);
-  border-radius: 3px;
+  border-radius: 16px;
   color: #fff;
   background: var(--ink);
   cursor: pointer;

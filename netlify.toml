@@ -1,9 +1,42 @@
 [build]
+  command = "npm run build"
   publish = "."
   functions = "netlify/functions"
 
 [functions]
   external_node_modules = ["@netlify/blobs"]
+
+# Cholula está pausada temporalmente. Conservamos las URLs históricas como
+# redirecciones 302 para no romper enlaces ni declarar un cierre definitivo.
+[[redirects]]
+  from = "/cholula"
+  to = "/cafeteria-en-la-paz-puebla/"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "/cholula/*"
+  to = "/cafeteria-en-la-paz-puebla/"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "/menu-cholula"
+  to = "/menu/"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "/menu-cholula/*"
+  to = "/menu/"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "/preview-commons/*"
+  to = "/adaptogenos-en-bebidas-puebla/"
+  status = 302
+  force = true
 
 # Los archivos fuente y herramientas de SEO no son una superficie pública.
 [[redirects]]
@@ -12,28 +45,21 @@
   status = 404
   force = true
 
-# Las rutas educativas antiguas sobre CBD se consolidan en la guía vigente.
+# Las rutas educativas antiguas sobre CBD se consolidan en una sola guía sencilla.
 [[redirects]]
   from = "/cbd-en-el-cafe"
-  to = "/bienestar/"
+  to = "/cbd-en-el-cafe/"
   status = 301
-  force = true
-
-[[redirects]]
-  from = "/cbd-en-el-cafe/*"
-  to = "/bienestar/"
-  status = 301
-  force = true
 
 [[redirects]]
   from = "/cbd-no-psicoactivo-puebla"
-  to = "/bienestar/"
+  to = "/cbd-en-el-cafe/"
   status = 301
   force = true
 
 [[redirects]]
   from = "/cbd-no-psicoactivo-puebla/*"
-  to = "/bienestar/"
+  to = "/cbd-en-el-cafe/"
   status = 301
   force = true
 
@@ -42,31 +68,44 @@
 [[redirects]]
   from = "/assets/coacalming.pdf"
   to = "/bienestar/"
-  status = 302
+  status = 301
   force = true
 
 [[redirects]]
   from = "/assets/coafocus.pdf"
   to = "/bienestar/"
-  status = 302
+  status = 301
   force = true
 
 [[redirects]]
   from = "/assets/coasleep.pdf"
   to = "/bienestar/"
-  status = 302
+  status = 301
   force = true
 
 [[redirects]]
   from = "/assets/coawellness.pdf"
   to = "/bienestar/"
-  status = 302
+  status = 301
   force = true
 
 [[redirects]]
   from = "/assets/menu-better-mood.pdf"
   to = "/menu/"
-  status = 302
+  status = 301
+  force = true
+
+# Módulo aislado de encuestas: se publica bajo /sistema/ sin modificar ni interceptar el POS.
+[[redirects]]
+  from = "/sistema/encuestas"
+  to = "/sistema-encuestas/index.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/sistema/encuestas/"
+  to = "/sistema-encuestas/index.html"
+  status = 200
   force = true
 
 # Sistema interno: Netlify normaliza /sistema a /sistema/ por el directorio local.
@@ -176,14 +215,43 @@
   status = 301
 
 [[redirects]]
+  from = "/cafe-para-negocios-puebla"
+  to = "/cafe-para-negocios-puebla/"
+  status = 301
+
+[[redirects]]
+  from = "/cafe-para-negocios"
+  to = "/cafe-para-negocios-puebla/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/cafe-para-negocios/"
+  to = "/cafe-para-negocios-puebla/"
+  status = 301
+  force = true
+
+[[redirects]]
   from = "/ubicacion"
-  to = "/#location"
+  to = "/ubicaciones/"
   status = 301
   force = true
 
 [[redirects]]
   from = "/ubicacion/"
-  to = "/#location"
+  to = "/ubicaciones/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/sucursales"
+  to = "/ubicaciones/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/sucursales/"
+  to = "/ubicaciones/"
   status = 301
   force = true
 
@@ -206,13 +274,20 @@
   force = true
 
 [[redirects]]
-  from = "/cafe-de-especialidad-puebla"
-  to = "/cafe-de-especialidad-puebla/"
-  status = 301
+  from = "/apple-touch-icon.png"
+  to = "/assets/home/bettermood-logo-180.png"
+  status = 200
+  force = true
 
 [[redirects]]
-  from = "/cbd-en-el-cafe"
-  to = "/cbd-en-el-cafe/"
+  from = "/apple-touch-icon-precomposed.png"
+  to = "/assets/home/bettermood-logo-180.png"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/cafe-de-especialidad-puebla"
+  to = "/cafe-de-especialidad-puebla/"
   status = 301
 
 [[redirects]]
@@ -266,13 +341,18 @@
   status = 301
 
 [[redirects]]
-  from = "/cbd-no-psicoactivo-puebla"
-  to = "/cbd-no-psicoactivo-puebla/"
+  from = "/adaptogenos-en-bebidas-puebla"
+  to = "/adaptogenos-en-bebidas-puebla/"
   status = 301
 
 [[redirects]]
-  from = "/adaptogenos-en-bebidas-puebla"
-  to = "/adaptogenos-en-bebidas-puebla/"
+  from = "/encuesta"
+  to = "/encuesta/"
+  status = 301
+
+[[redirects]]
+  from = "/trabaja-con-nosotros"
+  to = "/trabaja-con-nosotros/"
   status = 301
 
 [[redirects]]
@@ -322,3 +402,12 @@
   for = "/assets/*.pdf"
   [headers.values]
     X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/sistema/encuestas/*"
+  [headers.values]
+    Cache-Control = "no-store"
+    Referrer-Policy = "no-referrer"
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    X-Robots-Tag = "noindex, nofollow, noarchive"

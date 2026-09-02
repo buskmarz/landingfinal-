@@ -20,6 +20,7 @@
   const scoreEl = root.querySelector("[data-pinball-score]");
   const highEl = root.querySelector("[data-pinball-high]");
   const ballsEl = root.querySelector("[data-pinball-balls]");
+  const comboEl = root.querySelector("[data-pinball-combo]");
   const stateEl = root.querySelector("[data-pinball-state]");
   const startOverlay = root.querySelector('[data-pinball-overlay="start"]');
   const pauseOverlay = root.querySelector('[data-pinball-overlay="pause"]');
@@ -33,6 +34,7 @@
   const finalScoreEl = root.querySelector("[data-pinball-final-score]");
   const finalHighEl = root.querySelector("[data-pinball-final-high]");
   const controlButtons = Array.from(root.querySelectorAll("[data-pinball-action]"));
+  const launchControl = root.querySelector('[data-pinball-action="launch"]');
 
   const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
   const hypot = Math.hypot;
@@ -89,7 +91,21 @@
     launchTimer: 0,
     launchExitDone: false,
     flipperCooldown: 0,
+    nudgeCooldown: 0,
+    slingCooldown: 0,
     bumpPulse: 0,
+    combo: 1,
+    comboTimer: 0,
+    bumperCooldowns: [0, 0, 0],
+    bumperContacts: [false, false, false],
+    missionCompleted: 0,
+    targetResetTimer: 0,
+    popups: [],
+    trail: [],
+    shake: 0,
+    visualTime: 0,
+    lastHit: "",
+    stallTimer: 0,
     environmentProgress: 0,
     input: { left: false, right: false },
     ball: { x: 0, y: 0, vx: 0, vy: 0, r: 10 },
@@ -104,6 +120,7 @@
   let rafId = 0;
   let lastRealNow = 0;
   let isActive = !root.closest("[hidden]");
+  let keyboardEngaged = false;
   const pointerSides = new Map();
 
   root.tabIndex = root.tabIndex >= 0 ? root.tabIndex : 0;
@@ -127,10 +144,8 @@
   }
 
   function focusGame() {
-    if (document.activeElement instanceof HTMLElement && root.contains(document.activeElement)) {
-      document.activeElement.blur();
-    }
-    root.focus({ preventScroll: true });
+    keyboardEngaged = true;
+    if (!root.contains(document.activeElement)) root.focus({ preventScroll: true });
   }
 
   function capturePointer(target, pointerId) {
@@ -154,8 +169,31 @@
     requestAnimationFrame(resizeCanvas);
   }
 
-  function toggleFullscreen() {
+  async function toggleFullscreen() {
+    if (document.fullscreenElement === root) {
+      await document.exitFullscreen?.();
+      return;
+    }
+    if (root.requestFullscreen) {
+      try {
+        await root.requestFullscreen();
+        return;
+      } catch {
+        // Fallback below keeps the game usable when fullscreen permission is denied.
+      }
+    }
     setFullscreenMode(!root.classList.contains("arcade-play--fullscreen"));
+  }
+
+  function ignoreKeyboardEvent(event) {
+    const target = event.target;
+    if (!(target instanceof Element)) return false;
+    const interactive = target.closest('input, textarea, select, button, a, summary, [contenteditable="true"]');
+    return Boolean(interactive && !root.contains(interactive));
+  }
+
+  function hasGameFocus() {
+    return keyboardEngaged && isActive;
   }
 
   function makeSegment(ax, ay, bx, by, width, color, kind = "wall") {
@@ -171,21 +209,21 @@
   function createFlipper(side) {
     const isLeft = side === "left";
     const pivot = {
-      x: world.width * (isLeft ? 0.31 : 0.69),
-      y: world.height * 0.84,
+      x: world.width * (isLeft ? 0.3 : 0.7),
+      y: world.height * 0.865,
     };
     return {
       side,
       pivot,
-      length: world.width * 0.265,
-      width: world.width * 0.042,
-      restAngle: isLeft ? -0.18 : Math.PI + 0.18,
-      activeAngle: isLeft ? -0.93 : Math.PI + 0.93,
-      angle: isLeft ? -0.18 : Math.PI + 0.18,
-      previousAngle: isLeft ? -0.18 : Math.PI + 0.18,
+      length: world.width * 0.145,
+      width: world.width * 0.036,
+      restAngle: isLeft ? 0.16 : Math.PI - 0.16,
+      activeAngle: isLeft ? -0.64 : Math.PI + 0.64,
+      angle: isLeft ? 0.16 : Math.PI - 0.16,
+      previousAngle: isLeft ? 0.16 : Math.PI - 0.16,
       angularVelocity: 0,
       pressed: false,
-      fill: isLeft ? "#ffde00" : "#f0f4b0",
+      fill: "#ffde00",
       segment: { a: { ...pivot }, b: { x: 0, y: 0 } },
     };
   }
@@ -198,44 +236,54 @@
   }
 
   function configureTable() {
-    bounds.left = world.width * 0.08;
-    bounds.right = world.width * 0.92;
-    bounds.top = world.height * 0.045;
-    bounds.bottom = world.height * 0.94;
-    bounds.drainLeft = world.width * 0.39;
-    bounds.drainRight = world.width * 0.61;
+    bounds.left = world.width * 0.055;
+    bounds.right = world.width * 0.945;
+    bounds.top = world.height * 0.145;
+    bounds.bottom = world.height * 0.965;
+    bounds.drainLeft = world.width * 0.405;
+    bounds.drainRight = world.width * 0.595;
 
-    launchLane.x = world.width * 0.84;
-    launchLane.top = world.height * 0.12;
-    launchLane.bottom = world.height * 0.86;
+    launchLane.x = world.width * 0.885;
+    launchLane.top = world.height * 0.17;
+    launchLane.bottom = world.height * 0.89;
     launchLane.exitY = world.height * 0.17;
 
-    state.ball.r = clamp(world.width * 0.018, 8, 13);
+    state.ball.r = clamp(world.width * 0.022, 10, 15);
     state.bumpers = [
-      { x: world.width * 0.32, y: world.height * 0.25, r: world.width * 0.07, fill: "#ffde00", glow: "rgba(255, 222, 0, 0.42)", label: "B" },
-      { x: world.width * 0.64, y: world.height * 0.22, r: world.width * 0.064, fill: "#9fd681", glow: "rgba(159, 214, 129, 0.4)", label: "M" },
-      { x: world.width * 0.5, y: world.height * 0.39, r: world.width * 0.072, fill: "#92d5df", glow: "rgba(146, 213, 223, 0.42)", label: "D" },
+      { x: world.width * 0.31, y: world.height * 0.29, r: world.width * 0.066, fill: "#ffde00", glow: "rgba(255, 222, 0, 0.54)", label: "F", name: "Focus", pulse: 0 },
+      { x: world.width * 0.61, y: world.height * 0.27, r: world.width * 0.064, fill: "#ffba00", glow: "rgba(255, 186, 0, 0.5)", label: "C", name: "Chill", pulse: 0 },
+      { x: world.width * 0.48, y: world.height * 0.45, r: world.width * 0.07, fill: "#fff6ce", glow: "rgba(255, 222, 0, 0.44)", label: "M", name: "Mood", pulse: 0 },
     ];
     state.posts = [
-      { x: world.width * 0.3, y: world.height * 0.72, r: world.width * 0.028, kick: world.width * 0.035 },
-      { x: world.width * 0.5, y: world.height * 0.775, r: world.width * 0.032, kick: world.width * 0.04 },
-      { x: world.width * 0.7, y: world.height * 0.72, r: world.width * 0.028, kick: world.width * 0.035 },
+      { x: world.width * 0.19, y: world.height * 0.69, r: world.width * 0.02, kick: world.width * 0.04 },
+      { x: world.width * 0.33, y: world.height * 0.76, r: world.width * 0.024, kick: world.width * 0.052 },
+      { x: world.width * 0.67, y: world.height * 0.76, r: world.width * 0.024, kick: world.width * 0.052 },
+      { x: world.width * 0.79, y: world.height * 0.69, r: world.width * 0.02, kick: world.width * 0.04 },
     ];
     state.targets = [
-      { x: world.width * 0.29, y: world.height * 0.13, width: world.width * 0.1, height: world.height * 0.032, label: "C", active: true },
-      { x: world.width * 0.5, y: world.height * 0.1, width: world.width * 0.1, height: world.height * 0.032, label: "B", active: true },
-      { x: world.width * 0.71, y: world.height * 0.13, width: world.width * 0.1, height: world.height * 0.032, label: "D", active: true },
+      ..."FOCUS".split("").map((label, index) => ({
+        x: world.width * (0.235 + index * 0.115),
+        y: world.height * (index === 2 ? 0.185 : 0.205),
+        width: world.width * 0.075,
+        height: world.height * 0.032,
+        label,
+        active: true,
+        pulse: 0,
+      })),
     ];
     state.walls = [
-      makeSegment(0.16, 0.13, 0.1, 0.72, 0.018, "rgba(255,255,255,0.92)"),
-      makeSegment(0.16, 0.13, 0.34, 0.055, 0.018, "rgba(255,255,255,0.92)"),
-      makeSegment(0.34, 0.055, 0.64, 0.055, 0.018, "rgba(255,255,255,0.92)"),
-      makeSegment(0.64, 0.055, 0.78, 0.12, 0.018, "rgba(255,255,255,0.92)"),
-      makeSegment(0.78, 0.12, 0.9, 0.84, 0.018, "rgba(255,255,255,0.92)"),
-      makeSegment(0.76, 0.18, 0.76, 0.83, 0.014, "rgba(255,255,255,0.74)", "lane"),
-      makeSegment(0.1, 0.72, 0.18, 0.84, 0.018, "rgba(255,255,255,0.92)"),
-      makeSegment(0.28, 0.68, 0.18, 0.84, 0.016, "rgba(255, 222, 0, 0.92)", "sling"),
-      makeSegment(0.72, 0.68, 0.82, 0.84, 0.016, "rgba(255, 222, 0, 0.92)", "sling"),
+      makeSegment(0.13, 0.22, 0.075, 0.68, 0.015, "#231f20"),
+      makeSegment(0.13, 0.22, 0.28, 0.15, 0.015, "#231f20"),
+      makeSegment(0.28, 0.15, 0.66, 0.15, 0.015, "#231f20"),
+      makeSegment(0.66, 0.15, 0.75, 0.2, 0.015, "#231f20"),
+      makeSegment(0.95, 0.18, 0.95, 0.7, 0.015, "#231f20"),
+      makeSegment(0.78, 0.28, 0.78, 0.82, 0.012, "rgba(35,31,32,.72)", "lane"),
+      makeSegment(0.075, 0.68, 0.15, 0.86, 0.016, "#231f20"),
+      makeSegment(0.95, 0.7, 0.94, 0.92, 0.016, "#231f20"),
+      makeSegment(0.16, 0.64, 0.3, 0.78, 0.018, "#ffba00", "sling"),
+      makeSegment(0.7, 0.78, 0.82, 0.64, 0.018, "#ffba00", "sling"),
+      makeSegment(0.14, 0.56, 0.27, 0.48, 0.012, "rgba(35,31,32,.64)", "guide"),
+      makeSegment(0.69, 0.5, 0.78, 0.58, 0.012, "rgba(35,31,32,.64)", "guide"),
     ];
     state.flippers.left = createFlipper("left");
     state.flippers.right = createFlipper("right");
@@ -252,21 +300,34 @@
     state.launchExitDone = false;
     state.ballSaveTime = 0;
     state.flipperCooldown = 0;
+    state.nudgeCooldown = 0;
     releaseControls();
   }
 
-  function setReadyToLaunch() {
+  function setReadyToLaunch(shouldStartLoop = true) {
     setBallReady();
     state.mode = MODE.READY;
     state.running = true;
     updateHud();
-    startLoop();
+    if (shouldStartLoop) startLoop();
   }
 
   function resetGameState() {
     state.score = 0;
     state.ballsLeft = 3;
     state.bumpPulse = 0;
+    state.combo = 1;
+    state.comboTimer = 0;
+    state.bumperCooldowns = [0, 0, 0];
+    state.bumperContacts = [false, false, false];
+    state.missionCompleted = 0;
+    state.targetResetTimer = 0;
+    state.popups = [];
+    state.trail = [];
+    state.shake = 0;
+    state.visualTime = 0;
+    state.lastHit = "";
+    state.stallTimer = 0;
     state.environmentProgress = 0;
     state.lastOrbit.left = false;
     state.lastOrbit.right = false;
@@ -280,7 +341,8 @@
   function resizeCanvas() {
     const rect = canvas.getBoundingClientRect();
     const old = { width: world.width, height: world.height };
-    const preserveLiveBall = old.width > 40 && old.height > 40 && isLive();
+    const preserveLiveBall = old.width > 40 && old.height > 40 && (isLive() || state.mode === MODE.PAUSED);
+    const targetStates = state.targets.map((target) => target.active);
     const ballRatio = preserveLiveBall
       ? {
           x: state.ball.x / old.width,
@@ -300,6 +362,9 @@
     world.height = nextHeight;
     background.resize(world);
     configureTable();
+    targetStates.forEach((active, index) => {
+      if (state.targets[index]) state.targets[index].active = active;
+    });
 
     if (ballRatio) {
       state.ball.x = clamp(world.width * ballRatio.x, bounds.left, bounds.right);
@@ -312,12 +377,21 @@
     draw();
   }
 
-  function awardScore(points, x, y, kind = "bean") {
+  function awardScore(points, x, y, kind = "bean", label = "") {
     state.score += points;
     state.highScore = Math.max(state.highScore, state.score);
     state.bumpPulse = 0.18;
+    state.shake = Math.max(state.shake, points >= 100 ? 8 : 3.5);
+    state.lastHit = label || `+${points}`;
+    state.popups.push({
+      x,
+      y,
+      text: label ? `${label} +${points}` : `+${points}`,
+      ttl: 0.62,
+      maxTtl: 0.62,
+    });
+    if (state.popups.length > 3) state.popups.shift();
     state.environmentProgress = clamp(state.score / 1400, 0, 1);
-    effects.spawnCollectBurst(x, y, kind, Math.max(1, Math.round(points / 15)), state.environmentProgress);
     updateHud();
   }
 
@@ -329,13 +403,13 @@
     setBallReady();
     state.mode = MODE.LAUNCHING;
     state.running = true;
-    state.launchTimer = 0.9;
+    state.launchTimer = 1.35;
     state.launchExitDone = false;
     state.ballSaveTime = 7;
-    state.ball.vx = -world.width * 0.38;
-    state.ball.vy = -world.height * 1.55;
+    state.ball.vx = -world.width * 0.02;
+    state.ball.vy = -world.height * 1.72;
     if (hypot(state.ball.vx, state.ball.vy) < world.height * 0.9) {
-      state.ball.vx = -world.width * 0.46;
+      state.ball.vx = -world.width * 0.03;
       state.ball.vy = -world.height * 1.7;
     }
     setOverlay(null);
@@ -348,20 +422,34 @@
     if (scoreEl) scoreEl.textContent = String(state.score);
     if (highEl) highEl.textContent = String(state.highScore);
     if (ballsEl) ballsEl.textContent = String(state.ballsLeft);
+    if (comboEl) comboEl.textContent = `×${state.combo}`;
     if (stateEl) {
       stateEl.textContent =
         state.mode === MODE.READY
-          ? "Launch"
+          ? "Lanzar"
           : state.mode === MODE.LAUNCHING || state.mode === MODE.PLAYING
-            ? "Live"
+            ? "En juego"
             : state.mode === MODE.PAUSED
               ? "Pausa"
               : state.mode === MODE.GAME_OVER
-                ? "Over"
+                ? "Fin"
                 : "Listo";
     }
     if (pauseBtn) pauseBtn.disabled = state.mode === MODE.IDLE || state.mode === MODE.GAME_OVER;
-    if (muteBtn) muteBtn.textContent = state.muted ? "×" : "♪";
+    if (pauseBtn) {
+      const paused = state.mode === MODE.PAUSED;
+      pauseBtn.textContent = paused ? "▶" : "II";
+      pauseBtn.setAttribute("aria-label", paused ? "Reanudar juego" : "Pausar juego");
+    }
+    if (muteBtn) {
+      muteBtn.textContent = state.muted ? "×" : "♪";
+      muteBtn.setAttribute("aria-label", state.muted ? "Activar sonido" : "Silenciar juego");
+    }
+    if (launchControl) {
+      const nudges = isLive();
+      launchControl.textContent = nudges ? "Impulso" : "Lanzar";
+      launchControl.setAttribute("aria-label", nudges ? "Dar un impulso suave a la mesa" : "Lanzar la bola");
+    }
   }
 
   function saveHighScore() {
@@ -377,6 +465,9 @@
     setOverlay(null);
     updateHud();
     draw();
+    // One clear action must start a real game. Requiring a second tap made Safari/mobile
+    // look frozen even though the table was only waiting in the shooter lane.
+    launchBall();
   }
 
   function endGame() {
@@ -386,6 +477,7 @@
     cancelAnimationFrame(rafId);
     saveHighScore();
     setOverlay("gameover");
+    if (document.fullscreenElement === root) document.exitFullscreen?.().catch(() => {});
     setFullscreenMode(false);
     if (finalScoreEl) finalScoreEl.textContent = String(state.score);
     if (finalHighEl) finalHighEl.textContent = String(state.highScore);
@@ -472,6 +564,50 @@
     return true;
   }
 
+  function collideFlipper(flipper) {
+    const segment = flipper.segment;
+    const abx = segment.b.x - segment.a.x;
+    const aby = segment.b.y - segment.a.y;
+    const apx = state.ball.x - segment.a.x;
+    const apy = state.ball.y - segment.a.y;
+    const abLenSq = abx * abx + aby * aby || 1;
+    const t = clamp((apx * abx + apy * aby) / abLenSq, 0, 1);
+    const cx = segment.a.x + abx * t;
+    const cy = segment.a.y + aby * t;
+    const dx = state.ball.x - cx;
+    const dy = state.ball.y - cy;
+    const dist = hypot(dx, dy) || 0.0001;
+    const minDist = state.ball.r + flipper.width * 0.56;
+    if (dist >= minDist) return false;
+
+    const nx = dx / dist;
+    const ny = dy / dist;
+    state.ball.x += nx * (minDist - dist + 0.2);
+    state.ball.y += ny * (minDist - dist + 0.2);
+
+    const rx = cx - flipper.pivot.x;
+    const ry = cy - flipper.pivot.y;
+    const surfaceVx = -flipper.angularVelocity * ry;
+    const surfaceVy = flipper.angularVelocity * rx;
+    const relativeVx = state.ball.vx - surfaceVx;
+    const relativeVy = state.ball.vy - surfaceVy;
+    const approach = relativeVx * nx + relativeVy * ny;
+    if (approach < 0) {
+      const bounce = 0.84;
+      state.ball.vx = relativeVx - (1 + bounce) * approach * nx + surfaceVx;
+      state.ball.vy = relativeVy - (1 + bounce) * approach * ny + surfaceVy;
+    }
+
+    if (flipper.pressed && Math.abs(flipper.angularVelocity) > 1.2) {
+      if (state.flipperCooldown <= 0) {
+        state.flipperCooldown = 0.09;
+        state.bumpPulse = Math.max(state.bumpPulse, 0.06);
+        if (navigator.vibrate) navigator.vibrate(7);
+      }
+    }
+    return true;
+  }
+
   function updateFlippers(dt) {
     [state.flippers.left, state.flippers.right].forEach((flipper) => {
       flipper.previousAngle = flipper.angle;
@@ -484,22 +620,14 @@
     });
   }
 
-  function applyFlipperSkillShot(flipper) {
-    if (!flipper.pressed || state.flipperCooldown > 0 || !isLive()) return false;
-    const isLeft = flipper.side === "left";
-    const xMin = world.width * (isLeft ? 0.11 : 0.43);
-    const xMax = world.width * (isLeft ? 0.57 : 0.89);
-    const yMin = world.height * 0.66;
-    const yMax = world.height * 0.91;
-    if (state.ball.x < xMin || state.ball.x > xMax || state.ball.y < yMin || state.ball.y > yMax) return false;
-    if (state.ball.vy < -world.height * 0.35) return false;
-
-    const centerPull = (world.width * 0.5 - state.ball.x) * 0.65;
-    state.ball.y = Math.min(state.ball.y, world.height * 0.78);
-    state.ball.vx = (isLeft ? world.width * 0.42 : -world.width * 0.42) + centerPull;
-    state.ball.vy = -world.height * 1.22;
-    state.flipperCooldown = 0.14;
-    awardScore(5, state.ball.x, state.ball.y, "bean");
+  function nudgeTable() {
+    if (!isLive() || state.nudgeCooldown > 0) return false;
+    const direction = state.ball.x < world.width * 0.5 ? 1 : -1;
+    state.ball.vx += direction * world.width * 0.13;
+    state.ball.vy -= world.height * 0.12;
+    state.nudgeCooldown = 0.7;
+    state.bumpPulse = Math.max(state.bumpPulse, 0.08);
+    if (navigator.vibrate) navigator.vibrate(6);
     return true;
   }
 
@@ -527,29 +655,34 @@
     }
   }
 
+  function applyShooterGate() {
+    if (state.mode !== MODE.PLAYING) return;
+    const gateX = world.width * 0.78;
+    if (state.ball.x + state.ball.r > gateX && state.ball.y < world.height * 0.29) {
+      state.ball.x = gateX - state.ball.r;
+      state.ball.vx = -Math.max(Math.abs(state.ball.vx) * 0.82, world.width * 0.16);
+    }
+  }
+
   function guideLaunchExit(dt) {
     if (state.mode !== MODE.LAUNCHING) return;
     state.launchTimer = Math.max(0, state.launchTimer - dt);
 
-    // The old table trapped the ball in the right lane. This gate forcibly opens the lane into the field.
-    if (!state.launchExitDone && state.ball.y <= launchLane.exitY) {
+    // Curve the real trajectory out of the shooter lane. Position is never teleported.
+    if (!state.launchExitDone && state.ball.y <= launchLane.exitY + world.height * 0.05) {
       state.launchExitDone = true;
-      state.ball.x = world.width * 0.72;
-      state.ball.y = world.height * 0.16;
-      state.ball.vx = -world.width * 0.72;
-      state.ball.vy = world.height * 0.18;
+      state.ball.vx = -world.width * 1.42;
+      state.ball.vy = world.height * 0.06;
+    }
+    if (state.ball.x < world.width * 0.785) {
       state.mode = MODE.PLAYING;
-      awardScore(10, state.ball.x, state.ball.y, "spring");
+      awardScore(10, state.ball.x, state.ball.y, "spring", "LANZAMIENTO");
       return;
     }
-
-    if (!state.launchExitDone && state.launchTimer <= 0.36) {
-      state.launchExitDone = true;
-      state.ball.x = world.width * 0.7;
-      state.ball.y = world.height * 0.2;
-      state.ball.vx = -world.width * 0.58;
-      state.ball.vy = world.height * 0.12;
-      state.mode = MODE.PLAYING;
+    // Safety only adds velocity if a browser throttles the first frames; it never jumps the ball.
+    if (state.launchTimer <= 0) {
+      state.ball.vx = Math.min(state.ball.vx, -world.width * 0.72);
+      state.ball.vy = Math.min(state.ball.vy, world.height * 0.08);
     }
   }
 
@@ -564,10 +697,7 @@
 
     const centerLane = state.ball.x > world.width * 0.38 && state.ball.x < world.width * 0.62 && state.ball.y < world.height * 0.18;
     if (centerLane && !state.lastOrbit.center) {
-      awardScore(50, state.ball.x, state.ball.y, "spring");
-      state.targets.forEach((target) => {
-        target.active = true;
-      });
+      awardScore(50, state.ball.x, state.ball.y, "spring", "ÓRBITA");
     }
     state.lastOrbit.center = centerLane;
 
@@ -577,21 +707,31 @@
       const withinY = Math.abs(state.ball.y - target.y) <= target.height;
       if (withinX && withinY) {
         target.active = false;
+        target.pulse = 0.3;
         state.ball.vy = Math.abs(state.ball.vy) + world.height * 0.25;
-        awardScore(20, target.x, target.y, "bean");
+        awardScore(25, target.x, target.y, "bean", target.label);
       }
     });
+
+    if (state.targetResetTimer <= 0 && state.targets.length > 0 && state.targets.every((target) => !target.active)) {
+      state.missionCompleted += 1;
+      state.targetResetTimer = 1.1;
+      state.combo = Math.min(5, state.combo + 1);
+      state.comboTimer = 2.5;
+      awardScore(500, world.width * 0.5, world.height * 0.19, "adaptogen", "FOCUS");
+    }
   }
 
   function loseBall() {
     if (state.ballSaveTime > 0) {
+      const remainingSave = state.ballSaveTime;
       setBallReady();
       state.mode = MODE.LAUNCHING;
       state.launchTimer = 0.75;
       state.launchExitDone = false;
-      state.ball.vx = -world.width * 0.38;
-      state.ball.vy = -world.height * 1.45;
-      state.ballSaveTime = Math.max(0, state.ballSaveTime - 2);
+      state.ball.vx = -world.width * 0.02;
+      state.ball.vy = -world.height * 1.72;
+      state.ballSaveTime = Math.max(0, remainingSave - 2);
       updateHud();
       return;
     }
@@ -603,10 +743,12 @@
       endGame();
       return;
     }
-    setReadyToLaunch();
+    setReadyToLaunch(false);
   }
 
   function update(dt) {
+    if (!isActiveMode()) return;
+    state.visualTime += dt;
     background.update(
       dt,
       {
@@ -616,16 +758,25 @@
       },
       world
     );
-    effects.update(dt, {
-      runner: { x: state.ball.x - state.ball.r, y: state.ball.y - state.ball.r, width: state.ball.r * 2, height: state.ball.r * 2 },
-      flowIntensity: clamp(state.score / 1500, 0, 1),
-    });
     state.bumpPulse = Math.max(0, state.bumpPulse - dt);
     state.flipperCooldown = Math.max(0, state.flipperCooldown - dt);
+    state.nudgeCooldown = Math.max(0, state.nudgeCooldown - dt);
+    state.slingCooldown = Math.max(0, state.slingCooldown - dt);
+    state.comboTimer = Math.max(0, state.comboTimer - dt);
+    state.targetResetTimer = Math.max(0, state.targetResetTimer - dt);
+    state.bumperCooldowns = state.bumperCooldowns.map((value) => Math.max(0, value - dt));
+    state.bumpers.forEach((bumper) => { bumper.pulse = Math.max(0, (bumper.pulse || 0) - dt); });
+    state.targets.forEach((target) => { target.pulse = Math.max(0, (target.pulse || 0) - dt); });
+    state.popups.forEach((popup) => { popup.ttl -= dt; popup.y -= world.height * 0.045 * dt; });
+    state.popups = state.popups.filter((popup) => popup.ttl > 0);
+    state.shake = Math.max(0, state.shake - dt * 18);
+    if (state.targetResetTimer === 0 && state.targets.length && state.targets.every((target) => !target.active)) {
+      state.targets.forEach((target) => { target.active = true; });
+    }
+    if (state.comboTimer === 0) state.combo = 1;
     state.ballSaveTime = Math.max(0, state.ballSaveTime - dt);
     audio.setIntensity(state.muted ? 0 : clamp(0.2 + state.environmentProgress * 0.5, 0, 1));
 
-    if (!isActiveMode()) return;
     updateFlippers(dt);
 
     if (isReady()) {
@@ -634,7 +785,7 @@
       return;
     }
 
-    const substeps = 4;
+    const substeps = 8;
     const stepDt = dt / substeps;
     for (let i = 0; i < substeps; i += 1) {
       guideLaunchExit(stepDt);
@@ -645,23 +796,32 @@
       state.ball.y += state.ball.vy * stepDt;
 
       applyPlayfieldBounds();
+      applyShooterGate();
       state.walls.forEach((wall) => {
         const boost = wall.kind === "sling" ? world.width * 0.09 : 0;
-        collideSegment(wall, wall.width * 0.52, boost);
+        const collided = collideSegment(wall, wall.width * 0.52, boost);
+        if (collided && wall.kind === "sling" && state.slingCooldown <= 0) {
+          state.slingCooldown = 0.12;
+          awardScore(20, state.ball.x, state.ball.y, "spring", "SLING");
+        }
       });
       [state.flippers.left, state.flippers.right].forEach((flipper) => {
-        const boost = flipper.pressed ? Math.abs(flipper.angularVelocity) * world.width * 0.055 : 0;
-        if (collideSegment(flipper.segment, flipper.width * 0.55, boost) && flipper.pressed) {
-          state.ball.vy -= world.height * 0.28;
-          state.ball.vx += flipper.side === "left" ? world.width * 0.14 : -world.width * 0.14;
-        }
-        applyFlipperSkillShot(flipper);
+        collideFlipper(flipper);
       });
-      state.bumpers.forEach((bumper) => {
-        if (collideCircle(bumper, world.width * 0.1)) awardScore(15, bumper.x, bumper.y, "spring");
+      state.bumpers.forEach((bumper, index) => {
+        const wasTouching = state.bumperContacts[index];
+        const touching = collideCircle(bumper, wasTouching ? 0 : world.width * 0.12);
+        state.bumperContacts[index] = touching;
+        if (!touching || wasTouching || state.bumperCooldowns[index] > 0) return;
+        state.combo = state.comboTimer > 0 ? Math.min(5, state.combo + 1) : 1;
+        state.comboTimer = 1.8;
+        state.bumperCooldowns[index] = 0.18;
+        bumper.pulse = 0.34;
+        awardScore(20 * state.combo, bumper.x, bumper.y, "spring", bumper.name.toUpperCase());
+        if (navigator.vibrate) navigator.vibrate(7);
       });
       state.posts.forEach((post) => collideCircle(post, post.kick));
-      scoreLanes();
+      if (state.mode === MODE.PLAYING) scoreLanes();
 
       const maxSpeed = world.height * 1.8;
       const speed = hypot(state.ball.vx, state.ball.vy);
@@ -673,6 +833,20 @@
         loseBall();
         return;
       }
+    }
+    state.trail.push({ x: state.ball.x, y: state.ball.y });
+    if (state.trail.length > 9) state.trail.shift();
+    const liveSpeed = hypot(state.ball.vx, state.ball.vy);
+    if (state.mode === MODE.PLAYING && liveSpeed < world.height * 0.085) state.stallTimer += dt;
+    else state.stallTimer = 0;
+    if (state.stallTimer > 1.05) {
+      const towardCenter = state.ball.x < world.width * 0.5 ? 1 : -1;
+      state.ball.vx = towardCenter * world.width * 0.34;
+      state.ball.vy = -world.height * 0.52;
+      state.stallTimer = 0;
+      state.lastHit = "BOLA LIBRE";
+      state.popups.push({ x: state.ball.x, y: state.ball.y, text: "BOLA LIBRE", ttl: 0.62, maxTtl: 0.62 });
+      if (state.popups.length > 3) state.popups.shift();
     }
     updateHud();
   }
@@ -689,7 +863,7 @@
       waitingLaunch: isReady(),
       modeLabel:
         state.mode === MODE.READY
-          ? "Space o Launch para sacar la bola"
+          ? "Espacio o Lanzar para sacar la bola"
           : state.mode === MODE.LAUNCHING || state.mode === MODE.PLAYING
             ? "Droppy Pinball en juego"
             : state.mode === MODE.PAUSED
@@ -697,8 +871,19 @@
               : state.mode === MODE.GAME_OVER
                 ? "Fin de partida"
                 : "Better Mood Arcade",
-      controlsLabel: "A/D · Flechas · Space",
+      controlsLabel: "A/D · Flechas · Espacio",
       environmentProgress: state.environmentProgress,
+      combo: state.combo,
+      comboTimer: state.comboTimer,
+      ballSaveTime: state.ballSaveTime,
+      missionCompleted: state.missionCompleted,
+      missionProgress: state.targets.filter((target) => !target.active).length,
+      popups: state.popups,
+      trail: state.trail,
+      shake: state.shake,
+      visualTime: state.visualTime,
+      lastHit: state.lastHit,
+      stallTime: Number(state.stallTimer.toFixed(2)),
     };
   }
 
@@ -717,13 +902,15 @@
   }
 
   async function advanceSimulation(ms) {
+    const wasRunning = state.running;
+    if (wasRunning) cancelAnimationFrame(rafId);
     const step = 1000 / 60;
-    let remaining = Math.max(step, ms);
-    while (remaining > 0) {
+    const steps = Math.max(1, Math.round(Math.max(step, ms) / step));
+    for (let index = 0; index < steps; index += 1) {
       update(step / 1000);
-      remaining -= step;
     }
     draw();
+    if (wasRunning) startLoop();
   }
 
   function renderGameToText() {
@@ -746,6 +933,22 @@
         right: Number(state.flippers.right.angle.toFixed(2)),
       },
       input: { ...state.input },
+      combo: state.combo,
+      comboTime: Number(state.comboTimer.toFixed(2)),
+      ballSaveTime: Number(state.ballSaveTime.toFixed(2)),
+      mission: {
+        name: "FOCUS",
+        lit: state.targets.filter((target) => !target.active).map((target) => target.label).join(""),
+        progress: state.targets.filter((target) => !target.active).length,
+        completed: state.missionCompleted,
+      },
+      targets: state.targets.map((target) => ({ label: target.label, lit: !target.active })),
+      lastHit: state.lastHit,
+      nudgeReady: state.nudgeCooldown <= 0,
+      muted: state.muted,
+      fullscreen: document.fullscreenElement === root || root.classList.contains("arcade-play--fullscreen"),
+      engaged: keyboardEngaged,
+      coordinateSystem: "origin top-left; x right; y down; canvas CSS pixels",
     });
   }
 
@@ -759,7 +962,8 @@
     if (!isActive) return;
     focusGame();
     if (action === "launch") {
-      launchBall();
+      if (state.mode === MODE.IDLE) startGame();
+      else if (!launchBall()) nudgeTable();
       return;
     }
     pressControl(action, true);
@@ -775,6 +979,12 @@
 
   document.addEventListener("keydown", (event) => {
     if (!isActive) return;
+    if (ignoreKeyboardEvent(event)) return;
+    if (!hasGameFocus()) return;
+    if (event.code === "Escape" && root.classList.contains("arcade-play--fullscreen") && !document.fullscreenElement) {
+      setFullscreenMode(false);
+      return;
+    }
     if (CAPTURED_KEYS.has(event.code)) event.preventDefault();
     if (event.repeat && event.code !== "Space") return;
 
@@ -797,11 +1007,15 @@
     }
     if (event.code === "ArrowLeft" || event.code === "KeyA") pressControl("left", true);
     if (event.code === "ArrowRight" || event.code === "KeyD") pressControl("right", true);
-    if (event.code === "Space" || event.code === "ArrowUp") launchBall();
+    if (event.code === "Space" || event.code === "ArrowUp") {
+      if (!launchBall()) nudgeTable();
+    }
   });
 
   document.addEventListener("keyup", (event) => {
     if (!isActive) return;
+    if (ignoreKeyboardEvent(event)) return;
+    if (!hasGameFocus()) return;
     if (CAPTURED_KEYS.has(event.code)) event.preventDefault();
     if (event.code === "ArrowLeft" || event.code === "KeyA") pressControl("left", false);
     if (event.code === "ArrowRight" || event.code === "KeyD") pressControl("right", false);
@@ -816,7 +1030,6 @@
         capturePointer(button, event.pointerId);
         handleAction("launch");
       };
-      button.addEventListener("pointerdown", fireLaunch);
       button.addEventListener("click", fireLaunch);
       return;
     }
@@ -895,7 +1108,15 @@
   muteBtn?.addEventListener("click", toggleMute);
   fullscreenBtn?.addEventListener("click", toggleFullscreen);
 
+  document.addEventListener("fullscreenchange", () => {
+    if (document.fullscreenElement === root) setFullscreenMode(true);
+    else if (root.classList.contains("arcade-play--fullscreen")) setFullscreenMode(false);
+  });
+
   window.addEventListener("resize", resizeCanvas);
+  document.addEventListener("pointerdown", (event) => {
+    keyboardEngaged = root.contains(event.target);
+  }, true);
   document.addEventListener("visibilitychange", () => {
     releaseControls();
     if (document.hidden) audio.suspend();

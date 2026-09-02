@@ -2,7 +2,7 @@ export const business = {
   name: "Better Mood Coffee",
   siteUrl: "https://bmoodcoffee.com",
   addressLine: "13 Poniente 2302/F, Col. La Paz, Puebla",
-  mapsUrl: "https://maps.google.com/?q=13+Poniente+2302%2FF,+La+Paz,+Puebla,+Puebla",
+  mapsUrl: "https://maps.app.goo.gl/Cx8Rz7zSEPTYzUxr6?g_st=ic",
   wazeUrl: "https://waze.com/ul?q=13%20Poniente%202302%20F%20La%20Paz%20Puebla",
   whatsappUrl: "https://wa.me/message/WQWEEODGY6H2P1",
   uberEatsUrl:
@@ -40,6 +40,7 @@ const staticLinkLabels = {
   "/bienestar/": { label: "Nuestra forma de servir" },
   "/recompensas/": { label: "Recompensas Better Mood" },
   "/recomendador/": { label: "Recomendador de bebidas" },
+  "/cbd-en-el-cafe/": { label: "CBD y bebidas funcionales" },
   "/cafe-de-especialidad-puebla/": { label: "Café de especialidad en Puebla" },
   "/origen-cafe/": { label: "Origen del café" },
   "/recorrido-cafe/": { label: "Recorrido del café" },
@@ -484,7 +485,7 @@ export const localPagesData = [
         heading: "Cómo convertir la búsqueda en una visita real",
         paragraphs: [
           "Si alguien ya está buscando dónde tomar matcha en Puebla, la conversión depende de detalles concretos: menú visible, dirección clara, horario, opciones de pedido y un motivo razonable para quedarse o volver. Better Mood ya tiene esos puntos dentro del ecosistema del sitio.",
-          "Por eso esta página no compite solo por una keyword. También conecta con otras rutas útiles: bebidas funcionales, CBD no psicoactivo, recomendador y recompensas. Eso le da más profundidad al tráfico y hace que una visita por matcha no se quede aislada."
+          "Por eso esta página no compite solo por una keyword. También conecta con otras rutas útiles: bebidas funcionales, la guía sencilla de CBD, recomendador y recompensas. Eso le da más profundidad al tráfico y hace que una visita por matcha no se quede aislada."
         ]
       }
     ],
@@ -605,7 +606,7 @@ export const localPagesData = [
       },
       {
         name: "Dragon’s Blood",
-        meta: "$95 · soda con CBD calming",
+        meta: "$95 · creación frutal de la casa",
         description: "Una salida más experimental si prefieres algo frío y distinto al cold brew clásico."
       }
     ],
@@ -735,292 +736,190 @@ export const localPagesData = [
     slug: "bebidas-funcionales-puebla",
     title: "Bebidas funcionales en Puebla | Better Mood Coffee",
     description:
-      "Descubre bebidas funcionales en Puebla en Better Mood Coffee: café de especialidad, matcha, CBD no psicoactivo y una guía responsable para elegir mejor.",
+      "Café de especialidad, recetas propias e ingredientes botánicos para explorar por sabor, ritual y curiosidad en Better Mood Coffee.",
     keywords:
-      "bebidas funcionales Puebla, café funcional Puebla, wellness coffee Puebla, bebidas con CBD Puebla, Better Mood Coffee",
-    h1: "Bebidas funcionales en Puebla con una guía más clara para elegir.",
+      "bebidas funcionales Puebla, café funcional Puebla, bebidas de autor Puebla, adaptógenos en bebidas, Better Mood Coffee",
+    h1: "Bebidas funcionales para descubrir algo distinto.",
     heroText:
-      "Better Mood combina café de especialidad, matcha y recetas funcionales con CBD no psicoactivo dentro de una experiencia premium, cálida y responsable en La Paz, Puebla.",
-    eyebrow: "Funcionales Better Mood",
+      "Café de especialidad, ingredientes curiosos y recetas que invitan a disfrutar una pausa diferente.",
+    eyebrow: "Bebidas funcionales",
     image: "/assets/dragon.jpg",
     imageAlt: "Bebida funcional de Better Mood Coffee en Puebla",
     benefits: [
-      "Carta funcional visible con recetas propias y mejor contexto antes de elegir.",
-      "Conexión natural entre café de especialidad, matcha y bienestar responsable.",
-      "Ruta clara hacia guía educativa, menú, ubicación, WhatsApp y pedidos."
+      "Café de especialidad como punto de partida.",
+      "Recetas propias guiadas por sabor, aroma y textura.",
+      "Una puerta sencilla a adaptógenos, CBD y nuevos rituales."
     ],
     sections: [
       {
-        heading: "Qué busca realmente quien escribe bebidas funcionales en Puebla",
+        heading: "Qué llamamos una bebida funcional",
         paragraphs: [
-          "La búsqueda de <strong>bebidas funcionales en Puebla</strong> suele mezclar curiosidad, deseo de novedad y una necesidad real de claridad. Muchas personas ya escucharon de CBD no psicoactivo, adaptógenos o wellness coffee, pero no quieren caer en marcas que prometen demasiado o explican demasiado poco.",
-          "Ese es el punto donde Better Mood encaja bien. La marca no vende una fantasía médica ni una moda vacía. Presenta una carta donde los funcionales conviven con café de especialidad, matcha y una narrativa más responsable sobre lo que sí vale la pena revisar antes de pedir."
+          "Es una forma de explorar café, té, cacao, fruta, especias e ingredientes botánicos dentro de un mismo ritual.",
+          "En Better Mood la experiencia comienza por lo que se disfruta: una buena taza, un perfil de sabor y un momento para hacer una pausa."
         ]
       },
       {
-        heading: "Por qué Better Mood tiene una posición distinta",
+        heading: "Sabor antes que etiquetas",
         paragraphs: [
-          "Hay cafeterías en Puebla que destacan por brunch, coworking o diseño visual. Better Mood compite desde otro ángulo: una mezcla clara de especialidad, bienestar responsable y producto accesible de entender. Eso hace que la categoría funcional no se sienta aislada, sino integrada al resto del negocio.",
-          "También ayuda que ya exista conversación local alrededor de la marca y de su propuesta con adaptógenos y bebidas funcionales. Eso valida la intención de búsqueda y vuelve más fácil construir páginas útiles que conviertan mejor tanto en Google como en visita física."
+          "Intenso, cítrico, cremoso, especiado o refrescante: el perfil de sabor es la forma más sencilla de empezar.",
+          "Los ingredientes acompañan la receta. El aroma, la textura y la preparación completan la experiencia."
         ]
       },
       {
-        heading: "Qué bebidas resumen mejor esta categoría",
+        heading: "Dos temas para seguir explorando",
         paragraphs: [
-          "Si quieres entender la parte funcional del menú, conviene empezar con recetas donde la identidad de Better Mood ya está muy marcada. <strong>Nirvana Lavanda</strong>, <strong>Dragon’s Blood</strong>, <strong>Tango Zen</strong>, <strong>Cold Berry Days</strong> y <strong>Matcha Tropic</strong> resumen bastante bien ese universo.",
-          "Cada una entra desde un ángulo distinto: algunas son más frescas, otras más suaves, otras más visuales. Por eso es útil mantener una guía y un recomendador. No todas las personas llegan buscando lo mismo, y una categoría funcional bien planteada tiene que dejar espacio para esa diferencia."
-        ]
-      },
-      {
-        heading: "Cómo elegir con más criterio",
-        paragraphs: [
-          "Lo responsable es separar experiencia de promesa. Una bebida funcional puede ser interesante, rica y alineada a tu rutina sin necesidad de hablar como si fuera tratamiento médico. Better Mood trabaja precisamente sobre esa línea: explicar mejor, no exagerar, y dejar visible que si tomas medicamentos o tienes dudas conviene revisar primero la guía de bienestar.",
-          "Eso vuelve más sólida la conversión. Quien llega por búsqueda orgánica encuentra información útil, productos visibles y rutas claras hacia menú, ubicación, delivery o WhatsApp. Esa combinación hace que la categoría funcional no se quede en curiosidad sino que sí mueva visitas y pedidos."
+          "Los adaptógenos reúnen historias de plantas y hongos que inspiran nuevas combinaciones.",
+          "El CBD abre otra conversación dentro del universo de las bebidas funcionales y cuenta con una guía propia para conocerlo con calma."
         ]
       }
     ],
-    recommendationsTitle: "Bebidas que representan mejor el universo funcional",
+    recommendationsTitle: "Elige tu siguiente ruta",
     recommendations: [
       {
-        name: "Nirvana Lavanda",
-        meta: "$95 · CBD calming",
-        description: "Una de las recetas firma si quieres entender el lado funcional de Better Mood."
+        name: "Café de especialidad",
+        meta: "Origen y preparación",
+        description: "Conoce el café que da inicio a la experiencia Better Mood."
       },
       {
-        name: "Dragon’s Blood",
-        meta: "$95 · fría",
-        description: "Ruta visual y fresca para quien busca una bebida más distinta desde la primera visita."
+        name: "Adaptógenos",
+        meta: "Plantas y hongos",
+        description: "Una guía breve para acercarte al término desde la curiosidad."
       },
       {
-        name: "Tango Zen",
-        meta: "$95 · soda italiana",
-        description: "Ideal si quieres una bebida funcional con perfil más frutal y ligero."
+        name: "CBD",
+        meta: "Cannabidiol",
+        description: "Una explicación sencilla dentro del mundo de las bebidas funcionales."
       },
       {
-        name: "Matcha Tropic",
-        meta: "$95 · matcha + wellness",
-        description: "Buena opción si vienes por matcha y funcionalidad en una sola bebida."
+        name: "Recomendador",
+        meta: "Por sabor",
+        description: "Encuentra una ruta según el perfil que disfrutas."
       }
     ],
     faqs: [
       {
         question: "¿Qué entiende Better Mood por bebidas funcionales?",
-        answer: "Bebidas donde café, matcha o recetas propias conviven con ingredientes como CBD no psicoactivo dentro de una comunicación responsable."
+        answer: "Recetas que reúnen una buena base, ingredientes botánicos y una experiencia guiada por sabor, aroma y textura."
       },
       {
-        question: "¿Hay una guía para entender CBD y adaptógenos antes de pedir?",
-        answer: "Sí. La página de bienestar funciona como hub para revisar contexto, uso responsable y preguntas frecuentes."
+        question: "¿Cómo puedo empezar a explorar?",
+        answer: "Elige primero un perfil de sabor y después conoce las historias e ingredientes que acompañan cada ritual."
       },
       {
-        question: "¿Dónde está la sucursal?",
-        answer: "En 13 Poniente 2302/F, Col. La Paz, Puebla."
+        question: "¿Dónde puedo conocer más sobre adaptógenos y CBD?",
+        answer: "Better Mood cuenta con una guía dedicada para cada tema y un recomendador por sabor."
       }
     ],
     related: [
       "/bienestar/",
-      "/cbd-no-psicoactivo-puebla/",
       "/adaptogenos-en-bebidas-puebla/",
+      "/cbd-en-el-cafe/",
       "/recomendador/"
     ],
     cta: {
-      title: "Elige mejor antes de pedir.",
-      text: "Explora el menú funcional, abre la guía de bienestar o escribe por WhatsApp si quieres contexto antes de visitar Better Mood."
+      title: "Encuentra una pausa a tu manera.",
+      text: "Explora las guías, elige tu sucursal y descubre Better Mood por sabor, ritual y curiosidad."
     },
     keyword: "bebidas funcionales en Puebla",
-    searchIntent: "educación de producto y visita"
-  },
-  {
-    slug: "cbd-no-psicoactivo-puebla",
-    title: "CBD no psicoactivo en Puebla | Better Mood Coffee",
-    description:
-      "Aprende sobre CBD no psicoactivo en Puebla con Better Mood Coffee: bebidas claras de entender, uso responsable y contexto real antes de elegir.",
-    keywords:
-      "CBD no psicoactivo Puebla, cafetería con CBD Puebla, café con CBD Puebla, bebidas con CBD Puebla",
-    h1: "CBD no psicoactivo en Puebla con una explicación más clara y responsable.",
-    heroText:
-      "Better Mood presenta CBD no psicoactivo dentro de una cafetería de especialidad en Puebla, con guía educativa, bebidas visibles y un tono responsable antes de pedir.",
-    eyebrow: "CBD responsable",
-    image: "/assets/dragon.jpg",
-    imageAlt: "Bebida Better Mood Coffee con CBD no psicoactivo en Puebla",
-    benefits: [
-      "Explicación responsable sobre CBD no psicoactivo sin promesas médicas ni lenguaje recreativo.",
-      "Bebidas visibles dentro del menú y rutas claras hacia bienestar, recomendador y productos.",
-      "Conversión sencilla con ubicación, menú, WhatsApp y pedidos."
-    ],
-    sections: [
-      {
-        heading: "Qué implica buscar CBD no psicoactivo en Puebla",
-        paragraphs: [
-          "La intención detrás de <strong>CBD no psicoactivo Puebla</strong> suele ser doble. Una parte del público quiere saber qué significa realmente. Otra parte ya tiene interés en probarlo, pero necesita una marca que lo explique sin exagerar, sin tono recreativo y sin discursos pseudocientíficos.",
-          "Better Mood responde bien a ese punto porque el CBD aparece dentro de una propuesta más amplia: café de especialidad, bebidas funcionales y bienestar responsable. Eso evita que la conversación se vuelva sensacionalista y la aterriza en algo mucho más útil para el usuario."
-        ]
-      },
-      {
-        heading: "Cómo lo presenta Better Mood",
-        paragraphs: [
-          "Aquí el CBD no se usa para construir misterio. Se presenta como <strong>no psicoactivo</strong> y como parte de una carta que también necesita contexto, lectura responsable y límites claros. Por eso el sitio conecta esta categoría con una guía específica de bienestar y preguntas frecuentes visibles.",
-          "Ese enfoque es importante a nivel SEO y conversión. Google y el usuario valoran mejor un contenido que explica con mesura que una página que solo repite claims ambiguos. Better Mood ya tiene esa base y esta página la aterriza a una intención local concreta en Puebla."
-        ]
-      },
-      {
-        heading: "Qué bebidas pueden interesarte si vienes por esta búsqueda",
-        paragraphs: [
-          "Si el interés principal es conocer el lado de CBD no psicoactivo dentro del menú, conviene empezar por bebidas donde el ingrediente ya aparece de forma visible. <strong>Nirvana Lavanda</strong>, <strong>Dragon’s Blood</strong>, <strong>Tango Zen</strong> y <strong>Cold Berry Days</strong> son ejemplos claros dentro de la carta actual.",
-          "Aun así, el criterio sigue importando. No todas las personas deberían elegir de la misma manera, ni todas buscan el mismo momento o tipo de bebida. Por eso la mejor ruta sigue siendo combinar esta página con la guía de bienestar y el recomendador de bebidas."
-        ]
-      },
-      {
-        heading: "Uso responsable antes que promesa",
-        paragraphs: [
-          "Better Mood evita tratar el CBD como una solución total. La conversación responsable habla de contexto: si tomas medicamentos, si estás embarazada, si tienes dudas sobre hígado o interacciones, conviene revisar primero la guía y consultar a un profesional cuando aplique.",
-          "Eso no enfría la conversión; la vuelve más sólida. Una marca que explica mejor genera más confianza para visita, pedido y recomendación. Desde SEO local, ese criterio también ayuda a sostener el posicionamiento en el tiempo."
-        ]
-      }
-    ],
-    recommendationsTitle: "Qué ver si llegas por CBD no psicoactivo",
-    recommendations: [
-      {
-        name: "Nirvana Lavanda",
-        meta: "$95 · CBD calming",
-        description: "Una de las bebidas más claras para entender cómo aparece el CBD dentro del menú."
-      },
-      {
-        name: "Dragon’s Blood",
-        meta: "$95 · soda italiana",
-        description: "Buena opción si quieres una bebida fría y distintiva de la marca."
-      },
-      {
-        name: "Cold Berry Days",
-        meta: "$95 · berries + CBD",
-        description: "Ruta más fresca si prefieres una experiencia menos clásica."
-      },
-      {
-        name: "Guía de bienestar",
-        meta: "Ruta educativa",
-        description: "Úsala antes de pedir si quieres entender contexto, preguntas frecuentes y uso responsable."
-      }
-    ],
-    faqs: [
-      {
-        question: "¿CBD no psicoactivo significa que no coloca?",
-        answer: "Sí. Better Mood lo explica como CBD no psicoactivo y lo diferencia claramente de un enfoque recreativo."
-      },
-      {
-        question: "¿Puedo pedir una bebida con CBD en Better Mood?",
-        answer: "Sí. Hay bebidas de la carta donde el CBD aparece de forma visible, además de un hub de bienestar para elegir con más claridad."
-      },
-      {
-        question: "¿Qué conviene revisar antes de probarlo?",
-        answer: "Si tomas medicamentos, tienes dudas médicas, embarazo o lactancia, conviene revisar primero la guía de bienestar y actuar con prudencia."
-      }
-    ],
-    related: [
-      "/bienestar/",
-      "/cbd-en-el-cafe/",
-      "/bebidas-funcionales-puebla/",
-      "/recomendador/"
-    ],
-    cta: {
-      title: "Pide con más contexto y menos ruido.",
-      text: "Abre la guía de bienestar, revisa el menú o escribe por WhatsApp antes de elegir tu bebida en Better Mood."
-    },
-    keyword: "CBD no psicoactivo Puebla",
-    searchIntent: "educación local y decisión de producto"
+    searchIntent: "descubrimiento y visita"
   },
   {
     slug: "adaptogenos-en-bebidas-puebla",
     title: "Adaptógenos en bebidas en Puebla | Better Mood Coffee",
     description:
-      "Qué significa adaptógeno, cómo leer estos ingredientes y cómo elegir una bebida en Better Mood Coffee sin promesas médicas.",
+      "Una guía breve sobre plantas, hongos y adaptógenos dentro del mundo de las bebidas funcionales.",
     keywords:
-      "adaptógenos en bebidas Puebla, adaptógenos Puebla, melena de león Puebla, cordyceps Puebla, reishi Puebla, ashwagandha Puebla, rhodiola Puebla",
-    h1: "Adaptógenos en tu bebida, explicados con claridad.",
+      "adaptógenos en bebidas Puebla, adaptógenos Puebla, plantas y hongos, bebidas funcionales Puebla, Better Mood Coffee",
+    h1: "Adaptógenos: plantas, hongos y nuevos rituales.",
     heroText:
-      "En Better Mood nombramos lo que lleva cada receta y evitamos prometer resultados. El sabor, la preparación y una elección informada van primero.",
-    eyebrow: "Adaptógenos Better Mood",
+      "Una guía para acercarte al término desde el sabor, la preparación y la curiosidad.",
+    eyebrow: "Guía Better Mood",
     image: "/assets/spaceman.jpg",
     imageAlt: "Experiencia Better Mood Coffee relacionada con adaptógenos y bebidas funcionales en Puebla",
     benefits: [
-      "Una definición clara, sin convertir el término en una promesa.",
-      "Ingredientes y recetas explicados con lenguaje sencillo.",
-      "Acceso equilibrado a nuestras sucursales de La Paz y Cholula."
+      "Una mirada sencilla al término adaptógeno.",
+      "Sabor, aroma y preparación como punto de entrada.",
+      "Conexiones con las guías de bebidas funcionales y CBD."
     ],
     sections: [
       {
-        heading: "Qué significa el término adaptógeno",
+        heading: "Un nombre para muchas historias",
         paragraphs: [
-          "<strong>Adaptógeno</strong> es un término amplio usado para algunos ingredientes botánicos que tradicionalmente se relacionan con la respuesta del cuerpo ante distintos tipos de estrés.",
-          "No describe un efecto garantizado ni una categoría médica uniforme: la evidencia, la preparación y la seguridad cambian según cada ingrediente, extracto y cantidad."
+          "<strong>Adaptógeno</strong> es un término que reúne distintos ingredientes botánicos y hongos.",
+          "Cada uno tiene un origen, una historia y un perfil propio dentro del universo de las bebidas funcionales."
         ]
       },
       {
-        heading: "Lo importante está en la receta específica",
+        heading: "De la curiosidad a la taza",
         paragraphs: [
-          "Que un ingrediente aparezca bajo este término no permite asumir qué hará en una bebida. Importan la especie, la parte usada, el tipo de extracto, la cantidad y la combinación completa.",
-          "Por eso en Better Mood preferimos decir qué lleva una receta y cómo sabe. Si quieres revisar un ingrediente antes de pedir, pregunta a nuestro equipo."
+          "Plantas, hongos, café, cacao, té y especias pueden inspirar combinaciones con perfiles muy distintos.",
+          "La preparación construye la experiencia; el ingrediente es una parte de la historia."
         ]
       },
       {
-        heading: "Cómo hablamos de estos ingredientes",
+        heading: "Cómo explorar este universo",
         paragraphs: [
-          "No presentamos los adaptógenos como tratamiento ni prometemos resultados. Nuestra conversación parte del sabor, la preparación, la transparencia y la curiosidad informada.",
-          "Si tomas medicamentos, estás embarazada o lactando, tienes una condición médica o dudas sobre un ingrediente, consulta a un profesional de salud antes de consumirlo."
+          "Empieza por un perfil que ya disfrutes: intenso, cremoso, especiado o refrescante.",
+          "Después puedes seguir la curiosidad hacia las guías de bebidas funcionales, CBD y café de especialidad."
         ]
       },
       {
-        heading: "Ven a conocer las recetas",
+        heading: "Una pausa para compartir",
         paragraphs: [
-          "La mejor forma de descubrir Better Mood sigue siendo probar una bebida y conversar con el equipo. Puedes revisar el menú antes de ir o elegir la sucursal que te quede mejor.",
-          "La Paz y Cholula tienen la misma importancia para nosotros: encuentra la ruta, consulta la carta y elige tu próxima pausa."
+          "Better Mood une café, conversación y curiosidad alrededor de una misma mesa.",
+          "En La Paz, cerca de UPAEP, puedes hacer una pausa con calma y buen sabor."
         ]
       }
     ],
-    recommendationsTitle: "Rutas útiles si te interesa este tema",
+    recommendationsTitle: "Sigue explorando",
     recommendations: [
       {
-        name: "Guía de bienestar",
-        meta: "Hub principal",
-        description: "La mejor entrada si quieres revisar CBD, adaptógenos y uso responsable en un solo lugar."
+        name: "Bebidas funcionales",
+        meta: "Sabor y ritual",
+        description: "La entrada principal al universo funcional de Better Mood."
       },
       {
-        name: "Bebidas funcionales Better Mood",
-        meta: "Ruta de producto",
-        description: "Útil para aterrizar la conversación en bebidas reales y no solo en teoría."
+        name: "Guía CBD",
+        meta: "Cannabidiol",
+        description: "Una explicación sencilla para continuar la curiosidad."
       },
       {
-        name: "Recomendador de bebidas",
-        meta: "Ruta rápida",
-        description: "Sirve si ya quieres pasar del tema educativo a una sugerencia concreta."
+        name: "Café de especialidad",
+        meta: "Origen y método",
+        description: "Conoce la base que da forma a la experiencia Better Mood."
       },
       {
-        name: "Menú + productos",
-        meta: "Exploración práctica",
-        description: "Para revisar carta y catálogo funcional antes de visitar la sucursal."
+        name: "Recomendador",
+        meta: "Por sabor",
+        description: "Encuentra una ruta de exploración según tus preferencias."
       }
     ],
     faqs: [
       {
-        question: "¿Better Mood habla de adaptógenos como tratamiento médico?",
-        answer: "No. La comunicación se mantiene en bienestar responsable, claridad y contexto antes de elegir."
+        question: "¿Qué significa adaptógeno?",
+        answer: "Es un término que reúne distintos ingredientes botánicos y hongos dentro de una conversación amplia sobre bebidas funcionales."
       },
       {
-        question: "¿Qué ingredientes suelen interesar más en esta búsqueda?",
-        answer: "Melena de león, cordyceps, reishi, ashwagandha y rhodiola suelen aparecer con más frecuencia."
+        question: "¿Todos los adaptógenos saben igual?",
+        answer: "Cada ingrediente tiene su propio origen y perfil; la combinación y la preparación también forman parte del sabor."
       },
       {
-        question: "¿Dónde puedo profundizar más antes de pedir?",
-        answer: "En la guía de bienestar, la página de CBD en el café, bebidas funcionales y el recomendador de Better Mood."
+        question: "¿Dónde puedo seguir explorando?",
+        answer: "En las guías de bebidas funcionales, CBD y café de especialidad de Better Mood."
       }
     ],
     related: [
       "/bienestar/",
       "/bebidas-funcionales-puebla/",
-      "/cbd-no-psicoactivo-puebla/",
-      "/cbd-en-el-cafe/"
+      "/cbd-en-el-cafe/",
+      "/cafe-de-especialidad-puebla/"
     ],
-    cta: baseCta,
+    cta: {
+      title: "Sigue la curiosidad.",
+      text: "Explora las bebidas funcionales, conoce el café y elige la sucursal para tu próxima pausa."
+    },
     keyword: "adaptógenos en bebidas Puebla",
-    searchIntent: "educación avanzada y consideración"
+    searchIntent: "educación y descubrimiento"
   }
 ];
 

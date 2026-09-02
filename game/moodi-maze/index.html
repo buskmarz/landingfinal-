@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="es-MX">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>La Ruta de Moodi | Juego Better Mood Coffee</title>
+    <meta
+      name="description"
+      content="Guía a Moodi por un laberinto de café, reúne granos y esquiva a Bruma, Vaho y Nimbo."
+    />
+    <meta name="theme-color" content="#ffde00" />
+    <meta name="robots" content="index,follow" />
+    <link rel="canonical" href="https://bmoodcoffee.com/game/moodi-maze/" />
+    <link rel="icon" href="../../assets/logo-better-mood.png" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <nav class="game-nav" aria-label="Salir del juego">
+      <a href="/" data-game-exit="home"><span aria-hidden="true">←</span> Better Mood</a>
+      <a href="/arcade/" data-game-exit="arcade">Juegos</a>
+    </nav>
+    <main class="game-shell">
+      <h1 class="sr-only">La Ruta de Moodi</h1>
+      <canvas
+        id="moodi-game"
+        width="720"
+        height="860"
+        tabindex="0"
+        role="application"
+        aria-label="La Ruta de Moodi. Usa flechas o WASD para moverte. P pausa, R reinicia y F activa pantalla completa."
+      ></canvas>
+      <p class="sr-only" aria-live="polite" id="game-status">Pulsa Enter para comenzar.</p>
+      <noscript>Activa JavaScript para jugar La Ruta de Moodi.</noscript>
+    </main>
+    <script src="./game.js"></script>
+  </body>
+</html>

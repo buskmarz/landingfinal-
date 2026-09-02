@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="es-MX">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cuéntanos cómo te fue | Better Mood Coffee</title>
+    <meta name="description" content="Encuesta breve de servicio de Better Mood Coffee." />
+    <meta name="robots" content="noindex,follow" />
+    <meta name="theme-color" content="#ffde00" />
+    <link rel="icon" href="/assets/bettermood_logo-10.png" />
+    <link rel="stylesheet" href="/encuesta/survey.css?v=20260819" />
+  </head>
+  <body>
+    <a class="skip-link" href="#encuesta">Saltar a la encuesta</a>
+
+    <header class="survey-header">
+      <a class="survey-brand" href="/" aria-label="Better Mood Coffee, inicio">
+        <img src="/assets/home/bettermood-logo-180.png" alt="Better Mood Coffee" width="180" height="147" />
+      </a>
+      <p>Tu experiencia nos ayuda a mejorar.</p>
+      <a class="survey-close" href="/" aria-label="Volver al inicio">Cerrar <span aria-hidden="true">×</span></a>
+    </header>
+
+    <main id="encuesta" class="survey-shell">
+      <section class="survey-intro" data-survey-intro>
+        <p class="eyebrow">60 segundos · 5 preguntas</p>
+        <h1>¿Cómo te<br />hicimos sentir?</h1>
+        <p class="survey-intro__lead">Queremos que tu próxima pausa sea todavía mejor.</p>
+
+        <form class="survey-setup" data-survey-setup>
+          <input type="hidden" name="branch" value="upaep" />
+          <p class="survey-setup__place"><strong>UPAEP / La Paz</strong><br />13 Poniente 2302/F, Puebla</p>
+          <fieldset>
+            <legend>¿Cuándo fue tu visita?</legend>
+            <div class="setup-options setup-options--three">
+              <label><input type="radio" name="visit_when" value="hoy" required /><span>Hoy</span></label>
+              <label><input type="radio" name="visit_when" value="ayer" required /><span>Ayer</span></label>
+              <label><input type="radio" name="visit_when" value="esta_semana" required /><span>Esta semana</span></label>
+            </div>
+          </fieldset>
+          <p class="setup-error" data-setup-error role="alert" hidden>Elige el momento de tu visita.</p>
+          <button class="button button--primary" type="submit">Comenzar</button>
+        </form>
+        <p class="survey-privacy">No pedimos tu nombre ni datos de contacto. <a href="/aviso-privacidad.html">Privacidad</a></p>
+      </section>
+
+      <section class="survey-flow" data-survey-flow hidden aria-live="polite">
+        <div class="survey-progress" aria-label="Progreso de la encuesta">
+          <span data-progress-label>Pregunta 1 de 5</span>
+          <div class="survey-progress__track" aria-hidden="true"><span data-progress-bar></span></div>
+        </div>
+
+        <form data-survey-form novalidate>
+          <input type="text" name="company" tabindex="-1" autocomplete="off" class="honeypot" aria-hidden="true" />
+          <div class="question-stage" data-question-stage></div>
+          <p class="question-error" data-question-error role="alert" hidden>Elige una carita para continuar.</p>
+          <div class="survey-actions">
+            <button class="button button--quiet" type="button" data-prev>Anterior</button>
+            <button class="button button--primary" type="button" data-next>Siguiente</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="survey-comment" data-survey-comment hidden>
+        <p class="eyebrow">Una última cosa · opcional</p>
+        <h2>¿Qué deberíamos mantener o mejorar?</h2>
+        <p>Una frase es suficiente. La leerá nuestro equipo.</p>
+        <form data-comment-form>
+          <label class="sr-only" for="survey-comment">Comentario</label>
+          <textarea id="survey-comment" name="comment" maxlength="600" rows="5" placeholder="Cuéntanos aquí…"></textarea>
+          <p class="character-count"><span data-character-count>0</span>/600</p>
+          <div class="survey-actions">
+            <button class="button button--quiet" type="button" data-comment-back>Anterior</button>
+            <button class="button button--primary" type="submit" data-submit>Enviar respuesta</button>
+          </div>
+          <p class="submit-status" data-submit-status role="status"></p>
+        </form>
+      </section>
+
+      <section class="survey-thanks" data-survey-thanks hidden>
+        <div class="thanks-face" aria-hidden="true">☺</div>
+        <p class="eyebrow">Gracias por decirlo</p>
+        <h2>Te escuchamos.</h2>
+        <p>Tu respuesta llegó al equipo de Better Mood.</p>
+        <p class="preview-note" data-preview-note hidden>Modo preview: recorriste el flujo completo, pero no se envió ningún correo ni se guardó información.</p>
+        <div class="thanks-actions">
+          <a class="button button--primary" href="/">Volver al inicio</a>
+          <a class="button button--quiet" href="https://maps.app.goo.gl/Cx8Rz7zSEPTYzUxr6?g_st=ic" target="_blank" rel="noopener noreferrer">Cómo llegar</a>
+        </div>
+      </section>
+    </main>
+
+    <template id="face-option-template">
+      <label class="face-option">
+        <input type="radio" />
+        <span class="face-option__icon" aria-hidden="true">
+          <svg viewBox="0 0 64 64" role="img">
+            <circle cx="32" cy="32" r="29"></circle>
+            <circle class="face-eye" cx="22" cy="25" r="2.6"></circle>
+            <circle class="face-eye" cx="42" cy="25" r="2.6"></circle>
+            <path class="face-mouth" d="M20 42 Q32 28 44 42"></path>
+          </svg>
+        </span>
+        <span class="face-option__label"></span>
+      </label>
+    </template>
+
+    <script src="/encuesta/survey.js?v=20260819" defer></script>
+  </body>
+</html>

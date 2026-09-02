@@ -4,46 +4,46 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Arcade Better Mood Puebla | Droppy Dash, Stacks y Pinball</title>
+    <title>Juegos Better Mood | Moodi, Ruleta, Stacks y Pinball</title>
     <meta
       name="description"
-      content="Arcade Better Mood Coffee en Puebla. Juega Droppy Dash, Droppy Stacks y Droppy Pinball dentro del universo Better Mood."
+      content="Juegos Better Mood Coffee: Moodi, ruleta, Stacks y Pinball. Partidas breves para compartir en modo Focus &amp; Chill."
     />
     <meta name="robots" content="index,follow" />
     <link rel="canonical" href="https://bmoodcoffee.com/arcade/" />
     <meta
       name="keywords"
-      content="arcade Puebla, juegos Better Mood, Droppy Dash, Droppy Stacks, pinball web Puebla"
+      content="arcade Puebla, juegos Better Mood, Moodi, ruleta, Droppy Stacks, pinball web Puebla"
     />
 
     <meta property="og:locale" content="es_MX" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Better Mood Coffee" />
-    <meta property="og:title" content="Arcade Better Mood Puebla | Droppy Dash, Stacks y Pinball" />
+    <meta property="og:title" content="Juegos Better Mood | Una pausa para jugar" />
     <meta
       property="og:description"
-      content="Tres juegos. Mismo mood. Runner, puzzle y pinball dentro del universo Better Mood."
+      content="Moodi, ruleta, Stacks y Pinball. Cuatro juegos breves para compartir."
     />
     <meta property="og:url" content="https://bmoodcoffee.com/arcade/" />
-    <meta property="og:image" content="https://bmoodcoffee.com/assets/droppy.PNG" />
-    <meta property="og:image:alt" content="Arcade Better Mood" />
+    <meta property="og:image" content="https://bmoodcoffee.com/assets/moodi-wave-original.jpg" />
+    <meta property="og:image:alt" content="Moodi, personaje de Better Mood Coffee" />
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Arcade Better Mood Puebla | Tres juegos. Mismo mood." />
+    <meta name="twitter:title" content="Juegos Better Mood | Una pausa para jugar" />
     <meta
       name="twitter:description"
-      content="Juega Droppy Dash, Droppy Stacks y el nuevo pinball Better Mood."
+      content="Juega con Moodi, gira la ruleta o entra a Stacks y Pinball."
     />
     <meta name="twitter:url" content="https://bmoodcoffee.com/arcade/" />
-    <meta name="twitter:image" content="https://bmoodcoffee.com/assets/droppy.PNG" />
+    <meta name="twitter:image" content="https://bmoodcoffee.com/assets/moodi-wave-original.jpg" />
 
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "WebPage",
-        "name": "Arcade Better Mood Puebla",
+        "name": "Juegos Better Mood Puebla",
         "url": "https://bmoodcoffee.com/arcade/",
-        "description": "Arcade de Better Mood Coffee con Droppy Dash, Droppy Stacks y Droppy Pinball.",
+        "description": "Arcade de Better Mood Coffee con La Ruta de Moodi, Ruleta, Droppy Stacks y Droppy Pinball.",
         "breadcrumb": {
           "@type": "BreadcrumbList",
           "itemListElement": [
@@ -56,7 +56,7 @@
             {
               "@type": "ListItem",
               "position": 2,
-              "name": "Arcade",
+              "name": "Juegos",
               "item": "https://bmoodcoffee.com/arcade/"
             }
           ]
@@ -70,7 +70,8 @@
       href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="../styles.css?v=20260712-arcade-v3" />
+    <link rel="stylesheet" href="./arcade.css?v=20260712-arcade-v3" />
     <link rel="icon" href="../assets/logo-better-mood.png" />
   </head>
   <body class="arcade-page arcade-page--hub">
@@ -82,18 +83,17 @@
           <img src="../assets/logo-better-mood.png" alt="Better Mood Coffee" />
         </a>
 
-        <button class="nav-toggle" aria-controls="primary-nav" aria-expanded="false">
+        <button class="nav-toggle" type="button" aria-controls="primary-nav" aria-expanded="false">
           <span class="nav-toggle__icon" aria-hidden="true"></span>
           <span class="nav-toggle__label" aria-hidden="true">Menú</span>
           <span class="sr-only">Abrir navegación</span>
         </button>
 
-        <nav class="nav" id="primary-nav">
-          <a href="/#menu">Menú</a>
-          <a href="/recompensas/">Recompensas</a>
-          <a href="/bienestar/">Bienestar</a>
-          <a href="/#location">Ubicación</a>
-          <a href="/arcade/" aria-current="page">Arcade</a>
+        <nav class="nav" id="primary-nav" aria-label="Navegación principal">
+          <a href="/cafe-lavado/">Café</a>
+          <a href="/bebidas-funcionales-puebla/">Bebidas</a>
+          <a href="/arcade/" aria-current="page">Juegos</a>
+          <a href="/#sucursales">Ubicación</a>
           <details class="order-dropdown">
             <summary class="btn btn--sm btn--primary" aria-label="Pedir ahora">
               Pedir ahora
@@ -127,30 +127,23 @@
       <section class="page-hero page-hero--arcade arcade-hero" aria-labelledby="arcade-title">
         <div class="container page-hero__grid">
           <div class="page-hero__content">
-            <p class="eyebrow">Better Mood Arcade</p>
-            <h1 id="arcade-title">Tres juegos. Mismo mood.</h1>
-            <p class="hero__text">
-              Runner, puzzle y pinball dentro del universo Better Mood. Entra, entiende el juego rápido y empieza en segundos.
-            </p>
+            <p class="eyebrow">Focus &amp; Chill · Juegos</p>
+            <h1 id="arcade-title">Una pausa<br />para jugar.</h1>
+            <p class="hero__text">Cuatro juegos breves para compartir.</p>
             <div class="hero__actions">
-              <a class="btn btn--primary" href="#arcade-stage">Jugar ahora</a>
-              <a class="btn btn--secondary" href="/recompensas/">Ver recompensas</a>
-            </div>
-            <div class="page-hero__chips" aria-label="Resumen del arcade">
-              <span>Droppy Dash</span>
-              <span>Droppy Stacks</span>
-              <span>Droppy Pinball</span>
+              <a class="btn btn--primary" href="#arcade-games-title" data-event="arcade_games_open" data-cta="arcade-hero-games">Elegir juego</a>
+              <a class="btn btn--secondary" href="/#sucursales" data-event="branch_selector_open" data-cta="arcade-hero-location">Cómo llegar</a>
             </div>
           </div>
 
           <article class="arcade-hero-card">
             <div class="arcade-hero-card__visual">
-              <img src="../assets/droppy.PNG" alt="Droppy, mascota del arcade Better Mood" />
+              <img src="../assets/moodi-wave.png" alt="Moodi saluda e invita a jugar" />
             </div>
             <div class="arcade-hero-card__copy">
-              <p class="arcade-hero-card__eyebrow">Arcade, café y flow</p>
-              <h2>El lado más lúdico de Better Mood.</h2>
-              <p>Diseñado para móvil y desktop, con controles claros, partidas rápidas y una estética conectada con la marca.</p>
+              <p class="arcade-hero-card__eyebrow">La mesa Better Mood</p>
+              <h2>Juega. Respira. Vuelve a la conversación.</h2>
+              <p>Moodi tiene su propia ruta. Droppy vive en Stacks y Pinball.</p>
             </div>
           </article>
         </div>
@@ -161,26 +154,37 @@
           <div class="section__header section__header--split">
             <div>
               <p class="eyebrow">Elige tu juego</p>
-              <h2 id="arcade-games-title">Tres formas de entrar al mismo universo.</h2>
-            </div>
-            <div class="section__cta section__cta--left">
-              <a class="btn btn--secondary" href="/recompensas/">Recompensas Better Mood</a>
+              <h2 id="arcade-games-title">Cuatro juegos. Elige el tuyo.</h2>
             </div>
           </div>
 
           <div class="arcade-games__grid">
-            <article class="arcade-game-card">
-              <p class="arcade-game-card__type">Runner</p>
-              <h3>Droppy Dash</h3>
-              <p>Salta, suma y mantén el ritmo. El juego original del universo Droppy sigue activo.</p>
+            <article class="arcade-game-card arcade-game-card--featured">
+              <span class="arcade-game-card__art arcade-game-card__art--moodi" aria-hidden="true"><img src="/assets/moodi-point-original.jpg" alt="" /></span>
+              <p class="arcade-game-card__type">Laberinto</p>
+              <h3>La Ruta de Moodi</h3>
+              <p>Reúne granos, esquiva la niebla y encuentra tu mejor ruta.</p>
               <div class="arcade-game-card__meta">
-                <span>Arcade runner</span>
-                <span>Home</span>
+                <span>Nuevo</span>
+                <span>Teclado + touch</span>
               </div>
-              <a class="btn btn--secondary btn--sm" href="/#droppy-dash">Jugar Dash</a>
+              <a class="btn btn--primary btn--sm" href="/game/moodi-maze/" data-event="moodi_maze_open" data-cta="arcade-card-moodi">Jugar con Moodi</a>
             </article>
 
-            <article class="arcade-game-card arcade-game-card--featured">
+            <article class="arcade-game-card">
+              <span class="arcade-game-card__art arcade-game-card__art--wheel" aria-hidden="true"></span>
+              <p class="arcade-game-card__type">Comunidad</p>
+              <h3>Ruleta Better Mood</h3>
+              <p>Pega nombres, gira y deja que la mesa elija.</p>
+              <div class="arcade-game-card__meta">
+                <span>Sorteos</span>
+                <span>Grupos</span>
+              </div>
+              <a class="btn btn--secondary btn--sm" href="/ruleta/">Abrir ruleta</a>
+            </article>
+
+            <article class="arcade-game-card">
+              <span class="arcade-game-card__art arcade-game-card__art--droppy" aria-hidden="true"><img src="/assets/droppy.PNG" alt="" /></span>
               <p class="arcade-game-card__type">Puzzle</p>
               <h3>Droppy Stacks</h3>
               <p>Ordena blends, limpia filas y mantén el tablero vivo sin perder el flow.</p>
@@ -188,10 +192,11 @@
                 <span>Mobile first</span>
                 <span>Partidas rápidas</span>
               </div>
-              <button class="btn btn--primary btn--sm" type="button" data-game-select="stacks">Jugar Stacks</button>
+              <button class="btn btn--primary btn--sm" type="button" data-game-select="stacks" data-event="arcade_game_select" data-cta="arcade-card-stacks">Jugar Stacks</button>
             </article>
 
             <article class="arcade-game-card">
+              <span class="arcade-game-card__art arcade-game-card__art--pinball" aria-hidden="true"></span>
               <p class="arcade-game-card__type">Pinball</p>
               <h3>Droppy Pinball</h3>
               <p>Rebotes limpios, bumpers Better Mood y una mesa pensada para repetir una partida más.</p>
@@ -199,7 +204,7 @@
                 <span>Nuevo</span>
                 <span>Desktop + touch</span>
               </div>
-              <button class="btn btn--secondary btn--sm" type="button" data-game-select="pinball">Jugar Pinball</button>
+              <button class="btn btn--secondary btn--sm" type="button" data-game-select="pinball" data-event="arcade_game_select" data-cta="arcade-card-pinball">Jugar Pinball</button>
             </article>
           </div>
         </div>
@@ -216,10 +221,10 @@
               </p>
             </div>
             <div class="arcade-stage__switch" role="tablist" aria-label="Selector de juegos arcade">
-              <button class="arcade-stage__tab is-active" type="button" role="tab" aria-selected="true" data-game-select="stacks">
+              <button class="arcade-stage__tab is-active" id="arcade-tab-stacks" type="button" role="tab" aria-selected="true" aria-controls="arcade-panel-stacks" tabindex="0" data-game-select="stacks" data-event="arcade_game_select" data-cta="arcade-tab-stacks">
                 Stacks
               </button>
-              <button class="arcade-stage__tab" type="button" role="tab" aria-selected="false" data-game-select="pinball">
+              <button class="arcade-stage__tab" id="arcade-tab-pinball" type="button" role="tab" aria-selected="false" aria-controls="arcade-panel-pinball" tabindex="-1" data-game-select="pinball" data-event="arcade_game_select" data-cta="arcade-tab-pinball">
                 Pinball
               </button>
             </div>
@@ -235,24 +240,24 @@
               </div>
               <div class="arcade-note">
                 <p class="arcade-note__label">También disponible</p>
-                <a class="arcade-note__link" href="/#droppy-dash">
-                  <strong>Droppy Dash</strong>
-                  <span>Runner activo en la home</span>
+                <a class="arcade-note__link" href="/ruleta/">
+                  <strong>Ruleta Better Mood</strong>
+                  <span>Para sorteos y decisiones de grupo</span>
                 </a>
                 <a class="arcade-note__link" href="/recompensas/">
                   <strong>Recompensas Better Mood</strong>
-                  <span>Cupón de $50 para nuevos usuarios</span>
+                  <span>Consulta tus beneficios con tu teléfono</span>
                 </a>
                 <a class="arcade-note__link" href="/eventos/">
                   <strong>Eventos Better Mood</strong>
-                  <span>Próximas experiencias de café y bienestar</span>
+                  <span>Próximas experiencias de café y comunidad</span>
                 </a>
               </div>
             </aside>
 
             <div class="arcade-stage__panels">
-              <section class="arcade-panel is-active" data-arcade-panel="stacks">
-                <div class="arcade-play" data-arcade-game data-game-key="stacks">
+              <section class="arcade-panel is-active" id="arcade-panel-stacks" role="tabpanel" aria-labelledby="arcade-tab-stacks" data-arcade-panel="stacks">
+                <div class="arcade-play" data-arcade-game data-game-key="stacks" tabindex="0" aria-label="Droppy Stacks. Usa flechas, espacio, P para pausa y F para pantalla completa.">
                   <div class="arcade-play__frame">
                     <canvas
                       class="arcade-play__canvas"
@@ -264,20 +269,20 @@
                     <div class="arcade-play__hud" aria-live="polite">
                       <div class="arcade-play__hud-main">
                         <div class="arcade-play__hud-block">
-                          <span class="arcade-play__hud-label">Score</span>
+                          <span class="arcade-play__hud-label">Puntos</span>
                           <span class="arcade-play__hud-value" data-arcade-score>0</span>
                         </div>
                         <div class="arcade-play__hud-block">
-                          <span class="arcade-play__hud-label">Lines</span>
+                          <span class="arcade-play__hud-label">Líneas</span>
                           <span class="arcade-play__hud-value" data-arcade-lines>0</span>
                         </div>
                         <div class="arcade-play__hud-block">
-                          <span class="arcade-play__hud-label">Level</span>
+                          <span class="arcade-play__hud-label">Nivel</span>
                           <span class="arcade-play__hud-value" data-arcade-level>1</span>
                         </div>
                         <div class="arcade-play__hud-block arcade-play__hud-block--flow">
-                          <span class="arcade-play__hud-label">Flow</span>
-                          <span class="arcade-play__hud-value" data-arcade-flow>Ready</span>
+                          <span class="arcade-play__hud-label">Ritmo</span>
+                          <span class="arcade-play__hud-value" data-arcade-flow>Listo</span>
                         </div>
                       </div>
                       <div class="arcade-play__hud-actions">
@@ -290,7 +295,7 @@
                       <p class="arcade-play__overlay-title">Droppy Stacks</p>
                       <p class="arcade-play__overlay-text">Acomoda blends Better Mood y limpia filas sin perder el flow.</p>
                       <p class="arcade-play__overlay-note">Flechas para mover, espacio para girar, abajo para acelerar.</p>
-                      <button class="btn btn--primary" type="button" data-arcade-start>Jugar</button>
+                      <button class="btn btn--primary" type="button" data-arcade-start data-event="arcade_game_start" data-cta="arcade-start-stacks">Jugar</button>
                     </div>
 
                     <div class="arcade-play__overlay" data-arcade-overlay="pause" hidden>
@@ -306,17 +311,17 @@
                       <p class="arcade-play__overlay-title">Round cerrado</p>
                       <p class="arcade-play__overlay-text">Tu mezcla final quedó así.</p>
                       <p class="arcade-play__overlay-final">
-                        Score <strong data-arcade-final-score>0</strong> · Lines <strong data-arcade-final-lines>0</strong>
+                        Puntos <strong data-arcade-final-score>0</strong> · Líneas <strong data-arcade-final-lines>0</strong>
                       </p>
                       <div class="arcade-play__overlay-actions">
                         <button class="btn btn--primary" type="button" data-arcade-restart>Volver a jugar</button>
-                        <a class="btn btn--secondary" href="/recompensas/">Ir a recompensas</a>
+                        <a class="btn btn--secondary" href="/#sucursales">Ir por un café</a>
                       </div>
                     </div>
                   </div>
 
                   <div class="arcade-play__controls">
-                    <div class="arcade-play__control-grid" aria-label="Controles táctiles de Droppy Stacks">
+                    <div class="arcade-play__control-grid" role="group" aria-label="Controles táctiles de Droppy Stacks">
                       <button class="arcade-play__control" type="button" data-arcade-action="left">←</button>
                       <button class="arcade-play__control" type="button" data-arcade-action="rotate">⟳</button>
                       <button class="arcade-play__control" type="button" data-arcade-action="right">→</button>
@@ -327,8 +332,8 @@
                 </div>
               </section>
 
-              <section class="arcade-panel" data-arcade-panel="pinball" hidden>
-                <div class="arcade-play arcade-play--pinball" data-pinball-game data-game-key="pinball">
+              <section class="arcade-panel" id="arcade-panel-pinball" role="tabpanel" aria-labelledby="arcade-tab-pinball" data-arcade-panel="pinball" hidden>
+                <div class="arcade-play arcade-play--pinball" data-pinball-game data-game-key="pinball" tabindex="0" aria-label="Droppy Pinball. Usa A y D o flechas, espacio para lanzar, P para pausa y F para pantalla completa.">
                   <div class="arcade-play__frame arcade-play__frame--pinball">
                     <canvas
                       class="arcade-play__canvas"
@@ -340,20 +345,16 @@
                     <div class="arcade-play__hud arcade-play__hud--pinball" aria-live="polite">
                       <div class="arcade-play__hud-main">
                         <div class="arcade-play__hud-block">
-                          <span class="arcade-play__hud-label">Score</span>
+                          <span class="arcade-play__hud-label">Puntos</span>
                           <span class="arcade-play__hud-value" data-pinball-score>0</span>
-                        </div>
-                        <div class="arcade-play__hud-block">
-                          <span class="arcade-play__hud-label">High</span>
-                          <span class="arcade-play__hud-value" data-pinball-high>0</span>
                         </div>
                         <div class="arcade-play__hud-block">
                           <span class="arcade-play__hud-label">Bolas</span>
                           <span class="arcade-play__hud-value" data-pinball-balls>3</span>
                         </div>
                         <div class="arcade-play__hud-block arcade-play__hud-block--flow">
-                          <span class="arcade-play__hud-label">Estado</span>
-                          <span class="arcade-play__hud-value" data-pinball-state>Listo</span>
+                          <span class="arcade-play__hud-label">Combo</span>
+                          <span class="arcade-play__hud-value" data-pinball-combo>×1</span>
                         </div>
                       </div>
                       <div class="arcade-play__hud-actions">
@@ -365,9 +366,9 @@
 
                     <div class="arcade-play__overlay" data-pinball-overlay="start">
                       <p class="arcade-play__overlay-title">Droppy Pinball</p>
-                      <p class="arcade-play__overlay-text">Activa flippers, toca bumpers Better Mood y alarga la partida.</p>
-                      <p class="arcade-play__overlay-note">Desktop: A y D o flechas. Móvil: botones grandes. Espacio para lanzar.</p>
-                      <button class="btn btn--primary" type="button" data-pinball-start>Jugar</button>
+                      <p class="arcade-play__overlay-text">Enciende FOCUS. Haz combo. Mantén la bola viva.</p>
+                      <p class="arcade-play__overlay-note">A/D o flechas · toca ambos lados en móvil.</p>
+                      <button class="btn btn--primary" type="button" data-pinball-start data-event="arcade_game_start" data-cta="arcade-start-pinball">Jugar ahora</button>
                     </div>
 
                     <div class="arcade-play__overlay" data-pinball-overlay="pause" hidden>
@@ -380,25 +381,25 @@
                     </div>
 
                     <div class="arcade-play__overlay" data-pinball-overlay="gameover" hidden>
-                      <p class="arcade-play__overlay-title">Game over</p>
+                      <p class="arcade-play__overlay-title">Partida terminada</p>
                       <p class="arcade-play__overlay-text">Tu mejor racha quedó registrada en este dispositivo.</p>
                       <p class="arcade-play__overlay-final">
-                        Score <strong data-pinball-final-score>0</strong> · High <strong data-pinball-final-high>0</strong>
+                        Puntos <strong data-pinball-final-score>0</strong> · Récord <strong data-pinball-final-high>0</strong>
                       </p>
                       <div class="arcade-play__overlay-actions">
                         <button class="btn btn--primary" type="button" data-pinball-restart>Volver a jugar</button>
-                        <a class="btn btn--secondary" href="/recompensas/">Ir a recompensas</a>
+                        <a class="btn btn--secondary" href="/#sucursales">Ir por un café</a>
                       </div>
                     </div>
                   </div>
 
                   <div class="arcade-play__controls arcade-play__controls--pinball">
-                    <div class="arcade-play__control-grid arcade-play__control-grid--pinball" aria-label="Controles táctiles de Droppy Pinball">
-                      <button class="arcade-play__control arcade-play__control--flipper" type="button" data-pinball-action="left">Flipper L</button>
-                      <button class="arcade-play__control arcade-play__control--launch" type="button" data-pinball-action="launch">Launch</button>
-                      <button class="arcade-play__control arcade-play__control--flipper" type="button" data-pinball-action="right">Flipper R</button>
+                    <div class="arcade-play__control-grid arcade-play__control-grid--pinball" role="group" aria-label="Controles táctiles de Droppy Pinball">
+                      <button class="arcade-play__control arcade-play__control--flipper" type="button" data-pinball-action="left">◀ Izq</button>
+                      <button class="arcade-play__control arcade-play__control--launch" type="button" data-pinball-action="launch">Impulso</button>
+                      <button class="arcade-play__control arcade-play__control--flipper" type="button" data-pinball-action="right">Der ▶</button>
                     </div>
-                    <p class="arcade-play__hint">En móvil usa flippers y launch. En desktop juega con A/D, flechas o espacio.</p>
+                    <p class="arcade-play__hint">Toca ambos lados para activar los flippers. Espacio da un impulso suave.</p>
                   </div>
                 </div>
               </section>
@@ -407,39 +408,15 @@
         </div>
       </section>
 
-      <section class="section section--compact arcade-guide" aria-labelledby="arcade-guide-title">
+      <section class="section section--compact arcade-guide arcade-visit" aria-labelledby="arcade-guide-title">
         <div class="container">
           <div class="section__header">
-            <p class="eyebrow">Rápido y claro</p>
-            <h2 id="arcade-guide-title">Cómo se entiende este hub en segundos.</h2>
+            <p class="eyebrow">La partida sigue en la mesa</p>
+            <h2 id="arcade-guide-title">Una partida. Un café. Una conversación.</h2>
           </div>
-          <div class="arcade-guide__grid">
-            <article class="arcade-guide__item">
-              <h3>1. Elige</h3>
-              <p>Runner, puzzle o pinball. Cada juego tiene una lógica distinta y una entrada clara.</p>
-            </article>
-            <article class="arcade-guide__item">
-              <h3>2. Juega</h3>
-              <p>Controles cortos, HUD limpio y estados simples para que no te pierdas.</p>
-            </article>
-            <article class="arcade-guide__item">
-              <h3>3. Vuelve</h3>
-              <p>El arcade conecta con recompensas, visitas y el resto del universo Better Mood.</p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section class="section section--cta arcade-cta">
-        <div class="container">
-          <div class="section__header">
-            <p class="eyebrow">Better Mood completo</p>
-            <h2>Juega, pide y acumula.</h2>
-            <p>El arcade es una extensión de la marca, no una página aparte sin contexto.</p>
-          </div>
-          <div class="section__cta">
-            <a class="btn btn--primary" href="/recompensas/">Ver recompensas</a>
-            <a class="btn btn--secondary" href="/">Volver al inicio</a>
+          <div class="section__cta arcade-visit__actions">
+            <a class="btn btn--primary" href="/#sucursales" data-event="branch_open" data-cta="arcade-location">Cómo llegar</a>
+            <a class="btn btn--secondary" href="/eventos/" data-event="event_page_open" data-cta="arcade-eventos">Ver eventos</a>
           </div>
         </div>
       </section>
@@ -449,17 +426,17 @@
       <div class="container footer__grid">
         <div>
           <img class="footer__logo" src="../assets/logo-better-mood.png" alt="Better Mood Coffee" />
-          <p>Better Mood Coffee — café de especialidad, bienestar responsable y ahora también arcade.</p>
+          <p>Better Mood Coffee — café de especialidad, bebidas funcionales y comunidad.</p>
         </div>
 
         <div class="footer__links">
           <h3>Navegación</h3>
-          <a href="/#quick-order">Pedir ahora</a>
-          <a href="/#menu">Menú</a>
-          <a href="/recompensas/">Recompensas</a>
-          <a href="/bienestar/">Bienestar</a>
-          <a href="/arcade/">Arcade</a>
+          <a href="/#sucursales">Pedir ahora</a>
+          <a href="/#sucursales">Menú</a>
+          <a href="/arcade/">Juegos</a>
+          <a href="/bebidas-funcionales-puebla/">Bebidas</a>
           <a href="/eventos/">Eventos</a>
+          <a href="/cafe-para-negocios-puebla/">Negocios</a>
           <a href="/aviso-privacidad.html">Aviso de privacidad</a>
         </div>
 
@@ -468,37 +445,24 @@
           <a href="https://wa.me/message/WQWEEODGY6H2P1" target="_blank" rel="noopener noreferrer">WhatsApp</a>
           <a href="https://instagram.com/bettermood.coffee" target="_blank" rel="noopener">Instagram</a>
           <a href="https://facebook.com/bettermoodcoffee" target="_blank" rel="noopener">Facebook</a>
-          <a href="/#sucursales">Sucursales</a>
+          <a href="/#sucursales">Ubicación</a>
         </div>
       </div>
 
       <div class="container footer__disclaimer">
-        <p>
-          Consulta en barra ingredientes, alérgenos, tamaños, precios y disponibilidad. No atribuimos efectos médicos o fisiológicos a las bebidas.
-        </p>
         <p class="footer__copyright">© Better Mood Coffee. Todos los derechos reservados.</p>
       </div>
     </footer>
 
-    <a
-      class="floating-whatsapp"
-      href="https://wa.me/message/WQWEEODGY6H2P1"
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="Escríbenos por WhatsApp"
-    >
-      WhatsApp
-    </a>
-
-    <script src="../script.js"></script>
+    <script src="../script.js?v=20260712-arcade-v3"></script>
     <script src="../game/droppy/background.js"></script>
     <script src="../game/droppy/effects.js"></script>
     <script src="../game/droppy/audio.js"></script>
     <script src="../game/arcade/pieces.js"></script>
     <script src="../game/arcade/render.js"></script>
     <script src="../game/droppy-arcade.js"></script>
-    <script src="../game/pinball/render.js"></script>
-    <script src="../game/droppy-pinball.js"></script>
-    <script src="../game/arcade-hub.js"></script>
+    <script src="../game/pinball/render.js?v=20260712-pinball-rebuild"></script>
+    <script src="../game/droppy-pinball.js?v=20260712-pinball-rebuild"></script>
+    <script src="../game/arcade-hub.js?v=20260712-arcade-v3"></script>
   </body>
 </html>

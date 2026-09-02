@@ -5,6 +5,12 @@ node_modules/
 audits/
 prospectos_puebla/
 design/
+output/
+outputs/
+tmp/
+tools/
+promocionales/
+preview-commons/
 seo/
 progress.md
 *.bak-codex-*
@@ -14,3 +20,10 @@ menu-cholula/qr-menu-cholula-6up-carta.pdf
 menu-cholula/qr-menu-cholula.png
 assets/coa*.pdf
 assets/menu-better-mood.pdf
+assets/events/
+package.json
+package-lock.json
+shots-funcionales/*.md
+shots-funcionales/plan-negocio/
+shots-funcionales/generar-roadmap-pdf.py
+shots-funcionales/output/

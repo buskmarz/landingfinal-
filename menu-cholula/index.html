@@ -3,17 +3,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Menú Cholula Better Mood Coffee | Carta digital</title>
-    <meta name="description" content="Menú Cholula de Better Mood Coffee: café de especialidad, bebidas sin café, alimentos, extras y postres." />
+    <title>Menú Cholula | Better Mood Coffee</title>
+    <meta name="description" content="Menú Cholula de Better Mood Coffee: café de especialidad, bebidas funcionales, alimentos, postres y precios de esta sucursal." />
     <meta name="robots" content="index,follow" />
     <link rel="canonical" href="https://bmoodcoffee.com/menu-cholula/" />
     <meta property="og:locale" content="es_MX" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Better Mood Coffee" />
-    <meta property="og:title" content="Menú Cholula Better Mood Coffee" />
-    <meta property="og:description" content="Carta digital de Better Mood Cholula: café de especialidad, bebidas sin café, alimentos y postres." />
+    <meta property="og:title" content="Menú Cholula | Better Mood Coffee" />
+    <meta property="og:description" content="Café de especialidad, bebidas funcionales, alimentos y postres en Better Mood Coffee Cholula." />
     <meta property="og:url" content="https://bmoodcoffee.com/menu-cholula/" />
-    <meta property="og:image" content="https://bmoodcoffee.com/assets/logo-better-mood.png" />
+    <meta property="og:image" content="https://bmoodcoffee.com/assets/home/real-mushroom-cup-exterior.jpg" />
 
     <script type="application/ld+json">
       {
@@ -25,163 +25,254 @@
         "provider": {
           "@type": "CafeOrCoffeeShop",
           "name": "Better Mood Coffee Cholula",
-          "url": "https://bmoodcoffee.com"
+          "url": "https://bmoodcoffee.com/cholula/"
         },
         "hasMenuSection": [
-          { "@type": "MenuSection", "name": "Specialty Coffee" },
-          { "@type": "MenuSection", "name": "Non Coffee" },
-          { "@type": "MenuSection", "name": "Mood Fuel" },
-          { "@type": "MenuSection", "name": "Extras" },
-          { "@type": "MenuSection", "name": "Postres by Panera" }
+          { "@type": "MenuSection", "name": "Bebidas funcionales" },
+          { "@type": "MenuSection", "name": "Café de especialidad" },
+          { "@type": "MenuSection", "name": "Sin café" },
+          { "@type": "MenuSection", "name": "Alimentos" },
+          { "@type": "MenuSection", "name": "Postres" },
+          { "@type": "MenuSection", "name": "Extras" }
         ]
       }
     </script>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="../home.css?v=20260712-menu-v4" />
+    <link rel="stylesheet" href="../menu/menu.css?v=20260712-menu-v6" />
     <link rel="icon" href="../assets/logo-better-mood.png" />
   </head>
-  <body class="menu-page menu-cholula-page">
+  <body class="menu-page menu-page--cholula">
     <a class="skip-link" href="#main">Saltar al contenido</a>
 
-    <header class="header" id="top">
-      <div class="container header__inner">
-        <a class="logo" href="/" aria-label="Better Mood Coffee">
-          <img src="../assets/logo-better-mood.png" alt="Better Mood Coffee" />
-        </a>
-        <button class="nav-toggle" aria-controls="primary-nav" aria-expanded="false">
-          <span class="nav-toggle__icon" aria-hidden="true"></span>
-          <span class="nav-toggle__label" aria-hidden="true">Menú</span>
-          <span class="sr-only">Abrir navegación</span>
-        </button>
-        <nav class="nav" id="primary-nav">
-          <a href="/menu-cholula/" aria-current="page">Menú Cholula</a>
-          <a href="#cafe">Café</a>
-          <a href="#mood-fuel">Mood Fuel</a>
-          <a href="#postres">Postres</a>
-        </nav>
-      </div>
+    <header class="site-header" data-header>
+      <a class="brand" href="/" aria-label="Better Mood Coffee, inicio">
+        <img src="../assets/home/bettermood-logo-180.png" alt="Better Mood Coffee" width="180" height="155" />
+      </a>
+
+      <nav class="main-nav" id="primary-nav" data-nav aria-label="Navegación principal">
+        <a href="/menu-cholula/" aria-current="page">Menú</a>
+        <a href="/cafe-lavado/">Café</a>
+        <a href="/bebidas-funcionales-puebla/">Bebidas</a>
+        <a href="/#comunidad">Comunidad</a>
+      </nav>
+
+      <a class="button button--primary header-cta" href="#branch-selector">Sucursal</a>
+      <button class="nav-toggle" type="button" aria-controls="primary-nav" aria-expanded="false" aria-label="Abrir menú" data-nav-toggle>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span class="sr-only">Abrir navegación</span>
+      </button>
     </header>
 
     <main id="main">
-      <section class="cholula-hero" aria-labelledby="cholula-menu-title">
-        <div class="container cholula-hero__grid">
-          <div>
-            <p class="cholula-hero__label">@BETTERMOOD.COFFEE</p>
-            <h1 id="cholula-menu-title">Menú Cholula</h1>
-            <p>Café de especialidad, bebidas sin café, alimentos, extras y postres en una carta clara para pedir en barra.</p>
-            <div class="cholula-hero__actions">
-              <a class="btn btn--primary" href="#cafe">Ver menú</a>
-              <a class="btn btn--secondary" href="#cafe">Ir a café</a>
+      <section class="menu-hero" aria-labelledby="menu-title">
+        <div class="menu-shell menu-hero__layout">
+          <div class="menu-hero__copy reveal is-visible">
+            <p class="menu-eyebrow">Carta · Cholula</p>
+            <h1 id="menu-title">Qué se te antoja hoy.</h1>
+            <p class="menu-hero__lede">Café de especialidad, bebidas funcionales y algo para comer.</p>
+
+            <nav class="branch-tabs" id="branch-selector" aria-label="Elegir menú por sucursal">
+              <a href="/menu/" data-event="menu_branch_switch" data-cta="menu-cholula-to-lapaz">UPAEP</a>
+              <a href="/menu-cholula/" aria-current="page">Cholula</a>
+            </nav>
+
+            <div class="menu-hero__actions">
+              <a class="button button--primary" href="#funcionales" data-event="menu_category_jump" data-cta="hero-ver-carta">Ver carta</a>
+              <a class="button button--outline" href="https://maps.app.goo.gl/MNt4MuWNJ2UNS3Kj8?g_st=ic" target="_blank" rel="noopener noreferrer" data-event="click_maps" data-cta="menu-cholula-maps">Cómo llegar</a>
             </div>
           </div>
-          <aside class="cholula-hero__card" aria-label="Resumen del menú">
-            <img src="../assets/logo-better-mood.png" alt="Better Mood Coffee" />
-            <p>Diseñado para QR: rápido, claro y fácil de pedir en barra.</p>
-            <div class="cholula-hero__tags">
-              <span>Café de especialidad</span>
-              <span>Matcha</span>
-              <span>Alimentos</span>
-              <span>Postres</span>
-            </div>
-          </aside>
+
+          <figure class="menu-hero__media reveal reveal--late is-visible">
+            <img src="../assets/home/real-mushroom-cup-exterior.jpg" alt="Vaso en forma de hongo frente a Better Mood Coffee Cholula" width="360" height="638" />
+            <figcaption>Preparado y servido en Cholula.</figcaption>
+          </figure>
         </div>
       </section>
 
-      <nav class="menu-index cholula-index" aria-label="Secciones del menú Cholula">
-        <div class="container menu-index__inner">
-          <a href="#cafe">Specialty Coffee</a>
-          <a href="#non-coffee">Non Coffee</a>
-          <a href="#mood-fuel">Mood Fuel</a>
-          <a href="#extras">Extras</a>
-          <a href="#postres">Postres</a>
+      <nav class="menu-index" aria-label="Categorías del menú" data-menu-index>
+        <div class="menu-shell menu-index__track">
+          <a class="menu-index__link is-active" href="#funcionales" aria-current="location" data-menu-link>Funcionales</a>
+          <a class="menu-index__link" href="#cafe" data-menu-link>Café</a>
+          <a class="menu-index__link" href="#sin-cafe" data-menu-link>Sin café</a>
+          <a class="menu-index__link" href="#alimentos" data-menu-link>Alimentos</a>
+          <a class="menu-index__link" href="#postres" data-menu-link>Postres</a>
+          <a class="menu-index__link" href="#extras" data-menu-link>Extras</a>
         </div>
       </nav>
 
-      <section class="cholula-board cholula-board--light" aria-label="Carta base Cholula">
-        <div class="container cholula-board__grid">
-          <section class="cholula-section" id="cafe" aria-labelledby="specialty-title">
-            <div class="cholula-section__head"><p>Base de barra</p><h2 id="specialty-title">Specialty Coffee</h2></div>
-            <div class="cholula-item"><div><h3>Espresso doble <span>2 oz</span></h3><p>Intenso, corto y directo.</p></div><strong>$45</strong></div>
-            <div class="cholula-item"><div><h3>Americano <span>8 oz</span></h3><p>Espresso doble con agua caliente.</p></div><strong>$55</strong></div>
-            <div class="cholula-item"><div><h3>Brewed Coffee <span>8 oz</span></h3><p>Café diferente preparado en V60.</p></div><strong>$65</strong></div>
-            <div class="cholula-item"><div><h3>Cortado <span>4 oz</span></h3><p>Espresso doble con misma cantidad de leche.</p></div><strong>$55</strong></div>
-            <div class="cholula-item"><div><h3>Flat White <span>5 oz</span></h3><p>Ristretto doble y leche.</p></div><strong>$60</strong></div>
-            <div class="cholula-item"><div><h3>Cappuccino <span>6 oz</span></h3><p>Balance perfecto entre café y leche.</p></div><strong>$65</strong></div>
-            <div class="cholula-item"><div><h3>Latte <span>10 oz</span></h3><p>Leche y espresso.</p></div><strong>$70</strong></div>
-            <div class="cholula-item"><div><h3>Mocca <span>10 oz</span></h3><p>Espresso, cacao y leche.</p></div><strong>$75</strong></div>
-            <div class="cholula-item"><div><h3>Cold Brew <span>12 oz</span></h3><p>Extracción en frío de entre 24 y 48 hrs.</p></div><strong>$60</strong></div>
-            <div class="cholula-item"><div><h3>Cold Brew Tónic <span>12 oz</span></h3><p>Cold brew, hielos y agua tónica.</p></div><strong>$75</strong></div>
-            <div class="cholula-item"><div><h3>Espresso Tónic <span>12 oz</span></h3><p>Espresso, hielos y agua tónica.</p></div><strong>$65</strong></div>
-            <div class="cholula-item"><div><h3>Affogato <span>8 oz</span></h3><p>Helado de vainilla con espresso doble.</p></div><strong>$70</strong></div>
+      <section class="menu-catalog" aria-labelledby="catalog-title">
+        <div class="menu-shell">
+          <header class="menu-catalog__intro">
+            <h2 id="catalog-title">La carta.</h2>
+            <p>Menú Cholula. Confirma en barra ingredientes, alérgenos y disponibilidad.</p>
+          </header>
+
+          <section class="menu-category menu-category--featured reveal" id="funcionales" aria-labelledby="funcionales-title">
+            <header class="menu-category__rail">
+              <div>
+                <p class="menu-category__kicker">Con adaptógenos o CBD</p>
+                <h2 id="funcionales-title">Bebidas funcionales</h2>
+                <p class="menu-category__summary">Recetas Better Mood del menú Cholula.</p>
+              </div>
+            </header>
+            <div class="menu-category__body menu-subgroups">
+              <section class="menu-subgroup" aria-labelledby="cholula-focus-title">
+                <div class="menu-subgroup__head"><h3 id="cholula-focus-title">Focus &amp; Flow</h3></div>
+                <div class="menu-items">
+                  <article class="menu-item"><div><h4 class="menu-item__name">Cappuccino Focus <span class="menu-item__size">6 oz</span></h4><p class="menu-item__description">Espresso, vainilla, leche y melena de león.</p></div><strong class="menu-item__price">$95</strong></article>
+                  <article class="menu-item"><div><h4 class="menu-item__name">Tonic Flow <span class="menu-item__size">12 oz</span></h4><p class="menu-item__description">Hielo, vainilla, tónica, espresso y CBD Focus.</p></div><strong class="menu-item__price">$95</strong></article>
+                  <article class="menu-item"><div><h4 class="menu-item__name">Matcha Focus &amp; Flow <span class="menu-item__size">10 oz</span></h4><p class="menu-item__description">Matcha, vainilla, melena de león y CBD Focus.</p></div><strong class="menu-item__price">$95</strong></article>
+                </div>
+              </section>
+              <section class="menu-subgroup" aria-labelledby="cholula-calm-title">
+                <div class="menu-subgroup__head"><h3 id="cholula-calm-title">Calm &amp; Chill</h3></div>
+                <div class="menu-items">
+                  <article class="menu-item"><div><h4 class="menu-item__name">Latte Calm <span class="menu-item__size">10 oz</span></h4><p class="menu-item__description">Espresso, lavanda, leche y ashwagandha.</p></div><strong class="menu-item__price">$95</strong></article>
+                  <article class="menu-item"><div><h4 class="menu-item__name">Hojicha Chill <span class="menu-item__size">12 oz</span></h4><p class="menu-item__description">Hielo, lavanda, leche, hojicha y CBD Calming.</p></div><strong class="menu-item__price">$100</strong></article>
+                  <article class="menu-item"><div><h4 class="menu-item__name">Golden Peace <span class="menu-item__size">10 oz</span></h4><p class="menu-item__description">Golden milk, lavanda, leche y reishi.</p></div><strong class="menu-item__price">$95</strong></article>
+                </div>
+              </section>
+              <section class="menu-subgroup" aria-labelledby="cholula-energy-title">
+                <div class="menu-subgroup__head"><h3 id="cholula-energy-title">Energy &amp; Boost</h3></div>
+                <div class="menu-items">
+                  <article class="menu-item"><div><h4 class="menu-item__name">Enrgy Flat <span class="menu-item__size">5 oz</span></h4><p class="menu-item__description">Ristretto, piloncillo, leche y cordyceps.</p></div><strong class="menu-item__price">$95</strong></article>
+                  <article class="menu-item"><div><h4 class="menu-item__name">Cold Boost <span class="menu-item__size">12 oz</span></h4><p class="menu-item__description">Hielo, piloncillo, cold brew y CBD Wellness.</p></div><strong class="menu-item__price">$95</strong></article>
+                  <article class="menu-item"><div><h4 class="menu-item__name">Latte Energy &amp; Boost <span class="menu-item__size">10 oz</span></h4><p class="menu-item__description">Espresso, piloncillo, hielo, leche, cordyceps y CBD Wellness.</p></div><strong class="menu-item__price">$95</strong></article>
+                </div>
+              </section>
+              <p class="menu-note"><strong>Elige por sabor.</strong> Pregunta en barra por ingredientes y disponibilidad. Sin promesas de efectos. <a href="/adaptogenos-en-bebidas-puebla/" data-event="commons_guide_open" data-cta="menu-cholula-adaptogenos">Conoce los ingredientes →</a></p>
+            </div>
           </section>
 
-          <section class="cholula-section" id="non-coffee" aria-labelledby="non-coffee-title">
-            <div class="cholula-section__head"><p>Sin café</p><h2 id="non-coffee-title">Non Coffee</h2></div>
-            <div class="cholula-item"><div><h3>Chai <span>10 oz</span></h3><p>El ya conocido chai latte.</p></div><strong>$85</strong></div>
-            <div class="cholula-item"><div><h3>Matcha <span>10 oz</span></h3><p>Matcha ceremonial con leche.</p></div><strong>$75</strong></div>
-            <div class="cholula-item"><div><h3>Hojicha <span>10 oz</span></h3><p>Matcha tostado con leche.</p></div><strong>$70</strong></div>
-            <div class="cholula-item"><div><h3>Cacao <span>10 oz</span></h3><p>Cacao con agua o con leche.</p></div><strong>$75</strong></div>
-            <div class="cholula-item"><div><h3>Golden Milk <span>10 oz</span></h3><p>Pregunta por los sabores del momento.</p></div><strong>$85</strong></div>
-            <div class="cholula-item"><div><h3>Kombucha <span>12 oz</span></h3><p>Pregunta por los sabores del momento.</p></div><strong>$49</strong></div>
-            <div class="cholula-item"><div><h3>Té / Tisana <span>12 oz</span></h3><p>Pregunta por los sabores del momento.</p></div><strong>$65</strong></div>
+          <section class="menu-category reveal" id="cafe" aria-labelledby="cafe-title">
+            <header class="menu-category__rail">
+              <div>
+                <p class="menu-category__kicker">Base de barra</p>
+                <h2 id="cafe-title">Café de especialidad</h2>
+                <p class="menu-category__summary">Espresso, leche o filtro.</p>
+              </div>
+            </header>
+            <div class="menu-category__body menu-items">
+              <article class="menu-item"><div><h3 class="menu-item__name">Espresso doble <span class="menu-item__size">2 oz</span></h3><p class="menu-item__description">Intenso, corto y directo.</p></div><strong class="menu-item__price">$45</strong></article>
+              <article class="menu-item"><div><h3 class="menu-item__name">Americano <span class="menu-item__size">8 oz</span></h3><p class="menu-item__description">Espresso doble con agua caliente.</p></div><strong class="menu-item__price">$55</strong></article>
+              <article class="menu-item"><div><h3 class="menu-item__name">Brewed Coffee <span class="menu-item__size">8 oz</span></h3><p class="menu-item__description">Café diferente preparado en V60.</p></div><strong class="menu-item__price">$65</strong></article>
+              <article class="menu-item"><div><h3 class="menu-item__name">Cortado <span class="menu-item__size">4 oz</span></h3><p class="menu-item__description">Espresso doble con misma cantidad de leche.</p></div><strong class="menu-item__price">$55</strong></article>
+              <article class="menu-item"><div><h3 class="menu-item__name">Flat White <span class="menu-item__size">5 oz</span></h3><p class="menu-item__description">Ristretto doble y leche.</p></div><strong class="menu-item__price">$60</strong></article>
+              <article class="menu-item"><div><h3 class="menu-item__name">Cappuccino <span class="menu-item__size">6 oz</span></h3><p class="menu-item__description">Balance perfecto entre café y leche.</p></div><strong class="menu-item__price">$65</strong></article>
+              <article class="menu-item"><div><h3 class="menu-item__name">Latte <span class="menu-item__size">10 oz</span></h3><p class="menu-item__description">Leche y espresso.</p></div><strong class="menu-item__price">$70</strong></article>
+              <article class="menu-item"><div><h3 class="menu-item__name">Mocca <span class="menu-item__size">10 oz</span></h3><p class="menu-item__description">Espresso, cacao y leche.</p></div><strong class="menu-item__price">$75</strong></article>
+              <article class="menu-item"><div><h3 class="menu-item__name">Cold Brew <span class="menu-item__size">12 oz</span></h3><p class="menu-item__description">Extracción en frío de entre 24 y 48 hrs.</p></div><strong class="menu-item__price">$60</strong></article>
+              <article class="menu-item"><div><h3 class="menu-item__name">Cold Brew Tónic <span class="menu-item__size">12 oz</span></h3><p class="menu-item__description">Cold brew, hielo y agua tónica.</p></div><strong class="menu-item__price">$75</strong></article>
+              <article class="menu-item"><div><h3 class="menu-item__name">Espresso Tónic <span class="menu-item__size">12 oz</span></h3><p class="menu-item__description">Espresso, hielo y agua tónica.</p></div><strong class="menu-item__price">$65</strong></article>
+              <article class="menu-item"><div><h3 class="menu-item__name">Affogato <span class="menu-item__size">8 oz</span></h3><p class="menu-item__description">Helado de vainilla con espresso doble.</p></div><strong class="menu-item__price">$70</strong></article>
+            </div>
           </section>
 
-          <section class="cholula-section" id="mood-fuel" aria-labelledby="mood-fuel-title">
-            <div class="cholula-section__head"><p>Alimentos</p><h2 id="mood-fuel-title">Mood Fuel</h2></div>
-            <div class="cholula-item"><div><h3>Roast Beef</h3><p>Pan de caja, roast beef, mayonesa, cebolla caramelizada y mix de quesos.</p></div><strong>$120</strong></div>
-            <div class="cholula-item"><div><h3>Croissant Nutella</h3><p>Pan de caja, jamón de pavo, mayonesa, cherry, mix de lechugas y mix de quesos.</p></div><strong>$90</strong></div>
-            <div class="cholula-item"><div><h3>El Ibérico</h3><p>Croissant, jamón serrano, pesto, queso de cabra, mix de lechugas y aceitunas negras.</p></div><strong>$130</strong></div>
-            <div class="cholula-item"><div><h3>Golden</h3><p>Croissant, jamón de pavo, mix de quesos, manzana y miel de agave.</p></div><strong>$120</strong></div>
-            <div class="cholula-item"><div><h3>Waffles frutos rojos</h3><p>Waffles de chocolate con Nutella y fresas.</p></div><strong>$95</strong></div>
+          <section class="menu-category reveal" id="sin-cafe" aria-labelledby="sin-cafe-title">
+            <header class="menu-category__rail">
+              <div>
+                <p class="menu-category__kicker">Otras bebidas</p>
+                <h2 id="sin-cafe-title">Sin café</h2>
+                <p class="menu-category__summary">Chai, matcha, cacao y más.</p>
+              </div>
+            </header>
+            <div class="menu-category__body menu-items">
+              <article class="menu-item"><div><h3 class="menu-item__name">Chai <span class="menu-item__size">10 oz</span></h3><p class="menu-item__description">El ya conocido chai latte.</p></div><strong class="menu-item__price">$85</strong></article>
+              <article class="menu-item"><div><h3 class="menu-item__name">Matcha <span class="menu-item__size">10 oz</span></h3><p class="menu-item__description">Matcha ceremonial con leche.</p></div><strong class="menu-item__price">$75</strong></article>
+              <article class="menu-item"><div><h3 class="menu-item__name">Hojicha <span class="menu-item__size">10 oz</span></h3><p class="menu-item__description">Té verde japonés tostado con leche.</p></div><strong class="menu-item__price">$70</strong></article>
+              <article class="menu-item"><div><h3 class="menu-item__name">Cacao <span class="menu-item__size">10 oz</span></h3><p class="menu-item__description">Cacao con agua o con leche.</p></div><strong class="menu-item__price">$75</strong></article>
+              <article class="menu-item"><div><h3 class="menu-item__name">Golden Milk <span class="menu-item__size">10 oz</span></h3><p class="menu-item__description">Pregunta en barra por ingredientes y preparación.</p></div><strong class="menu-item__price">$85</strong></article>
+              <article class="menu-item"><div><h3 class="menu-item__name">Kombucha <span class="menu-item__size">12 oz</span></h3><p class="menu-item__description">Pregunta por los sabores del momento.</p></div><strong class="menu-item__price">$49</strong></article>
+              <article class="menu-item"><div><h3 class="menu-item__name">Té / Tisana <span class="menu-item__size">12 oz</span></h3><p class="menu-item__description">Pregunta por las opciones del momento.</p></div><strong class="menu-item__price">$65</strong></article>
+            </div>
           </section>
 
-          <section class="cholula-section" id="extras" aria-labelledby="extras-title">
-            <div class="cholula-section__head"><p>Personaliza</p><h2 id="extras-title">Extras</h2></div>
-            <div class="cholula-item"><div><h3>Leche de avena / shot leche</h3><p>Cambia tu leche regular por avena, o agrega un extra a tu bebida.</p></div><strong>$10</strong></div>
-            <div class="cholula-item"><div><h3>Frío / jarabe natural</h3><p>Cambia tu bebida a fría o agrega tu jarabe natural preferido.</p></div><strong>$10</strong></div>
-            <div class="cholula-item"><div><h3>Ingrediente adaptógeno</h3><p>Pregunta en barra por la mezcla, ingredientes y disponibilidad antes de elegir.</p></div><strong>$42</strong></div>
+          <section class="menu-category reveal" id="alimentos" aria-labelledby="alimentos-title">
+            <header class="menu-category__rail">
+              <div>
+                <p class="menu-category__kicker">Para acompañar</p>
+                <h2 id="alimentos-title">Alimentos</h2>
+              </div>
+            </header>
+            <div class="menu-category__body menu-items">
+              <article class="menu-item"><div><h3 class="menu-item__name">Roast Beef</h3><p class="menu-item__description">Pan de caja, roast beef, mayonesa, cebolla caramelizada y mix de quesos.</p></div><strong class="menu-item__price">$120</strong></article>
+              <article class="menu-item"><div><h3 class="menu-item__name">Croissant Nutella</h3><p class="menu-item__description">Confirma ingredientes y disponibilidad en barra.</p></div><strong class="menu-item__price">$90</strong></article>
+              <article class="menu-item"><div><h3 class="menu-item__name">El Ibérico</h3><p class="menu-item__description">Croissant, jamón serrano, pesto, queso de cabra, mix de lechugas y aceitunas negras.</p></div><strong class="menu-item__price">$130</strong></article>
+              <article class="menu-item"><div><h3 class="menu-item__name">Golden</h3><p class="menu-item__description">Croissant, jamón de pavo, mix de quesos, manzana y miel de agave.</p></div><strong class="menu-item__price">$120</strong></article>
+              <article class="menu-item"><div><h3 class="menu-item__name">Waffles frutos rojos</h3><p class="menu-item__description">Waffles de chocolate con Nutella y fresas.</p></div><strong class="menu-item__price">$95</strong></article>
+            </div>
           </section>
 
-          <section class="cholula-section cholula-section--panera" id="postres" aria-labelledby="postres-title">
-            <div class="cholula-section__head"><p>Panera Signature</p><h2 id="postres-title">Postres by Panera</h2></div>
-            <div class="cholula-item"><div><h3>Pasteles</h3><p>Turín, Red Velvet y Ferrero.</p></div><strong>$115</strong></div>
-            <div class="cholula-item"><div><h3>Cheesecake</h3><p>De Lotus.</p></div><strong>$120</strong></div>
-            <div class="cholula-item"><div><h3>Brownie con helado</h3><p>El clásico brownie con bola de helado.</p></div><strong>$80</strong></div>
-            <div class="cholula-item"><div><h3>Panqué de plátano</h3><p>Panqué de plátano casero.</p></div><strong>$45</strong></div>
-            <p class="cholula-note">Si quieres algo para compartir, pregunta por nuestros pasteles en tamaño grande.</p>
+          <section class="menu-category reveal" id="postres" aria-labelledby="postres-title">
+            <header class="menu-category__rail">
+              <div>
+                <p class="menu-category__kicker">Panera Signature</p>
+                <h2 id="postres-title">Postres</h2>
+                <p class="menu-category__summary">Algo dulce para cerrar.</p>
+              </div>
+            </header>
+            <div class="menu-category__body">
+              <div class="menu-items">
+                <article class="menu-item"><div><h3 class="menu-item__name">Pasteles</h3><p class="menu-item__description">Turín, Red Velvet y Ferrero.</p></div><strong class="menu-item__price">$115</strong></article>
+                <article class="menu-item"><div><h3 class="menu-item__name">Cheesecake</h3><p class="menu-item__description">De Lotus.</p></div><strong class="menu-item__price">$120</strong></article>
+                <article class="menu-item"><div><h3 class="menu-item__name">Brownie con helado</h3><p class="menu-item__description">El clásico brownie con bola de helado.</p></div><strong class="menu-item__price">$80</strong></article>
+                <article class="menu-item"><div><h3 class="menu-item__name">Panqué de plátano</h3><p class="menu-item__description">Panqué de plátano casero.</p></div><strong class="menu-item__price">$45</strong></article>
+              </div>
+              <p class="menu-note">Pregunta en barra por pasteles en tamaño grande para compartir.</p>
+            </div>
           </section>
+
+          <section class="menu-category reveal" id="extras" aria-labelledby="extras-title">
+            <header class="menu-category__rail">
+              <div>
+                <p class="menu-category__kicker">Personaliza</p>
+                <h2 id="extras-title">Extras</h2>
+              </div>
+            </header>
+            <div class="menu-category__body">
+              <div class="menu-items">
+                <article class="menu-item"><div><h3 class="menu-item__name">Leche de avena / shot leche</h3><p class="menu-item__description">Cambia tu leche regular por avena, o agrega un extra a tu bebida.</p></div><strong class="menu-item__price">$10</strong></article>
+                <article class="menu-item"><div><h3 class="menu-item__name">Frío / jarabe natural</h3><p class="menu-item__description">Cambia tu bebida a fría o agrega tu jarabe natural preferido.</p></div><strong class="menu-item__price">$10</strong></article>
+              <article class="menu-item"><div><h3 class="menu-item__name">Adaptógenos</h3><p class="menu-item__description">A elección en tu bebida o alimento preferido.</p></div><strong class="menu-item__price">$42</strong></article>
+              <article class="menu-item"><div><h3 class="menu-item__name">CBD Drops</h3><p class="menu-item__description">Pregunta en barra por ingredientes y disponibilidad.</p></div><strong class="menu-item__price">$42</strong></article>
+              </div>
+              <p class="menu-note">Precios, ingredientes y disponibilidad pueden cambiar. Confirma en barra antes de ordenar.</p>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="menu-visit" aria-labelledby="visit-title">
+        <div>
+          <p class="menu-eyebrow">Better Mood · Cholula</p>
+          <h2 id="visit-title">Tu mesa está lista.</h2>
+          <p>4 Norte 1203, San Andrés Cholula.</p>
+        </div>
+        <div class="menu-visit__actions">
+          <a class="button button--primary" href="https://maps.app.goo.gl/MNt4MuWNJ2UNS3Kj8?g_st=ic" target="_blank" rel="noopener noreferrer" data-event="click_maps" data-cta="menu-cholula-visit-maps">Abrir Maps</a>
+          <a class="button button--outline" href="/menu/" data-event="menu_branch_switch" data-cta="menu-cholula-footer-lapaz">Ver menú UPAEP</a>
         </div>
       </section>
     </main>
 
-    <footer class="footer menu-footer">
-      <div class="container footer__grid">
-        <div class="footer__brand">
-          <img class="footer__logo" src="../assets/logo-better-mood.png" alt="Better Mood Coffee" />
-          <p>Better Mood Coffee Cholula - Carta digital para apertura.</p>
-        </div>
-        <div class="footer__links">
-          <h3>Menú</h3>
-          <a href="#cafe">Specialty Coffee</a>
-          <a href="#mood-fuel">Mood Fuel</a>
-          <a href="#postres">Postres</a>
-        </div>
-        <div class="footer__links">
-          <h3>Better Mood</h3>
-          <a href="/">Inicio</a>
-          <a href="/menu/">Menú La Paz</a>
-          <a href="/kombucha/">Kombucha</a>
-          <a href="/cold-brew/">Cold Brew</a>
-        </div>
-      </div>
-      <div class="container footer__disclaimer">
-        <p>Consulta en barra ingredientes, alérgenos, tamaños, precios y disponibilidad. La carta no sustituye la confirmación en sucursal.</p>
-        <p class="footer__copyright">© Better Mood Coffee. Todos los derechos reservados.</p>
-      </div>
+    <footer class="site-footer">
+      <a class="brand brand--footer" href="/" aria-label="Better Mood Coffee, inicio">
+        <img src="../assets/home/bettermood-logo-180.png" alt="Better Mood Coffee" width="180" height="155" />
+      </a>
+      <nav class="footer-links" aria-label="Enlaces del pie">
+        <a href="/cafe-lavado/">Café</a>
+        <a href="/bebidas-funcionales-puebla/">Bebidas</a>
+        <a href="/como-preparar-cafe-en-casa/">Métodos</a>
+        <a href="/recompensas/">Recompensas</a>
+        <a href="/aviso-privacidad.html">Privacidad</a>
+      </nav>
+      <p>Cholula · Puebla, México.</p>
     </footer>
-    <script src="../script.js" defer></script>
+
+    <script src="../home.js?v=20260711-menu-v2" defer></script>
+    <script src="../menu/menu.js?v=20260712-menu-v5" defer></script>
   </body>
 </html>

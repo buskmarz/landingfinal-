@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="es-MX">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <meta name="theme-color" content="#231f20" />
+    <title>Simulador interno · Mood Shots | Better Mood Coffee</title>
+    <link rel="icon" href="/assets/bettermood_logo-10.png" />
+    <link rel="stylesheet" href="/shots-funcionales/calculadora.css?v=20260715" />
+  </head>
+  <body>
+    <header class="planner-header">
+      <a href="/shots-funcionales/">← Ver landing</a>
+      <span>Better Mood · uso interno</span>
+    </header>
+
+    <main>
+      <section class="planner-hero">
+        <p class="eyebrow">Mood Shots · escenario inicial</p>
+        <h1>Precio sin adivinar.</h1>
+        <p>Compara el mercado, captura el costo real y deja que el margen defina el precio.</p>
+        <div class="warning"><strong>REVISAR</strong> Los valores precargados son hipótesis, no costos confirmados ni tratamiento fiscal validado.<br /><strong>PILOTO</strong> La validación presencial se concentrará en UPAEP / La Paz.</div>
+      </section>
+
+      <section class="market" aria-labelledby="market-title">
+        <div class="section-title">
+          <p class="eyebrow">Mercado mexicano · 15 julio 2026</p>
+          <h2 id="market-title">El rango existe.<br />La propuesta debe justificarlo.</h2>
+        </div>
+        <div class="market-table-wrap">
+          <table>
+            <thead>
+              <tr><th>Referencia</th><th>Formato</th><th>Precio</th><th>MXN / 100 ml</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="https://www.soriana.com/cafe-helado-punta-del-cielo-cold-brew-shot-60-ml/11636190.html" target="_blank" rel="noopener noreferrer">Punta del Cielo Cold Brew Shot</a></td><td>60 ml</td><td>$24.90</td><td>$41.50</td></tr>
+              <tr><td><a href="https://www.walmart.com.mx/ip/bebida-de-limon-curcuma-y-jengibre-jus-flu-prensada-en-frio-shot-60-ml/00750046213334" target="_blank" rel="noopener noreferrer">JUS Flu limón, cúrcuma y jengibre</a></td><td>60 ml</td><td>$23.00</td><td>$38.33</td></tr>
+              <tr><td><a href="https://menu.sanborns.com.mx/pedir/GMtWTqHdh3P69cjvB/immunity-shotr-sku-18757" target="_blank" rel="noopener noreferrer">Sanborns Immunity Shot</a></td><td>60 ml</td><td>$49.00</td><td>$81.67</td></tr>
+              <tr><td><a href="https://www.numumarket.com.mx/shop/shot-enfoque-focus-pina-vinagre-adaptogenos-60ml-vida-bebida-numu-market-8214" target="_blank" rel="noopener noreferrer">Vida Bebida Focus</a></td><td>60 ml</td><td>$61.00</td><td>$101.67</td></tr>
+              <tr><td><a href="https://www.numumarket.com.mx/shop/shot-energia-boost-adaptogenos-guarana-betabel-60ml-vida-bebida-numu-market-8213" target="_blank" rel="noopener noreferrer">Vida Bebida Boost</a></td><td>60 ml</td><td>$61.00</td><td>$101.67</td></tr>
+              <tr><td><a href="https://supernaturista.com/products/shot-immune-60-ml-vida-bebida" target="_blank" rel="noopener noreferrer">Vida Bebida Immune</a></td><td>60 ml</td><td>$72.50</td><td>$120.83</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="market-reading">
+          <p><strong>$23–$25</strong><span>Shot sencillo de café o jengibre.</span></p>
+          <p><strong>$49–$72.50</strong><span>Shot funcional con ingredientes de mayor valor.</span></p>
+          <p><strong>$59–$69</strong><span>Rango inicial sugerido para probar 80 ml en UPAEP / La Paz.</span></p>
+        </div>
+      </section>
+
+      <section class="calculator" aria-labelledby="calculator-title">
+        <div class="section-title">
+          <p class="eyebrow">Simulador editable</p>
+          <h2 id="calculator-title">Del costo al precio.</h2>
+          <p>Incluye todo lo que toca una botella. Si falta un costo, el margen no es real.</p>
+        </div>
+
+        <form id="pricing-calculator">
+          <label class="wide">
+            Producto
+            <select id="product" name="product">
+              <option value="brew">Cold brew + cordyceps</option>
+              <option value="matcha">Matcha + melena de león</option>
+              <option value="flower">Bugambilia + jengibre + ashwagandha</option>
+            </select>
+          </label>
+          <label>Ingredientes y base <span>MXN</span><input id="ingredients" type="number" min="0" step="0.1" value="5.5" /></label>
+          <label>Botella, tapa, sello y etiqueta <span>MXN</span><input id="packaging" type="number" min="0" step="0.1" value="5.5" /></label>
+          <label>Empaque secundario <span>MXN</span><input id="secondaryPackaging" type="number" min="0" step="0.1" value="0.8" /></label>
+          <label>Producción y mano de obra <span>MXN</span><input id="labor" type="number" min="0" step="0.1" value="2.5" /></label>
+          <label>Proceso o maquila <span>MXN</span><input id="process" type="number" min="0" step="0.1" value="1.5" /></label>
+          <label>Refrigeración y logística <span>MXN</span><input id="coldChain" type="number" min="0" step="0.1" value="1.5" /></label>
+          <label>Almacenamiento <span>MXN</span><input id="storage" type="number" min="0" step="0.1" value="0.3" /></label>
+          <label>Laboratorio y cumplimiento prorrateado <span>MXN</span><input id="quality" type="number" min="0" step="0.1" value="1.5" /></label>
+          <label>Marketing variable <span>MXN</span><input id="variableMarketing" type="number" min="0" step="0.1" value="0.4" /></label>
+          <label>Devoluciones y mermas no productivas <span>MXN</span><input id="returns" type="number" min="0" step="0.1" value="0.2" /></label>
+          <label>Merma <span>%</span><input id="waste" type="number" min="0" max="100" step="0.1" value="5" /></label>
+          <label>Margen bruto objetivo <span>%</span><input id="targetMargin" type="number" min="1" max="95" step="1" value="55" /></label>
+          <label>Comisión del canal o cobro <span>%</span><input id="channelFee" type="number" min="0" max="80" step="0.1" value="3.6" /></label>
+          <label>Impuesto configurable <span>%</span><input id="tax" type="number" min="0" max="50" step="1" value="16" /></label>
+          <label>IEPS u otra cuota por unidad <span>MXN</span><input id="specificTax" type="number" min="0" step="0.01" value="0" /></label>
+          <label>Precio que quieres probar <span>MXN</span><input id="testPrice" type="number" min="1" step="1" value="59" /></label>
+          <label>Costos fijos mensuales del proyecto <span>MXN</span><input id="fixedMonthly" type="number" min="0" step="100" value="0" /></label>
+          <label>Volumen mensual esperado <span>unidades</span><input id="monthlyVolume" type="number" min="0" step="1" value="0" /></label>
+          <label>Inversión inicial a recuperar <span>MXN</span><input id="initialInvestment" type="number" min="0" step="100" value="0" /></label>
+        </form>
+
+        <div class="results" aria-live="polite">
+          <article><span>Costo variable estimado</span><strong id="unitCost">$0.00</strong></article>
+          <article><span>Precio para el margen objetivo</span><strong id="recommendedPrice">$0.00</strong></article>
+          <article><span>Margen con el precio de prueba</span><strong id="actualMargin">0%</strong></article>
+          <article><span>Utilidad bruta por unidad</span><strong id="grossProfit">$0.00</strong></article>
+          <article><span>Punto de equilibrio mensual</span><strong id="breakEvenUnits">0 u.</strong></article>
+          <article><span>Contribución mensual después de fijos</span><strong id="monthlyContribution">$0.00</strong></article>
+          <article><span>Recuperación de inversión</span><strong id="recoveryMonths">—</strong></article>
+        </div>
+        <p id="price-signal" class="price-signal"></p>
+        <p class="formula-note">Fórmula: (costo con merma + cuota por unidad) ÷ (1 − margen objetivo) ÷ (1 − comisión) × (1 + impuesto). Captura todos los costos con una base fiscal consistente y sin duplicar IVA recuperable. Valida con contabilidad IVA, IEPS, clasificación y facturación.</p>
+      </section>
+
+      <section class="decision" aria-labelledby="decision-title">
+        <div class="section-title">
+          <p class="eyebrow">Hipótesis comercial</p>
+          <h2 id="decision-title">Primero una prueba pequeña.</h2>
+        </div>
+        <ol>
+          <li><span>01</span><div><strong>Prototipo sensorial</strong><p>Tres versiones por sabor; prueba ciega de aceptación, dulzor, aroma y tamaño.</p></div></li>
+          <li><span>02</span><div><strong>Costeo completo</strong><p>Cotizaciones reales de ingrediente, botella, producción, laboratorio, frío y merma.</p></div></li>
+          <li><span>03</span><div><strong>Validación técnica</strong><p>Formulación, estabilidad, cafeína, microbiología, vida de anaquel y etiqueta.</p></div></li>
+          <li><span>04</span><div><strong>Prueba en UPAEP</strong><p>Validación en La Paz con precio A/B de $59, $65 o $69 y registro de venta y recompra.</p></div></li>
+          <li><span>05</span><div><strong>Decisión</strong><p>Continuar sólo si sabor, margen, operación y cumplimiento pasan juntos.</p></div></li>
+        </ol>
+      </section>
+    </main>
+
+    <script src="/shots-funcionales/calculadora.js?v=20260715" defer></script>
+  </body>
+</html>

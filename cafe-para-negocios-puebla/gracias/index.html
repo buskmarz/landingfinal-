@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="es-MX">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Solicitud recibida | Better Mood Coffee</title>
+    <meta name="description" content="Recibimos tu solicitud de café para negocio." />
+    <meta name="robots" content="noindex,follow" />
+    <meta name="theme-color" content="#fbf8ef" />
+    <link rel="icon" href="/assets/bettermood_logo-10.png" />
+    <link rel="stylesheet" href="/home.css" />
+    <style>
+      .thanks-page { min-height: 100vh; padding: 24px; display: grid; place-items: center; background: radial-gradient(circle at 20% 20%, rgba(255, 222, 0, 0.28), transparent 30%), #fbf8ef; }
+      .thanks-card { width: min(680px, 100%); padding: clamp(36px, 8vw, 84px); border: 1px solid rgba(255, 255, 255, 0.8); border-radius: 34px; background: rgba(251, 248, 239, 0.86); box-shadow: var(--shadow-sheet); text-align: center; -webkit-backdrop-filter: blur(24px); backdrop-filter: blur(24px); }
+      .thanks-card img { width: 92px; margin: 0 auto 36px; }
+      .thanks-card h1 { font-size: clamp(3rem, 8vw, 6rem); line-height: 0.94; letter-spacing: -0.06em; }
+      .thanks-card p { max-width: 470px; margin: 24px auto 0; color: var(--muted); font-size: 1.06rem; line-height: 1.6; }
+      .thanks-actions { margin-top: 34px; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+      @media (max-width: 560px) { .thanks-page { padding: 14px; } .thanks-actions { display: grid; } }
+    </style>
+  </head>
+  <body class="thanks-page">
+    <main class="thanks-card">
+      <img src="/assets/home/bettermood-logo-180.png" alt="Better Mood Coffee" width="180" height="147" />
+      <p class="eyebrow">Solicitud recibida</p>
+      <h1>Hablemos de café.</h1>
+      <p>Ya tenemos tus datos. Te responderemos por el canal que elegiste.</p>
+      <div class="thanks-actions">
+        <a class="button button--primary" href="/">Volver a Better Mood</a>
+        <a class="button button--whatsapp" href="https://wa.me/message/WQWEEODGY6H2P1" target="_blank" rel="noopener noreferrer">Abrir WhatsApp</a>
+      </div>
+    </main>
+  </body>
+</html>

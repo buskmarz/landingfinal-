@@ -3,41 +3,107 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Bienestar real en taza | Better Mood Coffee Puebla</title>
-    <meta name="description" content="La forma Better Mood de servir café en Puebla: buen producto, ingredientes claros, hospitalidad y una pausa para compartir." />
+    <title>Bienestar real en taza | Better Mood Coffee</title>
+    <meta name="description" content="La forma Better Mood de unir café de especialidad, bebidas funcionales y comunidad: sabor primero, curiosidad y una pausa para compartir." />
     <meta name="robots" content="index,follow" />
     <link rel="canonical" href="https://bmoodcoffee.com/bienestar/" />
-    <meta property="og:locale" content="es_MX" />
+    <meta name="theme-color" content="#fbf8ef" />
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Better Mood Coffee" />
-    <meta property="og:title" content="Bienestar real en taza | Better Mood Coffee" />
-    <meta property="og:description" content="Café de especialidad, recetas claras y una pausa para compartir en Puebla y Cholula." />
+    <meta property="og:locale" content="es_MX" />
+    <meta property="og:title" content="Bienestar real en taza | Better Mood" />
+    <meta property="og:description" content="Buen café, curiosidad y una pausa para compartir." />
     <meta property="og:url" content="https://bmoodcoffee.com/bienestar/" />
-    <meta property="og:image" content="https://bmoodcoffee.com/assets/hero-coffee.jpg" />
+    <meta property="og:image" content="https://bmoodcoffee.com/assets/home/hospitality.jpg" />
+    <link rel="icon" href="/assets/bettermood_logo-10.png" />
+    <link rel="stylesheet" href="/home.css" />
+    <link rel="stylesheet" href="/local-intent.css" />
     <script type="application/ld+json">
-      {"@context":"https://schema.org","@type":"WebPage","name":"Bienestar real en taza","url":"https://bmoodcoffee.com/bienestar/","inLanguage":"es-MX","about":{"@type":"CafeOrCoffeeShop","name":"Better Mood Coffee"}}
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Bienestar real en taza",
+        "description": "La forma Better Mood de unir café de especialidad, bebidas funcionales y comunidad.",
+        "url": "https://bmoodcoffee.com/bienestar/",
+        "inLanguage": "es-MX",
+        "about": { "@type": "Organization", "name": "Better Mood Coffee" }
+      }
     </script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="../styles.css" />
-    <link rel="icon" href="../assets/logo-better-mood.png" />
   </head>
-  <body class="learn-page">
-    <a class="skip-link" href="#main">Saltar al contenido</a>
-    <header class="header"><div class="container header__inner"><a class="logo" href="/" aria-label="Better Mood Coffee"><img src="../assets/logo-better-mood.png" alt="Better Mood Coffee" /></a><nav class="nav" aria-label="Navegación principal"><a href="/menu/">Menú La Paz</a><a href="/menu-cholula/">Menú Cholula</a><a href="/#sucursales">Sucursales</a></nav></div></header>
-    <main id="main">
-      <section class="learn-hero" aria-labelledby="wellness-title"><div class="container learn-hero__grid">
-        <div class="learn-hero__copy"><p class="eyebrow">Better Mood Coffee</p><h1 id="wellness-title">Bienestar real en taza.</h1><p>Buen café, recetas claras y una pausa para conversar. Sin promesas exageradas: sabor, preparación y hospitalidad.</p><div class="hero__actions"><a class="btn btn--primary" href="/#sucursales">Elegir sucursal</a><a class="btn btn--secondary" href="/menu/">Ver menú</a></div></div>
-        <figure class="learn-hero__media"><img src="../assets/hero-coffee.jpg" alt="Fachada de Better Mood Coffee en La Paz, Puebla" /><figcaption>Better Mood Coffee · La Paz</figcaption></figure>
-      </div></section>
-      <section class="learn-section"><div class="container learn-section__grid">
-        <div><p class="eyebrow">Nuestra forma de servir</p><h2>Una bebida que puedes entender.</h2></div>
-        <div><p>Te contamos qué lleva, cómo se prepara y qué perfil de sabor puedes esperar. Antes de ordenar, puedes preguntar por alérgenos, tamaño, dulzor y disponibilidad.</p><p>Si una mezcla requiere documentación o revisión adicional, no se promociona en la carta digital.</p></div>
-      </div></section>
-      <section class="learn-section learn-section--soft"><div class="container"><p class="eyebrow">Elige por sabor</p><h2>Café, matcha, frutas y especias.</h2><p>Intenso, cítrico, cremoso o refrescante: el equipo puede ayudarte a encontrar una bebida por gusto y momento, sin atribuirle resultados médicos o fisiológicos.</p><div class="hero__actions"><a class="btn btn--primary" href="/menu/">Menú La Paz</a><a class="btn btn--secondary" href="/menu-cholula/">Menú Cholula</a></div></div></section>
+  <body>
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+    <header class="site-header" data-header>
+      <a class="brand" href="/" aria-label="Better Mood Coffee, inicio"><img src="/assets/home/bettermood-logo-180.png" alt="Better Mood Coffee" width="180" height="147" /></a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="main-nav" data-nav-toggle><span></span><span></span><span></span><span class="sr-only">Abrir menú</span></button>
+      <nav class="main-nav" id="main-nav" aria-label="Navegación principal" data-nav>
+        <a href="/cafe-lavado/">El café</a>
+        <a href="/bebidas-funcionales-puebla/">Bebidas</a>
+        <a href="/como-preparar-cafe-en-casa/">Métodos</a>
+        <a href="/#sucursales">Ubicación</a>
+      </nav>
+      <a class="button button--primary header-cta" href="/#sucursales">Visítanos</a>
+    </header>
+
+    <main id="contenido">
+      <section class="intent-hero intent-hero--people section" aria-labelledby="wellbeing-title">
+        <div class="intent-hero__copy reveal">
+          <p class="eyebrow">La idea Better Mood</p>
+          <h1 id="wellbeing-title">Bienestar real<br />en taza.</h1>
+          <p>Buen café, curiosidad y una pausa para compartir.</p>
+          <div class="intent-hero__actions">
+            <a class="button button--primary" href="/#sucursales">Visítanos</a>
+            <a class="button button--outline" href="/bebidas-funcionales-puebla/">Descubrir bebidas</a>
+          </div>
+        </div>
+        <figure class="intent-hero__media reveal reveal--late">
+          <picture>
+            <source srcset="/assets/home/hospitality-720.avif 720w, /assets/home/hospitality-1440.avif 1440w" type="image/avif" sizes="(max-width: 680px) 100vw, 52vw" />
+            <img src="/assets/home/hospitality.jpg" alt="Momento de café y hospitalidad en Better Mood Coffee" width="1440" height="1600" fetchpriority="high" />
+          </picture>
+        </figure>
+      </section>
+
+      <section class="intent-facts section" aria-labelledby="wellbeing-meaning-title">
+        <div class="intent-facts__heading reveal">
+          <p class="eyebrow">Lo esencial</p>
+          <h2 id="wellbeing-meaning-title">Sentirte bien<br />también sabe bien.</h2>
+        </div>
+        <div class="intent-facts__grid reveal reveal--late">
+          <article class="intent-fact"><span>01</span><strong>Buen café</strong><p>El sabor siempre va primero.</p></article>
+          <article class="intent-fact"><span>02</span><strong>Algo por descubrir</strong><p>Recetas y bebidas funcionales.</p></article>
+          <article class="intent-fact"><span>03</span><strong>Una mesa compartida</strong><p>Hospitalidad que invita a volver.</p></article>
+        </div>
+      </section>
+
+      <section class="intent-split intent-split--sun section" aria-labelledby="wellbeing-simple-title">
+        <div class="reveal">
+          <p class="eyebrow">Nuestra forma de verlo</p>
+          <h2 id="wellbeing-simple-title">Así de simple.</h2>
+        </div>
+        <div class="intent-split__body reveal reveal--late">
+          <p>El café abre la conversación. Las bebidas funcionales suman curiosidad. La comunidad hace que valga la pena volver.</p>
+          <p>Sin fórmulas mágicas. Sin palabras difíciles. Sólo una experiencia que puedes hacer tuya.</p>
+          <a class="text-link" href="/bebidas-funcionales-puebla/">Conocer las bebidas <span aria-hidden="true">→</span></a>
+        </div>
+      </section>
+
+      <section class="intent-visit section" aria-labelledby="wellbeing-visit-title">
+        <div class="reveal">
+          <p class="eyebrow">UPAEP / La Paz</p>
+          <h2 id="wellbeing-visit-title">Ven por café.<br />Quédate por el mood.</h2>
+        </div>
+        <div class="intent-visit__actions reveal reveal--late">
+          <a class="button button--primary" href="https://maps.app.goo.gl/Cx8Rz7zSEPTYzUxr6?g_st=ic" data-event="maps_click" data-cta="bienestar-maps">Cómo llegar</a>
+          <a class="button button--outline" href="/arcade/" data-cta="bienestar-juegos">Ver juegos</a>
+        </div>
+      </section>
     </main>
-    <footer class="footer"><div class="container footer__grid"><div class="footer__brand"><img class="footer__logo" src="../assets/logo-better-mood.png" alt="Better Mood Coffee" /><p>Café de especialidad, recetas propias y hospitalidad.</p></div><div class="footer__links"><h3>Visítanos</h3><a href="/#sucursales">Elegir sucursal</a><a href="/menu/">Menú La Paz</a><a href="/menu-cholula/">Menú Cholula</a></div></div><div class="container footer__disclaimer"><p>Consulta en barra ingredientes, alérgenos, tamaños, precios y disponibilidad.</p></div></footer>
-    <script src="../script.js" defer></script>
+
+    <footer class="site-footer">
+      <a class="brand brand--footer" href="/" aria-label="Better Mood Coffee, inicio"><img src="/assets/home/bettermood-logo-180.png" alt="Better Mood Coffee" width="180" height="147" loading="lazy" /></a>
+      <div class="footer-links"><a href="/cafe-lavado/">Café</a><a href="/bebidas-funcionales-puebla/">Bebidas</a><a href="/eventos/">Eventos</a><a href="/aviso-privacidad.html">Privacidad</a></div>
+      <p>La Paz, Puebla, México.</p>
+    </footer>
+    <script src="/home.js" defer></script>
   </body>
 </html>
