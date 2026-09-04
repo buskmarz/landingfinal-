@@ -4,7 +4,7 @@
   "private": true,
   "description": "Better Mood Coffee landing page with Droppy Dash",
   "scripts": {
-    "build": "node seo/render-local-pages.mjs",
+    "build": "node seo/render-local-pages.mjs && node scripts/build-public.mjs",
     "lint": "node seo/validate-seo.mjs",
     "test": "node seo/validate-seo.mjs"
   },

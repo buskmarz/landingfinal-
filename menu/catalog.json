@@ -1,0 +1,414 @@
+{
+  "updated": "2026-09-04",
+  "currency": "MXN",
+  "items": [
+    {
+      "id": "espresso-doble",
+      "category": "cafe",
+      "name": "Espresso doble",
+      "size": "2 oz",
+      "description": "Intenso, corto y directo.",
+      "price": 45
+    },
+    {
+      "id": "americano",
+      "category": "cafe",
+      "name": "Americano",
+      "size": "8 oz",
+      "description": "Espresso doble con agua caliente.",
+      "price": 55
+    },
+    {
+      "id": "brewed-coffee",
+      "category": "cafe",
+      "name": "Brewed Coffee",
+      "size": "8 oz",
+      "description": "Café preparado en V60.",
+      "price": 65
+    },
+    {
+      "id": "cortado",
+      "category": "cafe",
+      "name": "Cortado",
+      "size": "4 oz",
+      "description": "Espresso doble con la misma cantidad de leche.",
+      "price": 50
+    },
+    {
+      "id": "flat-white",
+      "category": "cafe",
+      "name": "Flat White",
+      "size": "5 oz",
+      "description": "Ristretto doble y leche.",
+      "price": 60
+    },
+    {
+      "id": "cappuccino",
+      "category": "cafe",
+      "name": "Cappuccino",
+      "size": "6 oz",
+      "description": "Café y leche en equilibrio.",
+      "price": 65
+    },
+    {
+      "id": "latte",
+      "category": "cafe",
+      "name": "Latte",
+      "size": "10 oz",
+      "description": "Leche y espresso.",
+      "price": 70
+    },
+    {
+      "id": "mocca",
+      "category": "cafe",
+      "name": "Mocca",
+      "size": "10 oz",
+      "description": "Espresso, cacao y leche.",
+      "price": 75
+    },
+    {
+      "id": "cold-brew",
+      "category": "cafe",
+      "name": "Cold Brew",
+      "size": "12 oz",
+      "description": "Extracción en frío de entre 24 y 48 horas.",
+      "price": 60
+    },
+    {
+      "id": "cold-brew-tonic",
+      "category": "cafe",
+      "name": "Cold Brew Tónic",
+      "size": "12 oz",
+      "description": "Cold brew, hielo y agua tónica.",
+      "price": 75
+    },
+    {
+      "id": "espresso-tonic",
+      "category": "cafe",
+      "name": "Espresso Tónic",
+      "size": "12 oz",
+      "description": "Espresso, hielo y agua tónica.",
+      "price": 75
+    },
+    {
+      "id": "affogato",
+      "category": "cafe",
+      "name": "Affogato",
+      "size": "8 oz",
+      "description": "Helado de vainilla con espresso doble.",
+      "price": 70
+    },
+    {
+      "id": "chai",
+      "category": "sin-cafe",
+      "name": "Chai",
+      "size": "10 oz",
+      "description": "Chai latte.",
+      "price": 85
+    },
+    {
+      "id": "matcha",
+      "category": "sin-cafe",
+      "name": "Matcha",
+      "size": "10 oz",
+      "description": "Matcha ceremonial con leche.",
+      "price": 75
+    },
+    {
+      "id": "taro",
+      "category": "sin-cafe",
+      "name": "Taro",
+      "size": "10 oz",
+      "description": "Taro con leche.",
+      "price": 85
+    },
+    {
+      "id": "cacao",
+      "category": "sin-cafe",
+      "name": "Cacao",
+      "size": "10 oz",
+      "description": "Cacao con agua o con leche.",
+      "price": 75
+    },
+    {
+      "id": "golden-milk",
+      "category": "sin-cafe",
+      "name": "Golden Milk",
+      "size": "12 oz",
+      "description": "Pregunta por los sabores del momento.",
+      "price": 85
+    },
+    {
+      "id": "kombucha",
+      "category": "sin-cafe",
+      "name": "Kombucha",
+      "size": "12 oz",
+      "description": "Pregunta por los sabores del momento.",
+      "price": 49
+    },
+    {
+      "id": "te-tisana",
+      "category": "sin-cafe",
+      "name": "Té / tisana",
+      "size": "10 oz",
+      "description": "Pregunta por los sabores del momento.",
+      "price": 65
+    },
+    {
+      "id": "cappuccino-focus",
+      "category": "recetas",
+      "name": "Cappuccino Focus",
+      "size": "6 oz",
+      "description": "Espresso, vainilla, leche y melena de león.",
+      "price": 95
+    },
+    {
+      "id": "tonic-flow",
+      "category": "recetas",
+      "name": "Tonic Flow",
+      "size": "12 oz",
+      "description": "Hielo, vainilla, tónica, espresso y rhodiola.",
+      "price": 95
+    },
+    {
+      "id": "matcha-focus-flow",
+      "category": "recetas",
+      "name": "Matcha Focus & Flow",
+      "size": "10 oz",
+      "description": "Matcha, vainilla, melena de león y rhodiola.",
+      "price": 95
+    },
+    {
+      "id": "latte-calm",
+      "category": "recetas",
+      "name": "Latte Calm",
+      "size": "10 oz",
+      "description": "Espresso, lavanda, leche y ashwagandha.",
+      "price": 95
+    },
+    {
+      "id": "cold-berry-days",
+      "category": "recetas",
+      "name": "Cold Berry Days",
+      "size": "12 oz",
+      "description": "Macerado de berries, ginger ale, CBD Carmina y Gummie Berries. Consulta ingredientes en barra.",
+      "price": 95
+    },
+    {
+      "id": "golden-peace",
+      "category": "recetas",
+      "name": "Golden Peace",
+      "size": "10 oz",
+      "description": "Golden milk, lavanda, leche y reishi.",
+      "price": 95
+    },
+    {
+      "id": "enrgy-flat",
+      "category": "recetas",
+      "name": "Enrgy Flat",
+      "size": "5 oz",
+      "description": "Ristretto, jarabe de agave, leche y cordyceps.",
+      "price": 95
+    },
+    {
+      "id": "cold-boost",
+      "category": "recetas",
+      "name": "Cold Boost",
+      "size": "12 oz",
+      "description": "Hielo, jarabe de agave, cold brew y CBD Wellness.",
+      "price": 95
+    },
+    {
+      "id": "latte-energy-boost",
+      "category": "recetas",
+      "name": "Latte Energy & Boost",
+      "size": "10 oz",
+      "description": "Espresso, jarabe de agave, hielo, leche, cordyceps y CBD Wellness.",
+      "price": 95
+    },
+    {
+      "id": "chilaquiles",
+      "category": "alimentos",
+      "name": "Chilaquiles",
+      "size": "",
+      "description": "Verdes o rojos, con pollo, queso, crema y aguacate.",
+      "price": 85
+    },
+    {
+      "id": "molletes",
+      "category": "alimentos",
+      "name": "Molletes",
+      "size": "",
+      "description": "6 piezas, tocino, pepperoni, jamón serrano y jamón de pavo.",
+      "price": 85
+    },
+    {
+      "id": "avo-toast",
+      "category": "alimentos",
+      "name": "Avo toast",
+      "size": "",
+      "description": "Aguacate, cherry, aceite de oliva, sal y pimienta. Agrega tocino +$30.",
+      "price": 75
+    },
+    {
+      "id": "munchie-chips",
+      "category": "alimentos",
+      "name": "Munchie chips",
+      "size": "",
+      "description": "Papas fritas con salsa de la casa.",
+      "price": 70
+    },
+    {
+      "id": "waffles-frutos-rojos",
+      "category": "alimentos",
+      "name": "Waffles frutos rojos",
+      "size": "",
+      "description": "Nutella, fresas y coco.",
+      "price": 95
+    },
+    {
+      "id": "el-iberico",
+      "category": "alimentos",
+      "name": "El ibérico",
+      "size": "",
+      "description": "Jamón serrano, pesto, queso de cabra, mix de lechugas y aceitunas negras.",
+      "price": 130
+    },
+    {
+      "id": "golden",
+      "category": "alimentos",
+      "name": "Golden",
+      "size": "",
+      "description": "Jamón de pavo, mix de quesos, manzana y miel de agave.",
+      "price": 110
+    },
+    {
+      "id": "croissant-de-nutella",
+      "category": "alimentos",
+      "name": "Croissant de Nutella",
+      "size": "",
+      "description": "Nutella, fresas, almendra y coco.",
+      "price": 90
+    },
+    {
+      "id": "club-sandwich",
+      "category": "alimentos",
+      "name": "Club sándwich",
+      "size": "",
+      "description": "Pollo, jamón, tocino, mix de quesos, cherry, mix de lechuga, aguacate y mayonesa.",
+      "price": 160
+    },
+    {
+      "id": "roast-beef",
+      "category": "alimentos",
+      "name": "Roast beef",
+      "size": "",
+      "description": "Roast beef, mayonesa, cebolla caramelizada y mix de quesos.",
+      "price": 120
+    },
+    {
+      "id": "el-vasco",
+      "category": "alimentos",
+      "name": "El vasco",
+      "size": "",
+      "description": "Jamón serrano, pesto y jalea de higo.",
+      "price": 120
+    },
+    {
+      "id": "smoked-turkey",
+      "category": "alimentos",
+      "name": "Smoked turkey",
+      "size": "",
+      "description": "Jamón de pavo, mayonesa, cherry, mix de lechugas y mix de quesos.",
+      "price": 110
+    },
+    {
+      "id": "pasteles",
+      "category": "postres",
+      "name": "Pasteles",
+      "size": "",
+      "description": "Nutella, conejito, Ferrero, Red Velvet, zanahoria, lotus, Baileys, confeti, coco, tiramisú y triple chocolate.",
+      "price": 115
+    },
+    {
+      "id": "cheesecake",
+      "category": "postres",
+      "name": "Cheesecake",
+      "size": "",
+      "description": "Base de galleta con crema de Lotus.",
+      "price": 120
+    },
+    {
+      "id": "brownie",
+      "category": "postres",
+      "name": "Brownie",
+      "size": "",
+      "description": "+$20 con helado.",
+      "price": 60
+    },
+    {
+      "id": "enjambre",
+      "category": "postres",
+      "name": "Enjambre",
+      "size": "",
+      "description": "Hojuelas de cereal cubiertas con chocolate con leche o amargo.",
+      "price": 35
+    },
+    {
+      "id": "trufas",
+      "category": "postres",
+      "name": "Trufas",
+      "size": "",
+      "description": "3 piezas de chocolate con leche, amargo y blanco.",
+      "price": 35
+    },
+    {
+      "id": "panque-de-temporada",
+      "category": "postres",
+      "name": "Panqué de temporada",
+      "size": "",
+      "description": "",
+      "price": 45
+    },
+    {
+      "id": "tortuga-de-chocolate",
+      "category": "postres",
+      "name": "Tortuga de chocolate",
+      "size": "",
+      "description": "Oreo, pretzel, nuez o almendra.",
+      "price": 35
+    },
+    {
+      "id": "leche-de-avena-shot-de-leche",
+      "category": "extras",
+      "name": "Leche de avena / shot de leche",
+      "size": "",
+      "description": "Cambia tu leche regular por avena o agrega leche a tu bebida.",
+      "price": 15
+    },
+    {
+      "id": "frio-jarabe-natural",
+      "category": "extras",
+      "name": "Frío / jarabe natural",
+      "size": "",
+      "description": "Pide tu bebida fría o agrega tu jarabe natural preferido.",
+      "price": 15
+    },
+    {
+      "id": "adaptogenos",
+      "category": "extras",
+      "name": "Adaptógenos",
+      "size": "",
+      "description": "A elección en tu bebida o alimento. Confirma el ingrediente en barra.",
+      "price": 42
+    },
+    {
+      "id": "cbd-drops",
+      "category": "extras",
+      "name": "CBD Drops",
+      "size": "",
+      "description": "A elección entre Wellness y Calming. Consulta la información del ingrediente en barra.",
+      "price": 42
+    }
+  ]
+}

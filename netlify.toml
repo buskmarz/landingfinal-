@@ -1,10 +1,17 @@
 [build]
   command = "npm run build"
-  publish = "."
+  publish = "dist"
   functions = "netlify/functions"
 
 [functions]
   external_node_modules = ["@netlify/blobs"]
+
+# Table ordering uses the same POS backend and a cookie scoped to this route.
+[[redirects]]
+  from = "/api/table-order"
+  to = "https://tareascontrol.netlify.app/.netlify/functions/table-orders"
+  status = 200
+  force = true
 
 # Cholula está pausada temporalmente. Conservamos las URLs históricas como
 # redirecciones 302 para no romper enlaces ni declarar un cierre definitivo.
