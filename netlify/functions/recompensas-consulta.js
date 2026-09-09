@@ -8,7 +8,8 @@ function json(statusCode, body) {
       "Cache-Control": "no-store",
       "Access-Control-Allow-Origin": "https://bmoodcoffee.com",
       "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type",
+      "Access-Control-Allow-Headers": "Content-Type, Authorization",
+      "Referrer-Policy": "no-referrer",
     },
     body: JSON.stringify(body),
   };
@@ -39,9 +40,9 @@ exports.handler = async (event) => {
     if (event.httpMethod === "GET") {
       const token = readToken(event);
       if (!token) return json(400, { error: "Token requerido." });
-      const upstream = await fetch(`${PORTAL_BASE}?token=${encodeURIComponent(token)}`, {
+      const upstream = await fetch(PORTAL_BASE, {
         method: "GET",
-        headers: { Accept: "application/json" },
+        headers: { Accept: "application/json", Authorization: `Bearer ${token}` },
       });
       const payload = await upstream.json().catch(() => ({}));
       return json(upstream.status, payload);

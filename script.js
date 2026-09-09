@@ -944,6 +944,11 @@ if (rewardsPortalRoot) {
   };
   const PORTAL_STORAGE_KEY = "bmood_rewards_portal_token";
   let currentPortalToken = "";
+  let verifiedEmailMode = false;
+  let portalModeReady = false;
+  const portalEndpoint = () => verifiedEmailMode
+    ? 'https://tareascontrol.netlify.app/api/loyalty-portal'
+    : `${API_BASE}/recompensas-consulta`;
 
   const sendPortalEvent = (eventName, cta = "rewards_portal") => {
     if (IS_LOCAL_PREVIEW || !eventName) return;
@@ -996,6 +1001,7 @@ if (rewardsPortalRoot) {
   };
 
   const clearPortalSession = () => {
+    currentPortalToken = "";
     window.localStorage.removeItem(PORTAL_STORAGE_KEY);
     portalResults?.setAttribute("hidden", "hidden");
     portalReset?.setAttribute("hidden", "hidden");
@@ -1067,7 +1073,7 @@ if (rewardsPortalRoot) {
     if (button) button.setAttribute("disabled", "disabled");
     setPortalStatus(target === "apple" ? "Preparando Apple Wallet..." : "Preparando Google Wallet...");
     try {
-      const res = await fetch(`${API_BASE}/recompensas-consulta`, {
+      const res = await fetch(portalEndpoint(), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action: target === "apple" ? "issue_apple_wallet" : "issue_google_wallet", token: currentPortalToken }),
@@ -1129,7 +1135,7 @@ if (rewardsPortalRoot) {
     portalReset?.removeAttribute("hidden");
     if (token) {
       currentPortalToken = token;
-      window.localStorage.setItem(PORTAL_STORAGE_KEY, token);
+      if (!verifiedEmailMode) window.localStorage.setItem(PORTAL_STORAGE_KEY, token);
     }
     if (!options.skipScroll) {
       window.requestAnimationFrame(() => portalResults?.scrollIntoView({ block: "start", behavior: "auto" }));
@@ -1139,8 +1145,9 @@ if (rewardsPortalRoot) {
   const loadPortalSession = async (token, options = {}) => {
     if (!token) return false;
     try {
-      const res = await fetch(`${API_BASE}/recompensas-consulta?token=${encodeURIComponent(token)}`, {
-        headers: { Accept: "application/json" },
+      const res = await fetch(portalEndpoint(), {
+        headers: { Accept: "application/json", Authorization: `Bearer ${token}` },
+        cache: 'no-store', referrerPolicy: 'no-referrer',
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok || !data?.ok) {
@@ -1159,6 +1166,7 @@ if (rewardsPortalRoot) {
 
   portalForm?.addEventListener("submit", async (event) => {
     event.preventDefault();
+    if (!portalModeReady || verifiedEmailMode) return;
     const formData = new FormData(portalForm);
     const payload = {
       phone: String(formData.get("phone") || "").trim(),
@@ -1212,10 +1220,18 @@ if (rewardsPortalRoot) {
     issueWalletPass(button.getAttribute("data-wallet-platform"));
   });
 
-  const existingPortalToken = window.localStorage.getItem(PORTAL_STORAGE_KEY);
-  if (existingPortalToken) {
-    loadPortalSession(existingPortalToken, { silent: true }).then((ok) => {
-      if (ok) setPortalStatus("Recuperamos tu consulta activa.", "success");
-    });
-  }
+  rewardsPortalRoot.addEventListener('enrollment:signout', clearPortalSession);
+  import('/recompensas/enrollment.js').then(({initEnrollment}) => initEnrollment({
+    root: rewardsPortalRoot, setStatus: setPortalStatus,
+    onSession: data => renderPortalCustomer(data, data.token),
+    onMode: enabled => {
+      verifiedEmailMode = enabled;
+      portalModeReady = true;
+      if (enabled) { clearPortalSession(); return; }
+      const token = window.localStorage.getItem(PORTAL_STORAGE_KEY);
+      if (token) loadPortalSession(token, {silent:true}).then(ok=>{
+        if (ok) setPortalStatus('Recuperamos tu consulta activa.', 'success');
+      });
+    }
+  })).catch(() => setPortalStatus('No pudimos cargar el acceso. Recarga para reintentar.', 'error'));
 }
