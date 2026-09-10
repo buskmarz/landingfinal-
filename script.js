@@ -939,6 +939,7 @@ if (rewardsPortalRoot) {
     monthEarned: rewardsPortalRoot.querySelector("[data-portal-month-earned]"),
     nextAmount: rewardsPortalRoot.querySelector("[data-portal-next-amount]"),
     nextLabel: rewardsPortalRoot.querySelector("[data-portal-next-label]"),
+    progressTitle: rewardsPortalRoot.querySelector("[data-portal-progress-title]"),
     expiry: rewardsPortalRoot.querySelector("[data-portal-expiry]"),
     session: rewardsPortalRoot.querySelector("[data-portal-session]"),
   };
@@ -1098,6 +1099,7 @@ if (rewardsPortalRoot) {
     const customer = payload?.customer;
     if (!customer) return;
     const profile = customer.profile || {};
+    const hybrid = profile.loyaltyProgram === "hybrid";
     const publicCustomer = customer.customer || {};
     const sessionExpiresAt = payload.sessionExpiresAt ? formatDateTime(payload.sessionExpiresAt) : "";
 
@@ -1106,15 +1108,20 @@ if (rewardsPortalRoot) {
     if (portalFields.level) {
       const levelName = profile.cashbackLevelLabel || "Bronce";
       const pct = profile.cashbackPct ? `${Number(profile.cashbackPct).toFixed(2)}% de saldo` : "";
-      portalFields.level.textContent = pct ? `${levelName} · ${pct}` : levelName;
+      portalFields.level.textContent = hybrid ? "5% de cashback + sellos" : pct ? `${levelName} · ${pct}` : levelName;
     }
     if (portalFields.balance) portalFields.balance.textContent = formatMoney(profile.availableCashbackBalance);
     if (portalFields.pending) portalFields.pending.textContent = formatMoney(profile.pendingCashbackBalance);
     if (portalFields.monthSpend) portalFields.monthSpend.textContent = formatMoney(profile.currentMonthEligibleSpend);
     if (portalFields.monthEarned) portalFields.monthEarned.textContent = formatMoney(profile.currentMonthCashbackEarned);
-    if (portalFields.nextAmount) portalFields.nextAmount.textContent = formatMoney(profile.amountToNextTier);
+    if (portalFields.progressTitle) portalFields.progressTitle.textContent = hybrid ? "Sellos" : "Progreso de nivel";
+    if (portalFields.nextAmount) portalFields.nextAmount.textContent = hybrid
+      ? `${Number(profile.currentProgressVisits || 0)} de ${Number(profile.visitsPerReward || 6)}`
+      : formatMoney(profile.amountToNextTier);
     if (portalFields.nextLabel) {
-      portalFields.nextLabel.textContent = profile.nextTierLabel
+      portalFields.nextLabel.textContent = hybrid
+        ? `${Number(profile.availableRewardsCount || 0)} bebidas gratis disponibles`
+        : profile.nextTierLabel
         ? `Te faltan ${formatMoney(profile.amountToNextTier)} para ${profile.nextTierLabel}.`
         : "Ya estás en el nivel más alto.";
     }
