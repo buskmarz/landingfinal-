@@ -14,11 +14,18 @@ for(const [name,engine] of Object.entries({chromium,webkit})){
     for(const [device,viewport] of Object.entries({desktop:{width:1440,height:1000},tablet:{width:820,height:1180},mobile:{width:390,height:844}})){
       const context=await browser.newContext({viewport});
       let hybrid=true;
+      let releaseWallet, walletStarted;
+      const walletRequestStarted=new Promise(resolve=>{walletStarted=resolve;});
       const page=await context.newPage();
       const errors=[];page.on('pageerror',error=>errors.push(error.message));
       await context.addInitScript(()=>localStorage.setItem('bmood_rewards_portal_token','isolated-session'));
       await page.route('**/*',async route=>{
         const url=new URL(route.request().url());
+        if(url.pathname.includes('recompensas-consulta')&&route.request().method()==='POST'){
+          walletStarted();
+          await new Promise(resolve=>{releaseWallet=resolve;});
+          return route.fulfill({json:{ok:true,installUrl:'https://bmood.test/should-not-open',customer:{customer:{name:'Private stale customer'},profile:{availableCashbackBalance:999},wallet:{passes:[]}}}});
+        }
         if(url.pathname.includes('loyalty-enrollment-auth'))return route.fulfill({json:{emailVerificationRequired:false}});
         if(url.pathname.includes('recompensas-consulta'))return route.fulfill({json:{ok:true,token:'isolated-session',customer:{customer:{name:'Cliente de prueba',phoneMasked:'******00'},profile:{loyaltyProgram:hybrid?'hybrid':'cashback',availableCashbackBalance:'500.00',pendingCashbackBalance:'25.00',cashbackLevelLabel:'Bronce',cashbackPct:hybrid?'5.00':'3.00',currentProgressVisits:5,visitsPerReward:6,availableRewardsCount:2,amountToNextTier:100,nextTierLabel:'Plata'},movements:[],wallet:[]}}});
         if(url.hostname!=='bmood.test')return route.fulfill({status:204,body:''});
@@ -41,8 +48,15 @@ for(const [name,engine] of Object.entries({chromium,webkit})){
       await page.locator('[data-portal-results]:not([hidden])').waitFor();
       assert.equal(await page.locator('[data-portal-progress-title]').textContent(),'Progreso de nivel');
       assert.ok((await page.locator('[data-portal-level]').textContent()).includes('3.00%'));
+      await page.locator('[data-wallet-platform="apple"]').click();
+      await walletRequestStarted;
       await page.locator('[data-portal-reset]').click();
+      const walletResponse=page.waitForResponse(response=>response.url().includes('recompensas-consulta')&&response.request().method()==='POST');
+      releaseWallet();await walletResponse;
+      await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
       assert.equal(await page.locator('[data-portal-results]').isVisible(),false);
+      assert.equal(new URL(page.url()).pathname,'/recompensas/','Late Wallet response must not navigate after logout');
+      assert.equal(await page.locator('[data-portal-name]').textContent(),'Cliente de prueba','Late response must not render another customer');
       assert.deepEqual(errors,[],`${name}/${device} browser exceptions`);
       await context.close();
       console.log(`PASS ${name}/${device}: active hybrid, legacy compatibility, balances, logout and no overflow`);

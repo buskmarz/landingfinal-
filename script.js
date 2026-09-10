@@ -945,6 +945,7 @@ if (rewardsPortalRoot) {
   };
   const PORTAL_STORAGE_KEY = "bmood_rewards_portal_token";
   let currentPortalToken = "";
+  let portalSessionRevision = 0;
   let verifiedEmailMode = false;
   let portalModeReady = false;
   const portalEndpoint = () => verifiedEmailMode
@@ -1002,6 +1003,7 @@ if (rewardsPortalRoot) {
   };
 
   const clearPortalSession = () => {
+    portalSessionRevision += 1;
     currentPortalToken = "";
     window.localStorage.removeItem(PORTAL_STORAGE_KEY);
     portalResults?.setAttribute("hidden", "hidden");
@@ -1070,6 +1072,8 @@ if (rewardsPortalRoot) {
       return;
     }
     const target = platform === "apple" ? "apple" : "google";
+    const revision = portalSessionRevision;
+    const token = currentPortalToken;
     const button = portalWalletLinks?.querySelector(`[data-wallet-platform="${target}"]`);
     if (button) button.setAttribute("disabled", "disabled");
     setPortalStatus(target === "apple" ? "Preparando Apple Wallet..." : "Preparando Google Wallet...");
@@ -1077,9 +1081,10 @@ if (rewardsPortalRoot) {
       const res = await fetch(portalEndpoint(), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: target === "apple" ? "issue_apple_wallet" : "issue_google_wallet", token: currentPortalToken }),
+        body: JSON.stringify({ action: target === "apple" ? "issue_apple_wallet" : "issue_google_wallet", token }),
       });
       const data = await res.json().catch(() => ({}));
+      if (revision !== portalSessionRevision || token !== currentPortalToken) return;
       if (!res.ok || !data?.ok) throw new Error(data.error || "No se pudo generar tu tarjeta digital.");
       if (data.customer) renderPortalCustomer(data, currentPortalToken, { skipScroll: true });
       const installUrl = data.installUrl || walletPassUrl(data.customer?.wallet?.passes || [], target);
@@ -1088,6 +1093,7 @@ if (rewardsPortalRoot) {
       setPortalStatus("Tarjeta lista. Abriendo Wallet...", "success");
       window.location.href = installUrl;
     } catch (error) {
+      if (revision !== portalSessionRevision || token !== currentPortalToken) return;
       sendPortalEvent("wallet_issue_error", target);
       setPortalStatus(error.message || "No se pudo generar tu tarjeta digital.", "error");
     } finally {
@@ -1151,12 +1157,14 @@ if (rewardsPortalRoot) {
 
   const loadPortalSession = async (token, options = {}) => {
     if (!token) return false;
+    const revision = portalSessionRevision;
     try {
       const res = await fetch(portalEndpoint(), {
         headers: { Accept: "application/json", Authorization: `Bearer ${token}` },
         cache: 'no-store', referrerPolicy: 'no-referrer',
       });
       const data = await res.json().catch(() => ({}));
+      if (revision !== portalSessionRevision) return false;
       if (!res.ok || !data?.ok) {
         throw new Error(data.error || "No se pudo abrir tu consulta.");
       }
@@ -1164,6 +1172,7 @@ if (rewardsPortalRoot) {
       if (!options.silent) setPortalStatus("Saldo cargado correctamente.", "success");
       return true;
     } catch (error) {
+      if (revision !== portalSessionRevision) return false;
       clearPortalSession();
       currentPortalToken = "";
       if (!options.silent) setPortalStatus(error.message || "No se pudo abrir tu consulta.", "error");
@@ -1187,6 +1196,7 @@ if (rewardsPortalRoot) {
     }
 
     sendPortalEvent("rewards_check_start", "portal_form");
+    const revision = portalSessionRevision;
     setPortalStatus("Consultando saldo...");
     if (portalSubmit) portalSubmit.disabled = true;
 
@@ -1197,6 +1207,7 @@ if (rewardsPortalRoot) {
         body: JSON.stringify(payload),
       });
       const data = await res.json().catch(() => ({}));
+      if (revision !== portalSessionRevision) return;
       if (!res.ok || !data?.ok || !data?.token) {
         throw new Error(data.error || "No pudimos validar tus datos.");
       }
@@ -1204,6 +1215,7 @@ if (rewardsPortalRoot) {
       sendPortalEvent("rewards_check_success", "portal_form");
       setPortalStatus("Consulta lista.", "success");
     } catch (error) {
+      if (revision !== portalSessionRevision) return;
       clearPortalSession();
       sendPortalEvent("rewards_check_error", "portal_form");
       setPortalStatus(error.message || "No pudimos validar tus datos.", "error");
