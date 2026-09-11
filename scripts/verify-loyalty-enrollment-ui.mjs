@@ -17,7 +17,7 @@ for(const [name,engine] of Object.entries({chromium,webkit})){
       await page.route('**/*',async route=>{
         const request=route.request(),url=new URL(request.url());
         if(url.pathname.includes('loyalty-enrollment-auth')){
-          if(request.method()==='GET')return route.fulfill({json:{emailVerificationRequired:true,registrationAvailable:true}});
+          if(request.method()==='GET')return route.fulfill({json:{emailVerificationRequired:true,registrationAvailable:true,hybridProgramActive:true}});
           const body=request.postDataJSON();calls.push(body);
           const responses={request:{challengeId:'isolated-challenge'},verify:{emailProof:'isolated-proof'},register:{status:'ready'}};
           return route.fulfill({json:responses[body.action]});
@@ -30,6 +30,9 @@ for(const [name,engine] of Object.entries({chromium,webkit})){
       });
       await page.goto('https://bmood.test/recompensas/');
       const form=page.locator('[data-enrollment-form]');await form.waitFor();
+      assert.equal(await page.locator('#rewards-title').textContent(),'5% de cashback + una bebida gratis al completar 6 sellos.');
+      assert.equal(await page.locator('#how-title').textContent(),'Cómo se acumulan tus beneficios.');
+      assert.equal(await page.locator('.rewards-how__steps article').nth(1).locator('p').textContent(),'Cada compra elegible genera 5% de cashback y una visita por día y sucursal.');
       assert.equal(await page.locator('[data-portal-form]').isVisible(),false);
       assert.equal(await form.locator('[name=marketingAccepted]').isChecked(),false);
       await form.locator('[name=name]').fill('Registro aislado');

@@ -5,6 +5,15 @@ export async function initEnrollment({ root, setStatus, onSession, onMode }) {
   const legacy = root.querySelector('[data-portal-form]');
   if (!mount || !legacy) return;
   legacy.hidden = true;
+  const page = root.ownerDocument || document;
+  const applyProgramCopy = active => {
+    root.dataset.loyaltyProgram = active ? 'hybrid' : 'legacy';
+    page.querySelectorAll('[data-program-copy]').forEach(node => {
+      const copy = node.getAttribute(active ? 'data-copy-hybrid' : 'data-copy-legacy');
+      if (copy) node.textContent = copy;
+    });
+  };
+  applyProgramCopy(false);
   const request = async (endpoint, body) => {
     const response = await fetch(`${LOYALTY_API}/${endpoint}`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -20,10 +29,11 @@ export async function initEnrollment({ root, setStatus, onSession, onMode }) {
       credentials: 'omit', cache: 'no-store', referrerPolicy: 'no-referrer', signal: AbortSignal.timeout(10000)
     });
     // Compatibility with the older backend while the coordinated release is staged.
-    if (response.status === 404 || response.status === 405) { onMode(false); legacy.hidden = false; return; }
+    if (response.status === 404 || response.status === 405) { applyProgramCopy(false); onMode(false); legacy.hidden = false; return; }
     if (!response.ok) throw new Error('No pudimos verificar la disponibilidad. Recarga para reintentar.');
     const status = await response.json();
     if (typeof status.emailVerificationRequired !== 'boolean') throw new Error('Servicio temporalmente no disponible.');
+    applyProgramCopy(status.hybridProgramActive === true);
     onMode(status.emailVerificationRequired);
     if (!status.emailVerificationRequired) { legacy.hidden = false; return; }
     if (!status.registrationAvailable) throw new Error('El acceso por correo no está disponible por ahora. Solicita apoyo en sucursal.');

@@ -91,7 +91,8 @@ async function validatePublicShell() {
   assert((rewards.match(/<h1\b/gi) ?? []).length === 1, "Rewards must have one H1");
   assert(rewards.includes("Consulta tu saldo Better Mood."), "Rewards primary task is unclear");
   assert(rewards.includes("/#sucursales") && home.includes('id="sucursales"'), "Rewards menu link does not reach the branch selector");
-  assert(!/\$420\.02|cashback|CBD/i.test(rewards) && !/\bTODO\b/.test(rewards), "Rewards contains legacy, fictional, or internal copy");
+  const staticRewardsCopy = rewards.replace(/\sdata-copy-hybrid="[^"]*"/g, "");
+  assert(!/\$420\.02|cashback|CBD/i.test(staticRewardsCopy) && !/\bTODO\b/.test(rewards), "Rewards contains legacy, fictional, or internal copy");
   assert((rewards.match(/data-portal-[a-z-]+/g) ?? []).length >= 20, "Rewards portal contract is incomplete");
   assert(rewardsCss.includes("[hidden] { display: none !important; }"), "Rewards hidden states can leak before authentication");
   assert(business.includes('<link rel="canonical" href="https://bmoodcoffee.com/cafe-para-negocios-puebla/" />'), "B2B canonical missing");
