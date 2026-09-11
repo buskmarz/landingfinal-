@@ -32,7 +32,7 @@ for(const [name,engine] of Object.entries({chromium,webkit})){
       const form=page.locator('[data-enrollment-form]');await form.waitFor();
       assert.equal(await page.locator('#rewards-title').textContent(),'5% de cashback + una bebida gratis al completar 6 sellos.');
       assert.equal(await page.locator('#how-title').textContent(),'Cómo se acumulan tus beneficios.');
-      assert.equal(await page.locator('.rewards-how__steps article').nth(1).locator('p').textContent(),'Cada compra elegible genera 5% de cashback y una visita por día y sucursal.');
+      assert.equal(await page.locator('.rewards-how__steps article').nth(1).locator('p').textContent(),'Cada compra elegible genera 5% de cashback y un sello por cliente, día y sucursal.');
       assert.equal(await page.locator('[data-portal-form]').isVisible(),false);
       assert.equal(await form.locator('[name=marketingAccepted]').isChecked(),false);
       await form.locator('[name=name]').fill('Registro aislado');

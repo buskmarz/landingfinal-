@@ -940,6 +940,10 @@ if (rewardsPortalRoot) {
     nextAmount: rewardsPortalRoot.querySelector("[data-portal-next-amount]"),
     nextLabel: rewardsPortalRoot.querySelector("[data-portal-next-label]"),
     progressTitle: rewardsPortalRoot.querySelector("[data-portal-progress-title]"),
+    legacyProgress: rewardsPortalRoot.querySelector("[data-portal-legacy-progress]"),
+    hybridLoyalty: rewardsPortalRoot.querySelector("[data-portal-loyalty]"),
+    stamps: rewardsPortalRoot.querySelector("[data-portal-stamps]"),
+    freeDrinks: rewardsPortalRoot.querySelector("[data-portal-free-drinks]"),
     expiry: rewardsPortalRoot.querySelector("[data-portal-expiry]"),
     session: rewardsPortalRoot.querySelector("[data-portal-session]"),
   };
@@ -1120,6 +1124,14 @@ if (rewardsPortalRoot) {
     if (portalFields.pending) portalFields.pending.textContent = formatMoney(profile.pendingCashbackBalance);
     if (portalFields.monthSpend) portalFields.monthSpend.textContent = formatMoney(profile.currentMonthEligibleSpend);
     if (portalFields.monthEarned) portalFields.monthEarned.textContent = formatMoney(profile.currentMonthCashbackEarned);
+    if (portalFields.hybridLoyalty) portalFields.hybridLoyalty.toggleAttribute("hidden", !hybrid);
+    if (portalFields.legacyProgress) portalFields.legacyProgress.toggleAttribute("hidden", hybrid);
+    if (portalFields.stamps) portalFields.stamps.textContent = hybrid
+      ? `${Number(profile.currentProgressVisits || 0)} de ${Number(profile.visitsPerReward || 6)}`
+      : "0 de 6";
+    if (portalFields.freeDrinks) portalFields.freeDrinks.textContent = hybrid
+      ? String(Number(profile.availableRewardsCount || 0))
+      : "0";
     if (portalFields.progressTitle) portalFields.progressTitle.textContent = hybrid ? "Sellos" : "Progreso de nivel";
     if (portalFields.nextAmount) portalFields.nextAmount.textContent = hybrid
       ? `${Number(profile.currentProgressVisits || 0)} de ${Number(profile.visitsPerReward || 6)}`
