@@ -6,7 +6,9 @@
   "scripts": {
     "build": "node seo/render-local-pages.mjs && node scripts/build-public.mjs",
     "lint": "node seo/validate-seo.mjs",
-    "test": "node seo/validate-seo.mjs"
+    "test": "node seo/validate-seo.mjs",
+    "verify:loyalty-portal-ui": "node scripts/verify-loyalty-portal-ui.mjs",
+    "verify:loyalty-enrollment-ui": "node scripts/verify-loyalty-enrollment-ui.mjs"
   },
   "dependencies": {
     "@netlify/blobs": "*",

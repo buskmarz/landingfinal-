@@ -1,0 +1,13 @@
+.enrollment-form, .enrollment-form fieldset { display: grid; gap: 16px; min-width: 0; margin: 0; padding: 0; border: 0; }
+.enrollment-form [hidden], [data-enrollment-root][hidden], .enrollment-pending[hidden] { display: none !important; }
+.enrollment-form .enrollment-modes { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.enrollment-modes label { min-height: 44px; display: flex; align-items: center; gap: 8px; font-size: 14px; }
+.enrollment-birthday { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 12px; }
+.enrollment-form input:not([type=checkbox]):not([type=radio]), .enrollment-form select { min-height: 48px; font-size: 16px; min-width: 0; width: 100%; box-sizing: border-box; letter-spacing: 0; }
+.enrollment-form select { border: 1px solid #767676; border-radius: 6px; background: #fff; color: #202020; padding: 8px; }
+.enrollment-check { display: flex; gap: 10px; align-items: flex-start; min-height: 44px; font-size: 14px; line-height: 1.5; }
+.enrollment-check input { flex: 0 0 20px; width: 20px; height: 20px; margin-top: 2px; }
+.enrollment-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+[data-enrollment-root] button { min-height: 44px; white-space: normal; letter-spacing: 0; max-width: 100%; }
+[data-enrollment-root] p { overflow-wrap: anywhere; font-size: 14px; }
+.enrollment-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }

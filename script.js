@@ -939,11 +939,18 @@ if (rewardsPortalRoot) {
     monthEarned: rewardsPortalRoot.querySelector("[data-portal-month-earned]"),
     nextAmount: rewardsPortalRoot.querySelector("[data-portal-next-amount]"),
     nextLabel: rewardsPortalRoot.querySelector("[data-portal-next-label]"),
+    progressTitle: rewardsPortalRoot.querySelector("[data-portal-progress-title]"),
     expiry: rewardsPortalRoot.querySelector("[data-portal-expiry]"),
     session: rewardsPortalRoot.querySelector("[data-portal-session]"),
   };
   const PORTAL_STORAGE_KEY = "bmood_rewards_portal_token";
   let currentPortalToken = "";
+  let portalSessionRevision = 0;
+  let verifiedEmailMode = false;
+  let portalModeReady = false;
+  const portalEndpoint = () => verifiedEmailMode
+    ? 'https://tareascontrol.netlify.app/api/loyalty-portal'
+    : `${API_BASE}/recompensas-consulta`;
 
   const sendPortalEvent = (eventName, cta = "rewards_portal") => {
     if (IS_LOCAL_PREVIEW || !eventName) return;
@@ -996,6 +1003,8 @@ if (rewardsPortalRoot) {
   };
 
   const clearPortalSession = () => {
+    portalSessionRevision += 1;
+    currentPortalToken = "";
     window.localStorage.removeItem(PORTAL_STORAGE_KEY);
     portalResults?.setAttribute("hidden", "hidden");
     portalReset?.setAttribute("hidden", "hidden");
@@ -1063,16 +1072,19 @@ if (rewardsPortalRoot) {
       return;
     }
     const target = platform === "apple" ? "apple" : "google";
+    const revision = portalSessionRevision;
+    const token = currentPortalToken;
     const button = portalWalletLinks?.querySelector(`[data-wallet-platform="${target}"]`);
     if (button) button.setAttribute("disabled", "disabled");
     setPortalStatus(target === "apple" ? "Preparando Apple Wallet..." : "Preparando Google Wallet...");
     try {
-      const res = await fetch(`${API_BASE}/recompensas-consulta`, {
+      const res = await fetch(portalEndpoint(), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: target === "apple" ? "issue_apple_wallet" : "issue_google_wallet", token: currentPortalToken }),
+        body: JSON.stringify({ action: target === "apple" ? "issue_apple_wallet" : "issue_google_wallet", token }),
       });
       const data = await res.json().catch(() => ({}));
+      if (revision !== portalSessionRevision || token !== currentPortalToken) return;
       if (!res.ok || !data?.ok) throw new Error(data.error || "No se pudo generar tu tarjeta digital.");
       if (data.customer) renderPortalCustomer(data, currentPortalToken, { skipScroll: true });
       const installUrl = data.installUrl || walletPassUrl(data.customer?.wallet?.passes || [], target);
@@ -1081,6 +1093,7 @@ if (rewardsPortalRoot) {
       setPortalStatus("Tarjeta lista. Abriendo Wallet...", "success");
       window.location.href = installUrl;
     } catch (error) {
+      if (revision !== portalSessionRevision || token !== currentPortalToken) return;
       sendPortalEvent("wallet_issue_error", target);
       setPortalStatus(error.message || "No se pudo generar tu tarjeta digital.", "error");
     } finally {
@@ -1092,6 +1105,7 @@ if (rewardsPortalRoot) {
     const customer = payload?.customer;
     if (!customer) return;
     const profile = customer.profile || {};
+    const hybrid = profile.loyaltyProgram === "hybrid";
     const publicCustomer = customer.customer || {};
     const sessionExpiresAt = payload.sessionExpiresAt ? formatDateTime(payload.sessionExpiresAt) : "";
 
@@ -1100,15 +1114,20 @@ if (rewardsPortalRoot) {
     if (portalFields.level) {
       const levelName = profile.cashbackLevelLabel || "Bronce";
       const pct = profile.cashbackPct ? `${Number(profile.cashbackPct).toFixed(2)}% de saldo` : "";
-      portalFields.level.textContent = pct ? `${levelName} · ${pct}` : levelName;
+      portalFields.level.textContent = hybrid ? "5% de cashback + sellos" : pct ? `${levelName} · ${pct}` : levelName;
     }
     if (portalFields.balance) portalFields.balance.textContent = formatMoney(profile.availableCashbackBalance);
     if (portalFields.pending) portalFields.pending.textContent = formatMoney(profile.pendingCashbackBalance);
     if (portalFields.monthSpend) portalFields.monthSpend.textContent = formatMoney(profile.currentMonthEligibleSpend);
     if (portalFields.monthEarned) portalFields.monthEarned.textContent = formatMoney(profile.currentMonthCashbackEarned);
-    if (portalFields.nextAmount) portalFields.nextAmount.textContent = formatMoney(profile.amountToNextTier);
+    if (portalFields.progressTitle) portalFields.progressTitle.textContent = hybrid ? "Sellos" : "Progreso de nivel";
+    if (portalFields.nextAmount) portalFields.nextAmount.textContent = hybrid
+      ? `${Number(profile.currentProgressVisits || 0)} de ${Number(profile.visitsPerReward || 6)}`
+      : formatMoney(profile.amountToNextTier);
     if (portalFields.nextLabel) {
-      portalFields.nextLabel.textContent = profile.nextTierLabel
+      portalFields.nextLabel.textContent = hybrid
+        ? `${Number(profile.availableRewardsCount || 0)} bebidas gratis disponibles`
+        : profile.nextTierLabel
         ? `Te faltan ${formatMoney(profile.amountToNextTier)} para ${profile.nextTierLabel}.`
         : "Ya estás en el nivel más alto.";
     }
@@ -1129,7 +1148,7 @@ if (rewardsPortalRoot) {
     portalReset?.removeAttribute("hidden");
     if (token) {
       currentPortalToken = token;
-      window.localStorage.setItem(PORTAL_STORAGE_KEY, token);
+      if (!verifiedEmailMode) window.localStorage.setItem(PORTAL_STORAGE_KEY, token);
     }
     if (!options.skipScroll) {
       window.requestAnimationFrame(() => portalResults?.scrollIntoView({ block: "start", behavior: "auto" }));
@@ -1138,11 +1157,14 @@ if (rewardsPortalRoot) {
 
   const loadPortalSession = async (token, options = {}) => {
     if (!token) return false;
+    const revision = portalSessionRevision;
     try {
-      const res = await fetch(`${API_BASE}/recompensas-consulta?token=${encodeURIComponent(token)}`, {
-        headers: { Accept: "application/json" },
+      const res = await fetch(portalEndpoint(), {
+        headers: { Accept: "application/json", Authorization: `Bearer ${token}` },
+        cache: 'no-store', referrerPolicy: 'no-referrer',
       });
       const data = await res.json().catch(() => ({}));
+      if (revision !== portalSessionRevision) return false;
       if (!res.ok || !data?.ok) {
         throw new Error(data.error || "No se pudo abrir tu consulta.");
       }
@@ -1150,6 +1172,7 @@ if (rewardsPortalRoot) {
       if (!options.silent) setPortalStatus("Saldo cargado correctamente.", "success");
       return true;
     } catch (error) {
+      if (revision !== portalSessionRevision) return false;
       clearPortalSession();
       currentPortalToken = "";
       if (!options.silent) setPortalStatus(error.message || "No se pudo abrir tu consulta.", "error");
@@ -1159,6 +1182,7 @@ if (rewardsPortalRoot) {
 
   portalForm?.addEventListener("submit", async (event) => {
     event.preventDefault();
+    if (!portalModeReady || verifiedEmailMode) return;
     const formData = new FormData(portalForm);
     const payload = {
       phone: String(formData.get("phone") || "").trim(),
@@ -1172,6 +1196,7 @@ if (rewardsPortalRoot) {
     }
 
     sendPortalEvent("rewards_check_start", "portal_form");
+    const revision = portalSessionRevision;
     setPortalStatus("Consultando saldo...");
     if (portalSubmit) portalSubmit.disabled = true;
 
@@ -1182,6 +1207,7 @@ if (rewardsPortalRoot) {
         body: JSON.stringify(payload),
       });
       const data = await res.json().catch(() => ({}));
+      if (revision !== portalSessionRevision) return;
       if (!res.ok || !data?.ok || !data?.token) {
         throw new Error(data.error || "No pudimos validar tus datos.");
       }
@@ -1189,6 +1215,7 @@ if (rewardsPortalRoot) {
       sendPortalEvent("rewards_check_success", "portal_form");
       setPortalStatus("Consulta lista.", "success");
     } catch (error) {
+      if (revision !== portalSessionRevision) return;
       clearPortalSession();
       sendPortalEvent("rewards_check_error", "portal_form");
       setPortalStatus(error.message || "No pudimos validar tus datos.", "error");
@@ -1212,10 +1239,18 @@ if (rewardsPortalRoot) {
     issueWalletPass(button.getAttribute("data-wallet-platform"));
   });
 
-  const existingPortalToken = window.localStorage.getItem(PORTAL_STORAGE_KEY);
-  if (existingPortalToken) {
-    loadPortalSession(existingPortalToken, { silent: true }).then((ok) => {
-      if (ok) setPortalStatus("Recuperamos tu consulta activa.", "success");
-    });
-  }
+  rewardsPortalRoot.addEventListener('enrollment:signout', clearPortalSession);
+  import('/recompensas/enrollment.js').then(({initEnrollment}) => initEnrollment({
+    root: rewardsPortalRoot, setStatus: setPortalStatus,
+    onSession: data => renderPortalCustomer(data, data.token),
+    onMode: enabled => {
+      verifiedEmailMode = enabled;
+      portalModeReady = true;
+      if (enabled) { clearPortalSession(); return; }
+      const token = window.localStorage.getItem(PORTAL_STORAGE_KEY);
+      if (token) loadPortalSession(token, {silent:true}).then(ok=>{
+        if (ok) setPortalStatus('Recuperamos tu consulta activa.', 'success');
+      });
+    }
+  })).catch(() => setPortalStatus('No pudimos cargar el acceso. Recarga para reintentar.', 'error'));
 }
