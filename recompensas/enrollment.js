@@ -1,4 +1,5 @@
-export const LOYALTY_API = "https://tareascontrol.netlify.app/api";
+// Keep enrollment on the branded origin so the browser does not need a cross-origin preflight.
+export const LOYALTY_API = "/sistema/api";
 
 export async function initEnrollment({ root, setStatus, onSession, onMode }) {
   const mount = root.querySelector('[data-enrollment-root]');
