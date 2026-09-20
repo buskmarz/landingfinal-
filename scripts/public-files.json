@@ -2,6 +2,7 @@
   "description": "Explicit public website files. Add a path here when publishing a new page or asset; server code, working files and documents stay outside dist.",
   "baselineDeploy": "6a9b2d361cfd3b349142807c",
   "files": [
+    "soporte-app/index.html",
     "404.html",
     "adaptogenos-en-bebidas-puebla/index.html",
     "arcade/arcade.css",
