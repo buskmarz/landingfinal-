@@ -1,0 +1,7 @@
+// Local-only QA server with an isolated Postgres emulator. Never targets hosted data.
+import http from 'node:http';import fs from 'node:fs/promises';import path from 'node:path';
+import {NetlifyDB} from '@netlify/database-dev';import {getDatabase} from '@netlify/database';import {createHandler} from '../netlify/functions/freak.mjs';
+const engine=new NetlifyDB();const connectionString=await engine.start();await engine.applyMigrations('./netlify/database/migrations');const db=getDatabase({connectionString}),handler=createHandler(db);
+const types={'.html':'text/html','.js':'application/javascript','.css':'text/css','.webp':'image/webp','.ttf':'font/ttf','.png':'image/png'};
+http.createServer(async(req,res)=>{try{const url=new URL(req.url,'http://127.0.0.1:4278');if(url.pathname==='/api/freak'){let body='';for await(const c of req)body+=c;const request=new Request(url,{method:req.method,headers:req.headers,...(body?{body}:{})});const response=await handler(request,{ip:'local-browser'});res.writeHead(response.status,Object.fromEntries(response.headers));res.end(await response.text());return}
+const rel=url.pathname.endsWith('/')?url.pathname+'index.html':url.pathname;const file=path.resolve('.','.'+rel);if(!file.startsWith(path.resolve('.')+'/freak/')){res.writeHead(404);res.end();return}res.writeHead(200,{'Content-Type':types[path.extname(file)]||'application/octet-stream'});res.end(await fs.readFile(file));}catch(e){res.writeHead(404);res.end('Missing')}}).listen(4278,'127.0.0.1',()=>console.log('FREAK local isolated QA http://127.0.0.1:4278/freak/'));

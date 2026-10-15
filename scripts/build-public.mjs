@@ -11,7 +11,7 @@ const blockedDirectories = new Set([
 ]);
 const allowedExtensions = new Set([
   ".html", ".css", ".js", ".mjs", ".json", ".xml", ".txt", ".png", ".jpg",
-  ".jpeg", ".svg", ".webp", ".avif", ".ico", ".gif", ".webmanifest", ".mp3"
+  ".woff", ".woff2", ".ttf", ".jpeg", ".svg", ".webp", ".avif", ".ico", ".gif", ".webmanifest", ".mp3"
 ]);
 
 if (!Array.isArray(manifest.files) || !manifest.files.length) {
@@ -45,3 +45,19 @@ for (const relative of files) {
   await fs.copyFile(path.join(root, relative), output);
 }
 console.log(`Published ${files.size} reviewed public files to dist; server code remains outside dist.`);
+
+// Coffee Lab owns its build. Only verified static output is copied, never its sources.
+const coffeeOutput = path.join(root, 'apps/coffee-lab/dist');
+const coffeeFiles = await fs.readdir(coffeeOutput, {recursive: true});
+for (const relative of coffeeFiles) {
+  const source = path.join(coffeeOutput, relative);
+  const stat = await fs.lstat(source);
+  if (stat.isDirectory()) continue;
+  if (!stat.isFile() || !allowedExtensions.has(path.extname(relative).toLowerCase()) || /(?:^|[\\/])\./.test(relative)) {
+    throw new Error(`Unexpected Coffee Lab build asset: ${relative}`);
+  }
+  const output = path.join(destination, 'coffee-lab', relative);
+  await fs.mkdir(path.dirname(output), {recursive: true});
+  await fs.copyFile(source, output);
+}
+console.log('Coffee Lab built independently at /coffee-lab/.');

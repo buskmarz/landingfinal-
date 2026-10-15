@@ -4,3 +4,7 @@ node_modules
 output
 .DS_Store
 /dist/
+
+**/dist/
+**/*.tsbuildinfo
+FREAK-PRIVATE*/

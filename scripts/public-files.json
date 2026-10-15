@@ -197,6 +197,16 @@
     "ubicaciones/index.html",
     "ubicaciones/ubicaciones.css",
     "ubicaciones/ubicaciones.js",
-    "wellbeing.css"
+    "wellbeing.css",
+    "freak/freak.css",
+    "freak/freak.js",
+    "freak/index.html",
+    "freak/jsQR.js",
+    "freak/rye.ttf",
+    "freak/catalog.mjs",
+    "freak/chiquita.png",
+    "freak/annie.png",
+    "freak/lobster.png",
+    "freak/rare.png"
   ]
 }

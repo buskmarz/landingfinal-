@@ -1,0 +1,20 @@
+{
+  "name": "Better Mood Coffee Lab",
+  "short_name": "Coffee Lab",
+  "description": "Tu pr\u00f3xima taza, mejor.",
+  "start_url": "/coffee-lab/",
+  "scope": "/coffee-lab/",
+  "display": "standalone",
+  "background_color": "#231F20",
+  "theme_color": "#231F20",
+  "lang": "es-MX",
+  "icons": [
+    {
+      "src": "/coffee-lab/brand/app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "id": "/coffee-lab/"
+}

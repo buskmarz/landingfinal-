@@ -4,14 +4,23 @@
   "private": true,
   "description": "Better Mood Coffee landing page with Droppy Dash",
   "scripts": {
-    "build": "node seo/render-local-pages.mjs && node scripts/build-public.mjs",
+    "build": "node seo/render-local-pages.mjs && npm run build:coffee-lab && node scripts/build-public.mjs",
     "lint": "node seo/validate-seo.mjs",
     "test": "node seo/validate-seo.mjs",
     "verify:loyalty-portal-ui": "node scripts/verify-loyalty-portal-ui.mjs",
-    "verify:loyalty-enrollment-ui": "node scripts/verify-loyalty-enrollment-ui.mjs"
+    "verify:loyalty-enrollment-ui": "node scripts/verify-loyalty-enrollment-ui.mjs",
+    "build:coffee-lab": "npm --prefix apps/coffee-lab run build",
+    "postinstall": "npm ci --prefix apps/coffee-lab --no-audit --no-fund",
+    "test:freak": "node --test scripts/freak.test.mjs",
+    "test:coffee-lab": "npm --prefix apps/coffee-lab test"
   },
   "dependencies": {
     "@netlify/blobs": "*",
-    "playwright": "^1.58.2"
+    "playwright": "^1.58.2",
+    "@netlify/database": "2.0.1"
+  },
+  "devDependencies": {
+    "@netlify/database-dev": "1.0.1",
+    "qrcode": "1.5.4"
   }
 }
