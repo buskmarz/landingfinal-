@@ -137,3 +137,5 @@ Panel aislado en `/freak/admin/`, migración aditiva de tablas freak_ y telemetr
 FREAK: lanzamiento de colección simplificada, código visible corto, recepción física y cuatro artes con QR integrado. Modificaciones limitadas a FREAK y migración freak_; portada, menú y Coffee Lab se conservan. Publicación por Git main y build completo dist.
 
 Simplificación móvil FREAK: cambios exclusivamente en /freak, allowlist y documentación. Se conserva build completo y despliegue Git; no se modifica Coffee Lab ni la portada autorizada.
+
+Cierre comunitario FREAK: álbum de cuatro personajes, invitación y registro abreviado. Solo fuentes FREAK y pruebas/documentación; mismo build integral y Git CD. Portada y Coffee Lab siguen fuera del alcance de edición.
