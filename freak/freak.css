@@ -3,3 +3,5 @@
 .hero-art{background:#fff;aspect-ratio:1.55;margin-top:0;margin-bottom:0;border-block:1px solid #8accc766}.hero-art img{object-fit:contain;object-position:center;image-rendering:pixelated;filter:none}.hero-art:after{display:none}.hero-copy{padding-top:24px}.ticket img{image-rendering:pixelated;background:white;object-fit:contain}.hero-copy h1{font-size:clamp(43px,11.5vw,60px)}
 
 .campaign-chip{font:10px/1 Arial,sans-serif;letter-spacing:1px;color:var(--aqua);border:1px solid #8accc780;padding:7px 9px;border-radius:20px;margin-left:auto;margin-right:13px;white-space:nowrap}
+
+.collection-preview{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:16px -8px}.collection-preview img{width:100%;height:180px;object-fit:contain;border-radius:8px}.hero-copy{padding-top:12px}.hero-copy h1{font-size:44px}.big-ticket img{aspect-ratio:2/3;max-height:420px;object-fit:contain}.big-ticket{border:0;padding:14px}.big-ticket img,.ticket img{background:transparent}details{margin:24px 0}summary{cursor:pointer;color:var(--aqua);padding:12px 0}details p{margin:10px 0}[hidden]{display:none!important}

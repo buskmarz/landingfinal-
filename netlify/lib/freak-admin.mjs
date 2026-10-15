@@ -26,7 +26,7 @@ export async function adminAction({req,op,body,q,db,campaign,json}){
  if(!t)fail(404,'El QR no pertenece a esta campaña.');return json(t);
  }
  if(op==='admin-list'&&!write){
- const rows=(await q(`SELECT t.number,t.act,t.rare,t.release_at,t.claimed_at,p.alias,
+ const rows=(await q(`SELECT t.number,t.short_code,t.act,t.rare,t.release_at,t.claimed_at,t.received_at,t.received_alias,p.alias,
  l.place,l.reference,l.latitude,l.longitude,l.accuracy,l.physical,l.version,l.updated_at,
  COALESCE(v.opens,0)::int AS opens,v.first_open,v.last_open
  FROM freak_tickets t LEFT JOIN freak_people p ON p.id=t.owner
@@ -35,6 +35,22 @@ export async function adminAction({req,op,body,q,db,campaign,json}){
  WHERE t.campaign=$1 ORDER BY t.number`,[campaign])).rows.map(t=>({...t,name:series[t.act].name,physical:t.physical||'unplaced',version:t.version||0}));
  const history=(await q('SELECT number,snapshot,created_at FROM freak_location_history WHERE campaign=$1 ORDER BY id DESC LIMIT 300',[campaign])).rows;
  const config=(await q('SELECT id,active FROM freak_campaigns WHERE id=$1',[campaign])).rows[0];return json({tickets:rows,history,campaign:config});
+ }
+ if(op==='admin-receive'&&write){
+ const code=typeof body.code==='string'?body.code.trim().toUpperCase():'';
+ const alias=typeof body.alias==='string'?body.alias.normalize('NFKC').trim().replace(/\s+/g,' '):'';
+ if(!/^[A-Z2-9]{4}$/.test(code)||!/^[\p{L}\p{N} _-]{3,24}$/u.test(alias))fail(400,'Escribe el código de 4 caracteres y el alias (3–24 caracteres).');
+ const client=await db.pool.connect();
+ try{await client.query('BEGIN');
+ const t=(await client.query('SELECT * FROM freak_tickets WHERE campaign=$1 AND short_code=$2 FOR UPDATE',[campaign,code])).rows[0];
+ if(!t)fail(404,'Código no encontrado en esta colección.');
+ if(t.received_at)fail(409,'Este sticker ya fue contado.');
+ let verifiedAlias=alias;
+ if(t.owner){const owner=(await client.query('SELECT alias,alias_key FROM freak_people WHERE id=$1',[t.owner])).rows[0];if(owner.alias_key!==alias.toLocaleLowerCase('es-MX'))fail(409,`El QR pertenece a ${owner.alias}. Verifica quién lo entrega antes de contar.`);verifiedAlias=owner.alias;}
+ await client.query('UPDATE freak_tickets SET received_at=now(),received_alias=$3 WHERE campaign=$1 AND number=$2',[campaign,t.number,verifiedAlias]);
+ await client.query('INSERT INTO freak_receipt_history(campaign,number,alias,admin) VALUES($1,$2,$3,$4)',[campaign,t.number,verifiedAlias,admin.admin]);
+ await client.query('COMMIT');return json({ok:true,number:t.number,code,alias:verifiedAlias});
+ }catch(e){await client.query('ROLLBACK');throw e}finally{client.release()}
  }
  if(op==='admin-save'&&write){
  const {number,latitude,longitude,accuracy,version}=body;

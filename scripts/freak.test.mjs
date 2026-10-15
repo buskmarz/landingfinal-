@@ -11,7 +11,7 @@ async function request(op,{method='GET',body,who='',campaign='prueba',token,orig
  const response=await handler(new Request(`https://bmoodcoffee.com/api/freak?op=${op}&camp=${campaign}`,{method,headers:{origin,'content-type':'application/json',...(cookies[who]?{cookie:cookies[who]}:{}),...(token?{'X-Freak-Ticket':token}:{})},...(body?{body:JSON.stringify(body)}:{})}),{ip});
  const result=await response.json();if(response.headers.get('set-cookie'))cookies[who]=response.headers.get('set-cookie').split(';')[0];return {status:response.status,...result};
 }
-before(async()=>{engine=new NetlifyDB();const connectionString=await engine.start();db=getDatabase({connectionString});const exists=await db.pool.query("SELECT to_regclass('freak_campaigns') AS name");if(!exists.rows[0].name)await db.pool.query(await fs.readFile('netlify/database/migrations/20261015193000_freak.sql','utf8'));await db.pool.query(await fs.readFile('netlify/database/migrations/20261015213000_freak_admin.sql','utf8'));await db.pool.query('DELETE FROM freak_tickets');for(let i=0;i<4;i++)await db.pool.query('INSERT INTO freak_tickets(campaign,number,token_hash,act,rare,release_at) VALUES($1,$2,$3,$4,$5,$6)',['prueba',i+1,createHash('sha256').update(tokens[i]).digest('hex'),i===1?3:i===3?0:i,i===1,i===2?'2099-01-01':'2026-01-01']);handler=createHandler(db)});
+before(async()=>{engine=new NetlifyDB();const connectionString=await engine.start();db=getDatabase({connectionString});const exists=await db.pool.query("SELECT to_regclass('freak_campaigns') AS name");if(!exists.rows[0].name)await db.pool.query(await fs.readFile('netlify/database/migrations/20261015193000_freak.sql','utf8'));await db.pool.query(await fs.readFile('netlify/database/migrations/20261015213000_freak_admin.sql','utf8'));await db.pool.query(await fs.readFile('netlify/database/migrations/20261015220000_freak_launch.sql','utf8'));await db.pool.query("UPDATE freak_campaigns SET active=false WHERE id='freak-2026'");await db.pool.query('DELETE FROM freak_tickets');for(let i=0;i<4;i++)await db.pool.query('INSERT INTO freak_tickets(campaign,number,token_hash,act,rare,release_at) VALUES($1,$2,$3,$4,$5,$6)',['prueba',i+1,createHash('sha256').update(tokens[i]).digest('hex'),i===1?3:i===3?0:i,i===1,i===2?'2099-01-01':'2026-01-01']);await db.pool.query("UPDATE freak_tickets SET short_code='AB'||lpad((number+2)::text,2,'2')");handler=createHandler(db)});
 after(async()=>{await db?.pool.end();await engine?.stop()});
 test('GET inspection never assigns a ticket; invalid and locked states',async()=>{assert.equal((await request('ticket',{token:tokens[0]})).state,'available');assert.equal((await request('ticket',{token:tokens[0]})).state,'available');assert.equal((await request('ticket',{token:tokens[2]})).state,'unreleased');assert.equal((await request('ticket',{token:'x'.repeat(43)})).status,404);});
 test('register recoverable aliases and protect sessions',async()=>{for(const who of ['A','B']){const r=await request('register',{method:'POST',body:{alias:`Artista ${who}`},who});assert.equal(r.status,200);assert.ok(r.recovery.length>=24);recovery[who]=r.recovery;assert.ok(cookies[who].includes('__Secure-freak='));}assert.equal((await request('register',{method:'POST',body:{alias:'artista a'},who:'duplicate'})).status,409);assert.equal((await request('claim',{method:'POST',body:{token:tokens[0]}})).status,401);assert.equal((await request('register',{method:'POST',body:{alias:'closed'},campaign:'freak-2026'})).status,423);});
@@ -45,4 +45,23 @@ test('opening telemetry is deduplicated, private and does not claim',async()=>{
  assert.equal((await request('visit',{method:'POST',body:{token:tokens[3],visit:'bad'},ip:'visits'})).status,400);
  await request('visit',{method:'POST',body:{token:tokens[3],visit},campaign:'freak-2026',ip:'visits'});
  assert.equal((await db.pool.query('SELECT count(*)::int AS n FROM freak_visits')).rows[0].n,1);
+});
+test('physical receipts require admin, block duplicates and preserve digital ownership',async()=>{
+ const key=randomBytes(32).toString('base64url');await db.pool.query('UPDATE freak_admins SET key_hash=$1 WHERE id=$2',[createHash('sha256').update(key).digest('hex'),'owner']);
+ await request('admin-login',{method:'POST',body:{key},who:'desk',ip:'physical'});
+ const code=(await db.pool.query('SELECT short_code FROM freak_tickets WHERE number=4')).rows[0].short_code;
+ assert.equal((await request('admin-receive',{method:'POST',body:{code,alias:'Fisico Uno'},who:'A',ip:'physical'})).status,401);
+ assert.equal((await request('admin-receive',{method:'POST',body:{code,alias:'Fisico Uno'},who:'desk',ip:'physical'})).status,200);
+ assert.equal((await request('admin-receive',{method:'POST',body:{code,alias:'Fisico Uno'},who:'desk',ip:'physical'})).status,409);
+ assert.equal((await request('claim',{method:'POST',body:{token:tokens[3]},who:'A',ip:'physical'})).state,'received');
+ const rare=(await db.pool.query('SELECT short_code FROM freak_tickets WHERE number=2')).rows[0].short_code;
+ assert.equal((await request('admin-receive',{method:'POST',body:{code:rare,alias:'Otro Alias'},who:'desk',ip:'physical'})).status,409);
+ assert.equal((await request('admin-receive',{method:'POST',body:{code:rare,alias:'Artista B'},who:'desk',ip:'physical'})).status,200);
+ assert.equal((await request('state',{who:'B',ip:'physical'})).owned.filter(t=>t.number===2).length,1);
+ assert.equal((await db.pool.query('SELECT count(*)::int AS n FROM freak_receipt_history')).rows[0].n,2);
+});
+test('physical hand-in racing a digital claim cannot give the ticket to two collectors',async()=>{
+ const token=randomBytes(32).toString('base64url');await db.pool.query("INSERT INTO freak_tickets(campaign,number,token_hash,act,rare,release_at,short_code) VALUES('prueba',5,$1,0,false,'2026-01-01','RACE')",[createHash('sha256').update(token).digest('hex')]);
+ const [physical,digital]=await Promise.all([request('admin-receive',{method:'POST',body:{code:'RACE',alias:'Persona Fisica'},who:'desk',ip:'race'}),request('claim',{method:'POST',body:{token},who:'A',ip:'race'})]);
+ const t=(await db.pool.query("SELECT owner,received_at FROM freak_tickets WHERE campaign='prueba' AND number=5")).rows[0];assert.ok(Boolean(t.owner)!==Boolean(t.received_at),JSON.stringify({physical,digital,t}));assert.ok((physical.status===200&&digital.state==='received')||(physical.status===409&&digital.state==='owned'));
 });
