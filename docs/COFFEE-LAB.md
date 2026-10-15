@@ -143,3 +143,5 @@ Cierre comunitario FREAK: álbum de cuatro personajes, invitación y registro ab
 Corrección de nombres de artistas FREAK: catálogo compartido, copias públicas y arte impreso actualizados; conserva nombre FREAK y QR existentes. Sin cambios de landing, menú o Coffee Lab.
 
 FREAK: migración aditiva para numeración visible y claves cortas; build completo y despliegue Git conservados. Sin cambios en portada, menú, Coffee Lab o datos de esas aplicaciones.
+
+FREAK teléfono/comunidad: cambios aislados a FREAK, migración aditiva freak_ y apartado específico en aviso de privacidad. Portada, menú, fuentes y datos Coffee Lab sin cambios. Build conjunto dist y publicación por Git main → Netlify; checkout iCloud intacto.

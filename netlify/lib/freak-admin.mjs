@@ -1,3 +1,4 @@
+import {normalizePhone} from './freak-phone.mjs';
 import {randomBytes,createHash,timingSafeEqual} from 'node:crypto';
 import {series} from '../../freak/catalog.mjs';
 const hash=v=>createHash('sha256').update(v).digest('hex');
@@ -26,7 +27,7 @@ export async function adminAction({req,op,body,q,db,campaign,json}){
  if(!t)fail(404,'El QR no pertenece a esta campaña.');return json(t);
  }
  if(op==='admin-list'&&!write){
- const rows=(await q(`SELECT t.number,t.display_number,t.short_code,t.act,t.rare,t.release_at,t.claimed_at,t.received_at,t.received_alias,p.alias,
+ const rows=(await q(`SELECT t.number,t.display_number,t.short_code,t.act,t.rare,t.release_at,t.claimed_at,t.received_at,t.received_alias,t.received_phone,p.alias,p.phone,
  l.place,l.reference,l.latitude,l.longitude,l.accuracy,l.physical,l.version,l.updated_at,
  COALESCE(v.opens,0)::int AS opens,v.first_open,v.last_open
  FROM freak_tickets t LEFT JOIN freak_people p ON p.id=t.owner
@@ -34,20 +35,30 @@ export async function adminAction({req,op,body,q,db,campaign,json}){
  LEFT JOIN (SELECT campaign,number,count(*) AS opens,min(created_at) AS first_open,max(created_at) AS last_open FROM freak_visits GROUP BY campaign,number) v ON v.campaign=t.campaign AND v.number=t.number
  WHERE t.campaign=$1 ORDER BY t.display_number NULLS LAST,t.number`,[campaign])).rows.map(t=>({...t,name:series[t.act].name,physical:t.physical||'unplaced',version:t.version||0}));
  const history=(await q('SELECT number,snapshot,created_at FROM freak_location_history WHERE campaign=$1 ORDER BY id DESC LIMIT 300',[campaign])).rows;
- const config=(await q('SELECT id,active FROM freak_campaigns WHERE id=$1',[campaign])).rows[0];return json({tickets:rows,history,campaign:config});
+ const people=(await q('SELECT p.alias,p.phone,p.created_at,count(t.number)::int AS stickers FROM freak_people p LEFT JOIN freak_tickets t ON t.owner=p.id AND t.campaign=p.campaign WHERE p.campaign=$1 GROUP BY p.id ORDER BY p.created_at DESC',[campaign])).rows;
+ const config=(await q('SELECT id,active,public_hint,hint_version FROM freak_campaigns WHERE id=$1',[campaign])).rows[0];return json({tickets:rows,history,people,campaign:config});
+ }
+ if(op==='admin-hint'&&write){
+ const hint=typeof body.hint==='string'?body.hint.trim():'';
+ if(hint.length>180||!Number.isInteger(body.version))fail(400,'Usa una pista de hasta 180 caracteres.');
+ const result=await q('UPDATE freak_campaigns SET public_hint=$1,hint_updated_at=now(),hint_version=hint_version+1 WHERE id=$2 AND hint_version=$3 RETURNING id',[hint,campaign,body.version]);
+ if(!result.rowCount)fail(409,'La pista cambió en otro dispositivo. Actualiza antes de guardar.');
+ return json({ok:true});
  }
  if(op==='admin-receive'&&write){
  const code=typeof body.code==='string'?body.code.trim().toUpperCase():'';
+ const phone=body.phone!==undefined?normalizePhone(body.phone):null;
+ if(body.phone!==undefined&&!phone)fail(400,'Revisa el teléfono: 10 dígitos en México o +código de país.');
  const alias=typeof body.alias==='string'?body.alias.normalize('NFKC').trim().replace(/\s+/g,' '):'';
- if(!/^[A-Z2-9]{4}$/.test(code)||!/^[\p{L}\p{N} _-]{3,24}$/u.test(alias))fail(400,'Escribe el código de 4 caracteres y el alias (3–24 caracteres).');
+ if(!/^[A-Z2-9]{4}$/.test(code)||(!phone&&!/^[\p{L}\p{N} _-]{3,24}$/u.test(alias)))fail(400,'Escribe el código de 4 caracteres y el teléfono o alias anterior.');
  const client=await db.pool.connect();
  try{await client.query('BEGIN');
  const t=(await client.query('SELECT * FROM freak_tickets WHERE campaign=$1 AND short_code=$2 FOR UPDATE',[campaign,code])).rows[0];
  if(!t)fail(404,'Código no encontrado en esta colección.');
  if(t.received_at)fail(409,'Este sticker ya fue contado.');
- let verifiedAlias=alias;
- if(t.owner){const owner=(await client.query('SELECT alias,alias_key FROM freak_people WHERE id=$1',[t.owner])).rows[0];if(owner.alias_key!==alias.toLocaleLowerCase('es-MX'))fail(409,`El QR pertenece a ${owner.alias}. Verifica quién lo entrega antes de contar.`);verifiedAlias=owner.alias;}
- await client.query('UPDATE freak_tickets SET received_at=now(),received_alias=$3 WHERE campaign=$1 AND number=$2',[campaign,t.number,verifiedAlias]);
+ let verifiedAlias=phone?'Coleccionista presencial':alias;
+ if(t.owner){const owner=(await client.query('SELECT alias,alias_key,phone FROM freak_people WHERE id=$1',[t.owner])).rows[0];if(phone?owner.phone!==phone:owner.phone||owner.alias_key!==alias.toLocaleLowerCase('es-MX'))fail(409,`El QR pertenece a ${owner.alias}. Verifica quién lo entrega antes de contar.`);verifiedAlias=owner.alias;}
+ await client.query('UPDATE freak_tickets SET received_at=now(),received_alias=$3,received_phone=$4 WHERE campaign=$1 AND number=$2',[campaign,t.number,verifiedAlias,phone]);
  await client.query('INSERT INTO freak_receipt_history(campaign,number,alias,admin) VALUES($1,$2,$3,$4)',[campaign,t.number,verifiedAlias,admin.admin]);
  await client.query('COMMIT');return json({ok:true,number:t.number,code,alias:verifiedAlias});
  }catch(e){await client.query('ROLLBACK');throw e}finally{client.release()}
