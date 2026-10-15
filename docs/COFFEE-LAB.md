@@ -1,10 +1,12 @@
 # Coffee Lab dentro de LANDING BETTER
 
-Actualizado: 10 de octubre de 2026. Coffee Lab publicado y verificado en https://bmoodcoffee.com/coffee-lab/.
+Estado vigente al 15 octubre: fuente canónica integrada en main mediante PR #6 para preservar el app al volver a Git CD. FREAK se publicó en deploy 6ad129fce451efb5f3b2185d (main e8b0bf3); portada, menú y entrada Coffee Lab quedaron idénticos byte por byte a las versiones HTTPS anteriores. SW, manifiesto y coffee-product responden 200. No se publicó el rediseño local ni se modificaron datos de usuarios. Ver docs/FREAK.md y evidencia local output/freak-qa/production-http.json.
+
+Actualizado: 15 de octubre de 2026. Coffee Lab publicado y verificado en https://bmoodcoffee.com/coffee-lab/.
 
 ## Lanzamiento sobre la portada pública actual
 
-Deploy activo `6acaf29090d71f2aa07c5e98`, publicado el 10 de octubre (02:21 UTC del día 11). Se conservó “Tu pausa de café. Cerca de UPAEP.” y se corrigió el 404 en el dominio principal.
+Deploy histórico del lanzamiento `6acaf29090d71f2aa07c5e98`, publicado el 10 de octubre (02:21 UTC del día 11). Se conservó “Tu pausa de café. Cerca de UPAEP.” y se corrigió el 404 en el dominio principal.
 
 Base: commit público `46d099b43d9e7fe98e8d3094f527f73c6989eed1`, deploy anterior `6ab06bb6d3a27d0008aa8244`. Sus 196 archivos públicos coincidían por SHA con la compilación recuperada. Se conservaron 195; index.html recibió accesos a Coffee Lab en el hero, Explorar y pie. Se añadieron el app canónico compilado y sus cabeceras/redirección. El menú conserva sus bytes. Netlify transforma automáticamente el enlace de privacidad a su URL limpia.
 
