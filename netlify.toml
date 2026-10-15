@@ -456,5 +456,11 @@
     Referrer-Policy = "no-referrer"
     X-Content-Type-Options = "nosniff"
     X-Frame-Options = "DENY"
-    Permissions-Policy = "camera=(self), microphone=(), geolocation=()"
+    Permissions-Policy = "camera=(self), microphone=(), geolocation=(self)"
     Content-Security-Policy = "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; media-src 'self' blob:; form-action 'self'; base-uri 'none'; frame-ancestors 'none'"
+
+[[headers]]
+  for = "/freak/admin/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+    Cache-Control = "no-store"
