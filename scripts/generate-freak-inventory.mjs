@@ -4,6 +4,8 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 const destination=process.argv[2];
 if(!destination || !path.isAbsolute(destination)) throw Error('Pass an absolute PRIVATE output directory outside the repository.');
+const repo=path.resolve('.');
+if(destination===repo||destination.startsWith(repo+path.sep))throw Error('Private inventory must be outside the repository.');
 await fs.mkdir(destination,{recursive:true,mode:0o700});
 const manifestPath=path.join(destination,'inventory.json');
 try {await fs.access(manifestPath);throw Error('Inventory already exists; refusing to replace tokens.')} catch(e){if(e.code!=='ENOENT')throw e;}

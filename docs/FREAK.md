@@ -34,6 +34,15 @@ Dependencia estricta de preservación: Coffee Lab ya estaba publicado mediante d
 
 Pruebas automatizadas locales con Postgres aislado: inspección no consume, inválido/no liberado, alias duplicado, sesión, dos usuarios/un QR, reintento del dueño, edición rara, ranking, recuperación desde otra sesión, aislamiento de campaña, CSRF, GET no reclama, logout y rate limiting. `npm run test:freak`. No usan base real.
 
-Pendiente en este punto: preview Netlify, migración automática, QA móvil final con cuatro artes, verificación HTTPS y SHA tras merge. Registrar el resultado efectivo antes de considerar la publicación completa.
+Preview Netlify 6ad127873d18bde6bf0da1b2, SHA 7adcf757b5c22b7b7b9ec464030d5a0f198ef356: READY. Las dos migraciones aplicadas en la rama aislada codex/freak-collection; 40 funciones Node 22 y una edge function conservadas. Prueba HTTP real: dos usuarios/un QR, reintento, raro, inválido/no liberado, recuperación en tercera sesión, CSRF y aislamiento pasaron. La campaña real sigue inactiva y su ranking vacío. Evidencia local output/freak-qa/preview-smoke.json. Pendiente antes del cierre: SHA de main y dominio tras merge.
 
 Pruebas previas al PR: build conjunto correcto; el compilador conserva los avisos heredados de fuentes referenciadas por URL y chunks >500 kB de Coffee Lab. No impiden el build; su HTML publicado coincide. La instalación se verifica con el lock; todos los assets públicos están en un manifiesto explícito. `.netlify/` permanece ignorado al vincular el sitio existente.
+
+
+## Impresión y QA visual
+
+100 stickers reales preparados en PDF A4, nueve por página, doce páginas, 62 × 85 mm cada sticker; QR vectorial de 25 mm con cuatro módulos blancos de margen. Distribución comprobada 30/30/30/10, tokens originales conservados. Los 100 QR se renderizaron a 300 DPI y se decodificaron uno por uno con jsQR: 100/100 URLs exactas. Archivo privado FREAK-100-STICKERS-REALES-PRIVADO.pdf; no distribuir antes de activación. También FREAK-STICKERS-PRUEBA.pdf y FREAK-CUATRO-DISENOS-PRUEBA.pdf, con QR independientes de prueba. Scripts reproducibles export-freak-print.mjs y export-freak-print.py. No se publica ningún PDF de inventario.
+
+Browser/IAB a 393 × 852: registro desde QR, clave de recuperación, confirmación, colección y recarga correctos. Comparación con view_image del concepto y captura: jerarquía tipográfica, paleta, cortes de boleto, botones amarillos y navegación inferior verificados. Cambio intencional solicitado: cuatro retratos pixel art monocromos sustituyen grabados de cinco actos ficticios; los textos y tiradas se actualizaron conforme a esa decisión. El contenido visible inicial conserva FREAK, título, fecha, DJ, bebida y CTA. Lector físico de cámara y Safari/iPhone reales aún no comprobados; los QR impresos se validaron por software. Capturas en output/freak-qa/.
+
+Preservación de archivos previos: 195 assets del baseline coinciden por SHA-1, index.html solo recibe los tres enlaces ya publicados de Coffee Lab. netlify.toml es configuración de servidor y se excluye de dist. El menú y la entrada de Coffee Lab coinciden byte por byte con el dominio. Verificación de secretos en dist: ninguno de los 100 tokens reales aparece en archivos públicos.
