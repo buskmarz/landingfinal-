@@ -145,3 +145,5 @@ Corrección de nombres de artistas FREAK: catálogo compartido, copias públicas
 FREAK: migración aditiva para numeración visible y claves cortas; build completo y despliegue Git conservados. Sin cambios en portada, menú, Coffee Lab o datos de esas aplicaciones.
 
 FREAK teléfono/comunidad: cambios aislados a FREAK, migración aditiva freak_ y apartado específico en aviso de privacidad. Portada, menú, fuentes y datos Coffee Lab sin cambios. Build conjunto dist y publicación por Git main → Netlify; checkout iCloud intacto.
+
+FREAK inventario/nombres/reinicio: panel y API aislados, migración aditiva y privacidad específica. La limpieza solicitada afecta exclusivamente tablas freak_ después de publicación, con archivo privado; Coffee Lab, portada y menú se conservan y se verifica el build completo.
