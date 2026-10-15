@@ -8,10 +8,11 @@ import {createHandler} from '../netlify/functions/freak.mjs';
 let engine,db,handler;const tokens=Array.from({length:4},()=>randomBytes(32).toString('base64url'));
 const cookies={};const recovery={};
 async function request(op,{method='GET',body,who='',campaign='prueba',token,origin='https://bmoodcoffee.com',ip='qa-default'}={}){
+ if(op==='register'&&body?.phone&&!('name' in body))body={...body,name:'Persona QA'};
  const response=await handler(new Request(`https://bmoodcoffee.com/api/freak?op=${op}&camp=${campaign}`,{method,headers:{origin,'content-type':'application/json',...(cookies[who]?{cookie:cookies[who]}:{}),...(token?{'X-Freak-Ticket':token}:{})},...(body?{body:JSON.stringify(body)}:{})}),{ip});
  const result=await response.json();if(response.headers.get('set-cookie'))cookies[who]=response.headers.get('set-cookie').split(';')[0];return {status:response.status,...result};
 }
-before(async()=>{engine=new NetlifyDB();const connectionString=await engine.start();db=getDatabase({connectionString});const exists=await db.pool.query("SELECT to_regclass('freak_campaigns') AS name");if(!exists.rows[0].name)await db.pool.query(await fs.readFile('netlify/database/migrations/20261015193000_freak.sql','utf8'));await db.pool.query(await fs.readFile('netlify/database/migrations/20261015213000_freak_admin.sql','utf8'));await db.pool.query(await fs.readFile('netlify/database/migrations/20261015220000_freak_launch.sql','utf8'));await db.pool.query(await fs.readFile('netlify/database/migrations/20261015233000_freak_access_order.sql','utf8'));await db.pool.query(await fs.readFile('netlify/database/migrations/20261016010000_freak_phone_community.sql','utf8'));await db.pool.query("UPDATE freak_campaigns SET active=false WHERE id='freak-2026'");await db.pool.query('DELETE FROM freak_tickets');for(let i=0;i<4;i++)await db.pool.query('INSERT INTO freak_tickets(campaign,number,token_hash,act,rare,release_at) VALUES($1,$2,$3,$4,$5,$6)',['prueba',i+1,createHash('sha256').update(tokens[i]).digest('hex'),i===1?3:i===3?0:i,i===1,i===2?'2099-01-01':'2026-01-01']);await db.pool.query("UPDATE freak_tickets SET short_code='AB'||lpad((number+2)::text,2,'2')");handler=createHandler(db)});
+before(async()=>{engine=new NetlifyDB();const connectionString=await engine.start();db=getDatabase({connectionString});const exists=await db.pool.query("SELECT to_regclass('freak_campaigns') AS name");if(!exists.rows[0].name)await db.pool.query(await fs.readFile('netlify/database/migrations/20261015193000_freak.sql','utf8'));await db.pool.query(await fs.readFile('netlify/database/migrations/20261015213000_freak_admin.sql','utf8'));await db.pool.query(await fs.readFile('netlify/database/migrations/20261015220000_freak_launch.sql','utf8'));await db.pool.query(await fs.readFile('netlify/database/migrations/20261015233000_freak_access_order.sql','utf8'));await db.pool.query(await fs.readFile('netlify/database/migrations/20261016010000_freak_phone_community.sql','utf8'));await db.pool.query(await fs.readFile('netlify/database/migrations/20261016020000_freak_names_reset.sql','utf8'));await db.pool.query("UPDATE freak_campaigns SET active=false WHERE id='freak-2026'");await db.pool.query('DELETE FROM freak_tickets');for(let i=0;i<4;i++)await db.pool.query('INSERT INTO freak_tickets(campaign,number,token_hash,act,rare,release_at) VALUES($1,$2,$3,$4,$5,$6)',['prueba',i+1,createHash('sha256').update(tokens[i]).digest('hex'),i===1?3:i===3?0:i,i===1,i===2?'2099-01-01':'2026-01-01']);await db.pool.query("UPDATE freak_tickets SET short_code='AB'||lpad((number+2)::text,2,'2')");handler=createHandler(db)});
 after(async()=>{await db?.pool.end();await engine?.stop()});
 test('GET inspection never assigns a ticket; invalid and locked states',async()=>{assert.equal((await request('ticket',{token:tokens[0]})).state,'available');assert.equal((await request('ticket',{token:tokens[0]})).state,'available');assert.equal((await request('ticket',{token:tokens[2]})).state,'unreleased');assert.equal((await request('ticket',{token:'x'.repeat(43)})).status,404);});
 test('register recoverable aliases and protect sessions',async()=>{for(const who of ['A','B']){const r=await request('register',{method:'POST',body:{alias:`Artista ${who}`},who});assert.equal(r.status,200);assert.match(r.recovery,/^[A-HJ-NP-Z2-9]{4}$/);recovery[who]=r.recovery;assert.ok(cookies[who].includes('__Secure-freak='));}assert.equal((await request('register',{method:'POST',body:{alias:'artista a'},who:'duplicate'})).status,409);assert.equal((await request('claim',{method:'POST',body:{token:tokens[0]}})).status,401);assert.equal((await request('register',{method:'POST',body:{alias:'closed'},campaign:'freak-2026'})).status,423);});
@@ -123,4 +124,42 @@ test('public clues require admin, persist, handle conflicting edits, and can be 
  assert.equal((await request('admin-hint',{method:'POST',body:{hint:'Vieja pista',version:0},who:'desk',ip:'hint'})).status,409);
  assert.equal((await request('admin-hint',{method:'POST',body:{hint:'',version:1},who:'desk',ip:'hint'})).status,200);
  assert.equal((await request('state',{ip:'hint-read'})).campaign.public_hint,'');
+});
+test('name is required for phone registration and visible only to self and admin',async()=>{
+ assert.equal((await request('register',{method:'POST',body:{phone:'2223330098',name:''},ip:'name-empty'})).status,400);
+ assert.equal((await request('register',{method:'POST',body:{phone:'2223330098',name:'<script>'},ip:'name-html'})).status,400);
+ const p=await request('register',{method:'POST',body:{phone:'2223330098',name:'  Ana   María  '},who:'named',ip:'name-new'});assert.equal(p.person.display_name,'Ana María');
+ const state=await request('state',{who:'named',ip:'name-read'});assert.equal(state.person.display_name,'Ana María');
+ assert.ok(!JSON.stringify(await request('state',{ip:'name-public'})).includes('Ana María'));
+ assert.ok((await request('admin-list',{who:'desk',ip:'name-admin'})).people.some(p=>p.display_name==='Ana María'));
+});
+test('only admin can reset a sticker, stale reset blocked and QR stays identical',async()=>{
+ let list=await request('admin-list',{who:'desk',ip:'reset-list'});const t=list.tickets.find(t=>t.number===6);const before=(await db.pool.query("SELECT * FROM freak_tickets WHERE campaign='prueba' AND number=6")).rows[0];
+ assert.equal((await request('admin-unlink',{method:'POST',body:{number:6,resetKey:t.resetKey},who:'phone',ip:'reset-public'})).status,401);
+ assert.equal((await request('admin-unlink',{method:'POST',body:{number:6,resetKey:'stale'},who:'desk',ip:'reset-stale'})).status,409);
+ assert.equal((await request('admin-unlink',{method:'POST',body:{number:6,resetKey:t.resetKey},who:'desk',ip:'reset'})).status,200);
+ const after=(await db.pool.query("SELECT * FROM freak_tickets WHERE campaign='prueba' AND number=6")).rows[0];for(const k of ['number','display_number','short_code','token_hash','act','rare','release_at'])assert.deepEqual(after[k],before[k]);for(const k of ['owner','claimed_at','received_at','received_phone','received_name'])assert.equal(after[k],null);
+ assert.equal((await request('state',{who:'phone',ip:'reset-owner'})).owned.length,0);
+ assert.equal((await db.pool.query("SELECT count(*)::int AS n FROM freak_reset_audit WHERE number=6")).rows[0].n,1);
+ assert.equal((await request('admin-unlink',{method:'POST',body:{number:6,resetKey:t.resetKey},who:'desk',ip:'reset-old'})).status,409);
+});
+test('unlinked sticker can be collected again by one of two people, never both',async()=>{
+ const token=randomBytes(32).toString('base64url');await db.pool.query("INSERT INTO freak_tickets(campaign,number,token_hash,act,rare,release_at,short_code) VALUES('prueba',7,$1,1,false,'2026-01-01','NEWX')",[createHash('sha256').update(token).digest('hex')]);
+ await request('claim',{method:'POST',body:{token},who:'phone',ip:'new-claim'});
+ const ticket=(await request('admin-list',{who:'desk',ip:'new-list'})).tickets.find(t=>t.number===7);
+ await request('admin-unlink',{method:'POST',body:{number:7,resetKey:ticket.resetKey},who:'desk',ip:'new-reset'});
+ const race=await Promise.all(['phone','named'].map((who,i)=>request('claim',{method:'POST',body:{token},who,ip:'new-race'+i})));assert.deepEqual(race.map(r=>r.state).sort(),['occupied','owned']);
+});
+test('campaign reset archives tests, clears accounts and activity, preserves all inventory and other campaign',async()=>{
+ await db.pool.query("INSERT INTO freak_tickets(campaign,number,token_hash,act,rare,release_at,short_code) VALUES('freak-2026',1,$1,0,false,'2026-01-01','OTHR')",[createHash('sha256').update('other-campaign').digest('hex')]);
+
+ const before=(await db.pool.query('SELECT campaign,number,token_hash,short_code,act,rare,display_number,release_at FROM freak_tickets ORDER BY campaign,number')).rows;
+ assert.equal((await request('admin-reset-campaign',{method:'POST',body:{confirm:'REINICIAR prueba'},ip:'reset-all-anon'})).status,401);
+ assert.equal((await request('admin-reset-campaign',{method:'POST',body:{confirm:'REINICIAR freak-2026'},who:'desk',ip:'reset-all-bad'})).status,400);
+ assert.equal((await request('admin-reset-campaign',{method:'POST',body:{confirm:'REINICIAR prueba'},who:'desk',ip:'reset-all'})).status,200);
+ assert.deepEqual((await db.pool.query('SELECT campaign,number,token_hash,short_code,act,rare,display_number,release_at FROM freak_tickets ORDER BY campaign,number')).rows,before);
+ for(const table of ['freak_people','freak_locations','freak_visits','freak_location_history','freak_receipt_history'])assert.equal((await db.pool.query('SELECT count(*)::int AS n FROM '+table+" WHERE campaign='prueba'")).rows[0].n,0);
+ assert.equal((await request('state',{who:'phone',ip:'reset-session'})).person,null);
+ const list=await request('admin-list',{who:'desk',ip:'reset-empty'});assert.ok(list.tickets.every(t=>!t.owner&&!t.received_at&&!t.phone&&!t.display_name&&t.opens===0&&t.physical==='unplaced'));
+ assert.ok((await db.pool.query('SELECT snapshot FROM freak_reset_audit WHERE number IS NULL')).rows[0].snapshot.people.length>0);
 });

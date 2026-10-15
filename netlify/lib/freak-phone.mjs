@@ -7,3 +7,9 @@ export function normalizePhone(value){
  if(raw.startsWith('+')&&/^[1-9]\d{7,14}$/.test(digits))return '+'+digits;
  return null;
 }
+
+export function normalizeName(value){
+ if(typeof value!=='string')return null;
+ const name=value.normalize('NFKC').trim().replace(/\s+/g,' ');
+ return /^[\p{L}\p{M} .’'-]{2,60}$/u.test(name)&&/\p{L}/u.test(name)?name:null;
+}

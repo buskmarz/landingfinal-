@@ -1,4 +1,4 @@
-import {normalizePhone} from '../lib/freak-phone.mjs';
+import {normalizePhone,normalizeName} from '../lib/freak-phone.mjs';
 import {adminAction} from '../lib/freak-admin.mjs';
 import {series} from '../../freak/catalog.mjs';
 import { getDatabase } from '@netlify/database';
@@ -35,7 +35,7 @@ return async function(req,context={}) {
  if(!config)throw error(503,'not_ready','El circo está preparando sus puertas. Intenta más tarde.');
  const cookie=req.headers.get('cookie')||'', rawSession=cookie.split(';').map(v=>v.trim()).find(v=>v.startsWith(cookieName+'='))?.slice(cookieName.length+1);
  let person=null;
- if(rawSession&&/^[A-Za-z0-9_-]{43}$/.test(rawSession))person=(await q('SELECT p.id,p.alias,p.phone,p.recovery_length,p.short_recovery_hash IS NOT NULL AS has_short_key FROM freak_sessions s JOIN freak_people p ON p.id=s.person WHERE s.token_hash=$1 AND s.expires_at>now() AND p.campaign=$2',[hash(rawSession),campaign])).rows[0]||null;
+ if(rawSession&&/^[A-Za-z0-9_-]{43}$/.test(rawSession))person=(await q('SELECT p.id,p.alias,p.phone,p.display_name,p.recovery_length,p.short_recovery_hash IS NOT NULL AS has_short_key FROM freak_sessions s JOIN freak_people p ON p.id=s.person WHERE s.token_hash=$1 AND s.expires_at>now() AND p.campaign=$2',[hash(rawSession),campaign])).rows[0]||null;
  let body={};
  if(sensitive){const text=await req.text();if(text.length>2048)throw error(413,'size','Solicitud demasiado larga.');try{body=JSON.parse(text)}catch{throw error(400,'json','Solicitud inválida.')}if(!body||Array.isArray(body)||typeof body!=='object')throw error(400,'json','Solicitud inválida.');}
  if(op.startsWith('admin-'))return await adminAction({req,op,body,q,db,campaign,json});
@@ -50,6 +50,11 @@ return async function(req,context={}) {
  const updated=await q('UPDATE freak_people SET short_recovery_hash=$1,short_recovery_salt=$2 WHERE id=$3 AND recovery_length<>4 AND short_recovery_hash IS NULL RETURNING id',[derived,salt,person.id]);
  if(!updated.rowCount)throw error(409,'already_short','Ya tienes una clave de cuatro caracteres.');
  return json({recovery});
+ }
+ if(op==='profile-name'&&sensitive){
+ if(!person)throw error(401,'login','Entra a tu colección.');
+ const name=normalizeName(body.name);if(!name)throw error(400,'name','Escribe tu nombre (2–60 caracteres).');
+ await q('UPDATE freak_people SET display_name=$1 WHERE id=$2',[name,person.id]);return json({ok:true});
  }
  if(op==='link-phone'&&sensitive){
  if(!person)throw error(401,'login','Entra primero a tu colección.');
@@ -67,10 +72,11 @@ return async function(req,context={}) {
  if(!phone&&!/^[\p{L}\p{N} _-]{3,24}$/u.test(alias))throw error(400,'alias','Usa un alias de 3 a 24 letras o números.');
  const aliasKey=alias.toLocaleLowerCase('es-MX');let recovery;
  if(op==='register'){
+ const name=phone?normalizeName(body.name):null;if(phone&&!name)throw error(400,'name','Escribe tu nombre (2–60 caracteres).');
  if(!config.active)throw error(423,'closed','La colección todavía no está abierta.');
  recovery=shortKey();const salt=randomBytes(16).toString('hex');
  const passwordHash=(await scrypt(recovery,salt,64)).toString('hex');
- const inserted=await q('INSERT INTO freak_people(id,campaign,alias,alias_key,salt,recovery_hash,recovery_length,phone) VALUES($1,$2,$3,$4,$5,$6,4,$7) ON CONFLICT DO NOTHING RETURNING id,alias,phone',[generatedId,campaign,alias,aliasKey,salt,passwordHash,phone]);
+ const inserted=await q('INSERT INTO freak_people(id,campaign,alias,alias_key,salt,recovery_hash,recovery_length,phone,display_name) VALUES($1,$2,$3,$4,$5,$6,4,$7,$8) ON CONFLICT DO NOTHING RETURNING id,alias,phone,display_name',[generatedId,campaign,alias,aliasKey,salt,passwordHash,phone,name]);
  person=inserted.rows[0];if(!person)throw error(409,phone?'phone_taken':'alias_taken',phone?'Ese teléfono ya tiene una colección. Entra con tu clave.':'Ese alias ya tiene boleto. Elige otro o recupera tu acceso.');
  }else{
  let code=typeof body.recovery==='string'?body.recovery.trim():'';
@@ -82,7 +88,7 @@ return async function(req,context={}) {
  const useShort=code.length===4&&p?.short_recovery_hash;
  const derived=await scrypt(code,(useShort?p.short_recovery_salt:p?.salt)||'freak-invalid-credential-salt',64);
  const expected=Buffer.from((useShort?p.short_recovery_hash:p?.recovery_hash)||'0'.repeat(128),'hex');
- if(!p||!timingSafeEqual(derived,expected))throw error(401,'credentials','Teléfono o clave incorrectos.');person={id:p.id,alias:p.alias,phone:p.phone};
+ if(!p||!timingSafeEqual(derived,expected))throw error(401,'credentials','Teléfono o clave incorrectos.');person={id:p.id,alias:p.alias,phone:p.phone,display_name:p.display_name};
  }
  const session=randomBytes(32).toString('base64url');
  await q("INSERT INTO freak_sessions(token_hash,person,expires_at) VALUES($1,$2,now()+interval '30 days')",[hash(session),person.id]);
@@ -95,6 +101,7 @@ return async function(req,context={}) {
  const tokenHash=hash(token);
  if(op==='claim'){
  if(!person)throw error(401,'login','Entra a tu colección antes de capturar.');
+ if(person.phone&&!person.display_name)throw error(400,'name_required','Añade tu nombre para guardar el sticker.');
  const client=await db.pool.connect();
  try{
  await client.query('BEGIN');
