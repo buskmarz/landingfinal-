@@ -8,11 +8,11 @@ const hash=v=>createHash('sha256').update(v).digest('hex');
 const cookieName='__Secure-freak';
 const json=(body,status=200,extra={})=>new Response(JSON.stringify(body),{status,headers:{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff',...extra}});
 const error=(status,code,message)=>Object.assign(new Error(message),{status,code});
-const ticket=t=>({number:t.number,act:t.act,name:series[t.act].name,description:series[t.act].description,edition:series[t.act].edition,rare:t.rare,variant:t.variant,claimedAt:t.claimed_at});
+const ticket=t=>({number:t.number,code:t.short_code,act:t.act,name:series[t.act].name,description:series[t.act].description,edition:series[t.act].edition,rare:t.rare,variant:t.variant,claimedAt:t.claimed_at});
 export function createHandler(database,now=()=>Date.now()){
 return async function(req,context={}) {
  try {
- const url=new URL(req.url), op=url.searchParams.get('op')||'state', campaign=url.searchParams.get('camp')||'prueba';
+ const url=new URL(req.url), op=url.searchParams.get('op')||'state', campaign=url.searchParams.get('camp')||'freak-2026';
  if(!['prueba','freak-2026'].includes(campaign))throw error(400,'invalid_campaign','Campaña inválida.');
  if(!['GET','POST'].includes(req.method)) return json({error:'Método no permitido'},405,{Allow:'GET, POST'});
  const db=database||getDatabase();
@@ -76,14 +76,15 @@ return async function(req,context={}) {
  await client.query('BEGIN');
  // Serializes each participant so the final total has an unambiguous reached-at time.
  await client.query('SELECT id FROM freak_people WHERE id=$1 FOR UPDATE',[person.id]);
- await client.query(`UPDATE freak_tickets t SET owner=$1,claimed_at=clock_timestamp() FROM freak_campaigns c WHERE t.campaign=c.id AND c.id=$2 AND c.active=true AND t.token_hash=$3 AND t.owner IS NULL AND t.release_at<=now()`,[person.id,campaign,tokenHash]);
+ await client.query('SELECT number FROM freak_tickets WHERE campaign=$1 AND token_hash=$2 FOR UPDATE',[campaign,tokenHash]);
+ await client.query(`UPDATE freak_tickets t SET owner=$1,claimed_at=clock_timestamp() FROM freak_campaigns c WHERE t.campaign=c.id AND c.id=$2 AND c.active=true AND t.token_hash=$3 AND t.owner IS NULL AND t.received_at IS NULL AND t.release_at<=now()`,[person.id,campaign,tokenHash]);
  await client.query('COMMIT');
  }catch(e){await client.query('ROLLBACK');throw e}finally{client.release()}
  }
  const t=(await q('SELECT *,release_at>now() AS unreleased FROM freak_tickets WHERE campaign=$1 AND token_hash=$2',[campaign,tokenHash])).rows[0];
  if(!t)throw error(404,'invalid','Este boleto no es válido para esta campaña.');
  const mine=t.owner&&t.owner===person?.id;
- const state=mine?'owned':t.owner?'occupied':!config.active||t.unreleased?'unreleased':'available';
+ const state=mine?'owned':t.received_at?'received':t.owner?'occupied':!config.active||t.unreleased?'unreleased':'available';
  // Locked tickets do not reveal their hidden act or rarity.
  const details=state==='unreleased'?null:ticket(t);
  return json({state,ticket:details,campaign,person},op==='claim'&&state!=='owned'?409:200);

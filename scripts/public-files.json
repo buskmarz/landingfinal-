@@ -211,6 +211,10 @@
     "freak/THIRD-PARTY.txt",
     "freak/admin/index.html",
     "freak/admin/admin.js",
-    "freak/admin/admin.css"
+    "freak/admin/admin.css",
+    "freak/chiquita-integrated.png",
+    "freak/annie-integrated.png",
+    "freak/lobster-integrated.png",
+    "freak/rare-integrated.png"
   ]
 }

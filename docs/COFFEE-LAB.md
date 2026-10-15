@@ -133,3 +133,5 @@ Antes de publicar, la nueva entrada compilada de Coffee Lab y el menú coinciden
 ### Actualización administrativa de FREAK
 
 Panel aislado en `/freak/admin/`, migración aditiva de tablas freak_ y telemetría de aperturas. No modifica fuentes Coffee Lab, portada ni menú. Conserva root build → dist → GitHub main → Netlify. Checkout iCloud con rediseño pendiente permanece intacto.
+
+FREAK: lanzamiento de colección simplificada, código visible corto, recepción física y cuatro artes con QR integrado. Modificaciones limitadas a FREAK y migración freak_; portada, menú y Coffee Lab se conservan. Publicación por Git main y build completo dist.
