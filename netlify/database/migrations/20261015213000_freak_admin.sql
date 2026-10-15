@@ -1,0 +1,7 @@
+CREATE TABLE freak_admins(id text PRIMARY KEY,key_hash text NOT NULL);
+INSERT INTO freak_admins VALUES('owner','d917b6a44c6e6e2136e094ff9df6f6e5810e80093ed4d33dc43526af2589b5d4');
+CREATE TABLE freak_admin_sessions(token_hash text PRIMARY KEY,admin text NOT NULL REFERENCES freak_admins(id),expires_at timestamptz NOT NULL);
+CREATE TABLE freak_locations(campaign text NOT NULL,number integer NOT NULL,place text NOT NULL,reference text NOT NULL,latitude double precision,longitude double precision,accuracy double precision,physical text NOT NULL CHECK(physical IN ('unplaced','placed','removed','missing')),version integer NOT NULL,updated_at timestamptz NOT NULL DEFAULT now(),PRIMARY KEY(campaign,number),FOREIGN KEY(campaign,number) REFERENCES freak_tickets(campaign,number),CHECK(latitude BETWEEN -90 AND 90),CHECK(longitude BETWEEN -180 AND 180));
+CREATE TABLE freak_location_history(id bigserial PRIMARY KEY,campaign text NOT NULL,number integer NOT NULL,admin text NOT NULL REFERENCES freak_admins(id),snapshot jsonb NOT NULL,created_at timestamptz NOT NULL DEFAULT now(),FOREIGN KEY(campaign,number) REFERENCES freak_tickets(campaign,number));
+CREATE TABLE freak_visits(campaign text NOT NULL,number integer NOT NULL,visit uuid NOT NULL,created_at timestamptz NOT NULL DEFAULT now(),PRIMARY KEY(campaign,number,visit),FOREIGN KEY(campaign,number) REFERENCES freak_tickets(campaign,number));
+CREATE INDEX freak_history_campaign ON freak_location_history(campaign,id DESC);

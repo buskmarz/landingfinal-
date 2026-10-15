@@ -1,3 +1,4 @@
+import {adminAction} from '../lib/freak-admin.mjs';
 import {series} from '../../freak/catalog.mjs';
 import { getDatabase } from '@netlify/database';
 import { randomBytes, randomUUID, createHash, scrypt as scryptCallback, timingSafeEqual } from 'node:crypto';
@@ -35,6 +36,11 @@ return async function(req,context={}) {
  if(rawSession&&/^[A-Za-z0-9_-]{43}$/.test(rawSession))person=(await q('SELECT p.id,p.alias FROM freak_sessions s JOIN freak_people p ON p.id=s.person WHERE s.token_hash=$1 AND s.expires_at>now() AND p.campaign=$2',[hash(rawSession),campaign])).rows[0]||null;
  let body={};
  if(sensitive){const text=await req.text();if(text.length>2048)throw error(413,'size','Solicitud demasiado larga.');try{body=JSON.parse(text)}catch{throw error(400,'json','Solicitud inválida.')}if(!body||Array.isArray(body)||typeof body!=='object')throw error(400,'json','Solicitud inválida.');}
+ if(op.startsWith('admin-'))return await adminAction({req,op,body,q,db,campaign,json});
+ if(op==='visit'&&sensitive){
+ if(typeof body.token!=='string'||!/^[A-Za-z0-9_-]{43}$/.test(body.token)||typeof body.visit!=='string'||!/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(body.visit))throw error(400,'visit','Registro inválido.');
+ await q('INSERT INTO freak_visits(campaign,number,visit) SELECT campaign,number,$3 FROM freak_tickets WHERE campaign=$1 AND token_hash=$2 ON CONFLICT DO NOTHING',[campaign,hash(body.token),body.visit]);return json({ok:true});
+ }
  if(op==='logout'&&sensitive){if(rawSession)await q('DELETE FROM freak_sessions WHERE token_hash=$1',[hash(rawSession)]);return json({ok:true},200,{'Set-Cookie':`${cookieName}=; Path=/api/freak; Max-Age=0; Secure; HttpOnly; SameSite=Strict`});}
  if(['register','login'].includes(op)&&sensitive){
  const alias=typeof body.alias==='string'?body.alias.normalize('NFKC').trim().replace(/\s+/g,' '):'';

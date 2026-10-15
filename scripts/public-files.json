@@ -208,6 +208,9 @@
     "freak/annie.png",
     "freak/lobster.png",
     "freak/rare.png",
-    "freak/THIRD-PARTY.txt"
+    "freak/THIRD-PARTY.txt",
+    "freak/admin/index.html",
+    "freak/admin/admin.js",
+    "freak/admin/admin.css"
   ]
 }

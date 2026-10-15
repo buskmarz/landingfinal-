@@ -129,3 +129,7 @@ Prueba local dejó un favorito V60 y una sesión activa de QA sin bolsa en Chrom
 FREAK necesita volver al despliegue Git → main → Netlify. `origin/main` sigue en 46d099b y no incluye Coffee Lab; publicar desde ese commit sin integración borraría la aplicación que está en producción. Por ello se recuperó la fuente canónica dentro de un clon limpio fuera de iCloud y se añadieron únicamente el build del app, su copia a `dist/`, cabeceras/redirección y los tres enlaces de portada del lanzamiento autorizado. No se incorporan renderizadores editoriales ni el rediseño local. El checkout original queda intacto.
 
 Antes de publicar, la nueva entrada compilada de Coffee Lab y el menú coinciden byte por byte con el dominio HTTPS; la portada difiere exclusivamente por la normalización de privacidad de Netlify. Mantener `/coffee-lab/`, IndexedDB y service worker con su scope. Este trabajo es preservación estrictamente necesaria del despliegue existente. Estado de publicación y pruebas finales se registra en `docs/FREAK.md`.
+
+### Actualización administrativa de FREAK
+
+Panel aislado en `/freak/admin/`, migración aditiva de tablas freak_ y telemetría de aperturas. No modifica fuentes Coffee Lab, portada ni menú. Conserva root build → dist → GitHub main → Netlify. Checkout iCloud con rediseño pendiente permanece intacto.
