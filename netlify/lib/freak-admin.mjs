@@ -26,13 +26,13 @@ export async function adminAction({req,op,body,q,db,campaign,json}){
  if(!t)fail(404,'El QR no pertenece a esta campaña.');return json(t);
  }
  if(op==='admin-list'&&!write){
- const rows=(await q(`SELECT t.number,t.short_code,t.act,t.rare,t.release_at,t.claimed_at,t.received_at,t.received_alias,p.alias,
+ const rows=(await q(`SELECT t.number,t.display_number,t.short_code,t.act,t.rare,t.release_at,t.claimed_at,t.received_at,t.received_alias,p.alias,
  l.place,l.reference,l.latitude,l.longitude,l.accuracy,l.physical,l.version,l.updated_at,
  COALESCE(v.opens,0)::int AS opens,v.first_open,v.last_open
  FROM freak_tickets t LEFT JOIN freak_people p ON p.id=t.owner
  LEFT JOIN freak_locations l ON l.campaign=t.campaign AND l.number=t.number
  LEFT JOIN (SELECT campaign,number,count(*) AS opens,min(created_at) AS first_open,max(created_at) AS last_open FROM freak_visits GROUP BY campaign,number) v ON v.campaign=t.campaign AND v.number=t.number
- WHERE t.campaign=$1 ORDER BY t.number`,[campaign])).rows.map(t=>({...t,name:series[t.act].name,physical:t.physical||'unplaced',version:t.version||0}));
+ WHERE t.campaign=$1 ORDER BY t.display_number NULLS LAST,t.number`,[campaign])).rows.map(t=>({...t,name:series[t.act].name,physical:t.physical||'unplaced',version:t.version||0}));
  const history=(await q('SELECT number,snapshot,created_at FROM freak_location_history WHERE campaign=$1 ORDER BY id DESC LIMIT 300',[campaign])).rows;
  const config=(await q('SELECT id,active FROM freak_campaigns WHERE id=$1',[campaign])).rows[0];return json({tickets:rows,history,campaign:config});
  }

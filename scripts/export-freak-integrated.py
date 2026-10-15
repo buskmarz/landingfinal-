@@ -16,7 +16,9 @@ def sticker(c,t,x,y,w=90*mm,h=135*mm,preview=False):
  for row in range(n):
   for col in range(n):
    if matrix[row][col]:c.rect(qx+(col+4)*unit,qy+(n+3-row)*unit,unit,unit,fill=1,stroke=0)
- if not preview:c.setFont('Courier-Bold',7);c.drawCentredString(w/2,h-codey*scale,t['code'])
+ c.setFont('Courier-Bold',7)
+ label=['001–030','031–060','061–090','091–100'][t['act']] if preview else f"{t['displayNumber']:03} · {t['code']}"
+ c.drawCentredString(w/2,h-codey*scale,label)
  c.restoreState()
 filename=folder/'FREAK-100-QR-INTEGRADOS.pdf';c=canvas.Canvas(str(filename),pagesize=A4)
 for i,t in enumerate(data['tickets']):
