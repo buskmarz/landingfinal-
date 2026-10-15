@@ -5,6 +5,7 @@ let campaign=new URLSearchParams(location.search).get('camp')==='prueba'?'prueba
 let data=null,view='home',selected=null,token='',recovery='',busy=false,pendingClaim=false;
 const art=i=>`/freak/${series[i].art}.png`;
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ordinal=t=>String(t.displayNumber??t.number).padStart(3,'0');
 const names=series.map(s=>s.name);
 function title(a,b=''){return `<div class="page-title"><h1>${a}</h1>${b?`<p>${b}</p>`:''}</div>`;}
 function toast(msg){const el=document.querySelector('#toast');el.textContent=msg;el.style.display='block';setTimeout(()=>el.style.display='none',3500);}
@@ -12,7 +13,7 @@ async function api(op,body,extra={}){const res=await fetch(`/api/freak?op=${op}&
 async function refresh(){data=await api('state');}
 function stopCamera(){stopScanner();}
 function go(next){stopCamera();view=next;document.querySelector('#menu-panel').hidden=true;document.querySelector('#menu').setAttribute('aria-expanded','false');render();scrollTo({top:0,behavior:'instant'});}
-function ticketRow(t){return `<article class="ticket ticket-row ${t.rare?'rare':''}"><div class="ticket-info"><span class="ticket-number">${esc(t.code||String(t.number).padStart(3,'0'))}</span><h3>${esc(t.name)}</h3>${t.rare?'<span class="rare-label">Edición de 10</span>':''}</div><img src="${art(t.act)}" alt="${esc(t.name)}" loading="lazy"></article>`;}
+function ticketRow(t){return `<article class="ticket ticket-row ${t.rare?'rare':''}"><div class="ticket-info"><span class="ticket-number">${ordinal(t)} · ${esc(t.code||'')}</span><h3>${esc(t.name)}</h3>${t.rare?'<span class="rare-label">Edición de 10</span>':''}</div><img src="${art(t.act)}" alt="${esc(t.name)}" loading="lazy"></article>`;}
 function render(){
  document.querySelector('#campaign-chip').textContent=campaign==='prueba'?'INTERNO':'';
  document.querySelector('#campaign-chip').hidden=campaign!=='prueba';
@@ -22,17 +23,17 @@ function render(){
  if(view==='collection')html=title('Mi colección',data?.person?esc(data.person.alias):'Guarda tus stickers con un alias.')+(data?.person?`${album()}<details><summary>Mis ${data.owned.length} stickers</summary>${data.owned.map(ticketRow).join('')}</details>${data.owned.length?'':'<p class="state-note">Tu primer sticker te espera.</p>'}<button class="primary" data-go="scan">Añadir sticker</button>`:`<button class="primary" data-go="account">Crear mi colección</button><button class="secondary" data-go="login">Ya tengo cuenta</button>`);
  if(view==='ranking')html=title('La comunidad','Sal a buscar con alguien.')+`<button class="primary" id="invite">Invitar a un amigo</button><h2 class="community-title">Quiénes coleccionan</h2>`+(data?.ranking.length?`<table class="ranking"><thead><tr><th>#</th><th>Alias</th><th>Stickers</th></tr></thead><tbody>${data.ranking.map(r=>`<tr class="${r.mine?'mine':''}"><td>${r.place}</td><td>${esc(r.alias)}${r.mine?' · tú':''}</td><td>${r.total}</td></tr>`).join('')}</tbody></table>`:'<p class="state-note">Sé el primero en guardar un sticker.</p>')+`<p class="small">Capturas digitales. Las entregas físicas se registran en cafetería.</p><button class="secondary" id="refresh">Actualizar</button>`;
  if(view==='account'){
- if(recovery)html=title('Guarda tu acceso')+`<section class="recovery"><h2>${esc(data?.person?.alias)}</h2><p>Guárdala para entrar desde otro teléfono.</p><code>${esc(recovery)}</code><button class="secondary" id="copy-key">Copiar acceso</button><button class="secondary" id="download-key">Descargar acceso</button></section><button class="primary" id="saved-key">${pendingClaim?'Guardar mi sticker':'Ir a mi colección'}</button>`;
- else if(data?.person)html=title(esc(data.person.alias))+`<button class="primary" data-go="collection">Mi colección</button><button class="secondary" id="logout">Cerrar sesión</button>`;
+ if(recovery)html=title('Guarda tu acceso')+`<section class="recovery"><h2>${esc(data?.person?.alias)}</h2><p>Tu alias + esta clave para volver a entrar.</p><code>${esc(recovery)}</code><button class="secondary" id="copy-key">Copiar acceso</button><button class="secondary" id="download-key">Descargar acceso</button></section><button class="primary" id="saved-key">${pendingClaim?'Guardar mi sticker':'Ir a mi colección'}</button>`;
+ else if(data?.person)html=title(esc(data.person.alias))+`<button class="primary" data-go="collection">Mi colección</button>${data.person.recovery_length!==4&&!data.person.has_short_key?'<button class="secondary" id="short-access">Crear clave de 4 caracteres</button>':''}<button class="secondary" id="logout">Cerrar sesión</button>`;
  else html=title('Elige tu alias')+`<form class="form" id="register-form"><label for="alias">Alias público</label><input id="alias" name="alias" autocomplete="nickname" minlength="3" maxlength="24" placeholder="¿Cómo te llamamos?" required><button class="primary" ${!data?.campaign?.active?'disabled':''}>Continuar</button></form><p class="form-help">Guardamos tu alias y capturas. <a href="/aviso-privacidad.html">Privacidad</a>.</p><button class="secondary" data-go="login">Ya tengo cuenta</button>`;
  }
- if(view==='login')html=title('Vuelve a tu colección')+`<form class="form" id="login-form"><label for="alias">Alias</label><input id="alias" name="alias" autocomplete="username" maxlength="24" required><label for="key">Clave privada</label><input id="key" name="recovery" type="password" autocomplete="current-password" maxlength="80" required><button class="primary">Entrar</button></form><button class="secondary" data-go="account">Crear cuenta</button>`;
+ if(view==='login')html=title('Vuelve a tu colección')+`<form class="form" id="login-form"><label for="alias">Alias</label><input id="alias" name="alias" autocomplete="username" maxlength="24" required><label for="key">Clave de acceso</label><input id="key" name="recovery" type="password" autocomplete="current-password" maxlength="80" placeholder="4 caracteres o tu clave anterior" autocapitalize="characters" spellcheck="false" required><button class="primary">Entrar</button></form><button class="secondary" data-go="account">Crear cuenta</button>`;
  if(view==='scan')html=title('Escanea tu sticker')+`<button class="primary" id="camera">Abrir cámara</button><div id="scanner" hidden><video id="scan-video" playsinline muted aria-label="Cámara para escanear QR"></video><button class="secondary" id="stop-scan">Cerrar cámara</button><p id="scan-status" role="status"></p></div><details><summary>Pegar enlace QR</summary><form class="form" id="scan-form"><label for="ticket-url">Enlace</label><textarea id="ticket-url" name="url" autocomplete="off" required></textarea><button class="secondary">Abrir sticker</button></form></details><p class="state-note">Sin cuenta: tráelos a Better Mood UPAEP.</p>`;
  if(view==='claim'){
  const states={available:'Disponible',owned:'Ya es tuyo',occupied:'Ya tiene dueño',received:'Contado en cafetería',unreleased:'Aún no disponible',invalid:'QR no válido'};
  const state=selected?.state||'invalid',t=selected?.ticket;
  html=title(state==='owned'?'¡Es tuyo!':state==='available'?'Lo encontraste.':'Este sticker');
- if(t)html+=`<article class="ticket big-ticket ${t.rare?'rare':''}"><span class="ticket-number">${esc(t.code||String(t.number).padStart(3,'0'))}</span><img src="${art(t.act)}" alt="${esc(t.name)}"><span class="ticket-status">${states[state]}</span></article>`;
+ if(t)html+=`<article class="ticket big-ticket ${t.rare?'rare':''}"><span class="ticket-number">${ordinal(t)} · ${esc(t.code||'')}</span><img src="${art(t.act)}" alt="${esc(t.name)}"><span class="ticket-status">${states[state]}</span></article>`;
  else html+=`<p class="state-note">${states[state]}</p>`;
  if(state==='owned')html+=`<p class="state-note">${new Set(data.owned.map(t=>t.act)).size} de 4 artistas</p><button class="secondary" id="invite">Invitar a un amigo</button>`;
  if(state==='available')html+=`<button class="primary" id="claim">${data?.person?'Guardar en mi colección':'Elegir alias y guardar'}</button><p class="state-note">O guárdalo físicamente y tráelo a Better Mood UPAEP.</p>`;
@@ -52,6 +53,7 @@ function bind(){main.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b
  const login=document.querySelector('#login-form');if(login)login.onsubmit=e=>{e.preventDefault();action(async()=>{await api('login',Object.fromEntries(new FormData(login)));await afterLogin()})};
  const scan=document.querySelector('#scan-form');if(scan)scan.onsubmit=e=>{e.preventDefault();action(()=>openTicket(new FormData(scan).get('url')))};
  on('claim',async()=>{if(!data?.person){pendingClaim=true;go('account');return}await saveTicket();});
+ on('short-access',async()=>{const r=await api('short-access',{});recovery=r.recovery;await refresh();go('account')});
  on('logout',async()=>{await api('logout',{});recovery='';await refresh();go('account')});
  on('refresh',async()=>{await refresh();render();toast('Clasificación actualizada.');});
  on('copy-key',async()=>{await navigator.clipboard.writeText(`${data.person.alias}\n${recovery}`);toast('Alias y clave copiados. Guárdalos en un lugar privado.');});

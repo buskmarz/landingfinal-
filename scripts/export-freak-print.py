@@ -23,10 +23,10 @@ def sticker(c,t,x,y,w=62*mm,h=85*mm):
   for col in range(n):
    if matrix[row][col]:c.rect(qx+(col+4)*unit,qy+(n+3-row)*unit,unit,unit,fill=1,stroke=0)
  name=t['name'].replace(' · ',' / ')
- lines=['Espiridiona Cenda','Chiquita'] if t['act']==0 else [name]
+ lines=[name]
  c.setFillColor(INK);c.setFont('Helvetica-Bold',7)
  for i,line in enumerate(lines):c.drawString(3*mm,25*mm-i*3.5*mm,line)
- c.setFont('Helvetica',6);c.drawString(3*mm,15*mm,f"SERIE DE {t['edition']}");c.drawString(3*mm,11*mm,f"BOLETO {t['number']:03d}/100")
+ c.setFont('Helvetica',6);c.drawString(3*mm,15*mm,f"SERIE DE {t['edition']}");c.drawString(3*mm,11*mm,f"BOLETO {t['displayNumber']:03d}/100")
  if t['rare']:
   c.setFont('Helvetica-Bold',6);c.drawString(3*mm,7*mm,'EDICION RARA')
  c.setFont('Helvetica',5.5);c.drawCentredString(w/2,2.5*mm,'ESCANEA. ENTRA. CONFIRMA TU CAPTURA.')

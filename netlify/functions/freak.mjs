@@ -1,14 +1,15 @@
 import {adminAction} from '../lib/freak-admin.mjs';
 import {series} from '../../freak/catalog.mjs';
 import { getDatabase } from '@netlify/database';
-import { randomBytes, randomUUID, createHash, scrypt as scryptCallback, timingSafeEqual } from 'node:crypto';
+import { randomBytes, randomInt, randomUUID, createHash, scrypt as scryptCallback, timingSafeEqual } from 'node:crypto';
 import { promisify } from 'node:util';
 const scrypt=promisify(scryptCallback);
 const hash=v=>createHash('sha256').update(v).digest('hex');
+const shortKey=()=>Array.from({length:4},()=> 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[randomInt(32)]).join('');
 const cookieName='__Secure-freak';
 const json=(body,status=200,extra={})=>new Response(JSON.stringify(body),{status,headers:{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff',...extra}});
 const error=(status,code,message)=>Object.assign(new Error(message),{status,code});
-const ticket=t=>({number:t.number,code:t.short_code,act:t.act,name:series[t.act].name,description:series[t.act].description,edition:series[t.act].edition,rare:t.rare,variant:t.variant,claimedAt:t.claimed_at});
+const ticket=t=>({number:t.number,displayNumber:t.display_number??t.number,code:t.short_code,act:t.act,name:series[t.act].name,description:series[t.act].description,edition:series[t.act].edition,rare:t.rare,variant:t.variant,claimedAt:t.claimed_at});
 export function createHandler(database,now=()=>Date.now()){
 return async function(req,context={}) {
  try {
@@ -33,7 +34,7 @@ return async function(req,context={}) {
  if(!config)throw error(503,'not_ready','El circo está preparando sus puertas. Intenta más tarde.');
  const cookie=req.headers.get('cookie')||'', rawSession=cookie.split(';').map(v=>v.trim()).find(v=>v.startsWith(cookieName+'='))?.slice(cookieName.length+1);
  let person=null;
- if(rawSession&&/^[A-Za-z0-9_-]{43}$/.test(rawSession))person=(await q('SELECT p.id,p.alias FROM freak_sessions s JOIN freak_people p ON p.id=s.person WHERE s.token_hash=$1 AND s.expires_at>now() AND p.campaign=$2',[hash(rawSession),campaign])).rows[0]||null;
+ if(rawSession&&/^[A-Za-z0-9_-]{43}$/.test(rawSession))person=(await q('SELECT p.id,p.alias,p.recovery_length,p.short_recovery_hash IS NOT NULL AS has_short_key FROM freak_sessions s JOIN freak_people p ON p.id=s.person WHERE s.token_hash=$1 AND s.expires_at>now() AND p.campaign=$2',[hash(rawSession),campaign])).rows[0]||null;
  let body={};
  if(sensitive){const text=await req.text();if(text.length>2048)throw error(413,'size','Solicitud demasiado larga.');try{body=JSON.parse(text)}catch{throw error(400,'json','Solicitud inválida.')}if(!body||Array.isArray(body)||typeof body!=='object')throw error(400,'json','Solicitud inválida.');}
  if(op.startsWith('admin-'))return await adminAction({req,op,body,q,db,campaign,json});
@@ -42,22 +43,33 @@ return async function(req,context={}) {
  await q('INSERT INTO freak_visits(campaign,number,visit) SELECT campaign,number,$3 FROM freak_tickets WHERE campaign=$1 AND token_hash=$2 ON CONFLICT DO NOTHING',[campaign,hash(body.token),body.visit]);return json({ok:true});
  }
  if(op==='logout'&&sensitive){if(rawSession)await q('DELETE FROM freak_sessions WHERE token_hash=$1',[hash(rawSession)]);return json({ok:true},200,{'Set-Cookie':`${cookieName}=; Path=/api/freak; Max-Age=0; Secure; HttpOnly; SameSite=Strict`});}
+ if(op==='short-access'&&sensitive){
+ if(!person)throw error(401,'login','Entra con tu alias primero.');
+ const recovery=shortKey(),salt=randomBytes(16).toString('hex'),derived=(await scrypt(recovery,salt,64)).toString('hex');
+ const updated=await q('UPDATE freak_people SET short_recovery_hash=$1,short_recovery_salt=$2 WHERE id=$3 AND recovery_length<>4 AND short_recovery_hash IS NULL RETURNING id',[derived,salt,person.id]);
+ if(!updated.rowCount)throw error(409,'already_short','Ya tienes una clave de cuatro caracteres.');
+ return json({recovery});
+ }
  if(['register','login'].includes(op)&&sensitive){
  const alias=typeof body.alias==='string'?body.alias.normalize('NFKC').trim().replace(/\s+/g,' '):'';
  if(!/^[\p{L}\p{N} _-]{3,24}$/u.test(alias))throw error(400,'alias','Usa un alias de 3 a 24 letras o números.');
  const aliasKey=alias.toLocaleLowerCase('es-MX');let recovery;
  if(op==='register'){
- if(!config.active)throw error(423,'closed','La colección real todavía no está abierta. Entra al modo prueba.');
- recovery=randomBytes(18).toString('base64url');const salt=randomBytes(16).toString('hex');
+ if(!config.active)throw error(423,'closed','La colección todavía no está abierta.');
+ recovery=shortKey();const salt=randomBytes(16).toString('hex');
  const passwordHash=(await scrypt(recovery,salt,64)).toString('hex');
- const inserted=await q('INSERT INTO freak_people(id,campaign,alias,alias_key,salt,recovery_hash) VALUES($1,$2,$3,$4,$5,$6) ON CONFLICT(campaign,alias_key) DO NOTHING RETURNING id,alias',[randomUUID(),campaign,alias,aliasKey,salt,passwordHash]);
+ const inserted=await q('INSERT INTO freak_people(id,campaign,alias,alias_key,salt,recovery_hash,recovery_length) VALUES($1,$2,$3,$4,$5,$6,4) ON CONFLICT(campaign,alias_key) DO NOTHING RETURNING id,alias',[randomUUID(),campaign,alias,aliasKey,salt,passwordHash]);
  person=inserted.rows[0];if(!person)throw error(409,'alias_taken','Ese alias ya tiene boleto. Elige otro o recupera tu acceso.');
  }else{
- const code=typeof body.recovery==='string'?body.recovery.trim():'';
- if(code.length<16||code.length>80)throw error(401,'credentials','Alias o clave incorrectos.');
+ let code=typeof body.recovery==='string'?body.recovery.trim():'';
+ const gate=await q(`INSERT INTO freak_rate(key,bucket,hits) VALUES($1,$2,1) ON CONFLICT(key,bucket) DO UPDATE SET hits=freak_rate.hits+1 WHERE freak_rate.hits<5 RETURNING hits`,[hash(`login:${campaign}:${aliasKey}`),Math.floor(now()/900000)]);
+ if(!gate.rowCount)throw error(429,'login_limit','Demasiados intentos para este alias. Espera 15 minutos.');
+ if(code.length===4)code=code.toUpperCase();
+ if(code.length!==4&&(code.length<16||code.length>80))throw error(401,'credentials','Alias o clave incorrectos.');
  const p=(await q('SELECT * FROM freak_people WHERE campaign=$1 AND alias_key=$2',[campaign,aliasKey])).rows[0];
- const derived=await scrypt(code,p?.salt||'freak-invalid-credential-salt',64);
- const expected=Buffer.from(p?.recovery_hash||'0'.repeat(128),'hex');
+ const useShort=code.length===4&&p?.short_recovery_hash;
+ const derived=await scrypt(code,(useShort?p.short_recovery_salt:p?.salt)||'freak-invalid-credential-salt',64);
+ const expected=Buffer.from((useShort?p.short_recovery_hash:p?.recovery_hash)||'0'.repeat(128),'hex');
  if(!p||!timingSafeEqual(derived,expected))throw error(401,'credentials','Alias o clave incorrectos.');person={id:p.id,alias:p.alias};
  }
  const session=randomBytes(32).toString('base64url');
@@ -90,7 +102,7 @@ return async function(req,context={}) {
  return json({state,ticket:details,campaign,person},op==='claim'&&state!=='owned'?409:200);
  }
  if(op!=='state'||req.method!=='GET')throw error(404,'route','Acción no encontrada.');
- const owned=person?(await q('SELECT * FROM freak_tickets WHERE campaign=$1 AND owner=$2 ORDER BY claimed_at',[campaign,person.id])).rows.map(ticket):[];
+ const owned=person?(await q('SELECT * FROM freak_tickets WHERE campaign=$1 AND owner=$2 ORDER BY display_number NULLS LAST,number',[campaign,person.id])).rows.map(ticket):[];
  const ranking=(await q(`SELECT p.alias,p.id,count(t.number)::int AS total,count(t.number) FILTER (WHERE t.rare)::int AS rares,max(t.claimed_at) AS reached_at FROM freak_people p JOIN freak_tickets t ON t.owner=p.id AND t.campaign=p.campaign WHERE p.campaign=$1 GROUP BY p.id ORDER BY total DESC,rares DESC,reached_at ASC,p.id ASC LIMIT 100`,[campaign])).rows.map((r,i)=>({place:i+1,alias:r.alias,total:r.total,rares:r.rares,mine:r.id===person?.id}));
  return json({campaign:config,person,owned,ranking,total:100,rareTotal:10});
  }catch(e){if(!e.status)console.error('FREAK request failed',e.message);return json({code:e.code||'unavailable',error:e.status?e.message:'El circo toma una pausa. Intenta de nuevo en un momento.'},e.status||503);}

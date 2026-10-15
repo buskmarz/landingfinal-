@@ -141,3 +141,5 @@ Simplificación móvil FREAK: cambios exclusivamente en /freak, allowlist y docu
 Cierre comunitario FREAK: álbum de cuatro personajes, invitación y registro abreviado. Solo fuentes FREAK y pruebas/documentación; mismo build integral y Git CD. Portada y Coffee Lab siguen fuera del alcance de edición.
 
 Corrección de nombres de artistas FREAK: catálogo compartido, copias públicas y arte impreso actualizados; conserva nombre FREAK y QR existentes. Sin cambios de landing, menú o Coffee Lab.
+
+FREAK: migración aditiva para numeración visible y claves cortas; build completo y despliegue Git conservados. Sin cambios en portada, menú, Coffee Lab o datos de esas aplicaciones.
