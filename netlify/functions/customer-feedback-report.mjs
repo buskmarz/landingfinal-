@@ -23,7 +23,7 @@ async function loadRecords(store, keys) {
   for (let index = 0; index < keys.length; index += 20) {
     const batch = await Promise.all(keys.slice(index, index + 20).map((key) => store.get(key, { type: "json" }).catch(() => null)));
     batch.forEach((record) => {
-      if (record?.received_at && record?.ratings && RATING_KEYS.every((key) => Number.isInteger(record.ratings[key]))) records.push(record);
+      if (!record?.is_test && record?.received_at && record?.ratings && RATING_KEYS.every((key) => Number.isInteger(record.ratings[key]))) records.push(record);
     });
   }
   return records;

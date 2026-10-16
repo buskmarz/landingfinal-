@@ -23,7 +23,7 @@
 
     <main id="encuesta" class="survey-shell">
       <section class="survey-intro" data-survey-intro>
-        <p class="eyebrow">60 segundos · 5 preguntas</p>
+        <p class="eyebrow">Tu experiencia cuenta</p>
         <h1>¿Cómo te<br />hicimos sentir?</h1>
         <p class="survey-intro__lead">Queremos que tu próxima pausa sea todavía mejor.</p>
 
@@ -81,7 +81,7 @@
         <div class="thanks-face" aria-hidden="true">☺</div>
         <p class="eyebrow">Gracias por decirlo</p>
         <h2>Te escuchamos.</h2>
-        <p>Tu respuesta llegó al equipo de Better Mood.</p>
+        <p>Tu respuesta quedó guardada. Gracias por ayudarnos a mejorar.</p>
         <p class="preview-note" data-preview-note hidden>Modo preview: recorriste el flujo completo, pero no se envió ningún correo ni se guardó información.</p>
         <div class="thanks-actions">
           <a class="button button--primary" href="/">Volver al inicio</a>
@@ -106,5 +106,8 @@
     </template>
 
     <script src="/encuesta/survey.js?v=20260819" defer></script>
-  </body>
+
+<!-- Static notification schema, detected by Netlify at build time. -->
+<form name="encuesta-servicio" method="POST" data-netlify="true" netlify-honeypot="company" hidden><input type="hidden" name="form-name" value="encuesta-servicio"><input name="subject" type="text"><input name="folio" type="text"><input name="sucursal" type="text"><input name="visita" type="text"><input name="promedio" type="text"><input name="comentario" type="text"><input name="recibida" type="text"><input name="company" type="text"><input name="service_overall" type="text"><input name="welcome" type="text"><input name="speed" type="text"><input name="accuracy" type="text"><input name="return_intent" type="text"></form>
+</body>
 </html>

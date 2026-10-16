@@ -113,7 +113,7 @@
           <img src="/assets/commons/commons-simbolo-verde.png" alt="" width="576" height="576" aria-hidden="true" />
           <span>Commons</span>
         </a>
-        <a href="#comunidad">Comunidad</a>
+        <a href="/freak/" data-event="freak_open" data-cta="header-freak">FREAK</a>
         <details class="nav-more" data-nav-more data-nav-popover>
           <summary>Explorar</summary>
           <div class="nav-more__panel">
@@ -122,7 +122,6 @@
             <a href="/cafe-lavado/"><span>Descubre</span>Café</a>
             <a href="/arcade/"><span>Comparte</span>Juegos</a>
             <a href="/bebidas-funcionales-puebla/"><span>Conoce</span>Bebidas funcionales</a>
-            <a href="/shots-funcionales/" data-event="beverage_collection_open" data-cta="home-header-five-drinks"><span>En carta + próximamente</span>Cinco bebidas</a>
             <a href="https://instagram.com/bettermood.coffee" target="_blank" rel="noopener noreferrer"><span>Conecta</span>Instagram</a>
             <a href="/cafe-para-negocios-puebla/" data-event="b2b_page_open" data-cta="home-header-negocios"><span>Colabora</span>Negocios</a>
             <a href="/trabaja-con-nosotros/"><span>Colabora</span>Trabaja con nosotros</a>
@@ -171,12 +170,22 @@
       </section>
 
       <section class="first-sip section" aria-labelledby="first-sip-title">
-        <div><p class="eyebrow">¿QUÉ SE TE ANTOJA?</p><h2 id="first-sip-title">Tu próxima pausa,<br />a tu gusto.</h2><p>Explora sabores, tamaños y precios antes de venir.</p></div>
+        <div class="first-sip__heading"><p class="eyebrow">A tu gusto</p><h2 id="first-sip-title">¿Qué se te antoja?</h2><a class="text-link" href="/menu/" data-event="menu_view_la_paz" data-cta="home-full-menu">Ver menú completo</a></div>
         <div class="first-sip__choices">
-          <a href="/menu/?producto=americano" data-event="menu_product_open" data-cta="home-americano"><span>01 · Clásico</span><strong>Americano <b>$55</b></strong><small>8 oz · Espresso doble y agua caliente</small><span class="first-sip__arrow" aria-hidden="true">↗</span></a>
-          <a href="/menu/?producto=cold-brew" data-event="menu_product_open" data-cta="home-cold-brew"><span>02 · Frío</span><strong>Cold Brew <b>$60</b></strong><small>12 oz · Café extraído en frío</small><span class="first-sip__arrow" aria-hidden="true">↗</span></a>
-          <a href="/menu/?producto=matcha" data-event="menu_product_open" data-cta="home-matcha"><span>03 · Con leche</span><strong>Matcha <b>$75</b></strong><small>10 oz · Matcha ceremonial con leche</small><span class="first-sip__arrow" aria-hidden="true">↗</span></a>
+          <a href="/menu/?producto=americano" data-event="menu_product_open" data-cta="home-americano"><strong>Americano <b>$55</b></strong><small>Espresso doble y agua caliente.</small></a>
+          <a href="/menu/?producto=cold-brew" data-event="menu_product_open" data-cta="home-cold-brew"><strong>Cold Brew <b>$60</b></strong><small>Café extraído en frío, suave y refrescante.</small></a>
+          <a href="/menu/?producto=matcha" data-event="menu_product_open" data-cta="home-matcha"><strong>Matcha <b>$75</b></strong><small>Matcha ceremonial con leche.</small></a>
         </div>
+      </section>
+
+      <section class="freak-feature section" id="freak" aria-labelledby="freak-feature-title">
+        <div class="freak-feature__copy"><p class="eyebrow">Una colección escondida cerca de UPAEP</p><h2 id="freak-feature-title">FREAK</h2><p class="freak-feature__lead">Sal por un café.<br>Vuelve con una historia.</p><p>Encuentra los stickers, llévatelos y colecciona a los personajes.</p><a class="button button--primary" href="/freak/" data-event="freak_open" data-cta="home-freak">Conocer la colección</a><small>¿Ya encontraste uno? Escanéalo o tráelo a Better Mood.</small></div>
+        <a class="freak-feature__art" href="/freak/" aria-label="Ver los personajes de la colección FREAK" data-event="freak_open" data-cta="home-freak-art">
+          <img src="/freak/chiquita-integrated.png" alt="Espiridiona Cenda" width="360" height="540" loading="lazy">
+          <img src="/freak/annie-integrated.png" alt="Annie Jones" width="360" height="540" loading="lazy">
+          <img src="/freak/lobster-integrated.png" alt="Grady Stiles Jr." width="360" height="540" loading="lazy">
+          <img src="/freak/rare-integrated.png" alt="Schlitze Surtees" width="360" height="540" loading="lazy">
+        </a>
       </section>
 
       <section class="identity section" aria-labelledby="identity-title">
@@ -214,7 +223,7 @@
           <p>Café de especialidad y bebidas con adaptógenos o CBD para descubrir a tu ritmo.</p>
           <div class="feature-actions">
             <a class="button button--primary" href="/bebidas-funcionales-puebla/" data-event="functional_drinks_open" data-cta="home-bebidas">Descubrir bebidas</a>
-            <a class="text-link" href="/cafe-lavado/" data-event="coffee_origin_open" data-cta="home-nuestro-cafe">Conocer el café <span aria-hidden="true">→</span></a>
+            <a class="text-link" href="/cafe-lavado/" data-event="coffee_origin_open" data-cta="home-nuestro-cafe">Conocer el café</a>
           </div>
         </div>
       </section>
@@ -248,7 +257,7 @@
                 data-cta="locations-maps-la-paz"
               >Cómo llegar</a>
               <a class="button button--outline" href="/menu/" data-event="menu_view_la_paz" data-cta="locations-menu-la-paz">Ver menú</a>
-              <a class="text-link" href="/cafeteria-para-trabajar-puebla/" data-cta="locations-trabajar">Ver guía para trabajar <span aria-hidden="true">→</span></a>
+              <a class="text-link" href="/cafeteria-para-trabajar-puebla/" data-cta="locations-trabajar">Ver guía para trabajar</a>
             </div>
           </article>
         </div>
@@ -273,38 +282,14 @@
           </div>
           <p class="eyebrow">Better Mood × Commons</p>
           <h2 id="commons-spotlight-title">Sabor primero.<br />Curiosidad siempre.</h2>
-          <p>Usamos una selección de adaptógenos Commons en bebidas reales de nuestra carta. Descubre qué son, cómo saben y dónde probarlos.</p>
+          <p>Conoce los ingredientes Commons que usamos en nuestras bebidas.</p>
           <div class="commons-spotlight__actions">
-            <a class="button button--primary" href="/adaptogenos-en-bebidas-puebla/" data-event="commons_guide_open" data-cta="home-commons-guide">Entender en 2 minutos</a>
+            <a class="button button--primary" href="/adaptogenos-en-bebidas-puebla/" data-event="commons_guide_open" data-cta="home-commons-guide">Conocer los ingredientes</a>
             <a class="button button--light" href="/bebidas-funcionales-puebla/" data-event="functional_drinks_open" data-cta="home-commons-drinks">Ver bebidas</a>
           </div>
         </div>
       </section>
 
-      <section class="shots-preview section" aria-labelledby="shots-preview-title">
-        <figure class="shots-preview__visual shots-preview__visual--five reveal" aria-label="Cold Brew y Kombucha Better Mood, más tres Mood Shots próximamente">
-          <span class="shots-preview__halo" aria-hidden="true"></span>
-          <span class="collection-packshot collection-packshot--brew">
-            <img src="/assets/collection/cold-brew-1200.jpg" alt="Botellas de Cold Brew Better Mood" width="1200" height="600" loading="lazy" />
-            <span><strong>Cold Brew</strong><small>En la carta</small></span>
-          </span>
-          <span class="collection-packshot collection-packshot--kombucha">
-            <img src="/assets/collection/kombucha-1200.jpg" alt="Botellas de Kombucha Better Mood" width="1200" height="600" loading="lazy" />
-            <span><strong>Kombucha</strong><small>En la carta</small></span>
-          </span>
-          <span class="collection-coming">
-            <strong>+ 3 Mood Shots</strong>
-            <small>Próximamente</small>
-          </span>
-        </figure>
-        <div class="shots-preview__copy reveal reveal--late">
-          <p class="eyebrow">Bebidas Better Mood</p>
-          <h2 id="shots-preview-title">Cinco bebidas.<br />Un mismo mood.</h2>
-          <p>Cold Brew y Kombucha en la carta. Tres Mood Shots en desarrollo.</p>
-          <p class="shots-preview__branches">Disponible en UPAEP / La Paz</p>
-          <a class="button button--primary" href="/shots-funcionales/" data-event="beverage_collection_open" data-cta="home-five-drinks">Explorar las cinco</a>
-        </div>
-      </section>
 
       <section class="gather section" id="comunidad" aria-labelledby="gather-title">
         <figure class="gather__media gather__media--real reveal">
@@ -324,7 +309,7 @@
           <p>Juegos, café y una mesa para compartir.</p>
           <div class="gather__actions">
             <a class="button button--primary" href="/arcade/" data-event="arcade_open" data-cta="home-entrar-juegos">Ver juegos</a>
-            <a class="text-link" href="/talleres-de-cafe-puebla/" data-event="branch_events_open" data-cta="home-events-branches">Ver agenda <span aria-hidden="true">→</span></a>
+            <a class="text-link" href="/talleres-de-cafe-puebla/" data-event="branch_events_open" data-cta="home-events-branches">Ver agenda</a>
           </div>
         </div>
       </section>
@@ -332,15 +317,15 @@
       <section class="service-pulse section" aria-labelledby="service-pulse-title">
         <div class="service-pulse__copy reveal">
           <p class="eyebrow">Tu experiencia cuenta</p>
-          <h2 id="service-pulse-title">¿Cómo te<br />fue hoy?</h2>
-          <p>60 segundos para mejorar tu próxima visita.</p>
+          <h2 id="service-pulse-title">¿Cómo te fue hoy?</h2>
+          <p>Te escuchamos para mejorar tu próxima visita.</p>
         </div>
         <div class="service-pulse__action reveal reveal--late">
           <div class="service-pulse__faces" aria-hidden="true">
-            <span data-face="1">☹</span><span data-face="2">⌢</span><span data-face="3">—</span><span data-face="4">⌣</span><span data-face="5">☺</span>
+            <span data-face="1"><svg viewBox="0 0 60 60" fill="none" aria-hidden="true"><circle cx="30" cy="30" r="27"/><circle class="face-eye" cx="21" cy="23" r="2"/><circle class="face-eye" cx="39" cy="23" r="2"/><path d="M18 38 Q30 24 42 38"/></svg></span><span data-face="2"><svg viewBox="0 0 60 60" fill="none" aria-hidden="true"><circle cx="30" cy="30" r="27"/><circle class="face-eye" cx="21" cy="23" r="2"/><circle class="face-eye" cx="39" cy="23" r="2"/><path d="M18 36 Q30 29 42 36"/></svg></span><span data-face="3"><svg viewBox="0 0 60 60" fill="none" aria-hidden="true"><circle cx="30" cy="30" r="27"/><circle class="face-eye" cx="21" cy="23" r="2"/><circle class="face-eye" cx="39" cy="23" r="2"/><path d="M18 34 H42"/></svg></span><span data-face="4"><svg viewBox="0 0 60 60" fill="none" aria-hidden="true"><circle cx="30" cy="30" r="27"/><circle class="face-eye" cx="21" cy="23" r="2"/><circle class="face-eye" cx="39" cy="23" r="2"/><path d="M18 31 Q30 41 42 31"/></svg></span><span data-face="5"><svg viewBox="0 0 60 60" fill="none" aria-hidden="true"><circle cx="30" cy="30" r="27"/><circle class="face-eye" cx="21" cy="23" r="2"/><circle class="face-eye" cx="39" cy="23" r="2"/><path d="M17 29 Q30 47 43 29"/></svg></span>
           </div>
           <a class="button button--primary" href="/encuesta/" data-event="customer_survey_open" data-cta="home-survey">Contarnos</a>
-          <small>Anónima · 5 preguntas</small>
+          <small>Breve y anónima</small>
         </div>
       </section>
 
@@ -395,8 +380,8 @@
       </nav>
       <nav class="footer-group" aria-label="Explora Better Mood">
         <h2>Explora</h2>
+        <a href="/freak/" data-event="freak_open" data-cta="footer-freak">Colección FREAK</a>
         <a href="/cafe-lavado/">Café</a>
-        <a href="/shots-funcionales/" data-event="beverage_collection_open" data-cta="home-footer-beverages">Cinco bebidas <span>Nuevas</span></a>
         <a href="/bebidas-funcionales-puebla/">Bebidas funcionales</a>
         <a href="/coffee-lab/">Coffee Lab · guía gratuita</a>
         <a href="/como-preparar-cafe-en-casa/">Métodos</a>

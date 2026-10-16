@@ -42,17 +42,34 @@ function emailBody(record) {
   return `<!doctype html><html><body style="margin:0;background:#f7f3e9;color:#231f20;font-family:Arial,sans-serif"><div style="max-width:640px;margin:0 auto;padding:32px 20px"><div style="background:#ffde00;border-radius:24px;padding:24px"><p style="margin:0 0 6px;font-size:12px;font-weight:700;letter-spacing:.12em">BETTER MOOD · ENCUESTA</p><h1 style="margin:0;font-size:28px">Nueva respuesta de servicio</h1></div><div style="background:#fff;border-radius:24px;padding:24px;margin-top:16px"><p><strong>Sucursal:</strong> ${branchLabel(record.branch)}<br><strong>Visita:</strong> ${visitLabel(record.visit_when)}<br><strong>Promedio:</strong> ${record.average} / 5<br><strong>Recibida:</strong> ${escapeHtml(record.received_at_local)}</p><table style="width:100%;border-collapse:collapse;margin:20px 0">${rows}</table><p style="margin-bottom:6px"><strong>Comentario</strong></p><p style="margin-top:0;line-height:1.55">${comment}</p><p style="margin-top:24px;color:#777;font-size:12px">ID: ${escapeHtml(record.submission_id)}</p></div></div></body></html>`;
 }
 
-async function sendNotification(record) {
+export async function sendNotification(record, origin, transport=fetch) {
   const apiKey = getEnv("RESEND_API_KEY");
   const to = getEnv("SURVEY_NOTIFY_EMAIL");
   const from = getEnv("SURVEY_FROM_EMAIL");
-  if (!apiKey || !to || !from) return { status: "not_configured" };
+  if (!apiKey || !to || !from) {
+    // Use the existing Netlify Forms email notification; previews never send mail.
+    if (origin !== 'https://bmoodcoffee.com') return { status: 'preview' };
+    const fields = new URLSearchParams({
+      'form-name': 'encuesta-servicio',
+      subject: `${record.is_test ? '[PRUEBA TÉCNICA] ' : ''}Encuesta Better Mood · ${branchLabel(record.branch)}`,
+      folio: record.submission_id, sucursal: branchLabel(record.branch), visita: visitLabel(record.visit_when),
+      promedio: String(record.average), comentario: record.comment || 'Sin comentario',
+      recibida: record.received_at_local, company: ''
+    });
+    for (const key of RATING_KEYS) fields.set(key, `${record.ratings[key]} / 5`);
+    const response = await transport(origin + '/encuesta/', {
+      method: 'POST', headers: { 'content-type': 'application/x-www-form-urlencoded' },
+      body: fields.toString(), signal: AbortSignal.timeout(10000)
+    });
+    if (!response.ok) throw new Error('No se pudo entregar la notificación al formulario.');
+    return { status: 'submitted', provider: 'netlify-forms', submitted_at: new Date().toISOString() };
+  }
 
   const lowScore = RATING_KEYS.some((key) => record.ratings[key] <= 1) || record.ratings.service_overall <= 2;
   const prefix = lowScore ? "[Atención]" : record.average < 4 ? "[Revisar]" : "[Nueva respuesta]";
   const subject = `${prefix} Encuesta ${branchLabel(record.branch)} · ${record.average}/5`;
   const textLines = RATING_KEYS.map((key) => `${RATING_LABELS[key]}: ${record.ratings[key]}/5`);
-  const result = await fetch("https://api.resend.com/emails", {
+  const result = await transport("https://api.resend.com/emails", {
     method: "POST",
     headers: {
       authorization: `Bearer ${apiKey}`,
@@ -93,7 +110,8 @@ export default async (request) => {
   const average = Number((RATING_KEYS.reduce((sum, key) => sum + ratings[key], 0) / RATING_KEYS.length).toFixed(2));
   const submissionId = validSubmissionId(payload.submission_id);
   const record = {
-    schema_version: 2,
+    schema_version: 3,
+    is_test: submissionId.startsWith("qa-notification-"),
     submission_id: submissionId,
     branch: payload.branch,
     visit_when: payload.visit_when,
@@ -118,7 +136,7 @@ export default async (request) => {
   }
 
   try {
-    record.notification = await sendNotification(record);
+    record.notification = await sendNotification(record, new URL(request.url).origin);
   } catch (error) {
     record.notification = { status: "failed", failed_at: new Date().toISOString() };
     console.error("feedback_notification_failed", { submission_id: submissionId, message: error.message });
