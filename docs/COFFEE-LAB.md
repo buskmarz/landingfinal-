@@ -151,3 +151,9 @@ FREAK inventario/nombres/reinicio: panel y API aislados, migración aditiva y pr
 ### Continuidad FREAK: acceso por celular y GPS voluntario
 
 Revisión aislada en `codex/freak-phone-pin-gps`: cambios exclusivos FREAK y su aviso de privacidad, migración aditiva para hallazgos GPS. Se compila el sitio completo mediante `npm run build`; Coffee Lab, menú y portada autorizada siguen intactos. No se publica el rediseño del checkout iCloud ni se reinicia la campaña otra vez. Ver docs/FREAK.md para contrato de acceso y pruebas.
+
+### Portada simplificada y conexión FREAK — 15 octubre
+
+El usuario autoriza ahora ajustes específicos de la portada pública existente: menú breve sin flechas/numeración decorativa; quitar Cinco bebidas de bloque y enlaces; FREAK con arte aprobado; caritas SVG y encuesta compacta. Se conserva el hero aprobado, precios y datos operativos, menú completo y Coffee Lab. Se trabaja sobre main publicado en copia limpia, sin incorporar el rediseño iCloud pendiente.
+
+Encuesta: faltaban RESEND_API_KEY/SURVEY_FROM_EMAIL/SURVEY_NOTIFY_EMAIL tanto en proyecto como la clave Resend del equipo. Netlify Forms ya tiene detección y notificación global a bettermoodcoffee@gmail.com. Se añade esquema estático encuesta-servicio y entrega URL-encoded desde la función cuando no hay Resend; solo origen productivo, nunca previews. Se distingue submitted de entrega real. IDs qa-notification- se marcan técnicos y excluyen de satisfacción. Validación de recepción exige evidencia de Gmail tras publicación, no solo HTTP 200.
