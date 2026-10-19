@@ -178,3 +178,12 @@ Revisión aislada en `codex/freak-phone-pin-gps`: cambios exclusivos FREAK y su 
 El usuario autoriza ahora ajustes específicos de la portada pública existente: menú breve sin flechas/numeración decorativa; quitar Cinco bebidas de bloque y enlaces; FREAK con arte aprobado; caritas SVG y encuesta compacta. Se conserva el hero aprobado, precios y datos operativos, menú completo y Coffee Lab. Se trabaja sobre main publicado en copia limpia, sin incorporar el rediseño iCloud pendiente.
 
 Encuesta: faltaban RESEND_API_KEY/SURVEY_FROM_EMAIL/SURVEY_NOTIFY_EMAIL tanto en proyecto como la clave Resend del equipo. Netlify Forms ya tiene detección y notificación global a bettermoodcoffee@gmail.com. Se añade esquema estático encuesta-servicio y entrega URL-encoded desde la función cuando no hay Resend; solo origen productivo, nunca previews. Se distingue submitted de entrega real. IDs qa-notification- se marcan técnicos y excluyen de satisfacción. Validación de recepción exige evidencia de Gmail tras publicación, no solo HTTP 200.
+
+
+## 19 octubre 2026 — FREAK físico y premios
+
+La campaña usa estampillas sin QR: normales 1 punto, especiales 2. Barra valida 10 puntos físicos, marca o retiene las estampillas y entrega un código privado de 12 caracteres. Solo los cinco carteles llevan QR. Cualquier cartel permite elegir un premio disponible; la confirmación atómica determina el orden. Máximo un premio por cuenta/celular. Nombre y teléfono se muestran únicamente en administración privada `/freak/admin/rewards.html`; sin SMS no se garantiza una persona física distinta por cada teléfono.
+
+Migración aditiva `20261019120000_freak_physical_rewards.sql`: tablas de validaciones y premios, restricciones únicas y tokens de carteles guardados como hashes. Conserva usuarios e inventario anteriores. Los códigos se entregan una sola vez; no publicar el archivo privado de tokens. Los carteles anteriores con texto no abren la landing: reimprimir los QR vinculados.
+
+Verificación: 21 pruebas FREAK existentes y 5 nuevas de puntos, permisos, privacidad, concurrencia y entrega; build completo desde origin/main, preservando portada, menú y Coffee Lab canónico. No se siembran ganadores ni pruebas en producción.

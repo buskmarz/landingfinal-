@@ -134,3 +134,12 @@ Comunidad muestra display_name tras guardar stickers; formulario y aviso explica
 Ubicación del hallazgo opcional, checkbox sin marcar: al guardar solicita permiso GPS una vez (8 s máximo); si no hay permiso/disponibilidad guarda sin GPS. Guarda latitud, longitud y precisión en la misma actualización condicional de propietario. Reintentos y carreras no sobrescriben ubicación. No recoge fotos ni rastrea. Panel y CSV distinguen hallazgo de colocación; detalle enlaza Maps y muestra margen aproximado. Desvincular borra estos campos y conserva auditoría privada. Migración exclusivamente aditiva, sin borrar cuentas ni repetir reinicio de campaña. QR, códigos, numeración, arte y portada no cambian.
 
 Validación local: 26 pruebas de servidor, concurrencia, identidad QR/orden, privacidad, GPS y cámara/compartir; build completo y validación SEO. La prueba de ubicación en navegador usa permisos/coordenadas simuladas; precisión física depende del celular y entorno.
+
+
+## 19 octubre 2026 — FREAK físico y premios
+
+La campaña usa estampillas sin QR: normales 1 punto, especiales 2. Barra valida 10 puntos físicos, marca o retiene las estampillas y entrega un código privado de 12 caracteres. Solo los cinco carteles llevan QR. Cualquier cartel permite elegir un premio disponible; la confirmación atómica determina el orden. Máximo un premio por cuenta/celular. Nombre y teléfono se muestran únicamente en administración privada `/freak/admin/rewards.html`; sin SMS no se garantiza una persona física distinta por cada teléfono.
+
+Migración aditiva `20261019120000_freak_physical_rewards.sql`: tablas de validaciones y premios, restricciones únicas y tokens de carteles guardados como hashes. Conserva usuarios e inventario anteriores. Los códigos se entregan una sola vez; no publicar el archivo privado de tokens. Los carteles anteriores con texto no abren la landing: reimprimir los QR vinculados.
+
+Verificación: 21 pruebas FREAK existentes y 5 nuevas de puntos, permisos, privacidad, concurrencia y entrega; build completo desde origin/main, preservando portada, menú y Coffee Lab canónico. No se siembran ganadores ni pruebas en producción.
