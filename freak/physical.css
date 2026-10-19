@@ -4,3 +4,5 @@
 .points-status{padding:18px 20px;border:1px dashed #847c6f;border-radius:12px;background:#f0ece1}.points-status strong{display:block;font-size:19px}.points-status small{margin-top:6px}.code-card{padding:20px;background:var(--aqua);border:1px solid var(--ink);border-radius:12px;margin:20px 0}.code-card code{display:block;font-size:clamp(22px,5vw,32px);font-weight:850;letter-spacing:.08em;margin:12px 0;overflow-wrap:anywhere}.admin-counts{display:grid;grid-template-columns:1fr 1fr;gap:16px}.admin-counts label{margin-top:12px}
 
 header a{min-height:44px;display:inline-flex;align-items:center;gap:6px}header a:first-of-type{flex-direction:column;align-items:flex-start;justify-content:center;gap:0}.text-link,.event a{min-height:44px}footer a,form small a{display:inline-flex;align-items:center;min-height:44px}.skip:focus{min-height:44px}
+
+.validation-row{padding:18px 0;border-bottom:1px solid var(--line)}.validation-row p{margin:0 0 12px}

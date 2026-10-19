@@ -80,3 +80,16 @@ Observación local de siete minutos: borrador de acceso conservado (nombre ficti
 Instrumentación mínima solo en scripts/freak-qa-server.mjs: registra fecha/op de lecturas de disponibilidad en output/freak-review/poll-observation.jsonl, sin nombres, celulares, códigos, cookies ni tokens. Evidencias soak-results.json, borrador-tras-ciclos-reales.png y premio-confirmado-tras-inactividad.png. No se repitieron suites completas ni se cambió la interfaz para llenar tiempo.
 
 Concluida esta observación, no se identificó otro defecto independiente que justifique una implementación. Siguen pendientes las decisiones operativas ya preguntadas. La ventana hasta 14:02 permanece abierta y no se declara cumplida por terminar esta prueba. Revisión local, sin push, merge, despliegue ni lanzamiento.
+
+
+## Aprobación posterior: reemitir código desde administración
+
+El usuario eligió «Reemitir desde administración». Esta decisión sustituye los pendientes históricos sobre recuperación de código de este documento. Implementado localmente: botón Reemitir código en Personas validadas, confirmación explícita que avisa que el anterior dejará de funcionar, nuevo código mostrado una sola vez y copiable. Se conserva la validación de puntos. Se bloquea si la cuenta ya confirmó un premio.
+
+Migración aditiva 20261019201500_freak_code_reissues.sql: auditoría con persona, campaña, administrador, hashes anterior/nuevo y fecha; sin guardar el código en texto. Operación transaccional con bloqueo de la persona y validación. Permisos y CSRF existentes se conservan. Se actualizó la guía del equipo.
+
+Verificación: ocho pruebas de premios/reemisión y 21 pruebas FREAK anteriores aprobadas. UI local: cancelar y confirmar; API tras pulsar el botón: código anterior 403, código nuevo 200, reemisión posterior al canje 409. Evidencia reissue-tests.txt, reissue-existing-tests.txt y reissue-ui-proof.json. Sin clientes ni premios reales afectados. Sin publicación ni despliegue. Siguen pendientes horario/cierre y condiciones/responsable/stock de entrega y presentación/inicio del americano.
+
+## Cartel de circo actualizado
+
+Referencia recuperada del chat «Calcula precio de latte en botella»: PET transparente, tapa negra y FREAK vertical. Cartel nuevo amarillo/crema/negro con cuatro personajes, botella plástica de latte naranjoso y la misma fuente Rye real incrustada en título, botella y textos. QR informativo real a https://bmoodcoffee.com/freak/, con logo, decodificado desde el archivo final. No sustituye los cinco enlaces privados de carteles de premios ni está asignado a un premio. Archivos de revisión en output/freak-cartel-amarillo/. Ilustración generada y tipografía/QR vectoriales maquetados como PDF tabloide. No se modificaron estampillas ni boletos aprobados.

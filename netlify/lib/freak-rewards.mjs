@@ -31,7 +31,7 @@ export async function rewardsAction({req,op,body,q,db,campaign,person,json,admin
  if(!admin)fail(401,'Entra a administración.');
  if(op==='admin-rewards'&&!write){
  const prizes=(await q('SELECT r.id,r.title,r.claimed_at,r.delivered_at,p.display_name,p.phone FROM freak_rewards r LEFT JOIN freak_people p ON p.id=r.owner WHERE r.campaign=$1 ORDER BY r.id',[campaign])).rows;
- const validations=(await q('SELECT v.normal_count,v.special_count,v.created_at,p.display_name,p.phone FROM freak_physical_validations v JOIN freak_people p ON p.id=v.person WHERE v.campaign=$1 ORDER BY v.created_at DESC',[campaign])).rows;
+ const validations=(await q('SELECT v.normal_count,v.special_count,v.created_at,p.display_name,p.phone,EXISTS(SELECT 1 FROM freak_rewards r WHERE r.campaign=v.campaign AND r.owner=v.person) AS has_prize FROM freak_physical_validations v JOIN freak_people p ON p.id=v.person WHERE v.campaign=$1 ORDER BY v.created_at DESC',[campaign])).rows;
  return json({prizes,validations});
  }
  if(op==='admin-validate-points'&&write){
@@ -39,8 +39,26 @@ export async function rewardsAction({req,op,body,q,db,campaign,person,json,admin
  if(!phone||!name||!Number.isInteger(body.normal)||!Number.isInteger(body.special)||body.normal<0||body.special<0||body.normal>5000||body.special>5000||body.normal+2*body.special<10||body.marked!==true)fail(400,'Revisa nombre, celular, 10 puntos y marca los stickers físicos como contados.');
  const code=randomBytes(6).toString('hex').toUpperCase();
  const result=await q(`INSERT INTO freak_physical_validations(campaign,person,normal_count,special_count,code_hash,admin) SELECT $1,id,$3,$4,$5,$6 FROM freak_people WHERE campaign=$1 AND phone=$2 AND display_name=$7 ON CONFLICT(campaign,person) DO NOTHING RETURNING person`,[campaign,phone,body.normal,body.special,hash(code),admin.admin,name]);
- if(!result.rowCount)fail(409,'La persona debe registrarse primero. Revisa nombre y celular; si ya fue validada, conserva su código original.');
+ if(!result.rowCount)fail(409,'La persona debe registrarse primero. Revisa nombre y celular; si ya fue validada, puedes reemitir su código en Personas validadas.');
  return json({ok:true,code,points:body.normal+2*body.special});
+ }
+ if(op==='admin-reissue-code'&&write){
+ const phone=normalizePhone(body.phone),name=normalizeName(body.name);
+ if(!phone||!name||body.confirmed!==true)fail(400,'Confirma nombre, celular y reemisión. El código anterior dejará de funcionar.');
+ const client=await db.pool.connect();
+ try{await client.query('BEGIN');
+ const owner=(await client.query('SELECT id FROM freak_people WHERE campaign=$1 AND phone=$2 AND display_name=$3 FOR UPDATE',[campaign,phone,name])).rows[0];
+ if(!owner)fail(404,'No encontramos esa cuenta. Revisa nombre y celular.');
+ const previous=(await client.query('SELECT id FROM freak_rewards WHERE campaign=$1 AND owner=$2',[campaign,owner.id])).rows[0];
+ if(previous)fail(409,'Ya confirmó un premio. No se puede reemitir el código.');
+ const validation=(await client.query('SELECT code_hash,normal_count+2*special_count AS points FROM freak_physical_validations WHERE campaign=$1 AND person=$2 FOR UPDATE',[campaign,owner.id])).rows[0];
+ if(!validation||validation.points<10)fail(409,'Primero valida sus 10 puntos en barra.');
+ const code=randomBytes(6).toString('hex').toUpperCase(),nextHash=hash(code);
+ const updated=await client.query('UPDATE freak_physical_validations SET code_hash=$1 WHERE campaign=$2 AND person=$3 AND code_hash=$4 RETURNING person',[nextHash,campaign,owner.id,validation.code_hash]);
+ if(!updated.rowCount)fail(409,'El código cambió. Actualiza antes de reemitirlo.');
+ await client.query('INSERT INTO freak_code_reissues(campaign,person,admin,old_code_hash,new_code_hash) VALUES($1,$2,$3,$4,$5)',[campaign,owner.id,admin.admin,validation.code_hash,nextHash]);
+ await client.query('COMMIT');return json({ok:true,code,points:validation.points});
+ }catch(e){await client.query('ROLLBACK');throw e}finally{client.release();}
  }
  if(op==='admin-deliver-reward'&&write){
  if(typeof body.id!=='string')fail(400,'Premio inválido.');
