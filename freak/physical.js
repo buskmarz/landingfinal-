@@ -31,7 +31,7 @@ async function api(op, body) {
       body: body ? JSON.stringify(body) : undefined
     });
     const data = await response.json();
-    if (!response.ok) throw Error(data.error || 'No pudimos completar la acción. Intenta de nuevo.');
+    if (!response.ok) throw Object.assign(Error(data.error || 'No pudimos completar la acción. Intenta de nuevo.'), {code:data.code, status:response.status});
     return data;
   } catch (error) {
     if (error.name === 'AbortError' || error instanceof TypeError || error instanceof SyntaxError)
@@ -85,9 +85,9 @@ function render() {
   if (state.mine) {
     $('#account').innerHTML = `<div class="account-card"><p class="eyebrow">${state.mine.delivered_at ? 'ENTREGA REGISTRADA' : 'PREMIO CONFIRMADO'}</p><h3>${escape(state.mine.title)}</h3><p>${state.mine.delivered_at ? 'El equipo registró tu entrega.' : 'Ya está reservado para ti. Presenta tu código de barra al equipo para coordinar la entrega.'}</p><button id="logout" class="secondary" type="button">Salir de mi cuenta</button></div>`;
   } else if (state.person) {
-    $('#account').innerHTML = `<div class="account-header"><p>Hola, <strong>${escape(state.person.name)}</strong>.</p><button id="logout" class="secondary" type="button">Salir</button></div><div class="points-status"><strong>${state.validation ? escape(state.validation.points) + ' puntos validados' : '10 puntos por validar en barra'}</strong><small>${state.validation ? 'Registrados por el equipo. Conserva tu código de barra.' : 'Tus stickers se cuentan en persona; aquí no sumas puntos tocando imágenes.'}</small></div><p class="fine-print">${!available ? 'Ya no quedan premios disponibles.' : selected ? 'Confirma abajo con tu código de barra.' : state.validation ? 'Tus puntos están validados. Escanea un cartel para elegir tu premio.' : 'Valida tus 10 puntos en barra. Después, escanea un cartel para elegir.'}</p>`;
+    $('#account').innerHTML = `<div class="account-header"><p>Hola, <strong>${escape(state.person.name)}</strong>.</p><button id="logout" class="secondary" type="button">Salir</button></div><div class="points-status"><strong>${state.validation ? escape(state.validation.points) + ' puntos validados' : 'Meta: 10 puntos'}</strong><small>${state.validation ? 'Registrados por el equipo. Conserva tu código de barra.' : 'Aún sin validar. Trae tus stickers a barra.'}</small></div><p class="fine-print">${!available ? 'Ya no quedan premios disponibles.' : selected ? 'Confirma abajo con tu código de barra.' : state.validation ? 'Tus puntos están validados. Escanea un cartel para elegir tu premio.' : 'Valida tus 10 puntos en barra. Después, escanea un cartel para elegir.'}</p>`;
   } else {
-    $('#account').innerHTML = `<form id="access"><p class="eyebrow">TU ACCESO</p><h3>Entra con tu celular</h3><p>Hazlo antes de validar tus puntos en barra.</p><label for="access-name">Nombre <span class="fine-print">(solo al registrarte)</span></label><input id="access-name" name="name" minlength="2" maxlength="60" autocomplete="given-name" value="${escape(accessDraft.name)}"><label for="access-phone">Celular</label><input id="access-phone" name="phone" type="tel" inputmode="numeric" pattern="[0-9]{10}" minlength="10" maxlength="10" autocomplete="tel-national" required placeholder="10 dígitos" value="${escape(accessDraft.phone)}"><div class="form-actions"><button class="button" name="mode" value="register">Registrarme</button><button class="secondary" name="mode" value="login">Ya tengo cuenta</button></div><small>Sin SMS. Tu acceso usa los últimos cuatro dígitos del celular. <a href="/privacidad/">Privacidad</a></small></form>`;
+    $('#account').innerHTML = `<form id="access"><p class="eyebrow">TU ACCESO</p><h3>Entra con tu celular</h3><p>Hazlo antes de validar tus puntos en barra.</p><label for="access-name">Nombre <span class="fine-print">(solo al registrarte)</span></label><input id="access-name" name="name" minlength="2" maxlength="60" autocomplete="given-name" value="${escape(accessDraft.name)}"><label for="access-phone">Celular</label><input id="access-phone" name="phone" type="tel" inputmode="numeric" pattern="[0-9]{10}" minlength="10" maxlength="10" autocomplete="tel-national" required placeholder="10 dígitos" value="${escape(accessDraft.phone)}"><div class="form-actions"><button class="button" name="mode" value="register">Registrarme</button><button class="secondary" name="mode" value="login">Ya tengo cuenta</button></div><small>Vuelve con el mismo celular. Sin SMS. <a href="/privacidad/">Privacidad</a></small></form>`;
     $('#access').oninput = event => { accessDraft[event.target.name] = event.target.value; };
     $('#access').onsubmit = access;
   }
@@ -106,10 +106,15 @@ async function access(event) {
   try {
     await api(mode, {name, phone, recovery:phone.slice(-4)});
     accessDraft.name = ''; accessDraft.phone = '';
-    message(selected ? 'Listo. Confirma con tu código de barra.' : 'Listo. Valida tus 10 puntos en barra.');
-    await load();
+    const refreshed = await load();
+    message(!refreshed ? 'Entraste. Pulsa Actualizar para ver tu cuenta.' : state.mine ? 'Este es tu premio confirmado.' : state.validation ? selected ? 'Confirma con tu código de barra.' : 'Tus puntos ya están validados. Escanea un cartel para elegir.' : 'Tu cuenta está lista. Junta 10 puntos y valídalos en barra.');
     if (selected && state?.person) $('#bar-code').focus();
-  } catch (error) { message(error.message, true); }
+  } catch (error) {
+    if (error.code === 'phone_taken') {
+      message('Este celular ya tiene cuenta. Pulsa «Ya tengo cuenta».');
+      form.querySelector('[value="login"]')?.focus();
+    } else message(error.message, true);
+  }
   finally {
     busy = false;
     if (form.isConnected) form.querySelectorAll('button').forEach(button => button.disabled = false);
