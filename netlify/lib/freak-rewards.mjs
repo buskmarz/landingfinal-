@@ -21,7 +21,7 @@ export async function rewardsAction({req,op,body,q,db,campaign,person,json,admin
  if(!person)fail(401,'Registra tu celular para guardar el QR.');
  if(typeof body.poster!=='string'||!/^[A-Za-z0-9_-]{43}$/.test(body.poster))fail(400,'Escanea un QR válido.');
  let foundId=null,outcome='error';
- const audit=async result=>{if(foundId)try{await q('INSERT INTO freak_poster_save_events(campaign,poster_id,person,outcome) VALUES($1,$2,$3,$4)',[campaign,foundId,person.id,result]);}catch{}};
+ const audit=async result=>{if(foundId)try{await client.query('INSERT INTO freak_poster_save_events(campaign,poster_id,person,outcome) VALUES($1,$2,$3,$4)',[campaign,foundId,person.id,result]);}catch{}};
  const client=await db.pool.connect();
  try{await client.query('BEGIN');
  await client.query('SELECT id FROM freak_people WHERE id=$1 FOR UPDATE',[person.id]);
