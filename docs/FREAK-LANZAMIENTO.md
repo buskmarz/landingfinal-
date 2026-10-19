@@ -93,3 +93,36 @@ Verificación: ocho pruebas de premios/reemisión y 21 pruebas FREAK anteriores 
 ## Cartel de circo actualizado
 
 Referencia recuperada del chat «Calcula precio de latte en botella»: PET transparente, tapa negra y FREAK vertical. Cartel nuevo amarillo/crema/negro con cuatro personajes, botella plástica de latte naranjoso y la misma fuente Rye real incrustada en título, botella y textos. QR informativo real a https://bmoodcoffee.com/freak/, con logo, decodificado desde el archivo final. No sustituye los cinco enlaces privados de carteles de premios ni está asignado a un premio. Archivos de revisión en output/freak-cartel-amarillo/. Ilustración generada y tipografía/QR vectoriales maquetados como PDF tabloide. No se modificaron estampillas ni boletos aprobados.
+
+## Entrada desde QR: vista local pendiente de aprobación
+- El fragmento de cartel muestra «Encontraste un premio» y la meta de 10 puntos en la portada, sin saltar directamente al listado.
+- Acción principal: ver premios disponibles. Se mantienen validación en barra y confirmación con código; escanear no reserva.
+- Se conserva amarillo principal; azul sustituye turquesa en acentos. Sin publicar.
+- Verificación: sintaxis JS, 8 pruebas de premios y build completos; entrada desde QR y portada normal comprobadas en navegador local.
+
+### Regla confirmada: dos tipos de QR
+El usuario confirmó 10 puntos + uno de los cinco QR escondidos. QR común en boleto: información y acceso; no habilita canje. Cinco QR con tokens existentes: elección y confirmación de premio. Un premio por celular. Texto reducido en portada, instrucciones y acceso. Vista local, sin deploy.
+
+### Hallazgo y boleto gratis
+Entrada QR: «¡Encontraste 1 de los 5 QR!» y «Solo faltan tus stickers: junta 10 puntos y valida en barra». Boleto gratis en Better Mood, para pegar stickers. Confeti decorativo breve, sin bloquear clics, con limpieza y respeto a movimiento reducido; no aparece en acceso común. No cambia reserva ni validación. Sin publicar.
+
+### Especial único y entrega a imprenta
+Solo carpa: 2 puntos. Cuatro personajes: 1 punto. Boleto especial retirado de landing. Entrega de cinco originales individuales a 21.17 mm, un diseño por tabloide armado por imprenta. No se presupone cantidad final ni se envía mensaje al proveedor.
+
+### Guardado exclusivo antes de juntar puntos
+Guardar QR requiere sesión de celular y operación explícita; registro desde QR intenta guardarlo después de crear la cuenta. Reserva por campaña/QR y campaña/persona con restricciones únicas y transacción; carrera comprobada: uno guarda y otro recibe conflicto. No se consume al abrir. Cuenta puede volver sin enlace. Tras comprobar 10 puntos físicos, puede confirmar premio sin introducir código. 9 pruebas de premios aprobadas, incluida nueva exclusividad; verificación de registro y guardado en navegador local. Sin publicar.
+
+### Coherencia landing general y entrada QR
+Ambas vistas muestran cuatro personajes (1 punto) y únicamente carpa (2 puntos), meta 10. Boleto gratis como soporte opcional para pegar; se comprueban stickers físicos. QR guardado en cuenta antes de juntar puntos, exclusivo por celular, y confirmación de premio tras comprobación. Panel muestra titulares de QR y conteo de carpas. Código de barra ya no se exige ni muestra en el flujo nuevo. Pruebas de premios 9/9 y build completos; ambas vistas comprobadas localmente. Pendiente aprobación del usuario para publicar.
+
+### Prioridad celular
+Botón principal adelantado antes de ejemplos; ancho completo y 54 px de alto. Cabecera, tipografía y colección compactadas; carpa especial en fila clara; formularios a 16 px y botones grandes. Revisión visual en viewport de 320 y 390 px mediante iframe local; no sustituye prueba con teléfono físico. Vista móvil disponible localmente en puerto 5197, no incluida en build ni deploy. Sin publicar.
+
+### Compactación y premio sorpresa
+Instrucciones y premios desplegables; acceso separado siempre visible. Mensaje: QR guardado requiere 10 puntos comprobados para hacer válido el premio. Usuario añadió premio sorpresa al cartón con más stickers. No se inventó regalo, desempate ni fecha de conteo; quedan por definir antes de adjudicar ese premio. Sin publicar.
+
+### Diseño compacto y control de impresión
+«Cómo ganar» y «Premios» pasan a filas minimalistas desplegables, sin flechas decorativas; listado de premios sin tarjetas pesadas. Evento: horario tentativo 6:00–9:00 p. m. Cinco QR del PDF verificados por decodificador con logo, páginas 11x17 y tokens coincidentes con hashes de migraciones. Web pública aún devuelve contrato anterior; no se ha desplegado esta revisión. Pedir aprobación sobre vista local antes de publicar y colocar carteles.
+
+## Publicación autorizada y panel de seguimiento · 19 octubre 2026
+El usuario autorizó publicar la versión revisada manteniendo cinco enlaces de QR permanentes. Los cambios futuros de contenido usan las mismas URLs y tokens; no regenerar reward-posters.json ni poster_hash de producción. El panel /freak/admin/rewards.html permite ubicación o coordenadas por QR, visitas por sesión, titular que lo guardó y premios confirmados/entregados. Contadores de visitas no equivalen a personas únicas. Migraciones aditivas de reservas y seguimiento, sin borrado de producción. Horario tentativo 18–21 h. Único especial: carpa. Imprenta recibe cinco originales individuales. Portada/menú/Coffee Lab se conservan al publicar.

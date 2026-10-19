@@ -12,6 +12,8 @@ async function load(){
  if(loading)return;loading=true;$('#refresh').disabled=true;$('#login button').disabled=true;
  try{const d=await api('admin-rewards');$('#login').hidden=true;$('#desk').hidden=false;
  $('#prizes').innerHTML=d.prizes.map(p=>`<article class="prize ${p.claimed_at?'taken':''}"><small>${p.delivered_at?'ENTREGADO':p.claimed_at?'POR ENTREGAR':'DISPONIBLE'}</small><h3>${esc(p.title)}</h3><p>${p.claimed_at?esc(p.display_name)+' · '+esc(phoneLabel(p.phone)):'Sin reservar'}</p>${p.claimed_at&&!p.delivered_at?`<button data-deliver="${esc(p.id)}">Registrar entrega</button>`:''}</article>`).join('')||'<p>No hay premios configurados.</p>';
+ $('#posters').innerHTML=(d.posters||[]).map(p=>`<article class="poster-admin"><h3>QR ${esc(p.id)}</h3><p>${p.scans} visitas · ${p.saved_at?'Guardado':'Disponible'}</p>${p.saved_at?`<p>${esc(p.display_name)} · ${esc(phoneLabel(p.phone))}</p>`:''}<form data-location="${esc(p.id)}"><label>Ubicación / coordenadas<input name="location" maxlength="240" value="${esc(p.location)}" placeholder="Ej. poste frente a… o latitud, longitud"></label><button class="secondary">Guardar ubicación</button></form></article>`).join('');
+ $('#reservations').innerHTML=(d.reservations||[]).map(r=>`<p><strong>QR ${esc(r.poster_id)}</strong> · ${esc(r.display_name)} · ${esc(phoneLabel(r.phone))}</p>`).join('')||'<p>Ningún QR guardado.</p>';
  $('#validations').innerHTML=d.validations.map(v=>`<article class="validation-row"><p><strong>${esc(v.display_name)}</strong> · ${esc(phoneLabel(v.phone))} · ${v.normal_count+v.special_count*2} puntos validados</p>${v.has_prize?'<small>Premio confirmado</small>':`<button class="secondary" data-reissue-phone="${esc(phoneLabel(v.phone))}" data-reissue-name="${esc(v.display_name)}">Reemitir código</button><div data-reissue-options hidden><p>El código anterior dejará de funcionar.</p><button data-reissue-confirm>Confirmar reemisión</button><button class="secondary" data-reissue-cancel>Cancelar</button></div>`}</article>`).join('')||'<p>Todavía no hay validaciones.</p>';return true;
  }catch(error){if(error.status===401)clearDesk();notice(error.message);return false;}finally{loading=false;$('#refresh').disabled=false;$('#login button').disabled=false;}
 }
@@ -20,7 +22,7 @@ function updateTotal(){const f=new FormData($('#validate')),normal=Number(f.get(
 $('#validate').oninput=updateTotal;
 $('#validate').onsubmit=async event=>{
  event.preventDefault();if(validating||reissuing)return;const form=event.currentTarget;validating=true;updateTotal();const f=new FormData(form);
- try{const d=await api('admin-validate-points',{name:f.get('name'),phone:f.get('phone'),normal:Number(f.get('normal')),special:Number(f.get('special')),marked:f.get('marked')==='on'});lastCode=d.code;$('#code-person').textContent='Código para '+f.get('name')+' · '+f.get('phone');$('#code').textContent=d.code;$('#code-card').hidden=false;$('#copy-code').textContent='Copiar código';form.reset();notice(d.points+' puntos validados. Entrega el código a esta persona.');await load();$('#code-card').scrollIntoView({block:'center'});
+ try{const d=await api('admin-validate-points',{name:f.get('name'),phone:f.get('phone'),normal:Number(f.get('normal')),special:Number(f.get('special')),marked:f.get('marked')==='on'});lastCode=d.code;$('#code-person').textContent='Código para '+f.get('name')+' · '+f.get('phone');$('#code').textContent=d.code;$('#code-card').hidden=true;form.reset();notice(d.points+' puntos comprobados. Ya puede elegir su premio desde su cuenta.');await load();
  }catch(error){notice(error.message);if(error.status===401)clearDesk();}finally{validating=false;updateTotal();}
 };
 $('#copy-code').onclick=async()=>{if(!lastCode)return;try{await navigator.clipboard.writeText(lastCode);$('#copy-code').textContent='Código copiado';}catch{notice('No pudimos copiarlo. Selecciona el código y cópialo manualmente.');}};
@@ -38,3 +40,5 @@ $('#validations').onclick=async event=>{
 $('#refresh').onclick=async()=>{notice('');await load();};
 $('#logout').onclick=async()=>{const button=$('#logout');button.disabled=true;try{await api('admin-logout',{});clearDesk();notice('Sesión cerrada.');}catch(error){notice(error.message);}finally{button.disabled=false;}};
 load();
+
+$('#posters').onsubmit=async event=>{const form=event.target.closest('[data-location]');if(!form)return;event.preventDefault();const button=form.querySelector('button');button.disabled=true;try{await api('admin-poster-location',{id:form.dataset.location,location:new FormData(form).get('location')});notice('Ubicación guardada.');}catch(error){notice(error.message);}finally{button.disabled=false;}};

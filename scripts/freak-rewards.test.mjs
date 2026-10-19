@@ -31,3 +31,27 @@ test('reissue is blocked after a prize is confirmed without changing code or aud
  assert.equal((await db.pool.query('SELECT * FROM freak_code_reissues')).rowCount,1);
  const panel=await req('admin-rewards',undefined,'admin');assert.ok(panel.validations.find(v=>v.display_name==='Persona A').has_prize);
 });
+
+test('poster saving requires a phone account, is exclusive and survives returning without the QR',async()=>{
+ const t=randomBytes(32).toString('base64url');
+ await db.pool.query("INSERT INTO freak_rewards(campaign,id,title,poster_hash) VALUES('prueba','5','Reserva',$1)",[hash(t)]);
+ assert.equal((await req('reserve-poster',{poster:t})).status,401);
+ for(let i=5;i<7;i++)await req('register',{name:'Reserva '+String.fromCharCode(65+i),phone:'222000000'+i},'p'+i);
+ const results=await Promise.all(['p5','p6'].map(w=>req('reserve-poster',{poster:t},w)));
+ assert.deepEqual(results.map(r=>r.status).sort(),[200,409]);
+ const winner=results[0].status===200?'p5':'p6',idx=winner.slice(1);
+ assert.equal((await req('reserve-poster',{poster:t},winner)).status,200);
+ assert.ok((await req('rewards',undefined,winner)).reservation);
+ assert.equal((await req('reward-claim',{id:'5'},winner)).status,403);
+ assert.equal((await req('admin-validate-points',{name:'Reserva '+String.fromCharCode(65+Number(idx)),phone:'222000000'+idx,normal:10,special:0,marked:true},'admin')).status,200);
+ assert.equal((await req('reward-claim',{id:'5'},winner)).status,200);
+ assert.equal((await req('rewards')).reservation,null);
+});
+
+test('poster visits dedupe, location is admin-only, public data does not expose locations',async()=>{
+ const visit=crypto.randomUUID();
+ for(let i=0;i<2;i++)assert.equal((await req('poster-visit',{poster,visit})).status,200);
+ assert.equal((await req('admin-poster-location',{id:'1',location:'Punto local de prueba'})).status,401);
+ assert.equal((await req('admin-poster-location',{id:'1',location:'Punto local de prueba'},'admin')).status,200);
+ const panel=await req('admin-rewards',undefined,'admin');assert.equal(panel.posters.find(p=>p.id==='1').scans,1);assert.equal(panel.posters.find(p=>p.id==='1').location,'Punto local de prueba');assert.ok(!JSON.stringify(await req('rewards')).includes('Punto local de prueba'));
+});
