@@ -7,7 +7,8 @@ export async function rewardsAction({req,op,body,q,db,campaign,person,json,admin
  if(op==='rewards'&&!write){
  const prizes=(await q('SELECT id,title,owner IS NOT NULL AS taken FROM freak_rewards WHERE campaign=$1 ORDER BY id',[campaign])).rows;
  const mine=person?(await q('SELECT id,title,claimed_at,delivered_at FROM freak_rewards WHERE campaign=$1 AND owner=$2',[campaign,person.id])).rows[0]:null;
- return json({prizes,mine,person:person?{name:person.display_name}:null});
+ const validation=person?(await q('SELECT normal_count+2*special_count AS points FROM freak_physical_validations WHERE campaign=$1 AND person=$2',[campaign,person.id])).rows[0]||null:null;
+ return json({prizes,mine,validation,person:person?{name:person.display_name}:null});
  }
  if(op==='reward-claim'&&write){
  if(!person)fail(401,'Entra con tu celular.');
