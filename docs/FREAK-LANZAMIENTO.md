@@ -64,3 +64,10 @@ Nueva comprobación local `scripts/freak-integration-reload-qa.mjs`: cuatro cond
 El servidor QA rechazaba su propia ruta raíz antes de resolver index.html. Corrección limitada al servidor local; enlaces de inicio, FREAK, panel, privacidad y ubicación responden 200. Fuentes públicas ajenas a FREAK y Coffee Lab no cambiaron. Servidor reiniciado en http://127.0.0.1:5196/freak/, sesión 22405, con base temporal nueva. El material de impresión sigue intacto.
 
 Pendientes solicitados al usuario: horario y cierre de canjes; responsable, disponibilidad y condiciones de entrega; tamaño e inicio del americano diario; decisión entre reemisión administrativa del código perdido (invalidando el anterior) o atención manual. No se implementó ninguna política sin respuesta. Sin publicación ni despliegue; la ventana hasta 14:02 no se declara concluida.
+
+
+## Inventario agotado y cierre de preparación independiente
+
+En la base temporal se ocuparon las cinco opciones y se revisó la portada: mensaje exacto «Todos los premios ya fueron elegidos», cero botones de elección habilitados. No se afectaron premios reales. Se conserva captura inventario-agotado-final.png y prueba local scripts/freak-exhaustion-local-qa.mjs. La base de prueba se reiniciará para que el preview vuelva a abrir con cinco opciones libres.
+
+Preservación repetida contra e8e83c9: 196 archivos públicos ajenos a freak/ idénticos, sin cambios en Coffee Lab; evidencia preservation-final.json. Guía de equipo preparada en output/freak-lanzamiento/GUIA-EQUIPO.md con los cinco títulos/cantidades aprobados, reglas comprobadas y decisiones todavía abiertas. No se repitieron suites completas ni se añadieron cambios cosméticos. Pendientes de decisión ya preguntados al usuario; no se repiten ni se implementan políticas nuevas. La preparación independiente queda comprobada; no equivale a haber cumplido la ventana hasta 14:02 ni a aprobación o despliegue.
