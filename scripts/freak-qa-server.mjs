@@ -23,6 +23,7 @@ const server=http.createServer(async(req,res)=>{
  if(req.url.startsWith('/api/freak')){
   const chunks=[];for await(const chunk of req)chunks.push(chunk);
   const url=new URL(req.url,'http://127.0.0.1:5196');
+  if(url.searchParams.get('op')==='rewards') await fs.appendFile('output/freak-review/poll-observation.jsonl',JSON.stringify({at:Date.now(),op:'rewards'})+'\n');
   const headers=new Headers(req.headers);if(req.headers.origin)headers.set('origin','https://bmoodcoffee.com');
   const response=await handle(new Request('https://bmoodcoffee.com'+url.pathname+url.search,{method:req.method,headers,...(req.method==='POST'?{body:Buffer.concat(chunks)}:{})}),{ip:req.headers['x-qa-ip']||'local-browser'});
   for(const [key,value]of response.headers)res.setHeader(key,value);
