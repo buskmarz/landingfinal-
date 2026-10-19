@@ -1,5 +1,7 @@
 # FREAK · La colección imposible
 
+> **Vigente al 19 octubre: stickers físicos sin QR.** La mecánica actual está en la sección «19 octubre 2026 — FREAK físico y premios». Las secciones previas documentan versiones históricas con QR individual; no usarlas para impresión ni instrucciones de la campaña actual.
+
 Trabajo del 15 octubre 2026. Ruta aislada `/freak/`, API `/api/freak`. Better Mood UPAEP, 28 octubre 2026, DJ en vivo, Pumpkin Spice Latte + Maracuyá. Horario, precio, premio y cierre pendientes; no se afirman.
 
 ## Colección confirmada
@@ -143,3 +145,31 @@ La campaña usa estampillas sin QR: normales 1 punto, especiales 2. Barra valida
 Migración aditiva `20261019120000_freak_physical_rewards.sql`: tablas de validaciones y premios, restricciones únicas y tokens de carteles guardados como hashes. Conserva usuarios e inventario anteriores. Los códigos se entregan una sola vez; no publicar el archivo privado de tokens. Los carteles anteriores con texto no abren la landing: reimprimir los QR vinculados.
 
 Verificación: 21 pruebas FREAK existentes y 5 nuevas de puntos, permisos, privacidad, concurrencia y entrega; build completo desde origin/main, preservando portada, menú y Coffee Lab canónico. No se siembran ganadores ni pruebas en producción.
+
+## Revisión local de claridad y estados · 19 octubre 2026 · sin publicar
+
+Fuente de las reglas: chat local FREAK `01a140ee-0473-77e1-b347-78cfc51f12c0`, consultado con `read_thread`, sin leer sesiones. El usuario indicó «cada sticker normal es 1 punto y los especiales son 2 puntos» (turno `01a15509-f78d-7243-ba9c-3f7d4bea447c`). Confirmó «10 puntos y máximo 1 premio por persona» (`01a1550b-9040-79e0-b42c-4879793acfc7`) y volvió a precisar «10 PUNTOS MAS BIEN» (`01a15525-10c8-7f13-aa31-b03355d2e6ea`). Los cinco premios fueron enumerados por el usuario en `01a154f8-65ba-7100-9897-dfc44745cbee`; esta revisión conserva sus títulos y cantidades en servidor, sin ampliarlos. La tirada vigente incluye personajes normales y dos especiales —carpa y boleto dorado—, no el esquema histórico de rareza de uno de los cuatro personajes.
+
+Implementación en copia aislada `Documents/Codex/2026-10-19/task/freak-review`, base e8e83c9, rama `codex/freak-launch-review`. Portada FREAK: meta visible, tres pasos, tipografía Metropolis local, etiqueta explícita de los dos tipos especiales y QR solo en carteles. El GET de premios añade exclusivamente los puntos validados de la propia sesión; no expone teléfono, código ni hash. Antes de validación no se inventa un saldo: los stickers se cuentan físicamente en barra.
+
+La actualización de disponibilidad conserva los campos del acceso; selección obsoleta se limpia tras un conflicto; cambiar premio limpia su código; confirmación pendiente bloquea repeticiones. La navegación interna conserva en memoria el cartel escaneado sin guardarlo en almacenamiento local. Quitar explícitamente el fragmento del cartel limpia selección y código. Si el POST se guardó pero su respuesta se perdió, se consulta servidor y se muestra la reserva confirmada cuando existe. La cuenta permite salir también después del canje.
+
+Panel de barra: se conservan referencias al formulario antes de las esperas asíncronas, corrigiendo el fallo de acceso y validación. Umbral 10, cantidades enteras y marcado de stickers se verifican también en servidor. Código nuevo copiable, asociado visualmente a su persona; no se guarda en localStorage. Al expirar autorización se retiran del DOM los datos administrativos. No se añade reemisión de códigos ni se cambian permisos.
+
+Materiales revisados en `output/freak-lanzamiento/`: seis tabloides de stickers sin QR, cinco carteles vinculados existentes y boleto carta doble cara con registro por celular y reserva al confirmar. Tokens originales conservados; el informe de impresión solo guarda hashes de los PDF y recuentos de QR. No se incluyen en el manifiesto público ni se publican los PDF.
+
+Decisiones pendientes: recuperación de código de barra perdido (solo existe su hash), horario y cierre de campaña, condiciones completas de entrega, stock físico y responsable operativo. La limitación por celular no acredita identidad ni garantiza una persona única; se conserva el acceso sin SMS previamente elegido, sin ampliar accesos. Revisión física de impresión, distancia de lectura y Safari/iPhone real aún pendiente.
+
+### Reproducir la revisión local
+
+Con dependencias del lock instaladas: `node scripts/freak-qa-server.mjs` inicia una base temporal nueva y escucha exclusivamente en `127.0.0.1:5196`. No usa la conexión de producción ni lee claves privadas de carteles. Sirve solo archivos del manifiesto público. Abrir `http://127.0.0.1:5196/freak/` en la misma Mac. Los premios y las cuentas en esa dirección son datos locales de prueba; la landing pública conserva su versión anterior. La pestaña solicitada con open_in_codex quedó en estado queued; no se afirma que esté visible.
+
+En otra terminal: `node scripts/freak-rewards-ui.test.mjs` verifica el ciclo completo con datos ficticios; requiere base temporal nueva por ejecución. `node scripts/freak-rewards-states.test.mjs` verifica estados adversos con API interceptada y puede repetirse sin modificar base. Ambos admiten `FREAK_QA_CHROMIUM` para indicar el ejecutable instalado; no instalan navegadores ni llaman a la API pública. Evidencias en `output/freak-review/`, excluidas del sitio. `node --test scripts/freak*.test.mjs` no debe usarse como comodín porque incluye flujos de navegador con servidor separado; ejecutar los cinco archivos de integración existentes explícitamente como antes.
+
+### Tercera ronda · accesibilidad y carga móvil
+
+Correcciones concretas: enlaces de cabecera, pie, privacidad y llamadas de navegación con área táctil mínima de 44 px. Fuente ornamental reducida de 178,076 a 60,792 bytes, renombrada Freak Display por el nombre reservado Rye y conservando OFL, caracteres latinos y métricas. La fuente original permanece para versiones históricas; no se altera el arte de stickers. Generador opcional en scripts/subset-freak-font.py, sin nueva dependencia de build.
+
+Axe WCAG 2 A/AA y 2.1 AA sin infracciones detectadas en las tres superficies auditadas (público 360/1440, panel 360). Prueba de teclado del salto a contenido, modo de movimiento reducido y texto al 200% en 320 px sin desbordamiento. Simulación local 150 ms, 200 KiB/s y CPU x4: carga aproximada 2.5 s frente a 3.0 s; recursos de 546 KB a 429 KB. No representa medición de producción ni teléfono físico. Informes y capturas en output/freak-review/. Coherencia de campaña y decisiones pendientes en FREAK-LANZAMIENTO.md.
+
+Library: consulta conectada, pero carga preparada no disponible en el entorno de transferencia. Dos capturas finales verificadas localmente; ninguna subida/ID creada. No se cambió a un flujo alternativo ni se publicó la campaña. Pendiente soporte de carga en el entorno para entregarlas como archivos de Library.
