@@ -44,3 +44,12 @@ La consulta de Library funcionó. El flujo preparado de carga de las dos imágen
 ## Operación aún física
 
 Probar un boleto a doble cara, un sticker y un cartel con la impresora final. Leer el cartel desde el sitio y distancia reales, sin exigir acercarse a una zona inaccesible. Validar con el equipo el marcado de stickers y registrar una entrega de prueba fuera de producción. Safari/iPhone físico, impresora, luz y distancia no quedan certificados por Chromium emulado ni por decodificar el PDF.
+
+
+## Cuarta ronda en el chat FREAK original
+
+Se verificó funcionalmente el checkpoint 6970bb7: registro nuevo, celular duplicado, entrada existente, selección/cancelación, rechazo sin código, validación de 8 normales + 1 especial, confirmación que ocupa el premio y entrega visible en panel y cuenta. Datos exclusivamente de la base temporal. Se repitieron 32 pruebas backend (27 de API/premios y 5 de orden/scanner/share), todas aprobadas. Los diálogos de entrega provocaron demoras del control del navegador, pero el panel confirmó Entrega registrada y la cuenta mostró Entrega registrada; no se atribuye a fallo de la aplicación.
+
+Correcciones: retirar todas las flechas y contadores decorativos; mantener 1/2/10 como datos de la dinámica. No invitar a confirmar antes de validar los puntos. Mostrar los teléfonos del panel con diez dígitos, manteniendo su normalización interna. Revisados tres PDFs del paquete contra sus SHA256; boleto carta de dos páginas, sin instrucciones de escanear estampillas.
+
+Capturas actuales: FREAK-cuarta-ronda-movil.png y FREAK-cuarta-ronda-escritorio.png. No contienen clientes ni claves. Vista móvil de 390 px sin desbordamiento horizontal, sin flechas y sin contador de pasos; cero errores JS observados en la portada recargada. El servidor se reinició después de cerrarse el proceso heredado; nueva base temporal independiente. La ventana hasta 14:02 no se declara cumplida en este punto de control. No hubo push, merge ni despliegue.

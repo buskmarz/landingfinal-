@@ -1,6 +1,7 @@
 const $=s=>document.querySelector(s),esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let validating=false,loading=false,lastCode='';
 function notice(text){$('#notice').textContent=text;}
+const phoneLabel=value=>String(value??'').replace(/^\+52(?=\d{10}$)/,'');
 async function api(op,body){
  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),15000);
  try{const r=await fetch('/api/freak?op='+op,{method:body?'POST':'GET',credentials:'same-origin',signal:controller.signal,headers:body?{'Content-Type':'application/json'}:{},body:body?JSON.stringify(body):undefined});const d=await r.json();if(!r.ok)throw Object.assign(Error(d.error||'No disponible'),{status:r.status});return d;}
@@ -10,8 +11,8 @@ function clearDesk(){lastCode='';$('#code').textContent='';$('#code-card').hidde
 async function load(){
  if(loading)return;loading=true;$('#refresh').disabled=true;$('#login button').disabled=true;
  try{const d=await api('admin-rewards');$('#login').hidden=true;$('#desk').hidden=false;
- $('#prizes').innerHTML=d.prizes.map(p=>`<article class="prize ${p.claimed_at?'taken':''}"><small>${p.delivered_at?'ENTREGADO':p.claimed_at?'POR ENTREGAR':'DISPONIBLE'}</small><h3>${esc(p.title)}</h3><p>${p.claimed_at?esc(p.display_name)+' · '+esc(p.phone):'Sin reservar'}</p>${p.claimed_at&&!p.delivered_at?`<button data-deliver="${esc(p.id)}">Registrar entrega</button>`:''}</article>`).join('')||'<p>No hay premios configurados.</p>';
- $('#validations').innerHTML=d.validations.map(v=>`<p><strong>${esc(v.display_name)}</strong> · ${esc(v.phone)} · ${v.normal_count+v.special_count*2} puntos validados</p>`).join('')||'<p>Todavía no hay validaciones.</p>';return true;
+ $('#prizes').innerHTML=d.prizes.map(p=>`<article class="prize ${p.claimed_at?'taken':''}"><small>${p.delivered_at?'ENTREGADO':p.claimed_at?'POR ENTREGAR':'DISPONIBLE'}</small><h3>${esc(p.title)}</h3><p>${p.claimed_at?esc(p.display_name)+' · '+esc(phoneLabel(p.phone)):'Sin reservar'}</p>${p.claimed_at&&!p.delivered_at?`<button data-deliver="${esc(p.id)}">Registrar entrega</button>`:''}</article>`).join('')||'<p>No hay premios configurados.</p>';
+ $('#validations').innerHTML=d.validations.map(v=>`<p><strong>${esc(v.display_name)}</strong> · ${esc(phoneLabel(v.phone))} · ${v.normal_count+v.special_count*2} puntos validados</p>`).join('')||'<p>Todavía no hay validaciones.</p>';return true;
  }catch(error){if(error.status===401)clearDesk();notice(error.message);return false;}finally{loading=false;$('#refresh').disabled=false;$('#login button').disabled=false;}
 }
 $('#login').onsubmit=async event=>{event.preventDefault();const form=event.currentTarget,button=form.querySelector('button');if(button.disabled)return;button.disabled=true;try{await api('admin-login',{key:new FormData(form).get('key')});form.reset();notice('');await load();}catch(error){notice(error.message);}finally{button.disabled=false;}};
