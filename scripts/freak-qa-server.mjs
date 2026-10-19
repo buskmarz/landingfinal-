@@ -29,7 +29,7 @@ const server=http.createServer(async(req,res)=>{
   res.writeHead(response.status);res.end(await response.text());return;
  }
  let file=path.resolve('.','.'+new URL(req.url,'http://localhost').pathname);
- if(!file.startsWith(path.resolve('.')+path.sep))throw Error('Path');
+ if(file!==path.resolve('.')&&!file.startsWith(path.resolve('.')+path.sep))throw Error('Path');
  if((await fs.stat(file)).isDirectory())file=path.join(file,'index.html');
  if(!publicFiles.has(path.relative(path.resolve('.'),file)))throw Error('Not a public asset');
  res.setHeader('Content-Type',types[path.extname(file)]||'application/octet-stream');

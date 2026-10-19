@@ -48,13 +48,18 @@ function clearSelection() {
   $('#claim-form').reset();
   $('#claim-form').hidden = true;
 }
-async function load({quiet = false} = {}) {
+async function load({quiet = false, explicitLogout = false} = {}) {
   if (loading) return;
   loading = true;
   $('#refresh').disabled = true;
   try {
     const next = await api('rewards');
     if (!Array.isArray(next.prizes)) throw Error('No pudimos leer los premios. Intenta de nuevo.');
+    if (state?.person && !next.person) {
+      clearSelection();
+      accessDraft.name = ''; accessDraft.phone = '';
+      if (!explicitLogout) message('Tu sesión terminó. Entra de nuevo con tu celular.');
+    }
     state = next;
     if (selected && !state.prizes.some(p => p.id === selected && !p.taken)) {
       clearSelection();
@@ -127,7 +132,7 @@ async function logout() {
   busy = true;
   try {
     await api('logout', {}); clearSelection(); accessKey = null;
-    message('Saliste de tu cuenta.'); await load();
+    message('Saliste de tu cuenta.'); await load({explicitLogout:true});
   } catch (error) { message(error.message, true); }
   finally { busy = false; $('#refresh').disabled = false; if (state) render(); }
 }

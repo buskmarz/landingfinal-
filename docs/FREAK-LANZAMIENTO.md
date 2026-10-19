@@ -53,3 +53,14 @@ Se verificó funcionalmente el checkpoint 6970bb7: registro nuevo, celular dupli
 Correcciones: retirar todas las flechas y contadores decorativos; mantener 1/2/10 como datos de la dinámica. No invitar a confirmar antes de validar los puntos. Mostrar los teléfonos del panel con diez dígitos, manteniendo su normalización interna. Revisados tres PDFs del paquete contra sus SHA256; boleto carta de dos páginas, sin instrucciones de escanear estampillas.
 
 Capturas actuales: FREAK-cuarta-ronda-movil.png y FREAK-cuarta-ronda-escritorio.png. No contienen clientes ni claves. Vista móvil de 390 px sin desbordamiento horizontal, sin flechas y sin contador de pasos; cero errores JS observados en la portada recargada. El servidor se reinició después de cerrarse el proceso heredado; nueva base temporal independiente. La ventana hasta 14:02 no se declara cumplida en este punto de control. No hubo push, merge ni despliegue.
+
+
+## Revisión adicional de integración
+
+Defecto corregido: al expirar la sesión pública, la selección y el código permanecían ocultos en el DOM. Ahora se borran al recibir del servidor una sesión terminada y se pide entrar de nuevo. Salir voluntariamente conserva su mensaje normal. Comprobado con dos pestañas y cuenta temporal; formulario oculto, código vacío y cero premios seleccionados. No cambia cuentas, autorización, reglas ni recuperación de código.
+
+Nueva comprobación local `scripts/freak-integration-reload-qa.mjs`: cuatro condiciones aprobadas (reserva persistida, reintento idempotente, solo un premio ocupado y rechazo de un segundo premio por cuenta). En navegador, volver a entrar y recargar mostró el mismo premio confirmado con todos los botones de elección deshabilitados. Evidencias integration-session-ui.json, integration-reload.json y canje-conservado-tras-recarga.png.
+
+El servidor QA rechazaba su propia ruta raíz antes de resolver index.html. Corrección limitada al servidor local; enlaces de inicio, FREAK, panel, privacidad y ubicación responden 200. Fuentes públicas ajenas a FREAK y Coffee Lab no cambiaron. Servidor reiniciado en http://127.0.0.1:5196/freak/, sesión 22405, con base temporal nueva. El material de impresión sigue intacto.
+
+Pendientes solicitados al usuario: horario y cierre de canjes; responsable, disponibilidad y condiciones de entrega; tamaño e inicio del americano diario; decisión entre reemisión administrativa del código perdido (invalidando el anterior) o atención manual. No se implementó ninguna política sin respuesta. Sin publicación ni despliegue; la ventana hasta 14:02 no se declara concluida.
