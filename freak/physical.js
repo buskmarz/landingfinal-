@@ -1,5 +1,6 @@
 const $=s=>document.querySelector(s),escape=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-let state,selected=null,busy=false;const fragment=new URLSearchParams(location.hash.slice(1)),poster=fragment.get('premio')||'';
+let state,selected=null,busy=false;let poster=new URLSearchParams(location.hash.slice(1)).get('premio')||'';
+window.addEventListener('hashchange',()=>{const token=new URLSearchParams(location.hash.slice(1)).get('premio');if(token){poster=token;$('#premios').scrollIntoView();}});
 async function api(op,body){const r=await fetch('/api/freak?op='+op,{method:body?'POST':'GET',credentials:'same-origin',headers:body?{'Content-Type':'application/json'}:{},body:body?JSON.stringify(body):undefined});const d=await r.json();if(!r.ok)throw Error(d.error||'Intenta de nuevo.');return d;}
 function message(text){$('#message').textContent=text;}
 async function load(){try{state=await api('rewards');render();}catch(e){$('#prize-status').textContent='No pudimos cargar los premios. Recarga para intentar de nuevo.';}}
