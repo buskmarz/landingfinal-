@@ -55,3 +55,17 @@ test('poster visits dedupe, location is admin-only, public data does not expose 
  assert.equal((await req('admin-poster-location',{id:'1',location:'Punto local de prueba'},'admin')).status,200);
  const panel=await req('admin-rewards',undefined,'admin');assert.equal(panel.posters.find(p=>p.id==='1').scans,1);assert.equal(panel.posters.find(p=>p.id==='1').location,'Punto local de prueba');assert.ok(!JSON.stringify(await req('rewards')).includes('Punto local de prueba'));
 });
+
+
+test('analytics counts repeated openings separately from sessions and records occupied save attempts',async()=>{
+ const visit=crypto.randomUUID(),event=crypto.randomUUID();
+ for(let i=0;i<2;i++)assert.equal((await req('poster-visit',{poster,visit,event})).status,200);
+ assert.equal((await req('poster-visit',{poster,visit,event:crypto.randomUUID()})).status,200);
+ const panel=await req('admin-rewards',undefined,'admin');
+ assert.equal(panel.posters.find(p=>p.id==='1').opens,2);
+ assert.equal(panel.posters.find(p=>p.id==='5').occupied_attempts,1);
+ assert.equal(panel.analytics.totals.saved,1);
+ assert.equal(panel.analytics.totals.claimed,1);
+ assert.ok(panel.analytics.daily.length>0);assert.equal(panel.analytics.timezone,'America/Mexico_City');
+ assert.ok(!JSON.stringify(await req('rewards')).includes('analytics'));
+});

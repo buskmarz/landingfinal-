@@ -2,6 +2,8 @@ const $ = selector => document.querySelector(selector);
 const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let state, selected = null, busy = false, loading = false, accessKey = null;
 let poster = new URLSearchParams(location.hash.slice(1)).get('premio') || '';
+const isQrPage = location.pathname.replace(/\/$/, '') === '/freak/qr';
+if (!isQrPage && poster) location.replace('/freak/qr/' + location.hash);
 const accessDraft = {name:'', phone:''};
 function openSection(target) {
  const details = target?.closest('details'); if (details) details.open = true;
@@ -18,7 +20,7 @@ async function savePoster() {
  finally { savingPoster = false; }
 }
 function celebrateDiscovery() {
-  if (!poster || celebratedPosters.has(poster)) return;
+  if (!isQrPage || !poster || celebratedPosters.has(poster)) return;
   celebratedPosters.add(poster);
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const layer = document.createElement('div');
@@ -37,7 +39,7 @@ function celebrateDiscovery() {
   setTimeout(() => layer.remove(), 12500);
 }
 function renderDiscovery() {
-  $('#discovery-title').textContent = poster ? '¡Encontraste 1 de los 5 QR!' : 'Busca. Junta. Elige.';
+  $('#discovery-title').textContent = poster ? '¡Encontraste 1 de los 5 QR!' : isQrPage ? 'Consulta tu QR' : 'Busca. Junta. Elige.';
   $('#discovery-eyebrow').textContent = poster ? '¡GRAN HALLAZGO!' : 'LA BÚSQUEDA ESTÁ AFUERA';
   $('#discovery-copy').textContent = poster ? 'Guarda el QR. Necesitas 10 puntos para hacer válido tu premio.' : 'Stickers escondidos cerca de UPAEP.';
   $('#discovery-ticket').textContent = 'Cartón gratis en Better Mood para pegar tus stickers.';
@@ -47,9 +49,9 @@ function renderDiscovery() {
 }
 renderDiscovery();
 function recordPosterVisit() {
- if(!poster || !/^[A-Za-z0-9_-]{43}$/.test(poster))return;
+ if(!isQrPage || !poster || !/^[A-Za-z0-9_-]{43}$/.test(poster))return;
  let visit;try{visit=sessionStorage.getItem('freak-poster-visit');if(!visit){visit=crypto.randomUUID();sessionStorage.setItem('freak-poster-visit',visit);}}catch{visit=crypto.randomUUID();}
- api('poster-visit',{poster,visit}).catch(()=>{});
+ api('poster-visit',{poster,visit,event:crypto.randomUUID()}).catch(()=>{});
 }
 recordPosterVisit();
 window.addEventListener('hashchange', () => {
@@ -128,8 +130,8 @@ async function load({quiet = false, explicitLogout = false} = {}) {
   }
 }
 function render() {
-  $('#discovery-action').textContent = state.reservation ? 'Consultar mi QR' : poster ? 'Guardar mi QR' : 'Guardar o consultar mi QR';
-  $('#discovery-action').href = '#account';
+  $('#discovery-action').textContent = isQrPage ? state.reservation ? 'Mi QR guardado' : poster ? 'Guardar mi QR' : 'Consultar mi QR' : 'Consultar mi QR';
+  $('#discovery-action').href = isQrPage ? '#account' : '/freak/qr/';
   const available = state.prizes.filter(p => !p.taken).length;
   $('#prize-status').textContent = state.prizes.length === 0 ? 'Los premios aún no están disponibles. Consulta al equipo en barra.' : available === 0 ? 'Todos los premios ya fueron elegidos.' : available === 1 ? 'Queda 1 premio disponible.' : `${available} premios disponibles.`;
   $('#prizes').innerHTML = state.prizes.map(p => `<article class="prize ${p.taken ? 'taken' : ''} ${p.id === selected ? 'selected' : ''}"><small>${p.taken ? 'YA ELEGIDO' : p.id === selected ? 'TU SELECCIÓN · SIN RESERVAR' : 'DISPONIBLE'}</small><h3>${escape(p.title)}</h3><button data-prize="${escape(p.id)}" aria-label="${p.taken ? 'Ya elegido' : 'Elegir'}: ${escape(p.title)}" aria-pressed="${p.id === selected}" ${p.taken || state.mine || busy ? 'disabled' : ''}>${p.taken ? 'Ya elegido' : p.id === selected ? 'Seleccionado' : 'Elegir premio'}</button></article>`).join('');
@@ -156,7 +158,7 @@ function render() {
  $('#account').append(card);
  $('#account .points-status small').textContent = state.validation ? 'Comprobados por el equipo.' : 'Trae tus stickers físicos cuando sumes 10 puntos.';
  $('#account > .fine-print').textContent = state.reservation ? state.validation ? 'Ya puedes elegir y confirmar un premio.' : 'Elige tu premio al completar los puntos.' : 'Guarda tu QR para seguir.';
-  if (state.reservation) { $('#discovery-action').textContent = 'Consultar mi QR'; $('#discovery-action').href='#account'; }
+  if (state.reservation) { $('#discovery-action').textContent = 'Consultar mi QR'; $('#discovery-action').href=isQrPage ? '#account' : '/freak/qr/'; }
  }
  if ($('#logout')) $('#logout').onclick = logout;
 }

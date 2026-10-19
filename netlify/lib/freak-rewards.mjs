@@ -13,22 +13,26 @@ export async function rewardsAction({req,op,body,q,db,campaign,person,json,admin
  }
  if(op==='poster-visit'&&write){
  if(typeof body.poster!=='string'||!/^[A-Za-z0-9_-]{43}$/.test(body.poster)||typeof body.visit!=='string'||!/^([a-f0-9]{8}-)([a-f0-9]{4}-){3}[a-f0-9]{12}$/i.test(body.visit))fail(400,'Visita inválida.');
- await q('INSERT INTO freak_poster_visits(campaign,poster_id,visit) SELECT campaign,id,$3::uuid FROM freak_rewards WHERE campaign=$1 AND poster_hash=$2 ON CONFLICT DO NOTHING',[campaign,hash(body.poster),body.visit]);return json({ok:true});
+ await q('INSERT INTO freak_poster_visits(campaign,poster_id,visit) SELECT campaign,id,$3::uuid FROM freak_rewards WHERE campaign=$1 AND poster_hash=$2 ON CONFLICT DO NOTHING',[campaign,hash(body.poster),body.visit]);
+ if(typeof body.event==='string' && /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(body.event))await q('INSERT INTO freak_poster_open_events(id,campaign,poster_id,visit) SELECT $3::uuid,campaign,id,$4::uuid FROM freak_rewards WHERE campaign=$1 AND poster_hash=$2 ON CONFLICT DO NOTHING',[campaign,hash(body.poster),body.event,body.visit]);
+ return json({ok:true});
  }
  if(op==='reserve-poster'&&write){
  if(!person)fail(401,'Registra tu celular para guardar el QR.');
  if(typeof body.poster!=='string'||!/^[A-Za-z0-9_-]{43}$/.test(body.poster))fail(400,'Escanea un QR válido.');
+ let foundId=null,outcome='error';
+ const audit=async result=>{if(foundId)try{await client.query('INSERT INTO freak_poster_save_events(campaign,poster_id,person,outcome) VALUES($1,$2,$3,$4)',[campaign,foundId,person.id,result]);}catch{}};
  const client=await db.pool.connect();
  try{await client.query('BEGIN');
  await client.query('SELECT id FROM freak_people WHERE id=$1 FOR UPDATE',[person.id]);
  const found=(await client.query('SELECT id FROM freak_rewards WHERE campaign=$1 AND poster_hash=$2',[campaign,hash(body.poster)])).rows[0];
- if(!found)fail(400,'Este QR no es válido.');
+ if(!found)fail(400,'Este QR no es válido.');foundId=found.id;
  const existing=(await client.query('SELECT poster_id FROM freak_poster_reservations WHERE campaign=$1 AND person=$2',[campaign,person.id])).rows[0];
- if(existing){if(existing.poster_id!==found.id)fail(409,'Ya tienes un QR guardado.');await client.query('COMMIT');return json({ok:true});}
+ if(existing){if(existing.poster_id!==found.id){outcome='other_qr';fail(409,'Ya tienes un QR guardado.');}await client.query('COMMIT');await audit('already_saved');return json({ok:true});}
  const saved=await client.query('INSERT INTO freak_poster_reservations(campaign,poster_id,person) VALUES($1,$2,$3) ON CONFLICT DO NOTHING RETURNING poster_id',[campaign,found.id,person.id]);
- if(!saved.rowCount)fail(409,'Este QR ya fue guardado por otra persona.');
- await client.query('COMMIT');return json({ok:true});
- }catch(e){await client.query('ROLLBACK');throw e}finally{client.release();}
+ if(!saved.rowCount){outcome='occupied';fail(409,'Este QR ya fue guardado por otra persona.');}
+ await client.query('COMMIT');await audit('saved');return json({ok:true});
+ }catch(e){await client.query('ROLLBACK');await audit(outcome);throw e}finally{client.release();}
  }
  if(op==='reward-claim'&&write){
  if(!person)fail(401,'Entra con tu celular.');
@@ -55,8 +59,11 @@ export async function rewardsAction({req,op,body,q,db,campaign,person,json,admin
  const prizes=(await q('SELECT r.id,r.title,r.claimed_at,r.delivered_at,p.display_name,p.phone FROM freak_rewards r LEFT JOIN freak_people p ON p.id=r.owner WHERE r.campaign=$1 ORDER BY r.id',[campaign])).rows;
  const validations=(await q('SELECT v.normal_count,v.special_count,v.created_at,p.display_name,p.phone,EXISTS(SELECT 1 FROM freak_rewards r WHERE r.campaign=v.campaign AND r.owner=v.person) AS has_prize FROM freak_physical_validations v JOIN freak_people p ON p.id=v.person WHERE v.campaign=$1 ORDER BY v.created_at DESC',[campaign])).rows;
  const reservations=(await q('SELECT r.poster_id,r.created_at,p.display_name,p.phone FROM freak_poster_reservations r JOIN freak_people p ON p.id=r.person WHERE r.campaign=$1 ORDER BY r.created_at',[campaign])).rows;
- const posters=(await q(`SELECT r.id,COALESCE(l.label,'') AS location,(SELECT count(*)::int FROM freak_poster_visits v WHERE v.campaign=r.campaign AND v.poster_id=r.id) AS scans,p.display_name,p.phone,s.created_at AS saved_at FROM freak_rewards r LEFT JOIN freak_poster_locations l ON l.campaign=r.campaign AND l.poster_id=r.id LEFT JOIN freak_poster_reservations s ON s.campaign=r.campaign AND s.poster_id=r.id LEFT JOIN freak_people p ON p.id=s.person WHERE r.campaign=$1 ORDER BY r.id`,[campaign])).rows;
- return json({prizes,validations,reservations,posters});
+ const posters=(await q(`SELECT r.id,COALESCE(l.label,'') AS location,(SELECT count(*)::int FROM freak_poster_open_events e WHERE e.campaign=r.campaign AND e.poster_id=r.id) AS opens,(SELECT count(*)::int FROM freak_poster_save_events e WHERE e.campaign=r.campaign AND e.poster_id=r.id) AS attempts,(SELECT count(*)::int FROM freak_poster_save_events e WHERE e.campaign=r.campaign AND e.poster_id=r.id AND e.outcome='occupied') AS occupied_attempts,EXISTS(SELECT 1 FROM freak_physical_validations v WHERE v.campaign=r.campaign AND v.person=s.person) AS validated,EXISTS(SELECT 1 FROM freak_rewards w WHERE w.campaign=r.campaign AND w.owner=s.person) AS claimed,EXISTS(SELECT 1 FROM freak_rewards w WHERE w.campaign=r.campaign AND w.owner=s.person AND w.delivered_at IS NOT NULL) AS delivered,(SELECT count(*)::int FROM freak_poster_visits v WHERE v.campaign=r.campaign AND v.poster_id=r.id) AS scans,p.display_name,p.phone,s.created_at AS saved_at FROM freak_rewards r LEFT JOIN freak_poster_locations l ON l.campaign=r.campaign AND l.poster_id=r.id LEFT JOIN freak_poster_reservations s ON s.campaign=r.campaign AND s.poster_id=r.id LEFT JOIN freak_people p ON p.id=s.person WHERE r.campaign=$1 ORDER BY r.id`,[campaign])).rows;
+ const daily=(await q(`SELECT (created_at AT TIME ZONE 'America/Mexico_City')::date::text AS day,poster_id,count(*)::int AS opens,count(DISTINCT visit)::int AS sessions FROM freak_poster_open_events WHERE campaign=$1 GROUP BY 1,2 ORDER BY 1 DESC,2 LIMIT 150`,[campaign])).rows;
+ const hourly=(await q(`SELECT extract(hour FROM created_at AT TIME ZONE 'America/Mexico_City')::int AS hour,count(*)::int AS opens FROM freak_poster_open_events WHERE campaign=$1 GROUP BY 1 ORDER BY 1`,[campaign])).rows;
+ const totals={opens:posters.reduce((n,p)=>n+p.opens,0),sessions:posters.reduce((n,p)=>n+p.scans,0),saved:reservations.length,attempts:posters.reduce((n,p)=>n+p.attempts,0),occupied:posters.reduce((n,p)=>n+p.occupied_attempts,0),validated:posters.filter(p=>p.validated).length,claimed:posters.filter(p=>p.claimed).length,delivered:posters.filter(p=>p.delivered).length};
+ return json({prizes,validations,reservations,posters,analytics:{totals,daily,hourly,timezone:'America/Mexico_City'}});
  }
  if(op==='admin-poster-location'&&write){
  if(typeof body.id!=='string'||!/^\d$/.test(body.id)||typeof body.location!=='string'||body.location.trim().length>240)fail(400,'Revisa el QR y la ubicación.');
