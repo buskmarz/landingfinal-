@@ -300,3 +300,10 @@ INCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL
 DAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM
 OTHER DEALINGS IN THE FONT SOFTWARE.
+
+
+Freak Display Latin subset
+Derived locally from the Rye font above, preserving Latin characters and outline metrics.
+Renamed Freak Display to respect the reserved font name Rye.
+Copyright and SIL Open Font License 1.1 above continue to apply.
+Rebuild: python3 scripts/subset-freak-font.py (fontTools required only for regeneration).
