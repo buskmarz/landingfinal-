@@ -1,5 +1,26 @@
 # Coffee Lab dentro de LANDING BETTER
 
+## Actualización sensorial preparada · 18 de octubre de 2026 · SIN PUBLICAR
+
+Integración local aislada basada en `34c771408997475de50e840e3e47ff5086a4304a` (main público del 16 de octubre). Solo se actualiza `apps/coffee-lab/` y este documento. Portada, FREAK, encuestas, menú, funciones y configuración de Netlify se conservan. El checkout canónico de iCloud mantiene intacto su trabajo previo; esta copia es preparación de lanzamiento, no otra fuente de desarrollo.
+
+- Catación educativa y guía descriptiva basada en SCA 102-2024: dosis por capacidad, relojes por taza, fragancia/aroma, costra, limpieza, tres rondas y cata a ciegas. No es formulario CVA completo ni certificación.
+- Notas e historial locales, recuperación tras recarga, copias compatibles y deduplicación. IndexedDB `ritual-coffee-lab` y esquema 1 conservados. Catación no descuenta inventario. Errores de cuota conservan la última versión y permiten reintentar el borrador visible.
+- Discrepancias entre reloj civil y monotónico muestran aviso y bloquean avance hasta revisar la hora. Acciones repetidas no saltan fases. Un cambio de hora con la app cerrada puede no detectarse; no se prometen avisos fiables en segundo plano.
+- Recetas documentadas de Tetsu Kasuya (4:6 publicada por HARIO) y Ole Kristian Bøen (Switch); equipo y procedencia visibles. Florentino León permanece como ficha histórica: su fuente no proporciona todos los pasos para una receta ejecutable.
+- Atlas de procesos, variedades, especies y capas de la cereza; profundidad CSS ligera. Historias y 3D de métodos anteriores conservados. Pantallas compactas y detalles técnicos desplegables.
+
+Fuentes enlazadas en la interfaz: [SCA 102-2024](https://sca.coffee/s/AW_SCA-102_Sample-Preparation_281024_Secured.pdf), [Tetsu/HARIO](https://www.hario-europe.com/blogs/hario-community/v60-ambassadors-tetsu-kasuya), [Ole/HARIO](https://www.hario-europe.com/blogs/hario-community/ole-kristian-boens-switch-recipe), [WCR](https://varieties.worldcoffeeresearch.org/arabica) y [Cafe Imports](https://www.cafeimports.com/north-america/fermentation).
+
+Validación de desarrollo: 67 pruebas del app, más 13 de integración/editorial/preview en el entorno canónico; recorridos de cata, recarga, cuotas, importación inválida/repetida, recetas, atlas y tiempo controlado en navegador aislado. Tamaños 360–1440 px. Axe sobre las pantallas comprobadas sin infracciones detectadas; no sustituye una auditoría integral.
+
+Preparación de lanzamiento: instalación limpia y build con Node 22.20.0, pruebas del app, SEO, comparación de hashes de los 215 archivos públicos ajenos a Coffee Lab y comprobación de la versión integrada. Resultado confirmado: los 215 archivos públicos fuera de `/coffee-lab/` coinciden byte por byte con el build base. Instalación limpia: 134 paquetes; 67 pruebas aprobadas; SEO: 9 páginas. Se corrigió el lock conservando todo el grafo original y añadiendo únicamente `fake-indexeddb`; la primera instalación detectó entradas opcionales ausentes. Vista local integrada en http://127.0.0.1:5192/coffee-lab/; cata, recarga, receta y atlas comprobados en tres tamaños, portada conservada visualmente. Evidencias fuera del repositorio en `/tmp/bm-coffee-release-qa/`; no incluir archivos de prueba en el sitio público. `fake-indexeddb` es dependencia solo de desarrollo.
+
+Pendientes antes de declarar validación completa: baristas con café real, Safari/iPhone físico y lector de pantalla. No se añadieron APIs de pago, credenciales, permisos ni servicios. No se hizo push ni publicación en esta preparación.
+
+Vía existente: Git CD de main en Netlify **betterland** (`3e5fbb47-ea01-4fae-b8d5-d3edd4a7118a`), `npm run build` → `dist`. Antes de publicar, revalidar main y revisar el diff aprobado; no desplegar el snapshot de la landing antigua ni reconstruir funciones desde ese checkout. Referencia pública de reversión al preparar: deploy `6ad16baa5dc1de73503bdece`. El costo marginal de hosting/build no está verificado; no se cambió el plan.
+
+
 Estado vigente al 15 octubre: fuente canónica integrada en main mediante PR #6 para preservar el app al volver a Git CD. FREAK se publicó en deploy 6ad129fce451efb5f3b2185d (main e8b0bf3); portada, menú y entrada Coffee Lab quedaron idénticos byte por byte a las versiones HTTPS anteriores. SW, manifiesto y coffee-product responden 200. No se publicó el rediseño local ni se modificaron datos de usuarios. Ver docs/FREAK.md y evidencia local output/freak-qa/production-http.json.
 
 Actualizado: 15 de octubre de 2026. Coffee Lab publicado y verificado en https://bmoodcoffee.com/coffee-lab/.
