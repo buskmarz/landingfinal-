@@ -216,6 +216,14 @@
     "freak/chiquita-integrated.png",
     "freak/annie-integrated.png",
     "freak/lobster-integrated.png",
-    "freak/rare-integrated.png"
+    "freak/rare-integrated.png",
+    "freak/physical.css",
+    "freak/physical.js",
+    "freak/admin/rewards.html",
+    "freak/admin/rewards.js",
+    "freak/estampilla-1.jpeg",
+    "freak/estampilla-2.jpeg",
+    "freak/estampilla-3.jpeg",
+    "freak/estampilla-4.jpeg"
   ]
 }

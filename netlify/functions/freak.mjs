@@ -1,3 +1,4 @@
+import {rewardsAction} from '../lib/freak-rewards.mjs';
 import {normalizePhone,normalizeName} from '../lib/freak-phone.mjs';
 import {adminAction} from '../lib/freak-admin.mjs';
 import {series} from '../../freak/catalog.mjs';
@@ -37,6 +38,7 @@ return async function(req,context={}) {
  if(rawSession&&/^[A-Za-z0-9_-]{43}$/.test(rawSession))person=(await q('SELECT p.id,p.alias,p.phone,p.display_name,p.recovery_length,p.short_recovery_hash IS NOT NULL AS has_short_key FROM freak_sessions s JOIN freak_people p ON p.id=s.person WHERE s.token_hash=$1 AND s.expires_at>now() AND p.campaign=$2',[hash(rawSession),campaign])).rows[0]||null;
  let body={};
  if(sensitive){const text=await req.text();if(text.length>2048)throw error(413,'size','Solicitud demasiado larga.');try{body=JSON.parse(text)}catch{throw error(400,'json','Solicitud inválida.')}if(!body||Array.isArray(body)||typeof body!=='object')throw error(400,'json','Solicitud inválida.');}
+ if(['rewards','reward-claim'].includes(op))return await rewardsAction({req,op,body,q,db,campaign,person,json});
  if(op.startsWith('admin-'))return await adminAction({req,op,body,q,db,campaign,json});
  if(op==='visit'&&sensitive){
  if(typeof body.token!=='string'||!/^[A-Za-z0-9_-]{43}$/.test(body.token)||typeof body.visit!=='string'||!/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(body.visit))throw error(400,'visit','Registro inválido.');
