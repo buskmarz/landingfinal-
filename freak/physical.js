@@ -253,7 +253,7 @@ setInterval(() => {
 
 // Source labels are explicit in new print links. Older /freak/ posters remain general:
 // an untagged link cannot reliably distinguish a printed advert from a direct visit.
-if (!isQrPage) {
+if (!isQrPage && !poster) {
  const origin=new URLSearchParams(location.search).get('origen');
  const source=['boleto','anuncio'].includes(origin)?origin:'general';
  let visitor;
