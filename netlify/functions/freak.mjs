@@ -1,3 +1,4 @@
+import {ticketAnalytics} from '../lib/freak-ticket-analytics.mjs';
 import {rewardsAction} from '../lib/freak-rewards.mjs';
 import {normalizePhone,normalizeName} from '../lib/freak-phone.mjs';
 import {adminAction} from '../lib/freak-admin.mjs';
@@ -22,7 +23,8 @@ return async function(req,context={}) {
  // The IP is supplied by Netlify, never by a caller-controlled forwarded header.
  const ip=context.ip||'unknown';
  const sensitive=req.method==='POST',bucket=Math.floor(now()/(sensitive?60000:60000));
- const rateKey=hash(`${ip}:${sensitive?'write':'read'}`), limit=sensitive?30:120;
+ const analyticsWrite=sensitive&&['ticket-open','poster-visit'].includes(op);
+ const rateKey=hash(`${ip}:${analyticsWrite?'analytics':sensitive?'write':'read'}`), limit=analyticsWrite?300:sensitive?30:120;
  const rate=await q(`INSERT INTO freak_rate(key,bucket,hits) VALUES($1,$2,1) ON CONFLICT(key,bucket) DO UPDATE SET hits=freak_rate.hits+1 WHERE freak_rate.hits<$3 RETURNING hits`,[rateKey,bucket,limit]);
  if(!rate.rowCount) return json({code:'rate_limit',error:'Una pausa entre actos. Intenta de nuevo en un minuto.'},429,{'Retry-After':'60'});
  if(sensitive){
@@ -38,6 +40,7 @@ return async function(req,context={}) {
  if(rawSession&&/^[A-Za-z0-9_-]{43}$/.test(rawSession))person=(await q('SELECT p.id,p.alias,p.phone,p.display_name,p.recovery_length,p.short_recovery_hash IS NOT NULL AS has_short_key FROM freak_sessions s JOIN freak_people p ON p.id=s.person WHERE s.token_hash=$1 AND s.expires_at>now() AND p.campaign=$2',[hash(rawSession),campaign])).rows[0]||null;
  let body={};
  if(sensitive){const text=await req.text();if(text.length>2048)throw error(413,'size','Solicitud demasiado larga.');try{body=JSON.parse(text)}catch{throw error(400,'json','Solicitud inválida.')}if(!body||Array.isArray(body)||typeof body!=='object')throw error(400,'json','Solicitud inválida.');}
+ if(op==='ticket-open'&&sensitive)return await ticketAnalytics({req,body,q,campaign,json});
  if(['rewards','reward-claim','reserve-poster','poster-visit'].includes(op))return await rewardsAction({req,op,body,q,db,campaign,person,json});
  if(op.startsWith('admin-'))return await adminAction({req,op,body,q,db,campaign,json});
  if(op==='visit'&&sensitive){
@@ -57,23 +60,25 @@ return async function(req,context={}) {
  if(op==='register'){
  const name=phone?normalizeName(body.name):null;if(phone&&!name)throw error(400,'name','Escribe tu nombre (2–60 caracteres).');
  if(!config.active)throw error(423,'closed','La colección todavía no está abierta.');
- recovery=phone.slice(-4);const salt=randomBytes(16).toString('hex');
+ recovery=typeof body.recovery==='string'?body.recovery.trim():'';
+ if(!/^\d{6,12}$/.test(recovery))throw error(400,'pin','Crea un PIN secreto de 6 a 12 dígitos.');
+ const salt=randomBytes(16).toString('hex');
  const passwordHash=(await scrypt(recovery,salt,64)).toString('hex');
- const inserted=await q('INSERT INTO freak_people(id,campaign,alias,alias_key,salt,recovery_hash,recovery_length,phone,display_name) VALUES($1,$2,$3,$4,$5,$6,4,$7,$8) ON CONFLICT DO NOTHING RETURNING id,alias,phone,display_name',[generatedId,campaign,alias,aliasKey,salt,passwordHash,phone,name]);
+ const inserted=await q('INSERT INTO freak_people(id,campaign,alias,alias_key,salt,recovery_hash,recovery_length,phone,display_name) VALUES($1,$2,$3,$4,$5,$6,$9,$7,$8) ON CONFLICT DO NOTHING RETURNING id,alias,phone,display_name',[generatedId,campaign,alias,aliasKey,salt,passwordHash,phone,name,recovery.length]);
  person=inserted.rows[0];if(!person)throw error(409,phone?'phone_taken':'alias_taken',phone?'Ese teléfono ya tiene una colección. Entra con tu clave.':'Ese alias ya tiene boleto. Elige otro o recupera tu acceso.');
  }else{
  const code=typeof body.recovery==='string'?body.recovery.trim():'';
- const p=(await q('SELECT id,alias,phone,display_name FROM freak_people WHERE campaign=$1 AND phone=$2',[campaign,phone])).rows[0];
+ const p=(await q('SELECT id,alias,phone,display_name,salt,recovery_hash,recovery_length FROM freak_people WHERE campaign=$1 AND phone=$2',[campaign,phone])).rows[0];
  const gate=await q(`INSERT INTO freak_rate(key,bucket,hits) VALUES($1,$2,1) ON CONFLICT(key,bucket) DO UPDATE SET hits=freak_rate.hits+1 WHERE freak_rate.hits<5 RETURNING hits`,[hash(`login:${campaign}:${p?.id||phone}`),Math.floor(now()/900000)]);
  if(!gate.rowCount)throw error(429,'login_limit','Demasiados intentos para esta cuenta. Espera 15 minutos.');
- // Intentionally phone-derived access, chosen for this low-friction collection.
- // Applies to existing phone accounts without changing their ownership or sessions.
- if(!/^\d{4}$/.test(code)||!p||!timingSafeEqual(Buffer.from(code),Buffer.from(p.phone.slice(-4))))throw error(401,'credentials','Celular o clave incorrectos.');
- person=p;
+ if(!/^\d{6,12}$/.test(code)||!p||p.recovery_length<6)throw error(401,'credentials','Celular o PIN incorrectos. Si usabas el acceso anterior, pide un PIN al equipo.');
+ const candidate=await scrypt(code,p.salt,64);
+ if(!timingSafeEqual(candidate,Buffer.from(p.recovery_hash,'hex')))throw error(401,'credentials','Celular o PIN incorrectos.');
+ person={id:p.id,alias:p.alias,phone:p.phone,display_name:p.display_name};
  }
  const session=randomBytes(32).toString('base64url');
  await q("INSERT INTO freak_sessions(token_hash,person,expires_at) VALUES($1,$2,now()+interval '30 days')",[hash(session),person.id]);
- return json({person,recovery},200,{'Set-Cookie':`${cookieName}=${session}; Path=/api/freak; Max-Age=2592000; Secure; HttpOnly; SameSite=Strict`});
+ return json({person},200,{'Set-Cookie':`${cookieName}=${session}; Path=/api/freak; Max-Age=2592000; Secure; HttpOnly; SameSite=Strict`});
  }
  if(op==='ticket'||op==='claim'){
  if(op==='ticket'&&req.method!=='GET'||op==='claim'&&!sensitive)throw error(405,'method','Confirma la captura con el botón.');

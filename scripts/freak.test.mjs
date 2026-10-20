@@ -8,14 +8,14 @@ import {createHandler} from '../netlify/functions/freak.mjs';
 let engine,db,handler;const tokens=Array.from({length:4},()=>randomBytes(32).toString('base64url'));
 const cookies={};const recovery={};
 async function request(op,{method='GET',body,who='',campaign='prueba',token,origin='https://bmoodcoffee.com',ip='qa-default'}={}){
- if(op==='register'&&body?.phone&&!('name' in body))body={...body,name:'Persona QA'};
+ if(op==='register'&&body?.phone)body={recovery:'493817',name:'Persona QA',...body};
  const response=await handler(new Request(`https://bmoodcoffee.com/api/freak?op=${op}&camp=${campaign}`,{method,headers:{origin,'content-type':'application/json',...(cookies[who]?{cookie:cookies[who]}:{}),...(token?{'X-Freak-Ticket':token}:{})},...(body?{body:JSON.stringify(body)}:{})}),{ip});
  const result=await response.json();if(response.headers.get('set-cookie'))cookies[who]=response.headers.get('set-cookie').split(';')[0];return {status:response.status,...result};
 }
 before(async()=>{engine=new NetlifyDB();const connectionString=await engine.start();db=getDatabase({connectionString});const exists=await db.pool.query("SELECT to_regclass('freak_campaigns') AS name");if(!exists.rows[0].name)await db.pool.query(await fs.readFile('netlify/database/migrations/20261015193000_freak.sql','utf8'));await db.pool.query(await fs.readFile('netlify/database/migrations/20261015213000_freak_admin.sql','utf8'));await db.pool.query(await fs.readFile('netlify/database/migrations/20261015220000_freak_launch.sql','utf8'));await db.pool.query(await fs.readFile('netlify/database/migrations/20261015233000_freak_access_order.sql','utf8'));await db.pool.query(await fs.readFile('netlify/database/migrations/20261016010000_freak_phone_community.sql','utf8'));await db.pool.query(await fs.readFile('netlify/database/migrations/20261016020000_freak_names_reset.sql','utf8'));await db.pool.query(await fs.readFile('netlify/database/migrations/20261016030000_freak_found_location.sql','utf8'));await db.pool.query("UPDATE freak_campaigns SET active=false WHERE id='freak-2026'");await db.pool.query('DELETE FROM freak_tickets');for(let i=0;i<4;i++)await db.pool.query('INSERT INTO freak_tickets(campaign,number,token_hash,act,rare,release_at) VALUES($1,$2,$3,$4,$5,$6)',['prueba',i+1,createHash('sha256').update(tokens[i]).digest('hex'),i===1?3:i===3?0:i,i===1,i===2?'2099-01-01':'2026-01-01']);await db.pool.query("UPDATE freak_tickets SET short_code='AB'||lpad((number+2)::text,2,'2')");handler=createHandler(db)});
 after(async()=>{await db?.pool.end();await engine?.stop()});
 test('GET inspection never assigns a ticket; invalid and locked states',async()=>{assert.equal((await request('ticket',{token:tokens[0]})).state,'available');assert.equal((await request('ticket',{token:tokens[0]})).state,'available');assert.equal((await request('ticket',{token:tokens[2]})).state,'unreleased');assert.equal((await request('ticket',{token:'x'.repeat(43)})).status,404);});
-test('register recoverable aliases and protect sessions',async()=>{for(const who of ['A','B']){const r=await request('register',{method:'POST',body:{phone:who==='A'?'2220000001':'2220000002',name:`Artista ${who}`},who});assert.equal(r.status,200);assert.match(r.recovery,/^\d{4}$/);recovery[who]=r.recovery;assert.ok(cookies[who].includes('__Secure-freak='));}assert.equal((await request('register',{method:'POST',body:{phone:'2220000001'},who:'duplicate'})).status,409);assert.equal((await request('claim',{method:'POST',body:{token:tokens[0]}})).status,401);assert.equal((await request('register',{method:'POST',body:{phone:'2220000003'},campaign:'freak-2026'})).status,423);});
+test('register recoverable aliases and protect sessions',async()=>{for(const who of ['A','B']){const r=await request('register',{method:'POST',body:{phone:who==='A'?'2220000001':'2220000002',name:`Artista ${who}`},who});assert.equal(r.status,200);assert.equal(r.recovery,undefined);recovery[who]='493817';assert.ok(cookies[who].includes('__Secure-freak='));}assert.equal((await request('register',{method:'POST',body:{phone:'2220000001'},who:'duplicate'})).status,409);assert.equal((await request('claim',{method:'POST',body:{token:tokens[0]}})).status,401);assert.equal((await request('register',{method:'POST',body:{phone:'2220000003'},campaign:'freak-2026'})).status,423);});
 test('two users racing one QR yields one global owner; retry is idempotent',async()=>{const results=await Promise.all(['A','B'].map(who=>request('claim',{method:'POST',body:{token:tokens[0],location:{consent:true,latitude:who==='A'?19:20,longitude:-98,accuracy:6}},who})));assert.deepEqual(results.map(r=>r.state).sort(),['occupied','owned']);const winner=results[0].state==='owned'?'A':'B';assert.equal((await request('claim',{method:'POST',body:{token:tokens[0]},who:winner})).state,'owned');const {rows}=await db.pool.query('SELECT count(*)::int AS n FROM freak_tickets WHERE owner IS NOT NULL');assert.equal(rows[0].n,1);});
 test('rare claim, persistent collection and distinct artist totals',async()=>{const r=await request('claim',{method:'POST',body:{token:tokens[1]},who:'B'});assert.equal(r.state,'owned');assert.equal(r.ticket.rare,true);const state=await request('state',{who:'B'});assert.ok(state.owned.some(t=>t.rare));assert.equal(state.ranking.find(r=>r.name==='Artista B').artists,new Set(state.owned.map(t=>t.act)).size);assert.ok(!JSON.stringify(state).includes('token_hash'));assert.equal((await request('claim',{method:'POST',body:{token:tokens[2]},who:'A'})).state,'unreleased');});
 test('recovery in a new session restores the server collection',async()=>{cookies.C='';const login=await request('login',{method:'POST',body:{phone:'2220000002',recovery:recovery.B},who:'C'});assert.equal(login.status,200);assert.deepEqual((await request('state',{who:'C'})).owned,(await request('state',{who:'B'})).owned);assert.equal((await request('login',{method:'POST',body:{phone:'2220000002',recovery:'wrong'.repeat(5)},who:'D'})).status,401);});
@@ -66,9 +66,9 @@ test('physical hand-in racing a digital claim cannot give the ticket to two coll
  const [physical,digital]=await Promise.all([request('admin-receive',{method:'POST',body:{code:'RACE',phone:'2221110033',name:'Persona Fisica'},who:'desk',ip:'race'}),request('claim',{method:'POST',body:{token},who:'A',ip:'race'})]);
  const t=(await db.pool.query("SELECT owner,received_at FROM freak_tickets WHERE campaign='prueba' AND number=5")).rows[0];assert.ok(Boolean(t.owner)!==Boolean(t.received_at),JSON.stringify({physical,digital,t}));assert.ok((physical.status===200&&digital.state==='received')||(physical.status===409&&digital.state==='owned'));
 });
-test('phone suffix is the access key, legacy routes removed and distributed attempts limited',async()=>{
- const created=await request('register',{method:'POST',body:{phone:'2224440012'},who:'short',ip:'short-new'});assert.equal(created.recovery,'0012');
- assert.equal((await request('login',{method:'POST',body:{phone:'2224440012',recovery:'0012'},who:'short2',ip:'short-login'})).status,200);
+test('secret PIN required; phone suffix rejected and distributed attempts limited',async()=>{
+ const created=await request('register',{method:'POST',body:{phone:'2224440012'},who:'short',ip:'short-new'});assert.equal(created.status,200);assert.equal(created.recovery,undefined);
+ assert.equal((await request('login',{method:'POST',body:{phone:'2224440012',recovery:'0012'},who:'short2',ip:'short-login'})).status,401);
  assert.equal((await request('login',{method:'POST',body:{alias:'Artista A',recovery:'0001'},ip:'legacy-login'})).status,400);
  for(const op of ['short-access','link-phone'])assert.equal((await request(op,{method:'POST',body:{phone:'2224440012'},who:'short',ip:'legacy-'+op})).status,404);
  const attempts=await Promise.all(Array.from({length:6},(_,i)=>request('login',{method:'POST',body:{phone:'2229990000',recovery:'1234'},ip:'distributed-'+i})));
@@ -76,20 +76,20 @@ test('phone suffix is the access key, legacy routes removed and distributed atte
 });
 test('phone registration normalizes formats, blocks duplicates and keeps phone private',async()=>{
  const r=await request('register',{method:'POST',body:{phone:'222 123 4567'},who:'phone',ip:'phone-new'});
- assert.equal(r.status,200);assert.equal(r.person.phone,'+522221234567');assert.match(r.recovery,/^\d{4}$/);recovery.phone=r.recovery;
+ assert.equal(r.status,200);assert.equal(r.person.phone,'+522221234567');assert.equal(r.recovery,undefined);recovery.phone='493817';
  assert.equal((await request('register',{method:'POST',body:{phone:'222-123-4567'},ip:'phone-duplicate'})).status,409);
  assert.equal((await request('register',{method:'POST',body:{phone:'123'},ip:'phone-invalid'})).status,400);
- assert.equal((await request('login',{method:'POST',body:{phone:'2221234567',recovery:r.recovery.toLowerCase()},who:'phone2',ip:'phone-login'})).status,200);
+ assert.equal((await request('login',{method:'POST',body:{phone:'2221234567',recovery:recovery.phone},who:'phone2',ip:'phone-login'})).status,200);
  assert.equal((await request('state',{who:'phone2',ip:'phone-state'})).person.id,r.person.id);
  assert.ok(!JSON.stringify(await request('state',{ip:'public-phone'})).includes('2221234567'));
  const race=await Promise.all(['2229876543','222 987 6543'].map((phone,i)=>request('register',{method:'POST',body:{phone},who:'phone-race'+i,ip:'phone-race'+i})));
  assert.deepEqual(race.map(r=>r.status).sort(),[200,409]);
 });
-test('existing phone account uses suffix despite its old hash, preserving collection',async()=>{
+test('legacy suffix cannot access an account; existing session preserves collection',async()=>{
  const before=await request('state',{who:'A',ip:'existing-before'});
- await db.pool.query("UPDATE freak_people SET recovery_hash=repeat('0',128) WHERE phone='+522220000001'");
- assert.equal((await request('login',{method:'POST',body:{phone:'2220000001',recovery:'0001'},who:'existing',ip:'existing-login'})).status,200);
- assert.deepEqual((await request('state',{who:'existing',ip:'existing-after'})).owned,before.owned);
+ await db.pool.query("UPDATE freak_people SET recovery_hash=repeat('0',128),recovery_length=4 WHERE phone='+522220000001'");
+ assert.equal((await request('login',{method:'POST',body:{phone:'2220000001',recovery:'0001'},who:'existing',ip:'existing-login'})).status,401);
+ assert.deepEqual((await request('state',{who:'A',ip:'existing-after'})).owned,before.owned);
  for(const phone of ['+522220000001','522220000001','+12025550199','123'])assert.equal((await request('register',{method:'POST',body:{phone},ip:'invalid-'+phone})).status,400);
 });
 test('phone physical reception preserves identity and rejects competing phone and repeats',async()=>{

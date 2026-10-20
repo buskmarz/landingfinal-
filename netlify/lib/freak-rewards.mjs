@@ -1,5 +1,6 @@
 import {createHash,randomBytes} from 'node:crypto';
 import {normalizePhone,normalizeName} from './freak-phone.mjs';
+import {analyticsFilters,decodeAnalyticsCursor,analyticsPage,analyticsTimezone} from './freak-analytics.mjs';
 const hash=v=>createHash('sha256').update(v).digest('hex');
 const fail=(status,message)=>{throw Object.assign(new Error(message),{status,code:'rewards'})};
 export async function rewardsAction({req,op,body,q,db,campaign,person,json,admin}){
@@ -9,13 +10,15 @@ export async function rewardsAction({req,op,body,q,db,campaign,person,json,admin
  const mine=person?(await q('SELECT id,title,claimed_at,delivered_at FROM freak_rewards WHERE campaign=$1 AND owner=$2',[campaign,person.id])).rows[0]:null;
  const validation=person?(await q('SELECT normal_count+2*special_count AS points FROM freak_physical_validations WHERE campaign=$1 AND person=$2',[campaign,person.id])).rows[0]||null:null;
  const reservation=person?(await q('SELECT poster_id,created_at FROM freak_poster_reservations WHERE campaign=$1 AND person=$2',[campaign,person.id])).rows[0]||null:null;
- return json({prizes,mine,validation,reservation,person:person?{name:person.display_name}:null});
+ const availability=(await q('SELECT count(*)::int AS total,count(*) FILTER(WHERE NOT EXISTS(SELECT 1 FROM freak_poster_reservations s WHERE s.campaign=r.campaign AND s.poster_id=r.id))::int AS available FROM freak_rewards r WHERE campaign=$1',[campaign])).rows[0];
+ return json({prizes,mine,validation,reservation,availability,person:person?{name:person.display_name}:null});
  }
  if(op==='poster-visit'&&write){
  if(typeof body.poster!=='string'||!/^[A-Za-z0-9_-]{43}$/.test(body.poster)||typeof body.visit!=='string'||!/^([a-f0-9]{8}-)([a-f0-9]{4}-){3}[a-f0-9]{12}$/i.test(body.visit))fail(400,'Visita inválida.');
  await q('INSERT INTO freak_poster_visits(campaign,poster_id,visit) SELECT campaign,id,$3::uuid FROM freak_rewards WHERE campaign=$1 AND poster_hash=$2 ON CONFLICT DO NOTHING',[campaign,hash(body.poster),body.visit]);
- if(typeof body.event==='string' && /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(body.event))await q('INSERT INTO freak_poster_open_events(id,campaign,poster_id,visit) SELECT $3::uuid,campaign,id,$4::uuid FROM freak_rewards WHERE campaign=$1 AND poster_hash=$2 ON CONFLICT DO NOTHING',[campaign,hash(body.poster),body.event,body.visit]);
- return json({ok:true});
+ if(typeof body.event==='string' && /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(body.event))await q('INSERT INTO freak_poster_open_events(id,campaign,poster_id,visit,occupied) SELECT $3::uuid,campaign,id,$4::uuid,EXISTS(SELECT 1 FROM freak_poster_reservations s WHERE s.campaign=r.campaign AND s.poster_id=r.id) FROM freak_rewards r WHERE campaign=$1 AND poster_hash=$2 ON CONFLICT DO NOTHING',[campaign,hash(body.poster),body.event,body.visit]);
+ const found=(await q('SELECT r.id,EXISTS(SELECT 1 FROM freak_poster_reservations s WHERE s.campaign=r.campaign AND s.poster_id=r.id) AS occupied FROM freak_rewards r WHERE campaign=$1 AND poster_hash=$2',[campaign,hash(body.poster)])).rows[0];
+ return json({ok:true,poster:found||null});
  }
  if(op==='reserve-poster'&&write){
  if(!person)fail(401,'Registra tu celular para guardar el QR.');
@@ -36,18 +39,15 @@ export async function rewardsAction({req,op,body,q,db,campaign,person,json,admin
  }
  if(op==='reward-claim'&&write){
  if(!person)fail(401,'Entra con tu celular.');
- const reserved=(await q('SELECT poster_id FROM freak_poster_reservations WHERE campaign=$1 AND person=$2',[campaign,person.id])).rows[0];
- if(!reserved && (typeof body.poster!=='string'||!/^[A-Za-z0-9_-]{43}$/.test(body.poster)))fail(400,'Guarda primero uno de los cinco QR.');
- if((!reserved && (typeof body.code!=='string'||!/^[A-F0-9]{12}$/.test(body.code.toUpperCase())))||typeof body.id!=='string'||!/^\d$/.test(body.id))fail(400,'Escribe el código de validación que recibiste en barra.');
+ if(typeof body.id!=='string'||!/^\d$/.test(body.id))fail(400,'Elige un premio disponible.');
  const client=await db.pool.connect();
  try{await client.query('BEGIN');
  await client.query('SELECT id FROM freak_people WHERE id=$1 FOR UPDATE',[person.id]);
  const previous=(await client.query('SELECT id,title FROM freak_rewards WHERE campaign=$1 AND owner=$2',[campaign,person.id])).rows[0];
  if(previous){if(previous.id!==body.id)fail(409,'Ya elegiste un premio.');await client.query('COMMIT');return json({ok:true,prize:previous});}
- const poster=reserved || (await client.query('SELECT id FROM freak_rewards WHERE campaign=$1 AND poster_hash=$2',[campaign,hash(body.poster)])).rows[0];
- if(!poster)fail(400,'Este cartel no es válido.');
- if(!reserved){const held=(await client.query('SELECT person FROM freak_poster_reservations WHERE campaign=$1 AND poster_id=$2',[campaign,poster.id])).rows[0];if(held && held.person!==person.id)fail(409,'Este QR ya fue guardado por otra persona.');}
- const v=reserved ? (await client.query('SELECT person FROM freak_physical_validations WHERE campaign=$1 AND person=$2 AND normal_count+2*special_count>=10',[campaign,person.id])).rows[0] : (await client.query('SELECT person FROM freak_physical_validations WHERE campaign=$1 AND person=$2 AND code_hash=$3 AND normal_count+2*special_count>=10',[campaign,person.id,hash(body.code.toUpperCase())])).rows[0];
+ const reserved=(await client.query('SELECT poster_id FROM freak_poster_reservations WHERE campaign=$1 AND person=$2',[campaign,person.id])).rows[0];
+ if(!reserved)fail(403,'Guarda primero uno de los cinco QR.');
+ const v=(await client.query('SELECT person FROM freak_physical_validations WHERE campaign=$1 AND person=$2 AND normal_count+2*special_count>=10',[campaign,person.id])).rows[0];
  if(!v)fail(403,'Trae tus stickers físicos: el equipo debe validar 10 puntos.');
  const won=(await client.query('UPDATE freak_rewards SET owner=$1,claimed_at=clock_timestamp() WHERE campaign=$2 AND id=$3 AND owner IS NULL RETURNING id,title',[person.id,campaign,body.id])).rows[0];
  if(!won)fail(409,'Alguien eligió ese premio. Puedes escoger otro disponible.');
@@ -64,6 +64,17 @@ export async function rewardsAction({req,op,body,q,db,campaign,person,json,admin
  const hourly=(await q(`SELECT extract(hour FROM created_at AT TIME ZONE 'America/Mexico_City')::int AS hour,count(*)::int AS opens FROM freak_poster_open_events WHERE campaign=$1 GROUP BY 1 ORDER BY 1`,[campaign])).rows;
  const totals={opens:posters.reduce((n,p)=>n+p.opens,0),sessions:posters.reduce((n,p)=>n+p.scans,0),saved:reservations.length,attempts:posters.reduce((n,p)=>n+p.attempts,0),occupied:posters.reduce((n,p)=>n+p.occupied_attempts,0),validated:posters.filter(p=>p.validated).length,claimed:posters.filter(p=>p.claimed).length,delivered:posters.filter(p=>p.delivered).length};
  return json({prizes,validations,reservations,posters,analytics:{totals,daily,hourly,timezone:'America/Mexico_City'}});
+ }
+ if(op==='admin-scan-history'&&!write){
+ const {p,from,to,snapshot:givenSnapshot}=analyticsFilters(req),poster=p.get('poster')||null,legacyBefore=p.get('before')||null;
+ if(poster&&!/^\d$/.test(poster))fail(400,'QR inválido.');
+ if(legacyBefore&&!Number.isFinite(Date.parse(legacyBefore)))fail(400,'Fecha inválida.');
+ const cursor=decodeAnalyticsCursor(p.get('cursor'));
+ const snapshot=givenSnapshot||(await q('SELECT clock_timestamp()::text AS cutoff')).rows[0].cutoff;
+ const events=(await q(`SELECT e.id,e.poster_id,e.created_at::text AS created_at,e.visit,e.occupied,COALESCE(l.label,'') AS location FROM freak_poster_open_events e LEFT JOIN freak_poster_locations l ON l.campaign=e.campaign AND l.poster_id=e.poster_id WHERE e.campaign=$1 AND ($2::text IS NULL OR e.poster_id=$2) AND ($3::date IS NULL OR e.created_at>=($3::date::timestamp AT TIME ZONE 'America/Mexico_City')) AND ($4::date IS NULL OR e.created_at<(($4::date+1)::timestamp AT TIME ZONE 'America/Mexico_City')) AND e.created_at<=$5::timestamptz AND ($6::timestamptz IS NULL OR (e.created_at,e.id)<($6::timestamptz,$7::uuid)) AND ($8::timestamptz IS NULL OR e.created_at<$8::timestamptz) ORDER BY e.created_at DESC,e.id DESC LIMIT 201`,[campaign,poster,from,to,snapshot,cursor?.[0]||null,cursor?.[1]||null,legacyBefore])).rows;
+ const page=analyticsPage(events);
+ // Keep the legacy timestamp field while new clients use the precise compound cursor.
+ return json({...page,nextCursor:page.next,next:page.next?events.at(-1).created_at:null,snapshot,filters:{poster,from,to},timezone:analyticsTimezone});
  }
  if(op==='admin-poster-location'&&write){
  if(typeof body.id!=='string'||!/^\d$/.test(body.id)||typeof body.location!=='string'||body.location.trim().length>240)fail(400,'Revisa el QR y la ubicación.');

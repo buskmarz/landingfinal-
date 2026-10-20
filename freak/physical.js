@@ -9,9 +9,9 @@ function openSection(target) {
  const details = target?.closest('details'); if (details) details.open = true;
  target?.scrollIntoView({block:'start'});
 }
-for (const link of document.querySelectorAll('a[href="#como-jugar"],a[href="#premios"]')) link.addEventListener('click', () => { const target=document.querySelector(link.getAttribute('href')); const details=target?.closest('details'); if(details) details.open=true; });
+for (const link of document.querySelectorAll('a[href="#como-jugar"],a[href="#premios"],a[href="#zona-busqueda"]')) link.addEventListener('click', () => { const target=document.querySelector(link.getAttribute('href')); const details=target?.closest('details'); if(details) details.open=true; });
 const celebratedPosters = new Set();
-let savingPoster = false;
+let savingPoster = false, posterStatus;
 async function savePoster() {
  if (savingPoster || !state?.person || !poster) return;
  savingPoster = true;
@@ -44,14 +44,15 @@ function renderDiscovery() {
   $('#discovery-copy').textContent = poster ? 'Guarda el QR. Necesitas 10 puntos para hacer válido tu premio.' : 'Stickers escondidos cerca de UPAEP.';
   $('#discovery-ticket').textContent = 'Cartón gratis en Better Mood para pegar tus stickers.';
   $('#qr-step-title').textContent = poster ? 'QR encontrado' : 'Encuentra un QR';
-  $('#qr-step-copy').textContent = poster ? 'Guárdalo con tu celular. Será solo tuyo.' : 'Encuentra uno de los cinco. Elige y confirma tu premio.';
-  celebrateDiscovery();
+  $('#qr-step-copy').textContent = poster ? 'Guárdalo con tu celular. Será solo tuyo.' : 'Encuentra uno de los cinco y guárdalo con tu celular.';
+  if(posterStatus?.occupied && !state?.reservation){$('#discovery-title').textContent='Este QR ya fue guardado';$('#discovery-copy').textContent='Todavía puedes buscar otro disponible.';}
+  if(posterStatus && !posterStatus.occupied) celebrateDiscovery();
 }
 renderDiscovery();
 function recordPosterVisit() {
  if(!isQrPage || !poster || !/^[A-Za-z0-9_-]{43}$/.test(poster))return;
  let visit;try{visit=sessionStorage.getItem('freak-poster-visit');if(!visit){visit=crypto.randomUUID();sessionStorage.setItem('freak-poster-visit',visit);}}catch{visit=crypto.randomUUID();}
- api('poster-visit',{poster,visit,event:crypto.randomUUID()}).catch(()=>{});
+ const scanned=poster; api('poster-visit',{poster,visit,event:crypto.randomUUID()}).then(d=>{if(scanned!==poster)return;posterStatus=d.poster;renderDiscovery();if(!d.poster){$('#discovery-title').textContent='QR no válido';$('#discovery-copy').textContent='Busca uno de los cinco carteles FREAK.';}}).catch(()=>message('No pudimos registrar esta apertura. Revisa tu conexión.'));
 }
 recordPosterVisit();
 window.addEventListener('hashchange', () => {
@@ -62,8 +63,9 @@ window.addEventListener('hashchange', () => {
     if (state) render();
     message('Tu QR guardado sigue disponible al entrar con tu celular.');
   }
-  renderDiscovery();
+  posterStatus=null;renderDiscovery();
   recordPosterVisit();
+  load();
 });
 // Keep the scanned poster while moving between sections on this page.
 for (const link of document.querySelectorAll('a[href^="#"]')) {
@@ -130,8 +132,11 @@ async function load({quiet = false, explicitLogout = false} = {}) {
   }
 }
 function render() {
-  $('#discovery-action').textContent = isQrPage ? state.reservation ? 'Mi QR guardado' : poster ? 'Guardar mi QR' : 'Consultar mi QR' : 'Consultar mi QR';
-  $('#discovery-action').href = isQrPage ? '#account' : '/freak/qr/';
+  const remaining=state.availability;
+  $('#qr-remaining').textContent=remaining ? (remaining.available ? `Quedan ${remaining.available} de ${remaining.total} QR disponibles. ¡Búscalos!` : 'Los cinco QR ya fueron guardados.') : '';
+  renderDiscovery();
+  $('#discovery-action').textContent = isQrPage ? state.reservation ? 'Mi QR guardado' : poster ? 'Guardar mi QR' : 'Consultar mi QR' : 'Dónde buscar';
+  $('#discovery-action').href = isQrPage ? '#account' : '#zona-busqueda';
   const available = state.prizes.filter(p => !p.taken).length;
   $('#prize-status').textContent = state.prizes.length === 0 ? 'Los premios aún no están disponibles. Consulta al equipo en barra.' : available === 0 ? 'Todos los premios ya fueron elegidos.' : available === 1 ? 'Queda 1 premio disponible.' : `${available} premios disponibles.`;
   $('#prizes').innerHTML = state.prizes.map(p => `<article class="prize ${p.taken ? 'taken' : ''} ${p.id === selected ? 'selected' : ''}"><small>${p.taken ? 'YA ELEGIDO' : p.id === selected ? 'TU SELECCIÓN · SIN RESERVAR' : 'DISPONIBLE'}</small><h3>${escape(p.title)}</h3><button data-prize="${escape(p.id)}" aria-label="${p.taken ? 'Ya elegido' : 'Elegir'}: ${escape(p.title)}" aria-pressed="${p.id === selected}" ${p.taken || state.mine || busy ? 'disabled' : ''}>${p.taken ? 'Ya elegido' : p.id === selected ? 'Seleccionado' : 'Elegir premio'}</button></article>`).join('');
@@ -146,8 +151,8 @@ function render() {
   } else if (state.person) {
     $('#account').innerHTML = `<div class="account-header"><p>Hola, <strong>${escape(state.person.name)}</strong>.</p><button id="logout" class="secondary" type="button">Salir</button></div><div class="points-status"><strong>${state.validation ? escape(state.validation.points) + ' puntos comprobados' : 'Meta: 10 puntos'}</strong><small></small></div><p class="fine-print"></p>`;
   } else {
-    $('#account').innerHTML = `<form id="access"><h3>${poster ? "Guarda tu QR" : "Consulta tu QR"}</h3><p>${poster ? "Nombre y celular. Vuelve con el mismo número." : "Escribe el celular con el que lo guardaste."}</p><label for="access-name">Nombre <span class="fine-print">(solo la primera vez)</span></label><input id="access-name" name="name" minlength="2" maxlength="60" autocomplete="given-name" value="${escape(accessDraft.name)}"><label for="access-phone">Celular</label><input id="access-phone" name="phone" type="tel" inputmode="numeric" pattern="[0-9]{10}" minlength="10" maxlength="10" autocomplete="tel-national" required placeholder="10 dígitos" value="${escape(accessDraft.phone)}"><div class="form-actions"><button class="button" name="mode" value="register">${poster ? "Guardar mi QR" : "Crear cuenta"}</button><button class="secondary" name="mode" value="login">Consultar mi QR</button></div><small>¿Ya lo guardaste? Escribe tu celular y toca «Consultar mi QR». <a href="/privacidad/">Privacidad</a></small></form>`;
-    $('#access').oninput = event => { accessDraft[event.target.name] = event.target.value; };
+    $('#account').innerHTML = `<form id="access"><h3>${poster ? "Guarda tu QR" : "Consulta tu QR"}</h3><p>${poster ? "Nombre, celular y PIN secreto." : "Entra con tu celular y PIN."}</p><label for="access-name">Nombre <span class="fine-print">(solo la primera vez)</span></label><input id="access-name" name="name" minlength="2" maxlength="60" autocomplete="given-name" value="${escape(accessDraft.name)}"><label for="access-phone">Celular</label><input id="access-phone" name="phone" type="tel" inputmode="numeric" pattern="[0-9]{10}" minlength="10" maxlength="10" autocomplete="tel-national" required placeholder="10 dígitos" value="${escape(accessDraft.phone)}"><label for="access-pin">PIN secreto</label><input id="access-pin" name="recovery" type="password" inputmode="numeric" pattern="[0-9]{6,12}" minlength="6" maxlength="12" required autocomplete="current-password" placeholder="6 a 12 dígitos"><div class="form-actions"><button class="button" name="mode" value="register">${poster ? "Guardar mi QR" : "Crear cuenta"}</button><button class="secondary" name="mode" value="login">Consultar mi QR</button></div><small>¿Ya lo guardaste? Usa tu celular y PIN. ¿Olvidaste el PIN? Pídelo al equipo. <a href="/privacidad/">Privacidad</a></small></form>`;
+    $('#access').oninput = event => { if(['name','phone'].includes(event.target.name))accessDraft[event.target.name] = event.target.value; };
     $('#access').onsubmit = access;
   }
   if (state.person && !state.mine) {
@@ -158,7 +163,7 @@ function render() {
  $('#account').append(card);
  $('#account .points-status small').textContent = state.validation ? 'Comprobados por el equipo.' : 'Trae tus stickers físicos cuando sumes 10 puntos.';
  $('#account > .fine-print').textContent = state.reservation ? state.validation ? 'Ya puedes elegir y confirmar un premio.' : 'Elige tu premio al completar los puntos.' : 'Guarda tu QR para seguir.';
-  if (state.reservation) { $('#discovery-action').textContent = 'Consultar mi QR'; $('#discovery-action').href=isQrPage ? '#account' : '/freak/qr/'; }
+  if (isQrPage && state.reservation) { $('#discovery-action').textContent = 'Consultar mi QR'; $('#discovery-action').href=isQrPage ? '#account' : '#zona-busqueda'; }
  }
  if ($('#logout')) $('#logout').onclick = logout;
 }
@@ -173,7 +178,7 @@ async function access(event) {
   busy = true;
   form.querySelectorAll('button').forEach(button => button.disabled = true);
   try {
-    await api(mode, {name, phone, recovery:phone.slice(-4)});
+    await api(mode, {name, phone, recovery:String(data.get('recovery')||'')});
     accessDraft.name = ''; accessDraft.phone = '';
     const refreshed = await load();
     message(!refreshed ? 'Entraste. Pulsa Actualizar para ver tu cuenta.' : state.mine ? 'Este es tu premio confirmado.' : state.validation ? selected ? 'Confirma tu premio.' : 'Tus puntos están comprobados. Elige tu premio.' : 'Listo. Junta 10 puntos y valida en barra.');
@@ -245,3 +250,15 @@ setInterval(() => {
   const activeForm = document.activeElement?.closest('form');
   if (document.visibilityState === 'visible' && !busy && !activeForm && !selected) load({quiet:true});
 }, 20000);
+
+// Source labels are explicit in new print links. Older /freak/ posters remain general:
+// an untagged link cannot reliably distinguish a printed advert from a direct visit.
+if (!isQrPage) {
+ const origin=new URLSearchParams(location.search).get('origen');
+ const source=['boleto','anuncio'].includes(origin)?origin:'general';
+ let visitor;
+ try { visitor=localStorage.getItem('freak-ticket-browser'); if(!visitor){visitor=crypto.randomUUID();localStorage.setItem('freak-ticket-browser',visitor);} } catch { visitor=crypto.randomUUID(); }
+ const event=crypto.randomUUID();
+ const record=()=>api('ticket-open',{event,visitor,source});
+ record().catch(()=>{setTimeout(()=>record().catch(()=>{}),1500);});
+}
