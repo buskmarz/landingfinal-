@@ -153,3 +153,13 @@ Todo nuevo canje exige QR reservado por esa cuenta y 10 puntos físicos validado
 Migraciones aditivas 20261020180000, 20261020220000, 20261020223000 y 20261020230000 se aplican por Netlify antes de publicar. No borran clientes ni inventario. Bucket de analítica separado (300/min por IP), operaciones de cuenta conservan 30/min y login cinco intentos/15min por cuenta.
 
 Verificación local: 21 pruebas de legado con PIN real, 23 pruebas de premios/estadísticas/PIN/QR, build completo; exportaciones >200 filas, filtro fecha Puebla, privacidad y recuperación comprobadas. Las carreras en el emulador PGlite se ejecutan con un solo cliente por su transacción única; no certifican bloqueos de PostgreSQL físico. El formato final impreso requiere comprobar lectura de cámara y distancia reales.
+
+### Comprobación hospedada y aprobación de publicación
+PR #23 fusionado en `3f5b807d02a4610a44d996378ba41981a3f8b737`. Preview Netlify `6ad7f15523302ecdfe0d24a9` READY con cuatro migraciones aplicadas en rama aislada. Prueba contra PostgreSQL hospedado: dos cuentas ficticias compiten por el mismo QR (una reserva), luego por el mismo premio (un ganador persistido), máximo uno por persona, entrega persistida, evento de boleto deduplicado y recuperación PIN con revocación de sesión. Solo la rama de preview fue modificada; registros y QR reales de producción no se consumieron.
+
+Portada, menú y Coffee Lab del preview coinciden con producción tras excluir la barra de revisión que Netlify inyecta únicamente en previews. El build local usa hashes de herramientas distintos; se usa la salida Git CD de Netlify para preservar el build productivo. Siete recorridos completos locales adicionales aprobados sin errores JS. Evidencias privadas fuera del build en `output/freak-admin-release/`.
+
+### Producción verificada
+Deploy `6ad7f3cf28295ef5a698048b`, commit `3f5b807`, READY y publicado. Clave administrativa original aceptada; cinco carteles visibles y estado previo conservado (cuatro aperturas históricas, una reserva, cero canjes/entregas al verificar). Panel y analytics protegidos por sesión. Apertura de boleto desde navegador confirmada contra el API productivo usando únicamente campaña `prueba`; no añadió eventos ni ganadores a la campaña real. Portada, menú y Coffee Lab idénticos por SHA256 antes/después. Capturas privadas sin nombres ni celulares: `output/freak-admin-release/ADMIN-PUBLICADO.png` y `ADMIN-MOVIL-PUBLICADO.png`.
+
+Ajuste adicional: el enlace antiguo de premio que redirige a `/freak/qr/` no cuenta como General en la página intermedia. Prueba de cinco fuentes/entradas aprobada. Se conserva el conteo del evento en destino.

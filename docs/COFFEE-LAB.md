@@ -190,3 +190,6 @@ Verificación: 21 pruebas FREAK existentes y 5 nuevas de puntos, permisos, priva
 
 ### FREAK · publicación administrativa 20 octubre 2026
 Lanzamiento preparado desde main público `3c90794` en checkout aislado `Documents/Codex/2026-10-20/freak-admin-release`. Solo FREAK, su API/migraciones y hosts de imágenes del mapa en CSP. Portada, menú, fuente y build Coffee Lab se conservan. Panel amarillo, conteo por fuentes, historial completo y PIN secreto; no se rota la clave administrativa existente. Compilación íntegra mediante `npm run build` → `dist`; publicación por Git CD para aplicar migraciones versionadas.
+
+Preview de PR #23: portada, menú y Coffee Lab coinciden con el HTTPS público al quitar la barra de revisión Netlify exclusiva del preview. No cambia la fuente del app ni se publican builds locales con otra versión de herramientas. El lanzamiento usa Git CD.
+Producción FREAK confirmada en deploy `6ad7f3cf28295ef5a698048b`: SHA256 de portada, menú y Coffee Lab exactamente iguales a los anteriores. La administración conserva credencial y datos previos; prueba de telemetría aislada en campaña `prueba`.
