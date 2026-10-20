@@ -1,3 +1,5 @@
+import {resetPersonPin} from './freak-pin.mjs';
+import {ticketAnalytics} from './freak-ticket-analytics.mjs';
 import {rewardsAction} from './freak-rewards.mjs';
 import {normalizePhone,normalizeName} from './freak-phone.mjs';
 import {randomBytes,createHash,timingSafeEqual} from 'node:crypto';
@@ -22,7 +24,9 @@ export async function adminAction({req,op,body,q,db,campaign,json}){
  }
  const admin=raw&&/^[A-Za-z0-9_-]{43}$/.test(raw)?(await q('SELECT admin FROM freak_admin_sessions WHERE token_hash=$1 AND expires_at>now()',[hash(raw)])).rows[0]:null;
  if(!admin)fail(401,'Entra con tu clave de administración.');
- if(['admin-rewards','admin-validate-points','admin-deliver-reward','admin-reissue-code','admin-poster-location'].includes(op))return await rewardsAction({req,op,body,q,db,campaign,json,admin});
+ if(op==='admin-reset-pin')return await resetPersonPin({req,body,db,campaign,admin,json});
+ if(op==='admin-ticket-analytics'&&req.method==='GET')return await ticketAnalytics({req,body,q,campaign,json,admin});
+ if(['admin-scan-history','admin-rewards','admin-validate-points','admin-deliver-reward','admin-reissue-code','admin-poster-location'].includes(op))return await rewardsAction({req,op,body,q,db,campaign,json,admin});
  if(op==='admin-logout'&&write){await q('DELETE FROM freak_admin_sessions WHERE token_hash=$1',[hash(raw)]);return json({ok:true},200,{'Set-Cookie':sessionCookie('',0)})}
  if(op==='admin-lookup'&&write){
  if(typeof body.token!=='string'||!/^[A-Za-z0-9_-]{43}$/.test(body.token))fail(400,'Enlace inválido.');

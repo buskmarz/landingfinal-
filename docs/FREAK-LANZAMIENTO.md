@@ -140,3 +140,16 @@ PR #21 fusionado: dcd65b7abb52c08b81796a2ddd5439872c5ddc0a. Netlify producción 
 
 ## QR con colección visible y amarillo continuo · 20 octubre 2026
 A petición del usuario, /freak/qr/ recupera los cuatro personajes, la carpa especial, valores 1/2/meta10 y «Así ganas» en tres pasos, antes del formulario. Fondo amarillo #FFDE00 continuo en portada, instrucciones y registro, sin franja crema que separaba la página. Botón principal temprano para acceso móvil; cartón gratis visible. Confeti de 12.5 segundos, guardado/consulta, estadísticas y cinco tokens se conservan. Cambios de HTML/CSS exclusivos de QR, build completo aprobado y revisión visual a 390 px. No se consumieron QR reales en revisión.
+
+## Administración y seguimiento · lanzamiento 20 octubre 2026
+Panel amarillo móvil en `/freak/admin/rewards.html`, logo original y operación separada del resumen. Registra aperturas de `?origen=boleto`, `?origen=anuncio` y enlaces generales sin etiqueta. Los anuncios ya impresos a `/freak/` se contabilizan como General: no se puede atribuir ese tráfico exclusivamente al cartel. Los cinco enlaces privados originales se conservan y contabilizan cada apertura, incluido QR ya guardado.
+
+Filtros por origen, fechas de Puebla y QR; resúmenes diarios/horarios; historial paginado con cursor compuesto y microsegundos; CSV completo al corte de la exportación. Los navegadores estimados no equivalen a personas verificadas; recargas cuentan. No se reconstruyen aperturas anteriores a la activación ni lecturas de cámara sin carga web. Estadísticas, ubicación de carteles y titulares requieren sesión administrativa.
+
+Registro público usa PIN secreto de 6–12 dígitos y hash scrypt; conocer el celular ya no permite entrar. Sesiones existentes se conservan. Cuentas anteriores que necesiten volver a entrar solicitan recuperación al equipo: nombre/celular e identidad confirmada, PIN aleatorio de ocho dígitos mostrado una vez, revocación de sesiones anteriores y auditoría sin guardar el PIN. El equipo entrega el PIN exclusivamente a su titular.
+
+Todo nuevo canje exige QR reservado por esa cuenta y 10 puntos físicos validados por equipo. El código antiguo ya no permite omitir reserva. Un premio por persona; entrega registrada por administración. Normal=1, única especial carpa=2. La reserva y los cinco tokens existentes se preservan.
+
+Migraciones aditivas 20261020180000, 20261020220000, 20261020223000 y 20261020230000 se aplican por Netlify antes de publicar. No borran clientes ni inventario. Bucket de analítica separado (300/min por IP), operaciones de cuenta conservan 30/min y login cinco intentos/15min por cuenta.
+
+Verificación local: 21 pruebas de legado con PIN real, 23 pruebas de premios/estadísticas/PIN/QR, build completo; exportaciones >200 filas, filtro fecha Puebla, privacidad y recuperación comprobadas. Las carreras en el emulador PGlite se ejecutan con un solo cliente por su transacción única; no certifican bloqueos de PostgreSQL físico. El formato final impreso requiere comprobar lectura de cámara y distancia reales.

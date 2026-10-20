@@ -1,1 +1,79 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>FREAK · Puntos y premios</title><link rel="stylesheet" href="/freak/physical.css"><script type="module" src="/freak/admin/rewards.js"></script></head><body><header><a href="/freak/">FREAK</a><a href="/freak/admin/">Inventario anterior</a></header><main><section><p class="eyebrow">SOLO EQUIPO · BETTER MOOD UPAEP</p><h1 style="font-size:clamp(32px,7vw,48px)">Puntos y premios</h1><p id="notice" class="notice" role="status" aria-live="polite" tabindex="-1"></p><form id="login"><label for="admin-key">Clave de administración</label><input id="admin-key" name="key" type="password" required autocomplete="current-password"><button type="submit">Entrar</button></form><div id="desk" hidden><form id="validate"><h2>Validar 10 puntos</h2><p>Primero, la persona se registra en FREAK. Revisa y marca sus stickers físicos.</p><label for="registered-name">Nombre registrado</label><input id="registered-name" name="name" required minlength="2" maxlength="60" autocomplete="off"><label for="registered-phone">Celular</label><input id="registered-phone" name="phone" type="tel" inputmode="numeric" pattern="[0-9]{10}" minlength="10" maxlength="10" required autocomplete="off" placeholder="10 dígitos"><div class="admin-counts"><div><label for="normal-count">Normales · 1 punto</label><input id="normal-count" name="normal" type="number" min="0" max="5000" step="1" value="0" required></div><div><label for="special-count">Carpas · 2 puntos</label><input id="special-count" name="special" type="number" min="0" max="5000" step="1" value="0" required></div></div><p id="total" role="status">0 de 10 puntos</p><label><input name="marked" type="checkbox" style="display:inline;width:auto;min-height:auto" required> Revisé y marqué los stickers como contados</label><button id="validate-submit" type="submit" disabled>Guardar puntos</button><small>Los puntos quedan ligados a su celular.</small></form><div id="code-card" class="code-card" hidden><p id="code-person"></p><p>Tu código de barra</p><code id="code" role="status"></code><button id="copy-code" class="secondary" type="button">Copiar código</button><small>Entrégalo a esta persona. Con él confirma un premio después de escanear un cartel. Si se pierde antes de canjear, reemítelo en Personas validadas.</small></div><div class="section-heading"><h2>Premios</h2><button id="refresh" class="secondary" type="button">Actualizar</button></div><div id="prizes" class="prizes"></div><h2>Resultados de la búsqueda</h2><div id="analytics"></div><h2>Carteles y escaneos</h2><p class="fine-print">Sesiones no son personas únicas. Aperturas e intentos se miden desde esta actualización; las ubicaciones las registra el equipo.</p><div id="posters"></div><details><summary>Visitas por fecha y hora</summary><div id="analytics-dates" class="table-scroll"></div></details><h2>QR guardados</h2><div id="reservations"></div><h2>Personas validadas</h2><div id="validations"></div><button id="logout" class="secondary" type="button">Salir del panel</button></div></section></main></body></html>
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>FREAK · Administración</title>
+  <link rel="stylesheet" href="/freak/physical.css">
+  <link rel="stylesheet" href="/freak/admin/dashboard.css">
+  <script type="module" src="/freak/admin/rewards.js"></script>
+  <script type="module" src="/freak/admin/pin.js"></script>
+</head>
+<body class="admin-dashboard">
+  <a class="skip" href="#admin-main">Ir al panel</a>
+  <header class="dashboard-header">
+    <a class="dashboard-brand" href="/freak/" aria-label="FREAK, página de la campaña">FREAK</a>
+    <div class="dashboard-header-meta"><span>ADMINISTRACIÓN</span><small>Hora de Puebla</small></div>
+    <a class="dashboard-mood" href="/freak/" aria-label="Better Mood, ver campaña"><img src="/assets/logo-better-mood.png" alt="Better Mood" width="48" height="48"></a>
+  </header>
+  <main id="admin-main">
+    <div class="dashboard-intro"><h1>Administración</h1><span>Boletos · anuncios · premios</span></div>
+    <p id="notice" class="notice" role="status" aria-live="polite" tabindex="-1"></p>
+    <form id="login" class="login-form">
+      <h2>Entrar al panel</h2>
+      <label for="admin-key">Clave de administración</label>
+      <input id="admin-key" name="key" type="password" required autocomplete="current-password">
+      <button type="submit">Entrar <span aria-hidden="true">↗</span></button>
+    </form>
+    <div id="desk" hidden>
+      <nav class="dashboard-nav" aria-label="Secciones del panel">
+        <a href="#resumen">Resumen</a><a href="#boleto">Todos los enlaces</a><a href="#qr-escondidos">QR escondidos</a><a href="#premios">Premios</a><a href="#puntos">Puntos</a>
+      </nav>
+      <section id="resumen" class="dashboard-section summary-section">
+        <div class="section-heading"><div><p class="eyebrow">EN UN VISTAZO</p><h2>Resumen</h2></div><button id="refresh" class="secondary" type="button"><span aria-hidden="true">↻</span> Actualizar</button></div>
+        <div id="analytics"></div>
+        <details class="definition-details"><summary>Qué estamos contando</summary><p>Cada apertura cuenta, también las repetidas. Las sesiones y navegadores son estimaciones, no personas únicas. Todos los horarios son de Puebla.</p></details>
+      </section>
+      <section id="boleto" class="dashboard-section">
+        <div class="section-heading"><div><p class="eyebrow">BOLETO · ANUNCIO · LANDING</p><h2>Todos los enlaces</h2></div><span class="section-index" aria-hidden="true">01</span></div>
+        <form id="analytics-filter" class="filter-bar"><div><label for="analytics-source">Origen</label><select id="analytics-source" name="source"><option value="all">Todos</option><option value="boleto">Boleto</option><option value="anuncio">Anuncio</option><option value="general">Landing</option></select></div><div><label for="analytics-from">Desde</label><input id="analytics-from" name="from" type="date"></div><div><label for="analytics-to">Hasta</label><input id="analytics-to" name="to" type="date"></div><button type="submit">Filtrar</button></form><div id="ticket-metrics"></div>
+        <details><summary>Por día y hora</summary><div id="ticket-periods" class="table-scroll"></div></details>
+        <details><summary>Cada apertura</summary><div class="toolbar"><button id="ticket-csv" class="secondary" type="button">CSV completo</button></div><div id="ticket-history" class="table-scroll"></div><button id="ticket-more" class="secondary" type="button" hidden>Ver anteriores</button></details>
+      </section>
+      <section id="qr-escondidos" class="dashboard-section">
+        <div class="section-heading"><div><p class="eyebrow">LOS CINCO</p><h2>QR escondidos</h2></div><span class="section-index" aria-hidden="true">02</span></div>
+        <div id="posters"></div><form id="history-filter" class="filter-bar"><div><label for="history-poster">QR</label><select id="history-poster" name="poster"><option value="">Todos</option><option value="1">QR 1</option><option value="2">QR 2</option><option value="3">QR 3</option><option value="4">QR 4</option><option value="5">QR 5</option></select></div><div><label for="history-from">Desde</label><input id="history-from" name="from" type="date"></div><div><label for="history-to">Hasta</label><input id="history-to" name="to" type="date"></div><button type="submit">Filtrar</button></form>
+        <details><summary>Por día y hora</summary><div id="analytics-dates" class="table-scroll"></div></details>
+        <details><summary>Cada apertura e intento</summary><div class="toolbar"><button id="history-refresh" class="secondary" type="button">Actualizar</button><button id="history-csv" class="secondary" type="button">CSV completo</button></div><p class="fine-print">Incluye QR ya guardados. La ubicación es la registrada por el equipo.</p><div id="scan-history" class="table-scroll"></div><button id="history-more" class="secondary" type="button" hidden>Ver anteriores</button></details>
+        <details><summary>Quién guardó cada QR</summary><div id="reservations"></div></details>
+      </section>
+      <section id="premios" class="dashboard-section">
+        <div class="section-heading"><div><p class="eyebrow">RESERVAS Y ENTREGAS</p><h2>Premios</h2></div><span class="section-index" aria-hidden="true">03</span></div>
+        <div id="prizes" class="prizes"></div>
+      </section>
+      <section id="puntos" class="dashboard-section points-section">
+        <div class="section-heading"><div><p class="eyebrow">EN BARRA</p><h2>Validar puntos</h2></div><span class="section-index" aria-hidden="true">04</span></div>
+        <div class="validation-workspace">
+          <form id="validate">
+            <p class="form-hint">Revisa sus stickers físicos. Mínimo: <strong>10 puntos.</strong></p>
+            <div class="identity-fields"><div><label for="registered-name">Nombre registrado</label><input id="registered-name" name="name" required minlength="2" maxlength="60" autocomplete="off"></div><div><label for="registered-phone">Celular</label><input id="registered-phone" name="phone" type="tel" inputmode="numeric" pattern="[0-9]{10}" minlength="10" maxlength="10" required autocomplete="off" placeholder="10 dígitos"></div></div>
+            <div class="admin-counts"><div><label for="normal-count">Normales <span>1 punto</span></label><input id="normal-count" name="normal" type="number" min="0" max="5000" step="1" value="0" required></div><div><label for="special-count">Carpas <span>2 puntos</span></label><input id="special-count" name="special" type="number" min="0" max="5000" step="1" value="0" required></div></div>
+            <p id="total" role="status">0 de 10 puntos</p>
+            <label class="check-label"><input name="marked" type="checkbox" required><span>Revisé y marqué los stickers.</span></label>
+            <button id="validate-submit" type="submit" disabled>Guardar puntos</button>
+          </form>
+          <div class="validation-context"><img src="/freak/especial-carpa.png" alt="Sticker especial de la carpa" width="120" height="120"><div><h3>Carpa = 2 puntos</h3><p>Los personajes valen 1.</p><small>Los puntos quedan ligados a su celular.</small></div></div>
+        </div>
+        <div id="code-card" class="code-card" hidden><p id="code-person"></p><p>Código nuevo</p><code id="code" role="status"></code><button id="copy-code" class="secondary" type="button">Copiar código</button><small>Entrega el código a su titular. El anterior queda anulado.</small></div>
+        <details><summary>Personas validadas</summary><div id="validations"></div></details>
+        <details class="access-recovery"><summary>Recuperar acceso</summary>
+          <form id="reset-pin"><div class="identity-fields"><div><label for="reset-name">Nombre registrado</label><input id="reset-name" name="name" required minlength="2" maxlength="60" autocomplete="off"></div><div><label for="reset-phone">Celular</label><input id="reset-phone" name="phone" type="tel" inputmode="numeric" pattern="[0-9]{10}" minlength="10" maxlength="10" required autocomplete="off" placeholder="10 dígitos"></div></div><label class="check-label"><input name="confirmed" type="checkbox" required><span>Verifiqué a la persona.</span></label><button type="submit">Generar PIN</button></form>
+          <div id="pin-card" class="pin-card" hidden><p id="pin-person"></p><code id="pin-value" role="status"></code><button id="pin-copy" type="button">Copiar PIN</button><small>Entrégalo solo a su titular.</small></div>
+        </details>
+      </section>
+      <footer class="dashboard-footer"><a href="/freak/" target="_blank" rel="noopener">Ver campaña <span aria-hidden="true">↗</span></a><a href="/freak/admin/">Inventario anterior</a><button id="logout" class="secondary" type="button">Cerrar sesión</button></footer>
+    </div>
+  </main>
+</body>
+</html>

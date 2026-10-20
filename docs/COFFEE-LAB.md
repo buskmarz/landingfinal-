@@ -187,3 +187,6 @@ La campaña usa estampillas sin QR: normales 1 punto, especiales 2. Barra valida
 Migración aditiva `20261019120000_freak_physical_rewards.sql`: tablas de validaciones y premios, restricciones únicas y tokens de carteles guardados como hashes. Conserva usuarios e inventario anteriores. Los códigos se entregan una sola vez; no publicar el archivo privado de tokens. Los carteles anteriores con texto no abren la landing: reimprimir los QR vinculados.
 
 Verificación: 21 pruebas FREAK existentes y 5 nuevas de puntos, permisos, privacidad, concurrencia y entrega; build completo desde origin/main, preservando portada, menú y Coffee Lab canónico. No se siembran ganadores ni pruebas en producción.
+
+### FREAK · publicación administrativa 20 octubre 2026
+Lanzamiento preparado desde main público `3c90794` en checkout aislado `Documents/Codex/2026-10-20/freak-admin-release`. Solo FREAK, su API/migraciones y hosts de imágenes del mapa en CSP. Portada, menú, fuente y build Coffee Lab se conservan. Panel amarillo, conteo por fuentes, historial completo y PIN secreto; no se rota la clave administrativa existente. Compilación íntegra mediante `npm run build` → `dist`; publicación por Git CD para aplicar migraciones versionadas.

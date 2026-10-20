@@ -307,3 +307,6 @@ Derived locally from the Rye font above, preserving Latin characters and outline
 Renamed Freak Display to respect the reserved font name Rye.
 Copyright and SIL Open Font License 1.1 above continue to apply.
 Rebuild: python3 scripts/subset-freak-font.py (fontTools required only for regeneration).
+
+Leaflet 1.9.4 — BSD-2-Clause; license: vendor/LEAFLET-LICENSE.txt.
+Street map: OpenStreetMap contributors, ODbL, https://www.openstreetmap.org/copyright. Tiles loaded on demand from tile.openstreetmap.org; attribution displayed. Search perimeter interpreted from user-provided marked screenshot, approximate.
