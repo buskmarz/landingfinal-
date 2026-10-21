@@ -60,8 +60,8 @@ return async function(req,context={}) {
  if(op==='register'){
  const name=phone?normalizeName(body.name):null;if(phone&&!name)throw error(400,'name','Escribe tu nombre (2–60 caracteres).');
  if(!config.active)throw error(423,'closed','La colección todavía no está abierta.');
- recovery=typeof body.recovery==='string'?body.recovery.trim():'';
- if(!/^\d{6,12}$/.test(recovery))throw error(400,'pin','Crea un PIN secreto de 6 a 12 dígitos.');
+ recovery=body.recovery==null?randomBytes(32).toString('hex'):typeof body.recovery==='string'?body.recovery.trim():'';
+ if(body.recovery!=null&&!/^\d{6,12}$/.test(recovery))throw error(400,'pin','Crea un PIN secreto de 6 a 12 dígitos.');
  const salt=randomBytes(16).toString('hex');
  const passwordHash=(await scrypt(recovery,salt,64)).toString('hex');
  const inserted=await q('INSERT INTO freak_people(id,campaign,alias,alias_key,salt,recovery_hash,recovery_length,phone,display_name) VALUES($1,$2,$3,$4,$5,$6,$9,$7,$8) ON CONFLICT DO NOTHING RETURNING id,alias,phone,display_name',[generatedId,campaign,alias,aliasKey,salt,passwordHash,phone,name,recovery.length]);

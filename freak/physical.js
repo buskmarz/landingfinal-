@@ -1,9 +1,10 @@
 const $ = selector => document.querySelector(selector);
 const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-let state, selected = null, busy = false, loading = false, accessKey = null;
+let state, selected = null, busy = false, loading = false, accessKey = null, prizeRenderKey = null;
 let poster = new URLSearchParams(location.hash.slice(1)).get('premio') || '';
 const isQrPage = location.pathname.replace(/\/$/, '') === '/freak/qr';
 if (!isQrPage && poster) location.replace('/freak/qr/' + location.hash);
+const assistedRecovery = new URLSearchParams(location.search).get('recuperar') === '1';
 const accessDraft = {name:'', phone:''};
 function openSection(target) {
  const details = target?.closest('details'); if (details) details.open = true;
@@ -81,7 +82,7 @@ async function api(op, body) {
   try {
     const response = await fetch('/api/freak?op=' + op, {
       method: body ? 'POST' : 'GET', credentials:'same-origin', signal:controller.signal,
-      headers: body ? {'Content-Type':'application/json'} : {},
+      headers: body ? {'Content-Type':'application/json'} : poster ? {'X-Freak-Poster':poster} : {},
       body: body ? JSON.stringify(body) : undefined
     });
     const data = await response.json();
@@ -112,9 +113,10 @@ async function load({quiet = false, explicitLogout = false} = {}) {
     if (state?.person && !next.person) {
       clearSelection();
       accessDraft.name = ''; accessDraft.phone = '';
-      if (!explicitLogout) message('Tu sesión terminó. Entra de nuevo con tu celular.');
+      if (!explicitLogout) message('Tu sesión terminó. Pide ayuda al equipo para recuperar tu QR.');
     }
     state = next;
+    if (next.poster) posterStatus=next.poster;
     if (selected && !state.prizes.some(p => p.id === selected && !p.taken)) {
       clearSelection();
       message('Ese premio ya fue elegido. Puedes escoger otro disponible.');
@@ -139,7 +141,10 @@ function render() {
   $('#discovery-action').href = isQrPage ? '#account' : '#zona-busqueda';
   const available = state.prizes.filter(p => !p.taken).length;
   $('#prize-status').textContent = state.prizes.length === 0 ? 'Los premios aún no están disponibles. Consulta al equipo en barra.' : available === 0 ? 'Todos los premios ya fueron elegidos.' : available === 1 ? 'Queda 1 premio disponible.' : `${available} premios disponibles.`;
+  const nextPrizeKey=JSON.stringify([state.prizes,selected,!!state.mine,busy]);
+  if(nextPrizeKey!==prizeRenderKey){prizeRenderKey=nextPrizeKey;
   $('#prizes').innerHTML = state.prizes.map(p => `<article class="prize ${p.taken ? 'taken' : ''} ${p.id === selected ? 'selected' : ''}"><small>${p.taken ? 'YA ELEGIDO' : p.id === selected ? 'TU SELECCIÓN · SIN RESERVAR' : 'DISPONIBLE'}</small><h3>${escape(p.title)}</h3><button data-prize="${escape(p.id)}" aria-label="${p.taken ? 'Ya elegido' : 'Elegir'}: ${escape(p.title)}" aria-pressed="${p.id === selected}" ${p.taken || state.mine || busy ? 'disabled' : ''}>${p.taken ? 'Ya elegido' : p.id === selected ? 'Seleccionado' : 'Elegir premio'}</button></article>`).join('');
+  }
   $('#claim-form').hidden = !selected || !state.person || !!state.mine;
   if (selected) $('#selection').textContent = 'Elegiste: ' + state.prizes.find(p => p.id === selected).title;
   const key = state.mine ? `mine:${state.mine.id}:${!!state.mine.delivered_at}` : state.person ? `person:${state.person.name}:${state.validation?.points || 0}:${!!state.reservation}:${!!selected}` : 'guest';
@@ -151,7 +156,14 @@ function render() {
   } else if (state.person) {
     $('#account').innerHTML = `<div class="account-header"><p>Hola, <strong>${escape(state.person.name)}</strong>.</p><button id="logout" class="secondary" type="button">Salir</button></div><div class="points-status"><strong>${state.validation ? escape(state.validation.points) + ' puntos comprobados' : 'Meta: 10 puntos'}</strong><small></small></div><p class="fine-print"></p>`;
   } else {
-    $('#account').innerHTML = `<form id="access"><h3>${poster ? "Guarda tu QR" : "Consulta tu QR"}</h3><p>${poster ? "Nombre, celular y PIN secreto." : "Entra con tu celular y PIN."}</p><label for="access-name">Nombre <span class="fine-print">(solo la primera vez)</span></label><input id="access-name" name="name" minlength="2" maxlength="60" autocomplete="given-name" value="${escape(accessDraft.name)}"><label for="access-phone">Celular</label><input id="access-phone" name="phone" type="tel" inputmode="numeric" pattern="[0-9]{10}" minlength="10" maxlength="10" autocomplete="tel-national" required placeholder="10 dígitos" value="${escape(accessDraft.phone)}"><label for="access-pin">PIN secreto</label><input id="access-pin" name="recovery" type="password" inputmode="numeric" pattern="[0-9]{6,12}" minlength="6" maxlength="12" required autocomplete="current-password" placeholder="6 a 12 dígitos"><div class="form-actions"><button class="button" name="mode" value="register">${poster ? "Guardar mi QR" : "Crear cuenta"}</button><button class="secondary" name="mode" value="login">Consultar mi QR</button></div><small>¿Ya lo guardaste? Usa tu celular y PIN. ¿Olvidaste el PIN? Pídelo al equipo. <a href="/privacidad/">Privacidad</a></small></form>`;
+    $('#account').innerHTML = `<form id="access"><h3>${poster ? "Guarda tu QR" : "Consulta tu QR"}</h3><p>${poster ? "Solo tu nombre y celular." : "Tu QR se guarda en este navegador."}</p><label for="access-name">Nombre <span class="fine-print">(solo la primera vez)</span></label><input id="access-name" name="name" minlength="2" maxlength="60" autocomplete="given-name" value="${escape(accessDraft.name)}"><label for="access-phone">Celular</label><input id="access-phone" name="phone" type="tel" inputmode="numeric" pattern="[0-9]{10}" minlength="10" maxlength="10" autocomplete="tel-national" required placeholder="10 dígitos" value="${escape(accessDraft.phone)}"><div class="form-actions"><button class="button" name="mode" value="register">${poster ? "Guardar mi QR" : "Crear cuenta"}</button></div><small>Se guarda en este navegador. ¿Cambiaste de celular? <a href="https://wa.me/message/WQWEEODGY6H2P1" target="_blank" rel="noopener">Te ayudamos</a>. <a href="/privacidad/">Privacidad</a></small></form>`;
+    if (assistedRecovery) {
+      $('#access h3').textContent='Recuperar mi QR';
+      $('#access > p').textContent='Usa el código que te dio el equipo.';
+      const label=document.createElement('label');label.htmlFor='access-recovery';label.textContent='Código de recuperación';
+      const input=document.createElement('input');input.id='access-recovery';input.name='recovery';input.type='password';input.inputMode='numeric';input.pattern='[0-9]{6,12}';input.required=true;input.autocomplete='one-time-code';
+      const actions=$('#access .form-actions');actions.before(label,input);const button=actions.querySelector('button');button.value='login';button.textContent='Recuperar mi QR';
+    }
     $('#access').oninput = event => { if(['name','phone'].includes(event.target.name))accessDraft[event.target.name] = event.target.value; };
     $('#access').onsubmit = access;
   }
@@ -178,14 +190,14 @@ async function access(event) {
   busy = true;
   form.querySelectorAll('button').forEach(button => button.disabled = true);
   try {
-    await api(mode, {name, phone, recovery:String(data.get('recovery')||'')});
+    await api(mode, {name, phone, ...(assistedRecovery ? {recovery:data.get('recovery')} : {})});
     accessDraft.name = ''; accessDraft.phone = '';
     const refreshed = await load();
     message(!refreshed ? 'Entraste. Pulsa Actualizar para ver tu cuenta.' : state.mine ? 'Este es tu premio confirmado.' : state.validation ? selected ? 'Confirma tu premio.' : 'Tus puntos están comprobados. Elige tu premio.' : 'Listo. Junta 10 puntos y valida en barra.');
     if (poster && state?.person && !state.reservation) await savePoster();
   } catch (error) {
     if (error.code === 'phone_taken') {
-      message('Este celular ya tiene cuenta. Toca «Consultar mi QR».');
+      message('Este celular ya tiene cuenta. Abre el navegador donde guardaste tu QR o pide ayuda al equipo.');
       form.querySelector('[value="login"]')?.focus();
     } else message(error.message, true);
   }
@@ -247,9 +259,9 @@ if (new URLSearchParams(location.hash.slice(1)).has('boleto')) {
 }
 renderDiscovery();
 setInterval(() => {
-  const activeForm = document.activeElement?.closest('form');
-  if (document.visibilityState === 'visible' && !busy && !activeForm && !selected) load({quiet:true});
-}, 20000);
+  if (document.visibilityState === 'visible' && !busy) load({quiet:true});
+}, 5000);
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&!busy)load({quiet:true});});
 
 // Source labels are explicit in new print links. Older /freak/ posters remain general:
 // an untagged link cannot reliably distinguish a printed advert from a direct visit.

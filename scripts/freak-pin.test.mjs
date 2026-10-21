@@ -23,3 +23,13 @@ test('admin verified reset revokes old sessions, preserves identity, audits with
  const login=await req('login',{phone:body.phone,recovery:reset.pin},'new');assert.equal(login.status,200);assert.equal(login.person.id,old.id);
  const audit=(await db.pool.query('SELECT * FROM freak_pin_resets')).rows;assert.equal(audit.length,1);assert.ok(!JSON.stringify(audit).includes(reset.pin));
 });
+
+test('name and phone registration needs no visible secret; browser session persists without phone-only takeover',async()=>{
+ const body={name:'Registro sin PIN',phone:'2220000888'};
+ const created=await req('register',body,'no-pin');assert.equal(created.status,200);assert.equal(created.recovery,undefined);
+ assert.equal((await req('state',undefined,'no-pin')).person.id,created.person.id);
+ assert.equal((await req('login',{phone:body.phone,recovery:'0888'},'imposter')).status,401);
+ assert.equal((await req('register',body,'imposter')).status,409);
+ assert.equal((await req('state',undefined,'imposter')).person,null);
+ const row=(await db.pool.query('SELECT recovery_length,recovery_hash FROM freak_people WHERE id=$1',[created.person.id])).rows[0];assert.equal(row.recovery_length,64);assert.equal(row.recovery_hash.length,128);
+});

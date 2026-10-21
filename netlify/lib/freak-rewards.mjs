@@ -11,7 +11,9 @@ export async function rewardsAction({req,op,body,q,db,campaign,person,json,admin
  const validation=person?(await q('SELECT normal_count+2*special_count AS points FROM freak_physical_validations WHERE campaign=$1 AND person=$2',[campaign,person.id])).rows[0]||null:null;
  const reservation=person?(await q('SELECT poster_id,created_at FROM freak_poster_reservations WHERE campaign=$1 AND person=$2',[campaign,person.id])).rows[0]||null:null;
  const availability=(await q('SELECT count(*)::int AS total,count(*) FILTER(WHERE NOT EXISTS(SELECT 1 FROM freak_poster_reservations s WHERE s.campaign=r.campaign AND s.poster_id=r.id))::int AS available FROM freak_rewards r WHERE campaign=$1',[campaign])).rows[0];
- return json({prizes,mine,validation,reservation,availability,person:person?{name:person.display_name}:null});
+ const token=req.headers.get('x-freak-poster')||'';
+ const poster=/^[A-Za-z0-9_-]{43}$/.test(token)?(await q('SELECT r.id,EXISTS(SELECT 1 FROM freak_poster_reservations s WHERE s.campaign=r.campaign AND s.poster_id=r.id) AS occupied FROM freak_rewards r WHERE campaign=$1 AND poster_hash=$2',[campaign,hash(token)])).rows[0]||null:null;
+ return json({prizes,mine,validation,reservation,availability,poster,person:person?{name:person.display_name}:null});
  }
  if(op==='poster-visit'&&write){
  if(typeof body.poster!=='string'||!/^[A-Za-z0-9_-]{43}$/.test(body.poster)||typeof body.visit!=='string'||!/^([a-f0-9]{8}-)([a-f0-9]{4}-){3}[a-f0-9]{12}$/i.test(body.visit))fail(400,'Visita inválida.');
