@@ -105,3 +105,8 @@ $('#ticket-csv').addEventListener('click',async()=>{
  const button=$('#ticket-csv');button.disabled=true;notice('Preparando CSV…');
  try{const rows=await collectAnalytics('admin-ticket-analytics',ticketQuery);downloadCsv('freak-enlaces-aperturas.csv',['Evento','Fecha UTC','Hora Puebla','Origen'],rows.map(e=>[e.id,e.created_at,stamp(e.created_at),sourceLabel(e.source)]));notice(rows.length+' aperturas exportadas.');}catch(e){notice(e.message);}finally{button.disabled=false;}
 });
+
+$('#reset-prize-tests').onsubmit=async event=>{
+ event.preventDefault();const form=event.currentTarget,button=form.querySelector('button');if(button.disabled)return;button.disabled=true;
+ try{const d=await api('admin-reset-prize-tests',{confirm:new FormData(form).get('confirm')});form.reset();await load();notice(`Listo: ${d.qr} QR disponibles. Solo se reiniciaron las pruebas de premios.`);}catch(error){notice(error.message);}finally{button.disabled=false;}
+};

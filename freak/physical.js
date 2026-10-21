@@ -40,10 +40,10 @@ function celebrateDiscovery() {
   setTimeout(() => layer.remove(), 12500);
 }
 function renderDiscovery() {
-  $('#discovery-title').textContent = poster ? '¡Encontraste 1 de los 5 QR!' : isQrPage ? 'Consulta tu QR' : 'Busca. Junta. Elige.';
+  $('#discovery-title').textContent = poster ? '¡Encontraste 1 de los 5 QR!' : isQrPage ? 'Consulta tu QR' : 'Dos formas de ganar.';
   $('#discovery-eyebrow').textContent = poster ? '¡GRAN HALLAZGO!' : 'LA BÚSQUEDA ESTÁ AFUERA';
-  $('#discovery-copy').textContent = poster ? 'Guarda el QR. Necesitas 10 puntos para hacer válido tu premio.' : 'Stickers escondidos cerca de UPAEP.';
-  $('#discovery-ticket').textContent = 'Cartón gratis en Better Mood para pegar tus stickers.';
+  $('#discovery-copy').textContent = poster ? 'Guarda el QR. Necesitas 10 puntos para hacer válido tu premio.' : isQrPage ? 'Stickers escondidos cerca de UPAEP.' : 'QR + 10 puntos, o el cartón con más stickers.';
+  $('#discovery-ticket').textContent = 'Recoge tu cartón gratis en Better Mood. Pega ahí tus stickers.';
   $('#qr-step-title').textContent = poster ? 'QR encontrado' : 'Encuentra un QR';
   $('#qr-step-copy').textContent = poster ? 'Guárdalo con tu celular. Será solo tuyo.' : 'Encuentra uno de los cinco y guárdalo con tu celular.';
   if(posterStatus?.occupied && !state?.reservation){$('#discovery-title').textContent='Este QR ya fue guardado';$('#discovery-copy').textContent='Todavía puedes buscar otro disponible.';}
@@ -135,7 +135,7 @@ async function load({quiet = false, explicitLogout = false} = {}) {
 }
 function render() {
   const remaining=state.availability;
-  $('#qr-remaining').textContent=remaining ? (remaining.available ? `Quedan ${remaining.available} de ${remaining.total} QR disponibles. ¡Búscalos!` : 'Los cinco QR ya fueron guardados.') : '';
+  $('#qr-remaining').textContent=!isQrPage ? 'Solo 5 QR. La búsqueda empieza el lunes 26 de octubre.' : remaining ? (remaining.available ? `Quedan ${remaining.available} de ${remaining.total} QR disponibles. ¡Búscalos!` : 'Los cinco QR ya fueron guardados.') : '';
   renderDiscovery();
   $('#discovery-action').textContent = isQrPage ? state.reservation ? 'Mi QR guardado' : poster ? 'Guardar mi QR' : 'Consultar mi QR' : 'Dónde buscar';
   $('#discovery-action').href = isQrPage ? '#account' : '#zona-busqueda';

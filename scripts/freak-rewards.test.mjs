@@ -113,3 +113,23 @@ test('ticket openings are separate, deduplicated, dated and admin-only',async()=
  assert.ok(!JSON.stringify(d).includes(visitor));
  assert.equal((await req('admin-ticket-analytics&cursor=bad',undefined,'admin')).status,400);
 });
+
+test('admin prize-only reset archives tests, preserves printed tokens and other statistics, refuses confirmed prizes',async()=>{
+ const body={confirm:'REINICIAR PREMIOS prueba'};
+ assert.equal((await req('admin-reset-prize-tests',body,'p0')).status,401);
+ assert.equal((await req('admin-reset-prize-tests',{confirm:'REINICIAR prueba'},'admin')).status,400);
+ assert.equal((await req('admin-reset-prize-tests',body,'admin')).status,409);
+ // Only the isolated test fixture has its previously claimed prizes released.
+ await db.pool.query("UPDATE freak_rewards SET owner=NULL,claimed_at=NULL,delivered_at=NULL WHERE campaign='prueba'");
+ const tables=['freak_people','freak_sessions','freak_ticket_open_events','freak_poster_locations','freak_physical_validations'];
+ const before={};for(const t of tables)before[t]=(await db.pool.query('SELECT * FROM '+t+' ORDER BY 1')).rows;
+ const tokens=(await db.pool.query('SELECT campaign,id,poster_hash FROM freak_rewards ORDER BY campaign,id')).rows;
+ const other=(await db.pool.query("SELECT * FROM freak_poster_reservations WHERE campaign='freak-2026' ORDER BY 1")).rows;
+ const result=await req('admin-reset-prize-tests',body,'admin');assert.equal(result.status,200);
+ for(const t of tables)assert.deepEqual((await db.pool.query('SELECT * FROM '+t+' ORDER BY 1')).rows,before[t],t+' preserved');
+ assert.deepEqual((await db.pool.query('SELECT campaign,id,poster_hash FROM freak_rewards ORDER BY campaign,id')).rows,tokens);
+ assert.deepEqual((await db.pool.query("SELECT * FROM freak_poster_reservations WHERE campaign='freak-2026' ORDER BY 1")).rows,other);
+ const state=await req('admin-rewards',undefined,'admin');assert.equal(state.analytics.totals.opens,0);assert.equal(state.analytics.totals.saved,0);assert.equal(state.analytics.totals.attempts,0);
+ for(const t of ['freak_poster_visits','freak_poster_open_events','freak_poster_save_events','freak_poster_reservations'])assert.equal((await db.pool.query("SELECT * FROM "+t+" WHERE campaign='prueba'")).rowCount,0);
+ const audit=(await db.pool.query("SELECT snapshot FROM freak_reset_audit WHERE campaign='prueba' ORDER BY id DESC LIMIT 1")).rows[0].snapshot;assert.equal(audit.scope,'prize-qr-tests');assert.ok(audit.rewards.length>0);
+});
