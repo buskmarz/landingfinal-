@@ -46,7 +46,7 @@ load();
 
 $('#posters').onsubmit=async event=>{const form=event.target.closest('[data-location]');if(!form)return;event.preventDefault();const button=form.querySelector('button');button.disabled=true;try{await api('admin-poster-location',{id:form.dataset.location,location:new FormData(form).get('location')});notice('Ubicación guardada.');}catch(error){notice(error.message);}finally{button.disabled=false;}};
 
-const sourceLabel=value=>({boleto:'Boleto',anuncio:'Anuncio',general:'General'}[value]||value);
+const sourceLabel=value=>({boleto:'Boleto',anuncio:'Anuncio',general:'General',instagram:'Instagram · historia'}[value]||value);
 const stamp=value=>new Intl.DateTimeFormat('es-MX',{timeZone:'America/Mexico_City',dateStyle:'short',timeStyle:'medium',hour12:false}).format(new Date(value));
 function filterQuery(selector,defaults={}){
  const form=$(selector),query=new URLSearchParams(defaults);

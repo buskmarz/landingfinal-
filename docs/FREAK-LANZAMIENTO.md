@@ -179,3 +179,6 @@ La captura con CSP corregido reveló además tiles 403 por ausencia de Referer. 
 
 ### Perímetro aprobado — 21 octubre 2026
 Zona reducida al trazo rojo del usuario: 9 Poniente, 19 Sur, 13 Poniente y 25 Sur. Los 23 vértices siguen los ejes de calles de OpenStreetMap, incluyendo cruces y cambios de dirección. Aprobado visualmente en local antes de publicar. Cambio exclusivo de geometría: no modifica QR, estadísticas, premios ni administración.
+
+### Historia Instagram — enlace medible
+`/freak/?origen=instagram` registra aperturas y navegador estimado bajo origen Instagram · historia, con fecha/hora y CSV existente. Cuenta cargas de landing, no garantiza contar clics que no terminan de cargar ni personas únicas. Se preservan fuentes y eventos anteriores. Migración aditiva de valor permitido.

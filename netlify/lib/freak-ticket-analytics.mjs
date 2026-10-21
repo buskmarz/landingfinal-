@@ -1,6 +1,6 @@
 import {analyticsFilters,decodeAnalyticsCursor,analyticsPage,analyticsTimezone} from './freak-analytics.mjs';
 const uuid=/^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i;
-const sources=['boleto','anuncio','general'];
+const sources=['boleto','anuncio','general','instagram'];
 export async function ticketAnalytics({req,body,q,campaign,json,admin}) {
  if(req.method==='POST'){
   const source=body.source??'boleto'; // Older printed-ticket clients omit this field.

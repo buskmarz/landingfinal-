@@ -267,7 +267,7 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
 // an untagged link cannot reliably distinguish a printed advert from a direct visit.
 if (!isQrPage && !poster) {
  const origin=new URLSearchParams(location.search).get('origen');
- const source=['boleto','anuncio'].includes(origin)?origin:'general';
+ const source=['boleto','anuncio','instagram'].includes(origin)?origin:'general';
  let visitor;
  try { visitor=localStorage.getItem('freak-ticket-browser'); if(!visitor){visitor=crypto.randomUUID();localStorage.setItem('freak-ticket-browser',visitor);} } catch { visitor=crypto.randomUUID(); }
  const event=crypto.randomUUID();
