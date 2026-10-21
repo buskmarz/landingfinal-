@@ -2,7 +2,7 @@
 (()=>{const el=document.getElementById('search-map');if(!el)return;
 if(!window.L){el.textContent='No pudimos cargar el mapa. Usa el enlace para llegar a Better Mood.';return;}
 const map=L.map(el,{scrollWheelZoom:false,zoomSnap:.25,zoomControl:true,attributionControl:true});
-const streets=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(map);
+const streets=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,referrerPolicy:'strict-origin-when-cross-origin',attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(map);
 const boundary=[[19.0521496,-98.219509],[19.0491516,-98.2132829],[19.0451488,-98.2153951],[19.047544,-98.2200274],[19.0489617,-98.2192284],[19.0497839,-98.220857]];
 const zone=L.polygon(boundary,{color:'#ffde00',weight:3,fillColor:'#ffde00',fillOpacity:.16,className:'search-perimeter'}).addTo(map);
 const reset=()=>map.fitBounds(zone.getBounds(),{padding:[22,22],animate:!matchMedia('(prefers-reduced-motion: reduce)').matches});reset();

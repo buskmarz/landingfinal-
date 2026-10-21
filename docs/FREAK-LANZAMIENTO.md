@@ -171,3 +171,8 @@ Registro habitual con nombre y celular, sin PIN visible. Sesión segura en el mi
 ## Lanzamiento de reglas y reinicio selectivo — 21 octubre 2026
 Dos vías: uno de cinco QR + diez puntos, o un ganador adicional por mayor cantidad de stickers pegados en el cartón. Cartón gratis en cafetería, conteo en evento del 29; búsqueda QR desde lunes 26. Mapa solo calles. Sin cambios en enlaces, tokens, archivos impresos ni portada/menu/Coffee Lab.
 Administrador incorpora `admin-reset-prize-tests`: transacción autenticada con confirmación exacta y snapshot privado en freak_reset_audit. Limpia solo reservas, visitas y eventos de los cinco QR; conserva personas, sesiones, estadísticas de boleto/anuncio/landing, ubicaciones y hashes impresos. Rechaza si hay premios confirmados.
+
+### Corrección del mapa público — 21 octubre
+El CSP permitía subdominios de tile.openstreetmap.org pero no el host exacto usado por Leaflet. Se añade exclusivamente https://tile.openstreetmap.org a img-src de /freak/*; se conserva mapa, perímetro, enlaces impresos y administración. Validación con encabezado real y captura del navegador público.
+
+La captura con CSP corregido reveló además tiles 403 por ausencia de Referer. Se utiliza strict-origin-when-cross-origin (solo origen en solicitudes externas, sin ruta ni fragmento) también en cada imagen Leaflet. No cambia autorización administrativa.
