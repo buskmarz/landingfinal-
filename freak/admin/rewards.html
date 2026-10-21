@@ -28,7 +28,7 @@
     </form>
     <div id="desk" hidden>
       <nav class="dashboard-nav" aria-label="Secciones del panel">
-        <a href="#resumen">Resumen</a><a href="#boleto">Todos los enlaces</a><a href="#qr-escondidos">QR escondidos</a><a href="#premios">Premios</a><a href="#puntos">Puntos</a>
+        <a href="#resumen">Resumen</a><a href="#boleto">Todos los enlaces</a><a href="#qr-escondidos">QR escondidos</a><a href="#premios" class="nav-prizes">Premios</a><a href="#puntos">Puntos</a>
       </nav>
       <section id="resumen" class="dashboard-section summary-section">
         <div class="section-heading"><div><p class="eyebrow">EN UN VISTAZO</p><h2>Resumen</h2></div><button id="refresh" class="secondary" type="button"><span aria-hidden="true">↻</span> Actualizar</button></div>
@@ -36,24 +36,24 @@
         <details class="definition-details"><summary>Qué estamos contando</summary><p>Cada apertura cuenta, también las repetidas. Las sesiones y navegadores son estimaciones, no personas únicas. Todos los horarios son de Puebla.</p></details>
       </section>
       <section id="boleto" class="dashboard-section">
-        <div class="section-heading"><div><p class="eyebrow">BOLETO · ANUNCIO · LANDING</p><h2>Todos los enlaces</h2></div><span class="section-index" aria-hidden="true">01</span></div>
+        <div class="section-heading"><div><p class="eyebrow">BOLETO · ANUNCIO · LANDING</p><h2>Todos los enlaces</h2></div></div>
         <form id="analytics-filter" class="filter-bar"><div><label for="analytics-source">Origen</label><select id="analytics-source" name="source"><option value="all">Todos</option><option value="boleto">Boleto</option><option value="anuncio">Anuncio</option><option value="general">Landing</option></select></div><div><label for="analytics-from">Desde</label><input id="analytics-from" name="from" type="date"></div><div><label for="analytics-to">Hasta</label><input id="analytics-to" name="to" type="date"></div><button type="submit">Filtrar</button></form><div id="ticket-metrics"></div>
         <details><summary>Por día y hora</summary><div id="ticket-periods" class="table-scroll"></div></details>
         <details><summary>Cada apertura</summary><div class="toolbar"><button id="ticket-csv" class="secondary" type="button">CSV completo</button></div><div id="ticket-history" class="table-scroll"></div><button id="ticket-more" class="secondary" type="button" hidden>Ver anteriores</button></details>
       </section>
       <section id="qr-escondidos" class="dashboard-section">
-        <div class="section-heading"><div><p class="eyebrow">LOS CINCO</p><h2>QR escondidos</h2></div><span class="section-index" aria-hidden="true">02</span></div>
+        <div class="section-heading"><div><p class="eyebrow">LOS CINCO</p><h2>QR escondidos</h2></div></div>
         <div id="posters"></div><form id="history-filter" class="filter-bar"><div><label for="history-poster">QR</label><select id="history-poster" name="poster"><option value="">Todos</option><option value="1">QR 1</option><option value="2">QR 2</option><option value="3">QR 3</option><option value="4">QR 4</option><option value="5">QR 5</option></select></div><div><label for="history-from">Desde</label><input id="history-from" name="from" type="date"></div><div><label for="history-to">Hasta</label><input id="history-to" name="to" type="date"></div><button type="submit">Filtrar</button></form>
         <details><summary>Por día y hora</summary><div id="analytics-dates" class="table-scroll"></div></details>
         <details><summary>Cada apertura e intento</summary><div class="toolbar"><button id="history-refresh" class="secondary" type="button">Actualizar</button><button id="history-csv" class="secondary" type="button">CSV completo</button></div><p class="fine-print">Incluye QR ya guardados. La ubicación es la registrada por el equipo.</p><div id="scan-history" class="table-scroll"></div><button id="history-more" class="secondary" type="button" hidden>Ver anteriores</button></details>
         <details><summary>Quién guardó cada QR</summary><div id="reservations"></div></details>
       <details class="definition-details"><summary>Reiniciar pruebas de los QR de premios</summary><p>Solo borra aperturas, intentos y reservas de estos cinco QR. Conserva boletos, anuncios, cuentas, ubicaciones y enlaces impresos. Guarda un respaldo interno.</p><form id="reset-prize-tests"><label for="reset-prize-confirm">Escribe REINICIAR PREMIOS freak-2026</label><input id="reset-prize-confirm" name="confirm" required autocomplete="off"><button type="submit" class="secondary">Restablecer solo QR de premios</button></form></details></section>
       <section id="premios" class="dashboard-section">
-        <div class="section-heading"><div><p class="eyebrow">RESERVAS Y ENTREGAS</p><h2>Premios</h2></div><span class="section-index" aria-hidden="true">03</span></div>
+        <div class="section-heading"><div><p class="eyebrow">ELIGE · VALIDA · ENTREGA</p><h2>Premios</h2></div></div>
         <div id="prizes" class="prizes"></div>
       </section>
       <section id="puntos" class="dashboard-section points-section">
-        <div class="section-heading"><div><p class="eyebrow">EN BARRA</p><h2>Validar puntos</h2></div><span class="section-index" aria-hidden="true">04</span></div>
+        <div class="section-heading"><div><p class="eyebrow">EN BARRA</p><h2>Validar puntos</h2></div></div>
         <div class="validation-workspace">
           <form id="validate">
             <p class="form-hint">Revisa sus stickers físicos. Mínimo: <strong>10 puntos.</strong></p>
