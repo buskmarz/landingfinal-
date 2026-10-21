@@ -59,3 +59,12 @@ test('five hidden QR history retains every opening, state, date filters and stab
  assert.equal((await posters('from=2026-10-21')).events.length,0);
  await assert.rejects(posters('cursor=invalid'),/Cursor inválido/);
 });
+
+test('Instagram story source is separately counted and filterable without changing old events',async()=>{
+ const previous=await links('source=all');const event=randomUUID(),visitor=randomUUID();
+ assert.equal((await opening({event,visitor,source:'instagram'})).status,200);
+ assert.equal((await opening({event,visitor,source:'instagram'})).status,200);
+ const story=await links('source=instagram');assert.equal(story.status,200);assert.equal(story.totals.opens,1);assert.equal(story.totals.browsers,1);assert.equal(story.events[0].source,'instagram');
+ const after=await links('source=all');assert.equal(after.totals.opens,previous.totals.opens+1);
+ assert.deepEqual(after.sources.filter(x=>x.source!=='instagram'),previous.sources);
+});
