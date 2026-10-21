@@ -453,7 +453,7 @@
   for = "/freak/*"
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
-    Referrer-Policy = "no-referrer"
+    Referrer-Policy = "strict-origin-when-cross-origin"
     X-Content-Type-Options = "nosniff"
     X-Frame-Options = "DENY"
     Permissions-Policy = "camera=(self), microphone=(), geolocation=(self)"

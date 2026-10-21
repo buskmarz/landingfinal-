@@ -174,3 +174,5 @@ Administrador incorpora `admin-reset-prize-tests`: transacción autenticada con 
 
 ### Corrección del mapa público — 21 octubre
 El CSP permitía subdominios de tile.openstreetmap.org pero no el host exacto usado por Leaflet. Se añade exclusivamente https://tile.openstreetmap.org a img-src de /freak/*; se conserva mapa, perímetro, enlaces impresos y administración. Validación con encabezado real y captura del navegador público.
+
+La captura con CSP corregido reveló además tiles 403 por ausencia de Referer. Se utiliza strict-origin-when-cross-origin (solo origen en solicitudes externas, sin ruta ni fragmento) también en cada imagen Leaflet. No cambia autorización administrativa.
