@@ -6,7 +6,7 @@ form.addEventListener('submit',async event=>{
  try{
   const r=await fetch('/api/freak?op=admin-reset-pin',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:data.get('name'),phone:data.get('phone'),confirmed:data.get('confirmed')==='on'})});
   const d=await r.json();if(!r.ok)throw Error(d.error||'No pudimos recuperar el acceso.');
-  pin=d.pin;document.querySelector('#pin-person').textContent=data.get('name')+' · '+data.get('phone');document.querySelector('#pin-value').textContent=pin;card.hidden=false;notice.textContent='PIN nuevo. El anterior y las sesiones previas dejaron de funcionar.';form.reset();
+  pin=d.pin;document.querySelector('#pin-person').textContent=data.get('name')+' · '+data.get('phone');document.querySelector('#pin-value').textContent=pin;card.hidden=false;notice.textContent='Acceso reemitido. Comparte el código y este enlace: '+location.origin+'/freak/qr/?recuperar=1. Las sesiones anteriores quedaron anuladas.';form.reset();
  }catch(e){notice.textContent=e.message;}finally{button.disabled=false;}
 });
 document.querySelector('#pin-copy').addEventListener('click',async()=>{

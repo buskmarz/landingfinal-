@@ -9,7 +9,7 @@
 <meta name="theme-color" content="#FFDE00"><meta property="og:title" content="FREAK · Busca. Junta. Elige.">
 <meta property="og:description" content="Encuentra un QR. Guárdalo con tu celular. Junta 10 puntos y elige un premio.">
 <meta property="og:image" content="https://bmoodcoffee.com/assets/logo-better-mood.png">
-<link rel="stylesheet" href="/freak/physical.css"><script type="module" src="/freak/physical.js"></script>
+<link rel="stylesheet" href="/freak/physical.css"><script type="module" src="/freak/physical.js"></script><script type="module" src="/freak/qr/prizes.js"></script>
 </head>
 <body class="qr-page">
 <a class="skip" href="#account">Ir a mi QR</a>
@@ -22,7 +22,7 @@
 <p id="discovery-ticket" class="ticket-prompt">Cartón gratis en Better Mood para pegar tus stickers.</p>
 <div class="portraits" aria-label="Los cuatro stickers FREAK"><img src="/freak/estampilla-1.jpeg" alt="Primer diseño de sticker FREAK" width="180" height="180"><img src="/freak/estampilla-2.jpeg" alt="Segundo diseño de sticker FREAK" width="180" height="180"><img src="/freak/estampilla-3.jpeg" alt="Tercer diseño de sticker FREAK" width="180" height="180"><img src="/freak/estampilla-4.jpeg" alt="Cuarto diseño de sticker FREAK" width="180" height="180"></div>
 <div class="special-stickers" aria-label="Carpa especial, dos puntos"><figure><img src="/freak/especial-carpa.png" alt="Carpa especial" width="140" height="140"><figcaption>Carpa <strong>ESPECIAL · 2 PUNTOS</strong></figcaption></figure></div><div class="points"><span>Personaje <strong>1 punto</strong></span><span>Carpa <strong>2 puntos</strong></span><span>Meta <strong>10 puntos</strong></span></div>
-<a class="button" id="discovery-action" href="#account">Guardar con mi celular</a>
+<button id="prizes-open" class="prizes-open" type="button" aria-haspopup="dialog" aria-controls="prize-dialog"><span aria-hidden="true">✦</span> Ver premios <span aria-hidden="true">↗</span></button><a class="button" id="discovery-action" href="#account">Guardar con mi celular</a>
 </section><details id="como-jugar" class="compact-details" open><summary><span>Cómo ganar</span><span class="detail-action" aria-hidden="true">Ver</span></summary><section class="steps" aria-labelledby="steps-title">
 <h2 id="steps-title">Así ganas</h2>
 <ol class="step-list"><li><h3 id="qr-step-title">Encuentra un QR</h3><p id="qr-step-copy">Guárdalo con tu celular.</p></li><li><h3 id="collect-step-title">Junta stickers</h3><p>Personaje: 1. Carpa: 2. Junta 10.</p></li><li><h3>Elige tu premio</h3><p>Trae tus stickers y elige tu premio.</p></li></ol>
@@ -32,16 +32,16 @@
 </details>
 <section class="compact-account" aria-label="Tu participación"><p id="message" class="notice" role="status" aria-live="polite" tabindex="-1"></p><div id="account"></div><form id="claim-form" hidden><h3>Confirma tu premio</h3><p id="selection"></p><label for="bar-code" hidden>Código de barra</label><input hidden id="bar-code" name="code" minlength="12" maxlength="12" pattern="[A-Fa-f0-9]{12}" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-describedby="code-help" placeholder="12 caracteres"><small hidden id="code-help">Tus stickers deben estar validados por el equipo.</small><div class="form-actions"><button class="button" type="submit">Confirmar premio</button><button class="secondary" id="cancel-selection" type="button">Cambiar premio</button></div><small>Al confirmar, este premio deja de estar disponible para los demás.</small></form></section>
 
-<details id="prize-details" class="compact-details"><summary><span>Premios</span><span class="detail-action" aria-hidden="true">Ver</span></summary><section id="premios" aria-labelledby="prizes-title">
-<div class="section-heading"><div><h2 id="prizes-title">Los premios</h2></div><button id="refresh" class="secondary" type="button">Actualizar</button></div>
-<p id="prize-status" role="status">Cargando disponibilidad…</p><div id="prizes" class="prizes"></div>
-<p class="fine-print">Un premio por celular. Se aparta al confirmar.</p>
-
-
-
-<noscript><p class="notice">Activa JavaScript para ver disponibilidad y elegir tu premio. Puedes consultar al equipo en barra.</p></noscript>
-</section>
-</details>
+<dialog id="prize-dialog" class="prize-dialog" aria-labelledby="prizes-title">
+<div class="prize-dialog-top"><span>FREAK · LOS PREMIOS</span><button id="prizes-close" class="prizes-close" type="button" aria-label="Cerrar premios">✕</button></div>
+<section id="premios" class="prize-showcase" aria-labelledby="prizes-title">
+<p class="eyebrow">ENCUENTRA. JUNTA. ELIGE.</p><h2 id="prizes-title">¿Cuál será tuyo?</h2>
+<div class="prize-toolbar"><p id="prize-status" role="status">Cargando disponibilidad…</p><button id="refresh" class="secondary" type="button" aria-label="Actualizar premios">↻</button></div>
+<div id="prizes" class="prizes"></div>
+<p class="prize-rule">Tu QR guardado + 10 puntos validados.</p>
+<button id="prizes-to-account" class="prizes-to-account" type="button">Ir a mi QR <span aria-hidden="true">→</span></button>
+<noscript>Activa JavaScript para consultar los premios.</noscript>
+</section></dialog>
 
 <section class="event" aria-labelledby="event-title"><p class="eyebrow">29 OCTUBRE 2026 · BETTER MOOD UPAEP</p><h2 id="event-title">DJ en vivo.</h2><p class="event-time">6:00–9:00 p. m.</p><p>Pumpkin Spice Latte + maracuyá.</p><a href="/ubicaciones/">Cómo llegar</a></section>
 <p class="qr-back"><a href="/freak/">Ver campaña FREAK</a></p><aside class="whatsapp-help"><a href="https://wa.me/message/WQWEEODGY6H2P1" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path fill="currentColor" d="M20.5 3.5A11.9 11.9 0 0 0 12 0 12 12 0 0 0 1.6 18L0 24l6.2-1.6A12 12 0 0 0 24 12c0-3.2-1.2-6.2-3.5-8.5ZM12 22a10 10 0 0 1-5.1-1.4l-.4-.2-3.7 1 1-3.6-.3-.4A10 10 0 1 1 12 22Zm5.5-7.5-1.8-.9c-.3-.1-.5-.2-.7.2l-.8 1c-.2.2-.4.2-.7.1a8.2 8.2 0 0 1-4-3.5c-.3-.4.3-.4.9-1.6.1-.2 0-.4 0-.6l-.9-2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.3s1 2.7 1.2 2.9c.1.2 2.1 3.3 5.1 4.6 1.9.8 2.6.9 3.6.7.6-.1 1.8-.7 2-1.4.3-.7.3-1.3.2-1.4-.1-.1-.3-.2-.6-.3Z"/></svg><span>¿Dudas? <strong>WhatsApp</strong></span></a></aside>

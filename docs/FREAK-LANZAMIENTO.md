@@ -163,3 +163,7 @@ Portada, menú y Coffee Lab del preview coinciden con producción tras excluir l
 Deploy `6ad7f3cf28295ef5a698048b`, commit `3f5b807`, READY y publicado. Clave administrativa original aceptada; cinco carteles visibles y estado previo conservado (cuatro aperturas históricas, una reserva, cero canjes/entregas al verificar). Panel y analytics protegidos por sesión. Apertura de boleto desde navegador confirmada contra el API productivo usando únicamente campaña `prueba`; no añadió eventos ni ganadores a la campaña real. Portada, menú y Coffee Lab idénticos por SHA256 antes/después. Capturas privadas sin nombres ni celulares: `output/freak-admin-release/ADMIN-PUBLICADO.png` y `ADMIN-MOVIL-PUBLICADO.png`.
 
 Ajuste adicional: el enlace antiguo de premio que redirige a `/freak/qr/` no cuenta como General en la página intermedia. Prueba de cinco fuentes/entradas aprobada. Se conserva el conteo del evento en destino.
+
+
+## Registro simple y premios — 20 octubre 2026
+Registro habitual con nombre y celular, sin PIN visible. Sesión segura en el mismo navegador; recuperar en otro dispositivo requiere código emitido por administración en `/freak/qr/?recuperar=1`. No permite entrar con solo un teléfono existente. Modal de premios y contador actualizado cada 5 segundos, sin generar escaneos artificiales. Se conserva el inventario y los enlaces impresos.
