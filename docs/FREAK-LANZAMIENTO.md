@@ -167,3 +167,7 @@ Ajuste adicional: el enlace antiguo de premio que redirige a `/freak/qr/` no cue
 
 ## Registro simple y premios — 20 octubre 2026
 Registro habitual con nombre y celular, sin PIN visible. Sesión segura en el mismo navegador; recuperar en otro dispositivo requiere código emitido por administración en `/freak/qr/?recuperar=1`. No permite entrar con solo un teléfono existente. Modal de premios y contador actualizado cada 5 segundos, sin generar escaneos artificiales. Se conserva el inventario y los enlaces impresos.
+
+## Lanzamiento de reglas y reinicio selectivo — 21 octubre 2026
+Dos vías: uno de cinco QR + diez puntos, o un ganador adicional por mayor cantidad de stickers pegados en el cartón. Cartón gratis en cafetería, conteo en evento del 29; búsqueda QR desde lunes 26. Mapa solo calles. Sin cambios en enlaces, tokens, archivos impresos ni portada/menu/Coffee Lab.
+Administrador incorpora `admin-reset-prize-tests`: transacción autenticada con confirmación exacta y snapshot privado en freak_reset_audit. Limpia solo reservas, visitas y eventos de los cinco QR; conserva personas, sesiones, estadísticas de boleto/anuncio/landing, ubicaciones y hashes impresos. Rechaza si hay premios confirmados.

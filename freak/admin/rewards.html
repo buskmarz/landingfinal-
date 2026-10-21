@@ -47,7 +47,7 @@
         <details><summary>Por día y hora</summary><div id="analytics-dates" class="table-scroll"></div></details>
         <details><summary>Cada apertura e intento</summary><div class="toolbar"><button id="history-refresh" class="secondary" type="button">Actualizar</button><button id="history-csv" class="secondary" type="button">CSV completo</button></div><p class="fine-print">Incluye QR ya guardados. La ubicación es la registrada por el equipo.</p><div id="scan-history" class="table-scroll"></div><button id="history-more" class="secondary" type="button" hidden>Ver anteriores</button></details>
         <details><summary>Quién guardó cada QR</summary><div id="reservations"></div></details>
-      </section>
+      <details class="definition-details"><summary>Reiniciar pruebas de los QR de premios</summary><p>Solo borra aperturas, intentos y reservas de estos cinco QR. Conserva boletos, anuncios, cuentas, ubicaciones y enlaces impresos. Guarda un respaldo interno.</p><form id="reset-prize-tests"><label for="reset-prize-confirm">Escribe REINICIAR PREMIOS freak-2026</label><input id="reset-prize-confirm" name="confirm" required autocomplete="off"><button type="submit" class="secondary">Restablecer solo QR de premios</button></form></details></section>
       <section id="premios" class="dashboard-section">
         <div class="section-heading"><div><p class="eyebrow">RESERVAS Y ENTREGAS</p><h2>Premios</h2></div><span class="section-index" aria-hidden="true">03</span></div>
         <div id="prizes" class="prizes"></div>
