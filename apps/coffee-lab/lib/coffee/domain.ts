@@ -1,3 +1,4 @@
+import type { Duel } from './duel.ts';
 import type { CuppingSession } from './cupping.ts';
 import { z } from 'zod';
 export const BRAND={name:'Better Mood Coffee Lab',short:'Better Mood',tagline:'Bienestar real en taza'};
@@ -28,7 +29,7 @@ export type Brew=Rhythm & {id:string;config:Config;startedAt:number;finishedAt:n
 export type Bag={id:string;name:string;roaster:string;country:string;region:string;producer:string;variety:string;process:string;roast:string;roastedAt:string;openedAt:string;initialWeight:number;price:number|null;currency:string;notes:string;photo:string|null;archived:boolean};
 export type Preferences={advanced:boolean;theme:'dark'|'light';sound:boolean;unit:'C'|'F';experience:string;scale:boolean;grinder:boolean;flavor:string;methods:string[];reduceMotion:boolean};
 export type SavedRecipe={id:string;title:string;config:Config;createdAt:number};
-export type Store={cuppings?:CuppingSession[];activeCupping?:CuppingSession|null;recipes?:SavedRecipe[];version:1;preferences:Preferences;bags:Bag[];brews:Brew[];favorites:string[];active:Active|null;activeBagId:string|null};
+export type Store={duels?:Duel[];cuppings?:CuppingSession[];activeCupping?:CuppingSession|null;recipes?:SavedRecipe[];version:1;preferences:Preferences;bags:Bag[];brews:Brew[];favorites:string[];active:Active|null;activeBagId:string|null};
 export function emptyStore():Store{return {version:1,preferences:{advanced:false,theme:'dark',sound:false,unit:'C',experience:'Explorando',scale:true,grinder:true,flavor:'Equilibrado',methods:[],reduceMotion:false},bags:[],brews:[],favorites:[],active:null,activeBagId:null}}
 export function remaining(b:Bag,brews:Brew[]){return +(b.initialWeight-brews.filter(x=>x.config.bagId===b.id).reduce((s,x)=>s+x.config.dose,0)).toFixed(1)}
 export function tick(a:Active,now:number):Active{if(a.mode==='paced'||a.pausedAt!==null||a.status!=='brewing')return a;let i=a.stepIndex,at=a.stepStartedAt;while(i<a.config.recipe.steps.length-1&&!a.config.recipe.steps[i].manual&&now-at>=a.config.recipe.steps[i].seconds*1000){at+=a.config.recipe.steps[i].seconds*1000;i++}return i===a.stepIndex?a:{...a,stepIndex:i,stepStartedAt:at}}

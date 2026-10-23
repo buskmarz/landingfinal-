@@ -56,3 +56,58 @@ body{font-family:Metropolis,Arial,sans-serif}.brand{flex-direction:column;gap:6p
 .learning-hub.is-detail>.compact-heading,.learning-hub.is-detail>.lab-tabs{display:none}.method-lesson{gap:12px}.method-lesson>p:not(.story-date){line-height:1.6;font-size:15px}.method-lesson>.text-button{justify-self:start}.method-lesson>h3{margin-top:4px}
 
 .cafe-return{font-size:12px;min-height:44px;display:inline-flex;align-items:center}.sidebar-note>a{display:block;font-size:12px;margin-bottom:18px}@media(min-width:768px){.cafe-return{display:none}}@media(max-width:420px){.topbar-right .pill{display:none}}
+
+/* Mobile method overview: all information stays visible; fewer vertical rows. */
+.method-profile::before{content:' · '}
+.checklist-action{display:grid;gap:10px}
+@media(max-width:767px){
+ .method-directory .compact-method-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ .method-directory .method-list-row{position:relative;display:grid;grid-template-columns:24px minmax(0,1fr);align-content:start;align-items:center;gap:10px 8px;padding:12px;min-height:106px}
+ .method-directory .method-list-row>.method-glyph{width:24px;height:24px;grid-column:1}
+ .method-directory .method-list-row>span{grid-column:1/-1;display:contents}
+ .method-directory .method-list-row strong{grid-row:1;grid-column:2;font-size:14px;line-height:1.3;min-height:36px;overflow-wrap:anywhere}
+ .method-directory .method-list-row small{grid-column:1/-1;margin:0;line-height:1.4;font-size:12px}
+ .method-directory .method-duration{color:var(--foreground);font-variant-numeric:tabular-nums}
+ .method-directory .method-profile{display:block;margin-top:2px}
+ .method-profile::before{content:none}
+ .method-directory .method-list-row>svg:last-child{display:none}
+ .method-directory.is-preview .compact-method-list{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .method-directory.is-preview .method-list-row{display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:8px;padding:10px;min-height:148px}
+ .method-directory.is-preview .method-list-row strong{font-size:13px;min-height:34px;align-items:flex-start;gap:3px}
+ .method-directory.is-preview .method-list-row strong svg{flex:0 0 12px}
+ .method-directory.is-preview .method-list-row small{font-size:12px}
+ .prepare-directory>.compact-heading{margin-bottom:16px}
+ .prepare-directory>.compact-heading p{margin-top:6px}
+ .method-filters summary{min-height:44px;padding-block:10px}
+ .method-directory.is-library .compact-method-list{margin-top:10px}
+ .lab-home .home-actions{margin-bottom:16px}
+ .lab-home>.home-promise{margin-top:12px}
+ .checklist-dialog{gap:12px!important;scroll-padding-block:20px}
+ .checklist-dialog .rhythm-choice{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ .checklist-dialog .rhythm-choice label{align-items:flex-start;gap:7px;padding:10px 8px}
+ .checklist-dialog .rhythm-choice input{margin-top:2px}
+ .checklist-dialog .rhythm-choice b{font-size:13px}
+ .checklist-dialog .rhythm-choice small{font-size:12px}
+ .checklist-dialog .checklist{gap:8px}
+ .checklist-dialog .checklist label{min-height:44px;padding:8px 10px;font-size:14px}
+ .checklist-dialog .checklist-action{position:sticky;bottom:-22px;background:var(--card);padding:12px 0 max(12px,env(safe-area-inset-bottom));margin-bottom:-12px;border-top:1px solid var(--border);z-index:1}
+ .checklist-dialog .check-summary{gap:6px}
+ .checklist-dialog .check-summary span{padding:5px 7px;font-size:12px}
+ .checklist-dialog .checklist-action .primary{min-height:48px}
+ .checklist-dialog .checklist-action .micro{margin:0;font-size:12px}
+ .cafe-connection{gap:12px;padding-top:18px;margin-top:20px}
+ .cafe-connection h2{font-size:19px}
+ .cafe-connection p.muted{font-size:13px}
+ .cafe-connection .eyebrow{font-size:10px}
+}
+
+@media(max-width:767px){
+ .sensory-lab:has(.learning-hub) .sensory-hero{display:none}
+ .learning-hub:not(.is-detail) .compact-heading{margin-bottom:14px}
+ .learning-hub .method-directory.is-learning .method-list-row{min-height:94px}
+ .learning-hub .method-directory.is-learning .method-list-row small{font-size:12px}
+}
+
+.checklist-buttons{display:flex;gap:8px;align-items:stretch}.checklist-buttons>.primary{width:auto;flex:1;min-width:0;padding-inline:10px}.checklist-buttons>.icon-button{flex:0 0 44px}
+/* Entry point styles are eager; the experiment itself remains in the lazy laboratory. */
+.duel-home-link b{font-size:16px;color:var(--primary)}.duel-home-link span{flex:1;text-align:left}.duel-home-link small{display:block;font-size:12px;color:var(--muted-foreground);font-weight:400;margin-top:3px}
