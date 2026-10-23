@@ -1,3 +1,4 @@
+import { validDuelPlan } from './duel.ts';
 import { cuppingSchema } from './cupping.ts';
 import { z } from 'zod';
 import { customRecipeError, remaining, type Store, type Config, type SavedRecipe } from './domain.ts';
@@ -18,11 +19,13 @@ const saved=z.object({id,title:text.min(1),config:configSchema,createdAt:timesta
 const bag=z.object({id,name:text.min(1),roaster:text,country:text,region:text,producer:text,variety:text,process:text,roast:text,roastedAt:text,openedAt:text,initialWeight:positive.max(100000),price:num.min(0).nullable(),currency:text,notes:text,photo:z.string().max(3000000).regex(/^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/).nullable(),archived:z.boolean()});
 const preferences=z.object({advanced:z.boolean(),theme:z.enum(['dark','light']),sound:z.boolean(),unit:z.enum(['C','F']),experience:text,scale:z.boolean(),grinder:z.boolean(),flavor:text,methods:z.array(method),reduceMotion:z.boolean()});
 const active=z.object({...rhythm,stepPhysicalStartedAt:timestamp.optional(),waterChoice:z.object({stepIndex:num.int().min(0).max(19),strategy:z.enum(['recipe','target'])}).optional(),id,config:configSchema,startedAt:timestamp,stepStartedAt:timestamp,stepIndex:num.int().min(0),pausedAt:timestamp.nullable(),status:z.enum(['brewing','review']),finishedAt:timestamp.nullable(),physicalSeconds:num.min(0).nullable(),evaluation}).refine(a=>a.stepIndex<a.config.recipe.steps.length,'Paso activo inválido.').refine(validEvents,'Eventos de preparación inválidos.');
-const storeSchema=z.object({version:z.literal(1),cuppings:z.array(cuppingSchema.refine(s=>s.finishedAt!==null)).max(10000).optional(),activeCupping:cuppingSchema.refine(s=>s.finishedAt===null).nullable().optional(),recipes:z.array(saved).max(10000).optional(),preferences,bags:z.array(bag).max(10000),brews:z.array(brew).max(100000),favorites:z.array(method),active:active.nullable(),activeBagId:id.nullable()});
+const duel=z.object({id,createdAt:timestamp,archived:z.boolean().optional(),coffee:z.string().max(100),a:configSchema,b:configSchema,aBrewId:id.nullable(),bBrewId:id.nullable(),result:z.object({choice:z.enum(['a','b','same']),note:z.string().max(1000),at:timestamp}).nullable()}).refine(validDuelPlan,'El reto debe cambiar solo el ratio.').refine(d=>!d.aBrewId||d.aBrewId!==d.bBrewId,'Las tazas deben ser distintas.');
+const storeSchema=z.object({version:z.literal(1),duels:z.array(duel).max(10000).optional(),cuppings:z.array(cuppingSchema.refine(s=>s.finishedAt!==null)).max(10000).optional(),activeCupping:cuppingSchema.refine(s=>s.finishedAt===null).nullable().optional(),recipes:z.array(saved).max(10000).optional(),preferences,bags:z.array(bag).max(10000),brews:z.array(brew).max(100000),favorites:z.array(method),active:active.nullable(),activeBagId:id.nullable()});
 export type ImportPayload={kind:'backup';data:Store}|{kind:'recipe';data:SavedRecipe};
 function validateLinks(s:Store){
- for(const records of [s.bags,s.brews,s.recipes||[],s.cuppings||[]])if(new Set(records.map(x=>x.id)).size!==records.length)throw new Error('El archivo contiene identificadores duplicados.');
+ for(const records of [s.bags,s.brews,s.recipes||[],s.cuppings||[],s.duels||[]])if(new Set(records.map(x=>x.id)).size!==records.length)throw new Error('El archivo contiene identificadores duplicados.');
  for(const b of s.brews)if(b.config.bagId&&!s.bags.some(x=>x.id===b.config.bagId))throw new Error('Falta una bolsa relacionada con el historial.');
+ for(const d of s.duels||[])if(d.a.bagId&&!s.bags.some(b=>b.id===d.a.bagId))throw new Error('Falta la bolsa del reto.');
  for(const b of s.bags)if(remaining(b,s.brews)<0)throw new Error(`El historial supera el peso de la bolsa «${b.name}». Revisa la copia.`);
 }
 export function parseImport(raw:string):ImportPayload{
@@ -41,8 +44,8 @@ export function backupFile(s:Store){return {format:'better-mood-backup',version:
 export function recipeFile(r:SavedRecipe){return {format:'better-mood-recipe',version:1,data:{id:r.id,title:r.title,createdAt:r.createdAt,config:{...structuredClone(r.config),bagId:null}}}}
 const same=(a:unknown,b:unknown):boolean=>{if(a===b)return true;if(!a||!b||typeof a!=='object'||typeof b!=='object')return false;const x=a as Record<string,unknown>,y=b as Record<string,unknown>;const keys=Object.keys(x).filter(k=>x[k]!==undefined).sort();return JSON.stringify(keys)===JSON.stringify(Object.keys(y).filter(k=>y[k]!==undefined).sort())&&keys.every(k=>same(x[k],y[k]))};
 export function planImport(current:Store,payload:ImportPayload){
- const next=structuredClone(current);const stats={cuppings:0,bags:0,brews:0,recipes:0,duplicates:0,conflicts:0,skipped:0};const conflictBagIds=new Set<string>();
- const merge=<T extends {id:string}>(local:T[],incoming:T[],key:'bags'|'brews'|'recipes'|'cuppings')=>{const out=[...local];for(const item of incoming){const exists=out.find(x=>x.id===item.id);if(exists){if(same(exists,item))stats.duplicates++;else{stats.conflicts++;if(key==='bags')conflictBagIds.add(item.id)}}else{out.push(structuredClone(item));stats[key]++}}return out};
+ const next=structuredClone(current);const stats={duels:0,cuppings:0,bags:0,brews:0,recipes:0,duplicates:0,conflicts:0,skipped:0};const conflictBagIds=new Set<string>();
+ const merge=<T extends {id:string}>(local:T[],incoming:T[],key:'bags'|'brews'|'recipes'|'cuppings'|'duels')=>{const out=[...local];for(const item of incoming){const exists=out.find(x=>x.id===item.id);if(exists){if(same(exists,item))stats.duplicates++;else{stats.conflicts++;if(key==='bags')conflictBagIds.add(item.id)}}else{out.push(structuredClone(item));stats[key]++}}return out};
  if(payload.kind==='recipe')next.recipes=merge(next.recipes||[],[payload.data],'recipes');
  else{
   next.cuppings=merge(next.cuppings||[],payload.data.cuppings||[],'cuppings');
@@ -50,6 +53,8 @@ export function planImport(current:Store,payload:ImportPayload){
   const safeBrews=payload.data.brews.filter(b=>{if(b.config.bagId&&conflictBagIds.has(b.config.bagId)&&!next.brews.some(x=>x.id===b.id)){stats.skipped++;return false}return true});
   next.brews=merge(next.brews,safeBrews,'brews').sort((a,b)=>b.startedAt-a.startedAt);
   next.recipes=merge(next.recipes||[],payload.data.recipes||[],'recipes');
+  const safeDuels=(payload.data.duels||[]).filter(d=>{if(d.a.bagId&&conflictBagIds.has(d.a.bagId)&&!next.duels?.some(x=>x.id===d.id)){stats.skipped++;return false}return true});
+  next.duels=merge(next.duels||[],safeDuels,'duels');
   next.favorites=[...new Set([...next.favorites,...payload.data.favorites])];
  }
  validateLinks(next);
