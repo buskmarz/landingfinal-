@@ -194,3 +194,6 @@ La migración aditiva `20261027180000_freak_prize_reservations.sql` añade `rese
 ### Kit de dulces confirmado · 27 octubre 2026
 
 El usuario confirmó que los Tugo y gomitas del Kit Necte son dulces preparados con Panera. Se habilita el premio 3 en la asignación administrativa, conservando el premio de nicotina excluido. La confirmación de 10 puntos, exclusividad del apartado y enlaces impresos se conservan. Cambio exclusivo de catálogo permitido, sin migraciones ni asignaciones automáticas.
+
+### 27 octubre: reserva desde tarjetas de premios
+En «Premios» cada premio permitido y libre permite elegir una persona con QR guardado y reservarlo. Reutiliza admin-reserve-prize y sus bloqueos transaccionales; no cambia el catálogo permitido ni la validación física de 10 puntos. Las reservas existentes aparecen como RESERVADO. No altera tokens impresos, estadísticas ni asigna premios automáticamente.
