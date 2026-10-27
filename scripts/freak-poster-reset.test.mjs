@@ -5,6 +5,7 @@ import {randomBytes,randomUUID,createHash} from 'node:crypto';
 import {NetlifyDB} from '@netlify/database-dev';
 import {getDatabase} from '@netlify/database';
 import {createHandler} from '../netlify/functions/freak.mjs';
+import {adminAssignable} from '../netlify/lib/freak-prize-reservation.mjs';
 import {resetPosterTest} from '../netlify/lib/freak-poster-reset.mjs';
 let engine,db,handler;
 const cookies={},tokens={},hash=s=>createHash('sha256').update(s).digest('hex');
@@ -120,3 +121,8 @@ test('admin can reserve ordinary rewards for saved QR owners; others cannot clai
  assert.equal((await request('admin-deliver-reward',{id:'4'})).status,200);
  assert.deepEqual(await rows('freak_poster_open_events'),events);assert.deepEqual(await rows('freak_ticket_open_events'),tickets);
 });
+
+ test('confirmed Panera candy kit is assignable; nicotine prize remains excluded',()=>{
+ assert.equal(adminAssignable({id:'3',title:'2 Tugo y 2 gomitas · Kit Necte'}),true);
+ assert.equal(adminAssignable({id:'2',title:'1 vape'}),false);
+ });
