@@ -198,3 +198,6 @@ El usuario confirmó que los Tugo y gomitas del Kit Necte son dulces preparados 
 ### 27 octubre: reserva desde tarjetas de premios
 En «Premios» cada premio permitido y libre permite elegir una persona con QR guardado y reservarlo. Reutiliza admin-reserve-prize y sus bloqueos transaccionales; no cambia el catálogo permitido ni la validación física de 10 puntos. Las reservas existentes aparecen como RESERVADO. No altera tokens impresos, estadísticas ni asigna premios automáticamente.
 Los premios reservados se ocultan de la lista pública para otras personas; quien tiene la reserva conserva su opción de confirmarla.
+
+### 27 octubre: premio «Vaporizador»
+El propietario identifica el reemplazo como BIOVIKOTING Difusor Oral ASIN B0GMMG3K62. Ficha consultada: dispositivo de aire saborizado no eléctrico, sin tabaco ni nicotina. Se usa únicamente el nombre solicitado «Vaporizador», sin promesas médicas. Migración versionada cambia solo el título del premio 2 y archiva el nombre previo; conserva poster_hash, propietarios, reservas y estadísticas. Allowlist habilita exactamente el nuevo título; «1 vape» continúa excluido.

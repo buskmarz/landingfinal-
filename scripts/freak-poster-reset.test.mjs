@@ -20,6 +20,7 @@ async function rows(table,where='',args=[]){return (await db.pool.query('SELECT 
 before(async()=>{
  engine=new NetlifyDB();db=getDatabase({connectionString:await engine.start()});db.pool.options.max=1;
  for(const f of (await fs.readdir('netlify/database/migrations')).filter(f=>f.includes('freak')&&!f.includes('inventory')).sort())await db.pool.query(await fs.readFile('netlify/database/migrations/'+f,'utf8'));
+ await db.pool.query('DELETE FROM freak_reset_audit'); // Local fixture starts after the catalog migration audit.
  handler=createHandler(db);const key=randomBytes(32).toString('base64url');await db.pool.query("UPDATE freak_admins SET key_hash=$1 WHERE id='owner'",[hash(key)]);assert.equal((await request('admin-login',{key})).status,200);
  for(let i=1;i<=5;i++){
   tokens[i]=randomBytes(32).toString('base64url');
@@ -125,4 +126,28 @@ test('admin can reserve ordinary rewards for saved QR owners; others cannot clai
  test('confirmed Panera candy kit is assignable; nicotine prize remains excluded',()=>{
  assert.equal(adminAssignable({id:'3',title:'2 Tugo y 2 gomitas · Kit Necte'}),true);
  assert.equal(adminAssignable({id:'2',title:'1 vape'}),false);
+ });
+
+ test('verified nicotine-free air diffuser can be reserved while the old nicotine label remains excluded',async()=>{
+ assert.equal(adminAssignable({id:'2',title:'Vaporizador'}),true);
+ assert.equal(adminAssignable({id:'2',title:'1 vape'}),false);
+ await db.pool.query("UPDATE freak_rewards SET title='Vaporizador' WHERE campaign='prueba' AND id='2'");
+ const current=await panel(),saved=current.reservations.find(r=>r.poster_id==='2');
+ assert.equal((await request('admin-reserve-prize',{poster_id:'2',id:'2',reservationKey:saved.reservationKey,confirmed:true})).status,200);
+ const other=await request('rewards',undefined,'');
+ assert.equal(other.prizes.find(p=>p.id==='2').reserved,true);
+ const own=await request('rewards',undefined,'6');
+ assert.equal(own.held.title,'Vaporizador');
+ });
+ test('product title migration preserves printed tokens, other campaigns and all reservation fields',async()=>{
+ await db.pool.query("UPDATE freak_rewards SET title='1 vape' WHERE campaign='freak-2026' AND id='2'");
+ const before=(await db.pool.query("SELECT * FROM freak_rewards ORDER BY campaign,id")).rows;
+ const migration=await fs.readFile('netlify/database/migrations/20261027193000_freak_vaporizador_title.sql','utf8');
+ await db.pool.query(migration);
+ const expected=before.map(r=>r.campaign==='freak-2026'&&r.id==='2'?{...r,title:'Vaporizador'}:r);
+ assert.deepEqual((await db.pool.query("SELECT * FROM freak_rewards ORDER BY campaign,id")).rows,expected);
+ const audits=(await db.pool.query("SELECT * FROM freak_reset_audit WHERE snapshot->>'scope'='prize-title-change'")).rows;
+ assert.equal(audits.length,1);
+ await db.pool.query(migration);
+ assert.equal((await db.pool.query("SELECT * FROM freak_reset_audit WHERE snapshot->>'scope'='prize-title-change'")).rowCount,1);
  });
