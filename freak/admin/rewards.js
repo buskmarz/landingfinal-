@@ -11,7 +11,7 @@ function clearDesk(){lastCode='';$('#code').textContent='';$('#code-card').hidde
 async function load(){
  if(loading)return;loading=true;$('#refresh').disabled=true;$('#login button').disabled=true;
  try{const d=await api('admin-rewards');$('#login').hidden=true;$('#desk').hidden=false;
- $('#prizes').innerHTML=d.prizes.map(p=>`<article class="prize ${p.claimed_at?'taken':''}"><small>${p.delivered_at?'ENTREGADO':p.claimed_at?'POR ENTREGAR':p.reserved_at?'APARTADO':'DISPONIBLE'}</small><h3>${esc(p.title)}</h3><p>${(p.claimed_at||p.reserved_at)?esc(p.display_name)+' · '+esc(phoneLabel(p.phone)):'Sin reservar'}</p>${p.claimed_at&&!p.delivered_at?`<button data-deliver="${esc(p.id)}">Registrar entrega</button>`:''}</article>`).join('')||'<p>No hay premios configurados.</p>';
+ $('#prizes').innerHTML=d.prizes.map(p=>`<article class="prize ${p.claimed_at?'taken':''}"><small>${p.delivered_at?'ENTREGADO':p.claimed_at?'POR ENTREGAR':p.reserved_at?'RESERVADO':'DISPONIBLE'}</small><h3>${esc(p.title)}</h3><p>${(p.claimed_at||p.reserved_at)?esc(p.display_name)+' · '+esc(phoneLabel(p.phone)):'Sin reservar'}</p>${p.claimed_at&&!p.delivered_at?`<button data-deliver="${esc(p.id)}">Registrar entrega</button>`:''}${prizeReservationControls(p,d)}</article>`).join('')||'<p>No hay premios configurados.</p>';
  const totals=d.analytics?.totals||{};const metrics=[['Aperturas QR premio',totals.opens],['Sesiones por QR',totals.sessions],['QR guardados',totals.saved],['Intentos con cuenta',totals.attempts],['Intentos QR ocupado',totals.occupied],['10 puntos',totals.validated],['Confirmados',totals.claimed],['Entregados',totals.delivered]];
  $('#analytics').innerHTML='<div class="analytics-grid">'+metrics.map(([label,value])=>`<div><strong>${esc(value||0)}</strong><small>${label}</small></div>`).join('')+'</div>'+`<p class="fine-print">Guardados / sesiones: ${totals.sessions?Math.round(totals.saved/totals.sessions*100)+'%':'Sin datos'} · Canjes / QR guardados: ${totals.saved?Math.round(totals.claimed/totals.saved*100)+'%':'Sin datos'}</p>`;
  $('#analytics-dates').innerHTML='<p>Hora de Puebla. Aperturas desde esta actualización.</p><table class="analytics-table"><thead><tr><th>Fecha</th><th>QR</th><th>Aperturas</th><th>Sesiones del día</th></tr></thead><tbody>'+(d.analytics?.daily||[]).map(v=>`<tr><td>${esc(v.day)}</td><td>${esc(v.poster_id)}</td><td>${v.opens}</td><td>${v.sessions}</td></tr>`).join('')+'</tbody></table><h3>Por hora</h3><table class="analytics-table"><tbody>'+(d.analytics?.hourly||[]).map(v=>`<tr><td>${v.hour}:00</td><td>${v.opens} aperturas</td></tr>`).join('')+'</tbody></table>';
@@ -125,12 +125,23 @@ function posterPrizeControls(p,d){
  if(!choices.length)return '<p>No hay premios asignables disponibles.</p>';
  return `<form data-assign-poster="${esc(p.id)}" data-reservation-key="${esc(saved.reservationKey)}"><label>Asignar premio<select name="prize" required><option value="">Elige un premio</option>${choices.map(r=>`<option value="${esc(r.id)}">${esc(r.title)}</option>`).join('')}</select></label><button>Apartar premio</button><small>Quedará reservado para esta persona. La entrega requiere 10 puntos.</small></form>`;
 }
+function prizeReservationControls(prize,d){
+ if(!prize.admin_assignable||prize.claimed_at||prize.reserved_at)return '';
+ const eligible=(d.reservations||[]).filter(r=>{
+  const poster=d.posters?.find(p=>p.id===r.poster_id);
+  return poster?.saved_at&&!poster.claimed&&!d.prizes.some(p=>(p.claimed_at||p.reserved_at)&&p.phone===r.phone);
+ });
+ if(!eligible.length)return '<small>Sin personas pendientes de asignación.</small>';
+ return `<form data-reserve-prize="${esc(prize.id)}"><label>Reservar para<select name="poster" required><option value="">Elige una persona</option>${eligible.map(r=>`<option value="${esc(r.poster_id)}" data-reservation-key="${esc(r.reservationKey)}">${esc(r.display_name)} · QR ${esc(r.poster_id)}</option>`).join('')}</select></label><button>Reservar premio</button><small>Ya no estará disponible para los demás. Entrega con 10 puntos.</small></form>`;
+}
 let assigningPrize=false;
-$('#posters').addEventListener('submit',async event=>{
- const form=event.target.closest('[data-assign-poster]');if(!form)return;
+for(const container of [$('#posters'),$('#prizes')])container.addEventListener('submit',async event=>{
+ const form=event.target.closest('[data-assign-poster],[data-reserve-prize]');if(!form)return;
  event.preventDefault();if(assigningPrize)return;assigningPrize=true;
  const button=form.querySelector('button');button.disabled=true;
- try{await api('admin-reserve-prize',{poster_id:form.dataset.assignPoster,id:new FormData(form).get('prize'),reservationKey:form.dataset.reservationKey,confirmed:true});await load();notice('Premio apartado. Ya no está disponible para los demás.');}
+ const selected=form.querySelector('select').selectedOptions[0];
+ const payload=form.hasAttribute('data-reserve-prize')?{poster_id:selected.value,id:form.dataset.reservePrize,reservationKey:selected.dataset.reservationKey}:{poster_id:form.dataset.assignPoster,id:new FormData(form).get('prize'),reservationKey:form.dataset.reservationKey};
+ try{await api('admin-reserve-prize',{...payload,confirmed:true});await load();notice('Premio apartado. Ya no está disponible para los demás.');}
  catch(error){notice(error.message);if(error.status===401)clearDesk();}
  finally{assigningPrize=false;if(button.isConnected)button.disabled=false;}
 });
