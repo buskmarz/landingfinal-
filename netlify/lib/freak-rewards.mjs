@@ -1,3 +1,4 @@
+import {reservationKey,adminAssignable} from './freak-prize-reservation.mjs';
 import {posterResetKey} from './freak-poster-reset.mjs';
 import {createHash,randomBytes} from 'node:crypto';
 import {normalizePhone,normalizeName} from './freak-phone.mjs';
@@ -7,14 +8,14 @@ const fail=(status,message)=>{throw Object.assign(new Error(message),{status,cod
 export async function rewardsAction({req,op,body,q,db,campaign,person,json,admin}){
  const write=req.method==='POST';
  if(op==='rewards'&&!write){
- const prizes=(await q('SELECT id,title,owner IS NOT NULL AS taken FROM freak_rewards WHERE campaign=$1 ORDER BY id',[campaign])).rows;
+ const prizes=(await q('SELECT id,title,(owner IS NOT NULL OR (reserved_for IS NOT NULL AND reserved_for IS DISTINCT FROM $2::uuid)) AS taken,(owner IS NULL AND reserved_for IS NOT NULL) AS reserved,(owner IS NULL AND reserved_for IS NOT NULL AND reserved_for=$2::uuid) AS reserved_for_me FROM freak_rewards WHERE campaign=$1 ORDER BY id',[campaign,person?.id||null])).rows;
  const mine=person?(await q('SELECT id,title,claimed_at,delivered_at FROM freak_rewards WHERE campaign=$1 AND owner=$2',[campaign,person.id])).rows[0]:null;
  const validation=person?(await q('SELECT normal_count+2*special_count AS points FROM freak_physical_validations WHERE campaign=$1 AND person=$2',[campaign,person.id])).rows[0]||null:null;
  const reservation=person?(await q('SELECT poster_id,created_at FROM freak_poster_reservations WHERE campaign=$1 AND person=$2',[campaign,person.id])).rows[0]||null:null;
  const availability=(await q('SELECT count(*)::int AS total,count(*) FILTER(WHERE NOT EXISTS(SELECT 1 FROM freak_poster_reservations s WHERE s.campaign=r.campaign AND s.poster_id=r.id))::int AS available FROM freak_rewards r WHERE campaign=$1',[campaign])).rows[0];
  const token=req.headers.get('x-freak-poster')||'';
  const poster=/^[A-Za-z0-9_-]{43}$/.test(token)?(await q('SELECT r.id,EXISTS(SELECT 1 FROM freak_poster_reservations s WHERE s.campaign=r.campaign AND s.poster_id=r.id) AS occupied FROM freak_rewards r WHERE campaign=$1 AND poster_hash=$2',[campaign,hash(token)])).rows[0]||null:null;
- return json({prizes,mine,validation,reservation,availability,poster,person:person?{name:person.display_name}:null});
+ return json({prizes,mine,held:prizes.find(p=>p.reserved_for_me)||null,validation,reservation,availability,poster,person:person?{name:person.display_name}:null});
  }
  if(op==='poster-visit'&&write){
  if(typeof body.poster!=='string'||!/^[A-Za-z0-9_-]{43}$/.test(body.poster)||typeof body.visit!=='string'||!/^([a-f0-9]{8}-)([a-f0-9]{4}-){3}[a-f0-9]{12}$/i.test(body.visit))fail(400,'Visita inválida.');
@@ -45,6 +46,7 @@ export async function rewardsAction({req,op,body,q,db,campaign,person,json,admin
  if(typeof body.id!=='string'||!/^\d$/.test(body.id))fail(400,'Elige un premio disponible.');
  const client=await db.pool.connect();
  try{await client.query('BEGIN');
+ await client.query('LOCK TABLE freak_rewards IN SHARE ROW EXCLUSIVE MODE');
  await client.query('SELECT id FROM freak_people WHERE id=$1 FOR UPDATE',[person.id]);
  const previous=(await client.query('SELECT id,title FROM freak_rewards WHERE campaign=$1 AND owner=$2',[campaign,person.id])).rows[0];
  if(previous){if(previous.id!==body.id)fail(409,'Ya elegiste un premio.');await client.query('COMMIT');return json({ok:true,prize:previous});}
@@ -52,21 +54,23 @@ export async function rewardsAction({req,op,body,q,db,campaign,person,json,admin
  if(!reserved)fail(403,'Guarda primero uno de los cinco QR.');
  const v=(await client.query('SELECT person FROM freak_physical_validations WHERE campaign=$1 AND person=$2 AND normal_count+2*special_count>=10',[campaign,person.id])).rows[0];
  if(!v)fail(403,'Trae tus stickers físicos: el equipo debe validar 10 puntos.');
- const won=(await client.query('UPDATE freak_rewards SET owner=$1,claimed_at=clock_timestamp() WHERE campaign=$2 AND id=$3 AND owner IS NULL RETURNING id,title',[person.id,campaign,body.id])).rows[0];
+ const held=(await client.query('SELECT id FROM freak_rewards WHERE campaign=$1 AND reserved_for=$2',[campaign,person.id])).rows[0];
+ if(held&&held.id!==body.id)fail(409,'Ya tienes un premio apartado. Confirma ese premio.');
+ const won=(await client.query('UPDATE freak_rewards SET owner=$1,claimed_at=clock_timestamp() WHERE campaign=$2 AND id=$3 AND owner IS NULL AND (reserved_for IS NULL OR reserved_for=$1) RETURNING id,title',[person.id,campaign,body.id])).rows[0];
  if(!won)fail(409,'Alguien eligió ese premio. Puedes escoger otro disponible.');
  await client.query('COMMIT');return json({ok:true,prize:won});
  }catch(e){await client.query('ROLLBACK');if(e.code==='23505')fail(409,'Ya elegiste un premio. Actualiza para verlo.');throw e}finally{client.release();}
  }
  if(!admin)fail(401,'Entra a administración.');
  if(op==='admin-rewards'&&!write){
- const prizes=(await q('SELECT r.id,r.title,r.claimed_at,r.delivered_at,p.display_name,p.phone FROM freak_rewards r LEFT JOIN freak_people p ON p.id=r.owner WHERE r.campaign=$1 ORDER BY r.id',[campaign])).rows;
+ const prizes=(await q('SELECT r.id,r.title,r.claimed_at,r.delivered_at,r.reserved_at,p.display_name,p.phone FROM freak_rewards r LEFT JOIN freak_people p ON p.id=COALESCE(r.owner,r.reserved_for) WHERE r.campaign=$1 ORDER BY r.id',[campaign])).rows;
  const validations=(await q('SELECT v.normal_count,v.special_count,v.created_at,p.display_name,p.phone,EXISTS(SELECT 1 FROM freak_rewards r WHERE r.campaign=v.campaign AND r.owner=v.person) AS has_prize FROM freak_physical_validations v JOIN freak_people p ON p.id=v.person WHERE v.campaign=$1 ORDER BY v.created_at DESC',[campaign])).rows;
- const reservations=(await q('SELECT r.poster_id,r.created_at,p.display_name,p.phone FROM freak_poster_reservations r JOIN freak_people p ON p.id=r.person WHERE r.campaign=$1 ORDER BY r.created_at',[campaign])).rows;
+ const reservations=(await q('SELECT r.poster_id,r.person,r.created_at,p.display_name,p.phone FROM freak_poster_reservations r JOIN freak_people p ON p.id=r.person WHERE r.campaign=$1 ORDER BY r.created_at',[campaign])).rows;
  const posters=(await q(`SELECT r.id,COALESCE(l.label,'') AS location,(SELECT count(*)::int FROM freak_poster_open_events e WHERE e.campaign=r.campaign AND e.poster_id=r.id) AS opens,(SELECT count(*)::int FROM freak_poster_save_events e WHERE e.campaign=r.campaign AND e.poster_id=r.id) AS attempts,(SELECT count(*)::int FROM freak_poster_save_events e WHERE e.campaign=r.campaign AND e.poster_id=r.id AND e.outcome='occupied') AS occupied_attempts,EXISTS(SELECT 1 FROM freak_physical_validations v WHERE v.campaign=r.campaign AND v.person=s.person) AS validated,EXISTS(SELECT 1 FROM freak_rewards w WHERE w.campaign=r.campaign AND w.owner=s.person) AS claimed,EXISTS(SELECT 1 FROM freak_rewards w WHERE w.campaign=r.campaign AND w.owner=s.person AND w.delivered_at IS NOT NULL) AS delivered,(SELECT count(*)::int FROM freak_poster_visits v WHERE v.campaign=r.campaign AND v.poster_id=r.id) AS scans,p.display_name,p.phone,s.created_at AS saved_at FROM freak_rewards r LEFT JOIN freak_poster_locations l ON l.campaign=r.campaign AND l.poster_id=r.id LEFT JOIN freak_poster_reservations s ON s.campaign=r.campaign AND s.poster_id=r.id LEFT JOIN freak_people p ON p.id=s.person WHERE r.campaign=$1 ORDER BY r.id`,[campaign])).rows;
  const daily=(await q(`SELECT (created_at AT TIME ZONE 'America/Mexico_City')::date::text AS day,poster_id,count(*)::int AS opens,count(DISTINCT visit)::int AS sessions FROM freak_poster_open_events WHERE campaign=$1 GROUP BY 1,2 ORDER BY 1 DESC,2 LIMIT 150`,[campaign])).rows;
  const hourly=(await q(`SELECT extract(hour FROM created_at AT TIME ZONE 'America/Mexico_City')::int AS hour,count(*)::int AS opens FROM freak_poster_open_events WHERE campaign=$1 GROUP BY 1 ORDER BY 1`,[campaign])).rows;
  const totals={opens:posters.reduce((n,p)=>n+p.opens,0),sessions:posters.reduce((n,p)=>n+p.scans,0),saved:reservations.length,attempts:posters.reduce((n,p)=>n+p.attempts,0),occupied:posters.reduce((n,p)=>n+p.occupied_attempts,0),validated:posters.filter(p=>p.validated).length,claimed:posters.filter(p=>p.claimed).length,delivered:posters.filter(p=>p.delivered).length};
- return json({prizes,validations,reservations,posters:posters.map(p=>({...p,resetKey:posterResetKey(p)})),analytics:{totals,daily,hourly,timezone:'America/Mexico_City'}});
+ return json({prizes:prizes.map(p=>({...p,admin_assignable:adminAssignable(p)})),validations,reservations:reservations.map(r=>{const {person,...safe}=r;return {...safe,reservationKey:reservationKey(r)};}),posters:posters.map(p=>({...p,resetKey:posterResetKey(p)})),analytics:{totals,daily,hourly,timezone:'America/Mexico_City'}});
  }
  if(op==='admin-scan-history'&&!write){
  const {p,from,to,snapshot:givenSnapshot}=analyticsFilters(req),poster=p.get('poster')||null,legacyBefore=p.get('before')||null;

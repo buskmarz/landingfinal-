@@ -26,8 +26,8 @@ export async function resetPosterTest({req,body,db,campaign,admin,json}){
   if(!reservation)fail(409,'Este QR ya está disponible. Actualiza el panel.');
   const person=(await client.query('SELECT display_name,phone FROM freak_people WHERE campaign=$1 AND id=$2',[campaign,reservation.person])).rows[0];
   const validated=(await client.query('SELECT person FROM freak_physical_validations WHERE campaign=$1 AND person=$2',[campaign,reservation.person])).rowCount>0;
-  const wins=(await client.query('SELECT id,delivered_at FROM freak_rewards WHERE campaign=$1 AND owner=$2',[campaign,reservation.person])).rows;
-  if(validated||wins.length||reward.owner||reward.delivered_at)fail(409,'Ya hay puntos validados o un premio confirmado. No se puede borrar como prueba.');
+  const wins=(await client.query('SELECT id,delivered_at FROM freak_rewards WHERE campaign=$1 AND (owner=$2 OR reserved_for=$2)',[campaign,reservation.person])).rows;
+  if(validated||wins.length||reward.owner||reward.reserved_for||reward.delivered_at)fail(409,'Ya hay puntos validados o un premio confirmado. No se puede borrar como prueba.');
   const state={id:body.id,saved_at:reservation.created_at,display_name:person?.display_name??null,phone:person?.phone??null,opens:snapshot.freak_poster_open_events.length,scans:snapshot.freak_poster_visits.length,attempts:snapshot.freak_poster_save_events.length,validated,claimed:wins.length>0,delivered:wins.some(r=>r.delivered_at!==null)};
   if(posterResetKey(state)!==body.resetKey)fail(409,'El registro cambió. Actualiza y revisa antes de borrar.');
   snapshot.registration=person;

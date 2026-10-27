@@ -91,3 +91,32 @@ test('validated participants and confirmed prizes cannot be cleared as tests',as
  assert.deepEqual(await rows('freak_poster_reservations'),before);
  assert.equal((await db.pool.query('SELECT * FROM freak_reset_audit')).rowCount,1);
 });
+
+test('admin can reserve ordinary rewards for saved QR owners; others cannot claim them and physical points remain required',async()=>{
+ await db.pool.query("UPDATE freak_rewards SET title='5 chilaquiles' WHERE campaign='prueba' AND id='4'");
+ await db.pool.query("UPDATE freak_rewards SET title='Hongo maitake Commons' WHERE campaign='prueba' AND id='5'");
+ await db.pool.query("UPDATE freak_rewards SET title='1 vape' WHERE campaign='prueba' AND id='2'");
+ const first=await panel(),r4=first.reservations.find(r=>r.poster_id==='4'),r5=first.reservations.find(r=>r.poster_id==='5');
+ const assign={poster_id:'4',id:'4',reservationKey:r4.reservationKey,confirmed:true};
+ assert.equal((await request('admin-reserve-prize',assign,'4')).status,401);
+ assert.equal((await request('admin-reserve-prize',{...assign,reservationKey:r5.reservationKey})).status,409);
+ assert.equal((await request('admin-reserve-prize',{...assign,id:'2'})).status,400);
+ const events=await rows('freak_poster_open_events'),tickets=await rows('freak_ticket_open_events');
+ assert.equal((await request('admin-reserve-prize',assign)).status,200);
+ assert.equal((await request('admin-reserve-prize',assign)).status,200);
+ const own=await request('rewards',undefined,'4'),other=await request('rewards',undefined,'5'),pub=await request('rewards',undefined,'');
+ assert.equal(own.held.id,'4');assert.equal(own.mine??null,null);assert.equal(own.validation,null);
+ assert.equal(other.prizes.find(p=>p.id==='4').taken,true);assert.equal(pub.prizes.find(p=>p.id==='4').reserved,true);
+ assert.equal(pub.held,null);assert.ok(!JSON.stringify(pub).includes('Persona ficticia'));
+ assert.equal((await request('reward-claim',{id:'4'},'4')).status,403);
+ const p=(await panel()).posters.find(p=>p.id==='4');assert.equal((await request('admin-reset-poster-test',body(p))).status,409);
+ assert.equal((await request('admin-validate-points',{name:'Persona ficticia F',phone:'2220000005',normal:10,special:0,marked:true})).status,200);
+ assert.equal((await request('reward-claim',{id:'4'},'5')).status,409);
+ assert.equal((await request('admin-reserve-prize',{poster_id:'5',id:'4',reservationKey:r5.reservationKey,confirmed:true})).status,409);
+ assert.equal((await request('admin-reserve-prize',{poster_id:'5',id:'5',reservationKey:r5.reservationKey,confirmed:true})).status,200);
+ assert.equal((await request('reward-claim',{id:'1'},'5')).status,409);
+ assert.equal((await request('admin-validate-points',{name:'Persona ficticia E',phone:'2220000004',normal:10,special:0,marked:true})).status,200);
+ assert.equal((await request('reward-claim',{id:'4'},'4')).status,200);
+ assert.equal((await request('admin-deliver-reward',{id:'4'})).status,200);
+ assert.deepEqual(await rows('freak_poster_open_events'),events);assert.deepEqual(await rows('freak_ticket_open_events'),tickets);
+});

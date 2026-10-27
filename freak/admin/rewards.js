@@ -11,11 +11,11 @@ function clearDesk(){lastCode='';$('#code').textContent='';$('#code-card').hidde
 async function load(){
  if(loading)return;loading=true;$('#refresh').disabled=true;$('#login button').disabled=true;
  try{const d=await api('admin-rewards');$('#login').hidden=true;$('#desk').hidden=false;
- $('#prizes').innerHTML=d.prizes.map(p=>`<article class="prize ${p.claimed_at?'taken':''}"><small>${p.delivered_at?'ENTREGADO':p.claimed_at?'POR ENTREGAR':'DISPONIBLE'}</small><h3>${esc(p.title)}</h3><p>${p.claimed_at?esc(p.display_name)+' · '+esc(phoneLabel(p.phone)):'Sin reservar'}</p>${p.claimed_at&&!p.delivered_at?`<button data-deliver="${esc(p.id)}">Registrar entrega</button>`:''}</article>`).join('')||'<p>No hay premios configurados.</p>';
+ $('#prizes').innerHTML=d.prizes.map(p=>`<article class="prize ${p.claimed_at?'taken':''}"><small>${p.delivered_at?'ENTREGADO':p.claimed_at?'POR ENTREGAR':p.reserved_at?'APARTADO':'DISPONIBLE'}</small><h3>${esc(p.title)}</h3><p>${(p.claimed_at||p.reserved_at)?esc(p.display_name)+' · '+esc(phoneLabel(p.phone)):'Sin reservar'}</p>${p.claimed_at&&!p.delivered_at?`<button data-deliver="${esc(p.id)}">Registrar entrega</button>`:''}</article>`).join('')||'<p>No hay premios configurados.</p>';
  const totals=d.analytics?.totals||{};const metrics=[['Aperturas QR premio',totals.opens],['Sesiones por QR',totals.sessions],['QR guardados',totals.saved],['Intentos con cuenta',totals.attempts],['Intentos QR ocupado',totals.occupied],['10 puntos',totals.validated],['Confirmados',totals.claimed],['Entregados',totals.delivered]];
  $('#analytics').innerHTML='<div class="analytics-grid">'+metrics.map(([label,value])=>`<div><strong>${esc(value||0)}</strong><small>${label}</small></div>`).join('')+'</div>'+`<p class="fine-print">Guardados / sesiones: ${totals.sessions?Math.round(totals.saved/totals.sessions*100)+'%':'Sin datos'} · Canjes / QR guardados: ${totals.saved?Math.round(totals.claimed/totals.saved*100)+'%':'Sin datos'}</p>`;
  $('#analytics-dates').innerHTML='<p>Hora de Puebla. Aperturas desde esta actualización.</p><table class="analytics-table"><thead><tr><th>Fecha</th><th>QR</th><th>Aperturas</th><th>Sesiones del día</th></tr></thead><tbody>'+(d.analytics?.daily||[]).map(v=>`<tr><td>${esc(v.day)}</td><td>${esc(v.poster_id)}</td><td>${v.opens}</td><td>${v.sessions}</td></tr>`).join('')+'</tbody></table><h3>Por hora</h3><table class="analytics-table"><tbody>'+(d.analytics?.hourly||[]).map(v=>`<tr><td>${v.hour}:00</td><td>${v.opens} aperturas</td></tr>`).join('')+'</tbody></table>';
- $('#posters').innerHTML=(d.posters||[]).map(p=>`<article class="poster-admin"><h3>QR ${esc(p.id)}</h3><p>${p.opens} aperturas · ${p.scans} sesiones · ${p.occupied_attempts} intentos con QR ocupado · ${p.saved_at?'Guardado · '+esc(stamp(p.saved_at)):'Disponible'}</p>${p.saved_at?`<p>${esc(p.display_name)} · ${esc(phoneLabel(p.phone))}</p>`:''}<form data-location="${esc(p.id)}"><label>Ubicación / coordenadas<input name="location" maxlength="240" value="${esc(p.location)}" placeholder="Ej. poste frente a… o latitud, longitud"></label><button class="secondary">Guardar ubicación</button></form>${posterTestControls(p)}</article>`).join('');
+ $('#posters').innerHTML=(d.posters||[]).map(p=>`<article class="poster-admin"><h3>QR ${esc(p.id)}</h3><p>${p.opens} aperturas · ${p.scans} sesiones · ${p.occupied_attempts} intentos con QR ocupado · ${p.saved_at?'Guardado · '+esc(stamp(p.saved_at)):'Disponible'}</p>${p.saved_at?`<p>${esc(p.display_name)} · ${esc(phoneLabel(p.phone))}</p>`:''}<form data-location="${esc(p.id)}"><label>Ubicación / coordenadas<input name="location" maxlength="240" value="${esc(p.location)}" placeholder="Ej. poste frente a… o latitud, longitud"></label><button class="secondary">Guardar ubicación</button></form>${posterPrizeControls(p,d)}${d.prizes.some(r=>r.reserved_at&&r.phone===p.phone)?'':posterTestControls(p)}</article>`).join('');
  $('#reservations').innerHTML=(d.reservations||[]).map(r=>`<p><strong>QR ${esc(r.poster_id)}</strong> · ${esc(r.display_name)} · ${esc(phoneLabel(r.phone))} · ${esc(stamp(r.created_at))}</p>`).join('')||'<p>Ningún QR guardado.</p>';
  $('#validations').innerHTML=d.validations.map(v=>`<article class="validation-row"><p><strong>${esc(v.display_name)}</strong> · ${esc(phoneLabel(v.phone))} · ${v.normal_count+v.special_count*2} puntos validados</p>${v.has_prize?'<small>Premio confirmado</small>':`<button class="secondary" data-reissue-phone="${esc(phoneLabel(v.phone))}" data-reissue-name="${esc(v.display_name)}">Reemitir código</button><div data-reissue-options hidden><p>El código anterior dejará de funcionar.</p><button data-reissue-confirm>Confirmar reemisión</button><button class="secondary" data-reissue-cancel>Cancelar</button></div>`}</article>`).join('')||'<p>Todavía no hay validaciones.</p>';await loadHistory(true);await loadTicket(true);return true;
  }catch(error){if(error.status===401)clearDesk();notice(error.message);return false;}finally{loading=false;$('#refresh').disabled=false;$('#login button').disabled=false;}
@@ -115,6 +115,25 @@ function posterTestControls(p){
  if(!p.saved_at||p.validated||p.claimed||p.delivered)return '';
  return `<details><summary>Borrar prueba de este QR</summary><p>Libera el QR ${esc(p.id)} y borra solo su registro y estadísticas. Conserva un respaldo.</p><form data-reset-poster="${esc(p.id)}" data-reset-key="${esc(p.resetKey)}"><label>Para confirmar, escribe BORRAR PRUEBA QR ${esc(p.id)}<input name="confirm" required autocomplete="off" pattern="BORRAR PRUEBA QR ${esc(p.id)}"></label><button class="secondary">Borrar prueba y liberar QR ${esc(p.id)}</button></form></details>`;
 }
+
+function posterPrizeControls(p,d){
+ const saved=d.reservations?.find(r=>r.poster_id===p.id);
+ if(!saved||p.claimed)return '';
+ const held=d.prizes.find(r=>r.reserved_at&&r.phone===p.phone);
+ if(held)return `<p><strong>Apartado: ${esc(held.title)}</strong></p><small>La entrega requiere 10 puntos validados.</small>`;
+ const choices=d.prizes.filter(r=>r.admin_assignable&&!r.claimed_at&&!r.reserved_at);
+ if(!choices.length)return '<p>No hay premios asignables disponibles.</p>';
+ return `<form data-assign-poster="${esc(p.id)}" data-reservation-key="${esc(saved.reservationKey)}"><label>Asignar premio<select name="prize" required><option value="">Elige un premio</option>${choices.map(r=>`<option value="${esc(r.id)}">${esc(r.title)}</option>`).join('')}</select></label><button>Apartar premio</button><small>Quedará reservado para esta persona. La entrega requiere 10 puntos.</small></form>`;
+}
+let assigningPrize=false;
+$('#posters').addEventListener('submit',async event=>{
+ const form=event.target.closest('[data-assign-poster]');if(!form)return;
+ event.preventDefault();if(assigningPrize)return;assigningPrize=true;
+ const button=form.querySelector('button');button.disabled=true;
+ try{await api('admin-reserve-prize',{poster_id:form.dataset.assignPoster,id:new FormData(form).get('prize'),reservationKey:form.dataset.reservationKey,confirmed:true});await load();notice('Premio apartado. Ya no está disponible para los demás.');}
+ catch(error){notice(error.message);if(error.status===401)clearDesk();}
+ finally{assigningPrize=false;if(button.isConnected)button.disabled=false;}
+});
 
 let resettingPoster=false;
 $('#posters').addEventListener('submit',async event=>{
