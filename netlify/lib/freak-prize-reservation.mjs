@@ -2,7 +2,7 @@ import {createHash} from 'node:crypto';
 const fail=(status,message)=>{throw Object.assign(Error(message),{status,code:'rewards'})};
 export const reservationKey=r=>createHash('sha256').update(JSON.stringify([r.poster_id,r.person,r.created_at])).digest('hex');
 // Only the campaign's ordinary coffee, food and edible maitake rewards can be assigned here.
-const ordinaryRewards=new Map([['1','1 americano diario durante 2026'],['4','5 chilaquiles'],['5','Hongo maitake Commons']]);
+const ordinaryRewards=new Map([['1','1 americano diario durante 2026'],['3','2 Tugo y 2 gomitas · Kit Necte'],['4','5 chilaquiles'],['5','Hongo maitake Commons']]);
 export const adminAssignable=p=>ordinaryRewards.get(p.id)===p.title;
 export async function reservePrize({req,body,db,campaign,admin,json}){
  if(req.method!=='POST')fail(405,'Usa el formulario de asignación.');
