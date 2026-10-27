@@ -1,3 +1,4 @@
+import {posterResetKey} from './freak-poster-reset.mjs';
 import {createHash,randomBytes} from 'node:crypto';
 import {normalizePhone,normalizeName} from './freak-phone.mjs';
 import {analyticsFilters,decodeAnalyticsCursor,analyticsPage,analyticsTimezone} from './freak-analytics.mjs';
@@ -65,7 +66,7 @@ export async function rewardsAction({req,op,body,q,db,campaign,person,json,admin
  const daily=(await q(`SELECT (created_at AT TIME ZONE 'America/Mexico_City')::date::text AS day,poster_id,count(*)::int AS opens,count(DISTINCT visit)::int AS sessions FROM freak_poster_open_events WHERE campaign=$1 GROUP BY 1,2 ORDER BY 1 DESC,2 LIMIT 150`,[campaign])).rows;
  const hourly=(await q(`SELECT extract(hour FROM created_at AT TIME ZONE 'America/Mexico_City')::int AS hour,count(*)::int AS opens FROM freak_poster_open_events WHERE campaign=$1 GROUP BY 1 ORDER BY 1`,[campaign])).rows;
  const totals={opens:posters.reduce((n,p)=>n+p.opens,0),sessions:posters.reduce((n,p)=>n+p.scans,0),saved:reservations.length,attempts:posters.reduce((n,p)=>n+p.attempts,0),occupied:posters.reduce((n,p)=>n+p.occupied_attempts,0),validated:posters.filter(p=>p.validated).length,claimed:posters.filter(p=>p.claimed).length,delivered:posters.filter(p=>p.delivered).length};
- return json({prizes,validations,reservations,posters,analytics:{totals,daily,hourly,timezone:'America/Mexico_City'}});
+ return json({prizes,validations,reservations,posters:posters.map(p=>({...p,resetKey:posterResetKey(p)})),analytics:{totals,daily,hourly,timezone:'America/Mexico_City'}});
  }
  if(op==='admin-scan-history'&&!write){
  const {p,from,to,snapshot:givenSnapshot}=analyticsFilters(req),poster=p.get('poster')||null,legacyBefore=p.get('before')||null;

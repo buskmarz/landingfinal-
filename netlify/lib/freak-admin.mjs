@@ -1,3 +1,4 @@
+import {resetPosterTest} from './freak-poster-reset.mjs';
 import {resetPersonPin} from './freak-pin.mjs';
 import {ticketAnalytics} from './freak-ticket-analytics.mjs';
 import {rewardsAction} from './freak-rewards.mjs';
@@ -24,6 +25,7 @@ export async function adminAction({req,op,body,q,db,campaign,json}){
  }
  const admin=raw&&/^[A-Za-z0-9_-]{43}$/.test(raw)?(await q('SELECT admin FROM freak_admin_sessions WHERE token_hash=$1 AND expires_at>now()',[hash(raw)])).rows[0]:null;
  if(!admin)fail(401,'Entra con tu clave de administración.');
+ if(op==='admin-reset-poster-test')return await resetPosterTest({req,body,db,campaign,admin,json});
  if(op==='admin-reset-prize-tests'){
  if(!write)fail(405,'Usa el formulario de reinicio.');
  if(body.confirm!==`REINICIAR PREMIOS ${campaign}`)fail(400,'Confirma el reinicio exclusivo de premios.');
