@@ -139,15 +139,15 @@ function render() {
   renderDiscovery();
   $('#discovery-action').textContent = isQrPage ? state.reservation ? 'Mi QR guardado' : poster ? 'Guardar mi QR' : 'Consultar mi QR' : 'Dónde buscar';
   $('#discovery-action').href = isQrPage ? '#account' : '#zona-busqueda';
-  const available = state.prizes.filter(p => !p.taken).length;
-  $('#prize-status').textContent = state.prizes.length === 0 ? 'Los premios aún no están disponibles. Consulta al equipo en barra.' : available === 0 ? 'Todos los premios ya fueron elegidos.' : available === 1 ? 'Queda 1 premio disponible.' : `${available} premios disponibles.`;
+  const available = state.prizes.filter(p => !p.taken && !p.reserved).length;
+  $('#prize-status').textContent = state.prizes.length === 0 ? 'Los premios aún no están disponibles. Consulta al equipo en barra.' : available === 0 ? 'No hay premios disponibles.' : available === 1 ? 'Queda 1 premio disponible.' : `${available} premios disponibles.`;
   const nextPrizeKey=JSON.stringify([state.prizes,selected,!!state.mine,busy]);
   if(nextPrizeKey!==prizeRenderKey){prizeRenderKey=nextPrizeKey;
-  $('#prizes').innerHTML = state.prizes.map(p => `<article class="prize ${p.taken ? 'taken' : ''} ${p.id === selected ? 'selected' : ''}"><small>${p.taken ? 'YA ELEGIDO' : p.id === selected ? 'TU SELECCIÓN · SIN RESERVAR' : 'DISPONIBLE'}</small><h3>${escape(p.title)}</h3><button data-prize="${escape(p.id)}" aria-label="${p.taken ? 'Ya elegido' : 'Elegir'}: ${escape(p.title)}" aria-pressed="${p.id === selected}" ${p.taken || state.mine || busy ? 'disabled' : ''}>${p.taken ? 'Ya elegido' : p.id === selected ? 'Seleccionado' : 'Elegir premio'}</button></article>`).join('');
+  $('#prizes').innerHTML = state.prizes.map(p => `<article class="prize ${p.taken ? 'taken' : ''} ${p.id === selected ? 'selected' : ''}"><small>${p.reserved_for_me ? 'APARTADO PARA TI' : p.reserved && p.taken ? 'APARTADO' : p.taken ? 'YA ELEGIDO' : p.id === selected ? 'TU SELECCIÓN · SIN RESERVAR' : 'DISPONIBLE'}</small><h3>${escape(p.title)}</h3><button data-prize="${escape(p.id)}" aria-label="${p.reserved && p.taken ? 'Apartado' : p.taken ? 'Ya elegido' : 'Elegir'}: ${escape(p.title)}" aria-pressed="${p.id === selected}" ${p.taken || state.mine || (state.held && state.held.id !== p.id) || busy ? 'disabled' : ''}>${p.reserved_for_me ? 'Confirmar mi premio' : p.reserved && p.taken ? 'Apartado' : p.taken ? 'Ya elegido' : p.id === selected ? 'Seleccionado' : 'Elegir premio'}</button></article>`).join('');
   }
   $('#claim-form').hidden = !selected || !state.person || !!state.mine;
   if (selected) $('#selection').textContent = 'Elegiste: ' + state.prizes.find(p => p.id === selected).title;
-  const key = state.mine ? `mine:${state.mine.id}:${!!state.mine.delivered_at}` : state.person ? `person:${state.person.name}:${state.validation?.points || 0}:${!!state.reservation}:${!!selected}` : 'guest';
+  const key = state.mine ? `mine:${state.mine.id}:${!!state.mine.delivered_at}` : state.person ? `person:${state.person.name}:${state.validation?.points || 0}:${!!state.reservation}:${state.held?.id||''}:${!!selected}` : 'guest';
   // Polling updates availability without replacing an active form or its inputs.
   if (accessKey === key) return;
   accessKey = key;
@@ -169,7 +169,8 @@ function render() {
   }
   if (state.person && !state.mine) {
  const card = document.createElement('div'); card.className = 'account-card';
- if (state.reservation) card.innerHTML = '<h3>¡QR guardado!</h3><p>Solo tuyo. Junta 10 puntos y trae tus stickers.</p>';
+ if (state.held) card.innerHTML = '<h3>Premio apartado</h3><p>'+escape(state.held.title)+'</p><p>Completa 10 puntos y trae tus stickers para validarlos.</p>';
+ else if (state.reservation) card.innerHTML = '<h3>¡QR guardado!</h3><p>Solo tuyo. Junta 10 puntos y trae tus stickers.</p>';
  else if (poster) { const button=document.createElement('button');button.textContent='Guardar mi QR';button.onclick=savePoster;card.append(button); }
  else card.textContent='Encuentra uno de los cinco QR para guardarlo.';
  $('#account').append(card);

@@ -21,3 +21,10 @@ body.admin-dashboard{--yellow:#ffde00;--ink:#231f20;--paper:#ffde00;--line:#231f
 .admin-dashboard .access-recovery form{max-width:660px}.admin-dashboard .pin-card{max-width:660px;margin:20px 0 0;background:var(--ink);color:var(--yellow);padding:24px;border-radius:8px}.admin-dashboard .pin-card p{font-size:12px;margin-top:0}.admin-dashboard #pin-value{display:block;font-size:32px;line-height:1.3;font-weight:700;letter-spacing:.16em;overflow-wrap:anywhere;margin:14px 0}.admin-dashboard .pin-card button{background:var(--yellow);color:var(--ink);margin:4px 0 12px}.admin-dashboard .pin-card small{color:var(--yellow);font-size:11px}.admin-dashboard .points-section>.access-recovery{margin-top:0}
 
 .admin-dashboard .dashboard-nav .nav-prizes{background:var(--ink);color:var(--yellow);border-radius:6px;font-weight:800}.admin-dashboard #premios .section-heading h2{font-size:clamp(32px,4vw,44px)}
+
+/* Assignment controls stay readable and touch-friendly inside each QR card. */
+.admin-dashboard form[data-assign-poster]{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;margin-top:18px}
+.admin-dashboard form[data-assign-poster] label{display:grid;gap:8px}
+.admin-dashboard form[data-assign-poster] select{width:100%;min-width:0;min-height:48px;padding:12px;border:1px solid #948100;border-radius:6px;background:#ffe76a;color:#231f20;font:inherit;font-size:14px;touch-action:manipulation}
+.admin-dashboard form[data-assign-poster] select:focus-visible{outline:3px solid #231f20;outline-offset:3px}
+.admin-dashboard form[data-assign-poster] small{grid-column:1/-1}

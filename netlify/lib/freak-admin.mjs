@@ -1,3 +1,4 @@
+import {reservePrize} from './freak-prize-reservation.mjs';
 import {resetPosterTest} from './freak-poster-reset.mjs';
 import {resetPersonPin} from './freak-pin.mjs';
 import {ticketAnalytics} from './freak-ticket-analytics.mjs';
@@ -25,6 +26,7 @@ export async function adminAction({req,op,body,q,db,campaign,json}){
  }
  const admin=raw&&/^[A-Za-z0-9_-]{43}$/.test(raw)?(await q('SELECT admin FROM freak_admin_sessions WHERE token_hash=$1 AND expires_at>now()',[hash(raw)])).rows[0]:null;
  if(!admin)fail(401,'Entra con tu clave de administración.');
+ if(op==='admin-reserve-prize')return await reservePrize({req,body,db,campaign,admin,json});
  if(op==='admin-reset-poster-test')return await resetPosterTest({req,body,db,campaign,admin,json});
  if(op==='admin-reset-prize-tests'){
  if(!write)fail(405,'Usa el formulario de reinicio.');
@@ -35,7 +37,7 @@ export async function adminAction({req,op,body,q,db,campaign,json}){
  await client.query('LOCK TABLE freak_rewards,freak_poster_reservations,freak_poster_visits,freak_poster_open_events,freak_poster_save_events IN ACCESS EXCLUSIVE MODE');
  const snapshot={scope:'prize-qr-tests',rewards:(await client.query('SELECT * FROM freak_rewards WHERE campaign=$1 ORDER BY id',[campaign])).rows};
  for(const table of ['freak_poster_reservations','freak_poster_visits','freak_poster_open_events','freak_poster_save_events'])snapshot[table]=(await client.query('SELECT * FROM '+table+' WHERE campaign=$1',[campaign])).rows;
- if(snapshot.rewards.some(r=>r.owner||r.delivered_at))fail(409,'Hay premios confirmados. Revisa antes de reiniciar.');
+ if(snapshot.rewards.some(r=>r.owner||r.reserved_for||r.delivered_at))fail(409,'Hay premios confirmados. Revisa antes de reiniciar.');
  await client.query('INSERT INTO freak_reset_audit(campaign,number,admin,snapshot) VALUES($1,NULL,$2,$3)',[campaign,admin.admin,JSON.stringify(snapshot)]);
  for(const table of ['freak_poster_save_events','freak_poster_open_events','freak_poster_visits','freak_poster_reservations'])await client.query('DELETE FROM '+table+' WHERE campaign=$1',[campaign]);
  await client.query('COMMIT');return json({ok:true,scope:'prize-qr-tests',qr:snapshot.rewards.length,archivedOpens:snapshot.freak_poster_open_events.length});
