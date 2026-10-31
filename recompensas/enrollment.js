@@ -45,26 +45,29 @@ export async function initEnrollment({ root, setStatus, onSession, onMode, resto
   } catch (error) { setStatus(error.message || 'Servicio temporalmente no disponible.', 'error'); return; }
 
   const heading = root.querySelector('#lookup-title');
-  if (heading) heading.textContent = 'Tu cuenta Better Mood';
+  if (heading) heading.textContent = 'Tu cuenta Rewards';
   const headingText = heading?.parentElement.querySelector('p');
   if (headingText) headingText.textContent = 'Recibe un código en tu correo para continuar.';
-  const intro = root.querySelector('.rewards-hero__intro > p');
-  if (intro) intro.textContent = 'Tu cashback, tus sellos y tu tarjeta en un solo lugar.';
-  const sheet = document.createElement('link'); sheet.rel = 'stylesheet'; sheet.href = '/recompensas/enrollment.css'; document.head.append(sheet);
+  const sheet = document.createElement('link'); sheet.rel = 'stylesheet'; sheet.href = '/recompensas/enrollment.css?v=20261030-rewards'; document.head.append(sheet);
   mount.innerHTML = `
     <form class="enrollment-form" data-enrollment-form>
       <fieldset class="enrollment-modes"><legend class="enrollment-sr">Acceso a tu cuenta</legend>
-        <label><input type="radio" name="mode" value="register">Crear cuenta</label>
-        <label><input type="radio" name="mode" value="login" checked>Entrar</label>
+        <label><input type="radio" name="mode" value="register"><span>Únete</span></label>
+        <label><input type="radio" name="mode" value="login" checked><span>Inicia sesión</span></label>
       </fieldset>
       <fieldset data-enrollment-fields>
         <label class="rewards-field" data-register-only><span>Nombre</span><input name="name" autocomplete="name" maxlength="100" required></label>
-        <label class="rewards-field"><span>Celular</span><input name="phone" type="tel" autocomplete="tel" placeholder="222 123 4567" maxlength="24" required></label>
-        <label class="rewards-field"><span>Correo electrónico</span><input name="email" type="email" autocomplete="email" maxlength="254" required></label>
-        <div class="enrollment-birthday" data-register-only>
-          <label class="rewards-field"><span>Día de cumpleaños</span><input name="birthdayDay" type="number" inputmode="numeric" min="1" max="31" required></label>
-          <label class="rewards-field"><span>Mes</span><select name="birthdayMonth" required><option value="">Seleccionar</option>${['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'].map((name,index)=>`<option value="${index+1}">${name}</option>`).join('')}</select></label>
+        <div class="enrollment-phone">
+          <label class="rewards-field"><span>País / código</span><select name="countryCode" autocomplete="tel-country-code"><option value="52">México (+52)</option><option value="1">EE. UU. / Canadá (+1)</option><option value="57">Colombia (+57)</option><option value="54">Argentina (+54)</option><option value="51">Perú (+51)</option><option value="56">Chile (+56)</option><option value="34">España (+34)</option><option value="other">Otro país</option></select></label>
+          <label class="rewards-field"><span>Celular</span><input name="phone" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="10 dígitos" maxlength="24" required aria-describedby="phone-help"></label>
+          <label class="rewards-field" data-country-custom hidden><span>Código de país</span><input name="customCountryCode" type="tel" inputmode="tel" placeholder="Ej. +44" maxlength="4" disabled></label>
+          <p class="enrollment-phone-note" id="phone-help">Escribe los 10 dígitos, sin +52.</p>
         </div>
+        <label class="rewards-field"><span>Correo electrónico</span><input name="email" type="email" autocomplete="email" maxlength="254" required></label>
+        <fieldset class="enrollment-birthday" data-register-only><legend>Fecha de nacimiento <span>(opcional)</span></legend>
+          <label class="rewards-field"><span>Día</span><input name="birthdayDay" type="number" inputmode="numeric" min="1" max="31"></label>
+          <label class="rewards-field"><span>Mes</span><select name="birthdayMonth"><option value="">Seleccionar</option>${['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'].map((name,index)=>`<option value="${index+1}">${name}</option>`).join('')}</select></label><p class="enrollment-birthday-note">Solo día y mes. Puedes dejarlos en blanco.</p>
+        </fieldset>
         <label class="enrollment-check" data-register-only><input name="privacyAccepted" type="checkbox" required><span>Acepto el <a href="/aviso-privacidad.html" target="_blank" rel="noopener noreferrer">aviso de privacidad</a> para registrar mi cuenta.</span></label>
         <label class="enrollment-check" data-register-only><input name="marketingAccepted" type="checkbox"><span>Quiero recibir promociones por correo. Opcional.</span></label>
       </fieldset>
@@ -86,8 +89,43 @@ export async function initEnrollment({ root, setStatus, onSession, onMode, resto
   const signout = mount.querySelector('[data-enrollment-signout]');
   const linkAccount = mount.querySelector('[data-enrollment-link]');
   let busy = false, challengeId = '', emailProof = '', enrollment = null, mode = 'register';
+  const readBirthday = data => {
+    const dayText = String(data.get('birthdayDay') || '').trim();
+    const monthText = String(data.get('birthdayMonth') || '').trim();
+    if (!dayText && !monthText) return {birthdayDay:undefined,birthdayMonth:undefined};
+    const birthdayDay = Number(dayText), birthdayMonth = Number(monthText);
+    const date = new Date(Date.UTC(2000,birthdayMonth-1,birthdayDay));
+    if (!dayText || !monthText || !Number.isInteger(birthdayDay) || !Number.isInteger(birthdayMonth) || birthdayMonth<1 || birthdayMonth>12 || birthdayDay<1 || date.getUTCMonth()!==birthdayMonth-1 || date.getUTCDate()!==birthdayDay) throw new Error('Completa el día y mes de nacimiento, o deja ambos en blanco.');
+    return {birthdayDay,birthdayMonth};
+  };
+  const country = form.elements.countryCode;
+  const customCountry = form.elements.customCountryCode;
+  const applyCountry = () => {
+    const other = country.value === 'other';
+    mount.querySelector('[data-country-custom]').hidden = !other;
+    customCountry.disabled = !other; customCountry.required = other;
+    form.elements.phone.placeholder = country.value === '52' ? '10 dígitos' : 'Número local';
+    mount.querySelector('#phone-help').textContent = country.value === '52' ? 'Escribe los 10 dígitos, sin +52.' : 'Escribe el número sin el código de país.';
+  };
+  const readPhone = data => {
+    const prefix = String(country.value === 'other' ? data.get('customCountryCode') || '' : country.value).trim().replace(/^\+/, '');
+    let national = String(data.get('phone') || '').replace(/[\s()-]/g,'');
+    if (!/^[1-9]\d{0,2}$/.test(prefix)) throw new Error('Revisa el código de país.');
+    // Allow a complete number pasted by the user or phone autofill, without doubling its prefix.
+    if (national.startsWith('+')) {
+      if (!national.startsWith(`+${prefix}`)) throw new Error('Elige el país que corresponde a tu número.');
+      national = national.slice(prefix.length+1);
+    }
+    if (prefix === '52' && !/^\d{10}$/.test(national)) throw new Error('Escribe los 10 dígitos de tu celular.');
+    const phone = `+${prefix}${national}`;
+    if (!/^\+[1-9]\d{7,14}$/.test(phone)) throw new Error('Revisa tu número de celular.');
+    return phone;
+  };
+  country.addEventListener('change',applyCountry);
+  applyCountry();
   const applyMode = () => {
     mode = form.elements.mode.value;
+    if (heading) heading.textContent = mode === 'register' ? 'Únete a Rewards' : 'Inicia sesión';
     mount.querySelectorAll('[data-register-only]').forEach(container => {
       container.hidden = mode !== 'register';
       container.querySelectorAll('input,select').forEach(input=>input.disabled=mode!=='register');
@@ -100,6 +138,7 @@ export async function initEnrollment({ root, setStatus, onSession, onMode, resto
     linkAccount.hidden = true;
     fields.disabled = false; modeFields.disabled = false;
     form.elements.phone.readOnly = false; form.elements.email.readOnly = false;
+    country.disabled = false; customCountry.readOnly = false; applyCountry();
     codeFields.hidden = true; codeInput.disabled = true; codeInput.required = false; codeInput.value = '';
     restart.hidden = true; submit.textContent = 'Enviar código'; applyMode(); setStatus('');
   };
@@ -128,14 +167,8 @@ export async function initEnrollment({ root, setStatus, onSession, onMode, resto
     try {
       if (!challengeId) {
         const data = new FormData(form);
-        let phone = String(data.get('phone') || '').replace(/[\s()-]/g,'');
-        if (/^\d{10}$/.test(phone)) phone = `+52${phone}`;
-        if (!/^\+[1-9]\d{7,14}$/.test(phone)) throw new Error('Revisa tu teléfono e incluye el código de país.');
-        enrollment = {name:String(data.get('name')||'').trim(),phone,email:String(data.get('email')||'').trim().toLowerCase(),birthdayDay:Number(data.get('birthdayDay')),birthdayMonth:Number(data.get('birthdayMonth')),privacyAccepted:data.get('privacyAccepted')==='on',marketingAccepted:data.get('marketingAccepted')==='on'};
-        if (mode === 'register') {
-          const birthday = new Date(Date.UTC(2000,enrollment.birthdayMonth-1,enrollment.birthdayDay));
-          if (birthday.getUTCMonth()!==enrollment.birthdayMonth-1 || birthday.getUTCDate()!==enrollment.birthdayDay) throw new Error('Revisa el día y mes de cumpleaños.');
-        }
+        const phone = readPhone(data);
+        enrollment = {name:String(data.get('name')||'').trim(),phone,email:String(data.get('email')||'').trim().toLowerCase(),...readBirthday(data),privacyAccepted:data.get('privacyAccepted')==='on',marketingAccepted:data.get('marketingAccepted')==='on'};
         const result = await request('loyalty-enrollment-auth',{action:'request',email:enrollment.email});
         if (!result.challengeId) throw new Error('No se confirmó el envío del código.');
         challengeId = result.challengeId; fields.disabled = true; modeFields.disabled = true;
@@ -147,10 +180,8 @@ export async function initEnrollment({ root, setStatus, onSession, onMode, resto
         if (emailProof && mode === 'register' && !fields.disabled) {
           const data = new FormData(form);
           enrollment = {...enrollment, name:String(data.get('name')||'').trim(),
-            birthdayDay:Number(data.get('birthdayDay')), birthdayMonth:Number(data.get('birthdayMonth')),
+            ...readBirthday(data),
             privacyAccepted:data.get('privacyAccepted')==='on',marketingAccepted:data.get('marketingAccepted')==='on'};
-          const birthday = new Date(Date.UTC(2000,enrollment.birthdayMonth-1,enrollment.birthdayDay));
-          if (birthday.getUTCMonth()!==enrollment.birthdayMonth-1 || birthday.getUTCDate()!==enrollment.birthdayDay) throw new Error('Revisa el día y mes de cumpleaños.');
         }
         if (!emailProof) {
           const result = await request('loyalty-enrollment-auth',{action:'verify',challengeId,code:codeInput.value});
@@ -180,6 +211,7 @@ export async function initEnrollment({ root, setStatus, onSession, onMode, resto
     form.elements.mode.value = 'register'; applyMode();
     fields.disabled = false; modeFields.disabled = true;
     form.elements.phone.readOnly = true; form.elements.email.readOnly = true;
+    country.disabled = true; customCountry.readOnly = true;
     codeFields.hidden = true; codeInput.required = false;
     submit.textContent = 'Activar mi acceso';
     setStatus('Completa tus datos. Tu correo ya está verificado.');

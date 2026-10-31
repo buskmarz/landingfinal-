@@ -217,3 +217,6 @@ Usa la base Netlify Database existente, sin nuevos planes, servicios ni dependen
 Tarifas verificadas de Luna: $0.10/$0.50 por millón de tokens entrada/salida (https://developers.openai.com/api/docs/models/gpt-6-luna). El tope API no cubre créditos Netlify; se conservan recargas desactivadas. Servidor local detenido para impedir consumo en un segundo ledger después del traspaso.
 
 Pruebas: build integral, SEO, 77 pruebas Coffee Lab, regresión FREAK y tres pruebas servidor (70 solicitudes concurrentes con saldo previo, fallos sin reembolso, rechazo de origen/roles/tamaño/previews). Prueba SQL con SQLite para lógica; Netlify aplica sintaxis PostgreSQL de la migración en preview antes de producción. Pendiente verificación de deploy y llamada pública real; no declarar publicado solo por este documento. Preparado sobre main 75cd3c948e5979ddbcd369c645a69d9645db022c, no sobre el rediseño pendiente del checkout iCloud.
+
+## Rewards · 30 octubre 2026
+Publicación coordinada con TAREASCONTROL PR84: acceso por correo, cumpleaños opcional, selector internacional y Wallet. Portada aprobada conservada; solo se retira promoción FREAK finalizada y se nombra Rewards. No cambia Coffee Lab ni se incluyen diseños pendientes del checkout iCloud. Build integral a dist, SEO y flujos aislados Chromium/WebKit; ver docs/RECOMPENSAS-ACCESO.md.

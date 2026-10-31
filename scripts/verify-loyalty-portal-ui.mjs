@@ -3,7 +3,7 @@ import {readFile,mkdir} from 'node:fs/promises';
 import {resolve,extname} from 'node:path';
 import {chromium,webkit} from 'playwright';
 
-// Browser plugin not available. Isolated Playwright routes never contact production.
+// Automated regression fixture: isolated routes never contact production.
 const root=process.cwd();
 const evidence='/private/tmp/bmc-hybrid-portal-ui';
 await mkdir(evidence,{recursive:true});
@@ -36,7 +36,7 @@ for(const [name,engine] of Object.entries({chromium,webkit})){
       });
       await page.goto('https://bmood.test/recompensas/');
       await page.locator('[data-portal-results]:not([hidden])').waitFor();
-      assert.equal(await page.locator('[data-portal-level]').textContent(),'5% de cashback + sellos');
+      assert.equal(await page.locator('[data-portal-level]').textContent(),'Rewards · 5% + sellos');
       assert.equal(await page.locator('[data-portal-progress-title]').textContent(),'Sellos');
       assert.equal(await page.locator('[data-portal-next-amount]').textContent(),'5 de 6');
       assert.equal(await page.locator('[data-portal-next-label]').textContent(),'2 bebidas gratis disponibles');
