@@ -953,7 +953,7 @@ if (rewardsPortalRoot) {
   let verifiedEmailMode = false;
   let portalModeReady = false;
   const portalEndpoint = () => verifiedEmailMode
-    ? 'https://tareascontrol.netlify.app/api/loyalty-portal'
+    ? '/sistema/api/loyalty-portal'
     : `${API_BASE}/recompensas-consulta`;
 
   const sendPortalEvent = (eventName, cta = "rewards_portal") => {
@@ -1001,15 +1001,18 @@ if (rewardsPortalRoot) {
 
   const setPortalStatus = (message, tone = "neutral") => {
     if (!portalStatus) return;
-    portalStatus.textContent = message;
+    portalStatus.textContent = portalResults?.hidden ? message : "";
     portalStatus.style.color =
       tone === "error" ? "#a6322c" : tone === "success" ? "#2f6b3a" : "rgba(35, 31, 32, 0.72)";
+    const walletStatus = rewardsPortalRoot.querySelector('[data-wallet-status]');
+    if (walletStatus) { walletStatus.textContent = portalResults?.hidden ? "" : message; walletStatus.style.color = portalStatus.style.color; }
   };
 
   const clearPortalSession = () => {
     portalSessionRevision += 1;
     currentPortalToken = "";
     window.localStorage.removeItem(PORTAL_STORAGE_KEY);
+    window.sessionStorage.removeItem(PORTAL_STORAGE_KEY);
     portalResults?.setAttribute("hidden", "hidden");
     portalReset?.setAttribute("hidden", "hidden");
     portalWallet?.setAttribute("hidden", "hidden");
@@ -1057,7 +1060,7 @@ if (rewardsPortalRoot) {
     return `
       <button class="wallet-badge wallet-badge--${platform}" type="button" data-wallet-platform="${platform}" data-wallet-url="${escapeHtml(url)}" aria-label="Agregar a ${label}">
         <span class="wallet-badge__icon ${iconClass}" aria-hidden="true"><i></i><i></i><i></i></span>
-        <span class="wallet-badge__text"><small>Add to</small><strong>${label}</strong></span>
+        <span class="wallet-badge__text"><small>Agregar a</small><strong>${label}</strong></span>
       </button>
     `;
   };
@@ -1118,7 +1121,7 @@ if (rewardsPortalRoot) {
     if (portalFields.level) {
       const levelName = profile.cashbackLevelLabel || "Bronce";
       const pct = profile.cashbackPct ? `${Number(profile.cashbackPct).toFixed(2)}% de saldo` : "";
-      portalFields.level.textContent = hybrid ? "5% de cashback + sellos" : pct ? `${levelName} · ${pct}` : levelName;
+      portalFields.level.textContent = hybrid ? "Rewards · 5% + sellos" : pct ? `${levelName} · ${pct}` : levelName;
     }
     if (portalFields.balance) portalFields.balance.textContent = formatMoney(profile.availableCashbackBalance);
     if (portalFields.pending) portalFields.pending.textContent = formatMoney(profile.pendingCashbackBalance);
@@ -1160,7 +1163,8 @@ if (rewardsPortalRoot) {
     portalReset?.removeAttribute("hidden");
     if (token) {
       currentPortalToken = token;
-      if (!verifiedEmailMode) window.localStorage.setItem(PORTAL_STORAGE_KEY, token);
+      if (verifiedEmailMode) window.sessionStorage.setItem(PORTAL_STORAGE_KEY, token);
+      else window.localStorage.setItem(PORTAL_STORAGE_KEY, token);
     }
     if (!options.skipScroll) {
       window.requestAnimationFrame(() => portalResults?.scrollIntoView({ block: "start", behavior: "auto" }));
@@ -1252,13 +1256,14 @@ if (rewardsPortalRoot) {
   });
 
   rewardsPortalRoot.addEventListener('enrollment:signout', clearPortalSession);
-  import('/recompensas/enrollment.js').then(({initEnrollment}) => initEnrollment({
+  import('/recompensas/enrollment.js?v=20261030-rewards').then(({initEnrollment}) => initEnrollment({
     root: rewardsPortalRoot, setStatus: setPortalStatus,
+    restoreSession: () => loadPortalSession(window.sessionStorage.getItem(PORTAL_STORAGE_KEY), {silent:true}),
     onSession: data => renderPortalCustomer(data, data.token),
     onMode: enabled => {
       verifiedEmailMode = enabled;
       portalModeReady = true;
-      if (enabled) { clearPortalSession(); return; }
+      if (enabled) { window.localStorage.removeItem(PORTAL_STORAGE_KEY); return; }
       const token = window.localStorage.getItem(PORTAL_STORAGE_KEY);
       if (token) loadPortalSession(token, {silent:true}).then(ok=>{
         if (ok) setPortalStatus('Recuperamos tu consulta activa.', 'success');

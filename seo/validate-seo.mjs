@@ -90,8 +90,8 @@ async function validatePublicShell() {
   assert(rewards.includes('<link rel="canonical" href="https://bmoodcoffee.com/recompensas/" />'), "Rewards canonical missing");
   assert((rewards.match(/<h1\b/gi) ?? []).length === 1, "Rewards must have one H1");
   assert(
-    rewards.includes("5% de cashback + una bebida gratis al completar 6 sellos.")
-      || rewards.includes("Consulta tu saldo Better Mood."),
+    rewards.includes("5% de saldo en tus compras + una bebida al completar 6 sellos.")
+      && rewards.includes("Únete gratis") && rewards.includes("Inicia sesión"),
     "Rewards primary task is unclear"
   );
   assert(rewards.includes("/#sucursales") && home.includes('id="sucursales"'), "Rewards menu link does not reach the branch selector");

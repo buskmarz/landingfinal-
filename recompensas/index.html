@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Recompensas Better Mood | 5% de cashback y sellos</title>
+    <title>Better Mood Rewards | Tu café tiene recompensas</title>
     <meta
       name="description"
       content="Regístrate en Better Mood Coffee: recibe 5% de cashback y una bebida gratis al completar 6 sellos. Consulta tus beneficios y agrega tu tarjeta a Apple Wallet o Google Wallet."
@@ -15,7 +15,7 @@
     <meta property="og:locale" content="es_MX" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Better Mood Coffee" />
-    <meta property="og:title" content="Recompensas Better Mood | 5% de cashback y sellos" />
+    <meta property="og:title" content="Better Mood Rewards | Tu café tiene recompensas" />
     <meta
       property="og:description"
       content="Regístrate en Better Mood Coffee: recibe 5% de cashback y una bebida gratis al completar 6 sellos. Consulta tus beneficios y agrega tu tarjeta a Apple Wallet o Google Wallet."
@@ -25,7 +25,7 @@
     <meta property="og:image:alt" content="Bebidas de Better Mood Coffee servidas sobre una mesa" />
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Recompensas Better Mood | 5% de cashback y sellos" />
+    <meta name="twitter:title" content="Better Mood Rewards | Tu café tiene recompensas" />
     <meta
       name="twitter:description"
       content="Regístrate en Better Mood Coffee: recibe 5% de cashback y una bebida gratis al completar 6 sellos. Consulta tus beneficios y agrega tu tarjeta a Apple Wallet o Google Wallet."
@@ -34,7 +34,7 @@
 
     <link rel="icon" href="/assets/bettermood_logo-10.png" />
     <link rel="stylesheet" href="/home.css" />
-    <link rel="stylesheet" href="./rewards.css" />
+    <link rel="stylesheet" href="./rewards.css?v=20261030-rewards" />
     <script src="/data/site-data.js" defer></script>
     <script type="application/ld+json">
       {
@@ -44,7 +44,7 @@
             "@type": "WebPage",
             "@id": "https://bmoodcoffee.com/recompensas/#webpage",
             "url": "https://bmoodcoffee.com/recompensas/",
-            "name": "Recompensas Better Mood | 5% de cashback y sellos",
+            "name": "Better Mood Rewards | Tu café tiene recompensas",
             "description": "Regístrate en Better Mood Coffee, acumula 5% de cashback y una bebida gratis al completar 6 sellos. Consulta tus beneficios y revisa las opciones de Wallet.",
             "inLanguage": "es-MX",
             "isPartOf": { "@id": "https://bmoodcoffee.com/#organization" }
@@ -54,7 +54,7 @@
             "@id": "https://bmoodcoffee.com/recompensas/#breadcrumb",
             "itemListElement": [
               { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://bmoodcoffee.com/" },
-              { "@type": "ListItem", "position": 2, "name": "Recompensas", "item": "https://bmoodcoffee.com/recompensas/" }
+              { "@type": "ListItem", "position": 2, "name": "Rewards", "item": "https://bmoodcoffee.com/recompensas/" }
             ]
           },
           {
@@ -64,7 +64,7 @@
               {
                 "@type": "Question",
                 "name": "¿Cómo me registro?",
-                "acceptedAnswer": { "@type": "Answer", "text": "Regístrate con tu nombre, teléfono, correo y día y mes de cumpleaños. Verifica tu correo para abrir tu cuenta de beneficios." }
+                "acceptedAnswer": { "@type": "Answer", "text": "Únete con nombre, celular y correo. Verifica el código que recibirás por correo. Tu fecha de nacimiento es opcional." }
               },
               {
                 "@type": "Question",
@@ -116,8 +116,8 @@
         class="button button--primary header-cta"
         href="#rewards-lookup"
         data-event="click_rewards_check_balance"
-        data-cta="header-consultar-saldo"
-      >Consultar saldo</a>
+        data-cta="header-consultar-saldo" data-enrollment-mode="login"
+      >Inicia sesión</a>
     </header>
 
     <main id="contenido">
@@ -128,40 +128,18 @@
         data-rewards-portal
       >
         <div class="rewards-hero__intro reveal">
-          <h1
-            id="rewards-title"
-            data-program-copy
-            data-copy-legacy="Consulta tu saldo Better Mood."
-            data-copy-hybrid="5% de cashback + una bebida gratis al completar 6 sellos."
-          >5% de cashback + una bebida gratis al completar 6 sellos.</h1>
-          <p
-            data-program-copy
-            data-copy-legacy="Ingresa tu teléfono y cumpleaños para abrir la cuenta asociada. Ahí verás tu saldo, movimientos y opciones de Wallet."
-            data-copy-hybrid="Regístrate o consulta tus beneficios: acumula 5% de cashback y un sello por visita elegible."
-          >Regístrate o consulta tus beneficios: acumula 5% de cashback y un sello por visita elegible.</p>
-          <div class="rewards-hero__actions">
-            <a
-              class="button button--primary"
-              href="#rewards-lookup"
-              data-event="click_rewards_check_balance"
-              data-cta="hero-consultar-saldo"
-            >Consultar mi saldo</a>
-            <a
-              class="button button--outline"
-              href="https://wa.me/message/WQWEEODGY6H2P1"
-              target="_blank"
-              rel="noopener noreferrer"
-              data-site-link="whatsappGeneral"
-              data-event="click_rewards_activate"
-              data-cta="hero-activar-cuenta"
-            >Activar mi cuenta</a>
+          <div class="rewards-hero__copy">
+            <p class="rewards-eyebrow">BETTER MOOD</p>
+            <h1 id="rewards-title">Rewards</h1>
+            <p class="rewards-hero__promise">Tu café tiene recompensas.</p>
+            <p class="rewards-hero__benefit" data-program-copy data-copy-legacy="Tu saldo y tu tarjeta, siempre contigo." data-copy-hybrid="5% de saldo en tus compras + una bebida al completar 6 sellos.">5% de saldo en tus compras + una bebida al completar 6 sellos.</p>
+            <div class="rewards-hero__actions">
+              <a class="button button--primary" href="#rewards-lookup" data-enrollment-mode="register" data-event="click_rewards_activate" data-cta="hero-activar-cuenta">Únete gratis</a>
+              <a class="button button--outline" href="#rewards-lookup" data-enrollment-mode="login" data-event="click_rewards_check_balance" data-cta="hero-consultar-saldo">Inicia sesión</a>
+            </div>
+            <a class="rewards-benefits-link" href="#condiciones">Conoce tus beneficios <span aria-hidden="true">↓</span></a>
           </div>
-          <p
-            class="rewards-hero__microcopy"
-            data-program-copy
-            data-copy-legacy="¿Ya estás registrado? Consulta primero."
-            data-copy-hybrid="Tu progreso y saldo se actualizan desde las compras elegibles pagadas."
-          >Tu progreso y saldo se actualizan desde las compras elegibles pagadas.</p>
+          <img class="rewards-hero__photo" src="/assets/home/hero-community.jpg" alt="Bebidas recién preparadas en Better Mood" width="1800" height="1126" fetchpriority="high" />
         </div>
 
         <article class="rewards-lookup reveal reveal--late" id="rewards-lookup" aria-labelledby="lookup-title">
@@ -234,7 +212,7 @@
         <article class="rewards-results" data-portal-results hidden aria-labelledby="results-title">
           <div class="rewards-results__head">
             <div>
-              <p class="rewards-label">Cuenta Better Mood</p>
+              <p class="rewards-label">Better Mood Rewards</p>
               <h2 id="results-title" data-portal-name>Cliente Better Mood</h2>
               <p class="rewards-muted" data-portal-phone></p>
             </div>
@@ -244,9 +222,9 @@
           <div class="rewards-wallet" data-portal-wallet hidden>
             <div>
               <p class="rewards-label">Tu tarjeta digital</p>
-              <p data-portal-wallet-note>Si está disponible para tu cuenta, elige Apple Wallet o Google Wallet.</p>
+              <p data-portal-wallet-note>Elige dónde guardar tu tarjeta. Muéstrala en caja en tu próxima visita.</p>
             </div>
-            <div class="rewards-wallet__links" data-portal-wallet-links></div>
+            <div><div class="rewards-wallet__links" data-portal-wallet-links></div><p class="rewards-wallet__status" data-wallet-status role="status" aria-live="polite"></p></div>
           </div>
 
           <div class="rewards-balances" role="group" aria-label="Resumen de saldo">
@@ -305,48 +283,35 @@
       </section>
 
       <section class="rewards-how section" id="condiciones" aria-labelledby="how-title">
-        <h2
-          id="how-title"
-          class="reveal"
-          data-program-copy
-          data-copy-legacy="Cómo funciona."
-          data-copy-hybrid="Cómo se acumulan tus beneficios."
-        >Cómo se acumulan tus beneficios.</h2>
+        <p class="rewards-eyebrow">MÁS RAZONES PARA VOLVER</p>
+        <h2 id="how-title" class="reveal">Tu café. Más beneficios.</h2>
         <div class="rewards-how__steps">
           <article class="reveal">
-            <span class="rewards-how__number">1</span>
-            <svg viewBox="0 0 48 48" aria-hidden="true"><rect x="13" y="5" width="22" height="38" rx="3"/><path d="M20 10h8M21 37h6"/></svg>
-            <div>
-              <h3 data-program-copy data-copy-legacy="Identifícate." data-copy-hybrid="Regístrate.">Identifícate.</h3>
-              <p data-program-copy data-copy-legacy="Menciona tu teléfono antes de pagar." data-copy-hybrid="Regístrate con tu nombre, teléfono, correo y cumpleaños.">Regístrate con tu nombre, teléfono, correo y cumpleaños.</p>
-            </div>
+            <svg viewBox="0 0 96 96" aria-hidden="true"><circle class="reward-icon-fill" cx="48" cy="48" r="44"/><path d="M29 30h36v43H29zM35 24h24v6M36 39h22M36 47h13M36 55h12M36 63h8"/><circle cx="67" cy="62" r="15"/><path d="M67 53v18M72 56h-7a4 4 0 0 0 0 8h4a4 4 0 0 1 0 8h-7"/></svg>
+            <h3 data-program-copy data-copy-legacy="Tu saldo a la mano" data-copy-hybrid="5% vuelve a ti">5% vuelve a ti</h3>
+            <p data-program-copy data-copy-legacy="Consulta tu saldo y úsalo en caja." data-copy-hybrid="Acumula saldo para tus próximas compras elegibles.">Acumula saldo para tus próximas compras elegibles.</p>
           </article>
           <article class="reveal reveal--late">
-            <span class="rewards-how__number">2</span>
-            <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 10h32v28H8zM14 17h20M14 24h13M14 31h17"/></svg>
-            <div>
-              <h3 data-program-copy data-copy-legacy="Consulta." data-copy-hybrid="Acumula.">Consulta.</h3>
-              <p data-program-copy data-copy-legacy="Revisa el saldo y los movimientos asociados a tu cuenta." data-copy-hybrid="Cada compra elegible genera 5% de cashback y un sello por cliente, día y sucursal.">Cada compra elegible genera 5% de cashback y un sello por cliente, día y sucursal.</p>
-            </div>
+            <svg viewBox="0 0 96 96" aria-hidden="true"><circle class="reward-icon-fill" cx="48" cy="48" r="44"/><path d="M22 39h44v18a18 18 0 0 1-18 18h-8a18 18 0 0 1-18-18zM66 43h5a10 10 0 0 1 0 20h-6M19 81h54M32 28c-8-9 9-11 1-20M48 28c-8-9 9-11 1-20"/><path d="m44 47 3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z"/></svg>
+            <h3 data-program-copy data-copy-legacy="Todo en tu cuenta" data-copy-hybrid="6 sellos, una bebida">6 sellos, una bebida</h3>
+            <p data-program-copy data-copy-legacy="Revisa tus movimientos cuando quieras." data-copy-hybrid="Un sello por día y sucursal con compra elegible. Tú eliges de la selección vigente.">Un sello por día y sucursal con compra elegible. Tú eliges de la selección vigente.</p>
           </article>
           <article class="reveal reveal--late">
-            <span class="rewards-how__number">3</span>
-            <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M7 15h34v25H7zM12 15V9h24v6M32 25h11v9H32z"/></svg>
-            <div>
-              <h3 data-program-copy data-copy-legacy="Usa tu saldo." data-copy-hybrid="Disfruta.">Usa tu saldo.</h3>
-              <p data-program-copy data-copy-legacy="Confirma en caja el monto disponible antes de pagar." data-copy-hybrid="Al completar 6 sellos obtienes una bebida gratis de la selección vigente.">Al completar 6 sellos obtienes una bebida gratis de la selección vigente.</p>
-            </div>
+            <svg viewBox="0 0 96 96" aria-hidden="true"><circle class="reward-icon-fill" cx="48" cy="48" r="44"/><rect x="28" y="14" width="40" height="68" rx="8"/><path d="M42 21h12M43 75h10"/><rect x="36" y="34" width="9" height="9"/><rect x="51" y="34" width="9" height="9"/><rect x="36" y="49" width="9" height="9"/><path d="M52 49h8v9h-4v6M50 62h-5"/></svg>
+            <h3>Tu tarjeta, contigo</h3>
+            <p>Consulta tus beneficios y guarda tu tarjeta en Apple Wallet o Google Wallet cuando esté disponible.</p>
           </article>
         </div>
+        <p class="rewards-how__note">Crea tu cuenta, muestra tu tarjeta en caja y disfruta. <a href="#faq-title">Ver condiciones</a></p>
       </section>
 
       <section class="rewards-help section" aria-labelledby="faq-title">
         <div class="rewards-help__faq reveal">
-          <h2 id="faq-title">Preguntas frecuentes.</h2>
+          <h2 id="faq-title">Lo que necesitas saber.</h2>
           <div class="rewards-faq">
             <details>
               <summary>¿Cómo me registro?<span aria-hidden="true"></span></summary>
-              <p data-program-copy data-copy-legacy="Solicita la activación por WhatsApp o en caja. El equipo confirmará los datos necesarios." data-copy-hybrid="Regístrate con tu nombre, teléfono, correo y día y mes de cumpleaños. Verifica tu correo para abrir tu cuenta.">Regístrate con tu nombre, teléfono, correo y día y mes de cumpleaños. Verifica tu correo para abrir tu cuenta.</p>
+              <p data-program-copy data-copy-legacy="Solicita la activación por WhatsApp o en caja. El equipo confirmará los datos necesarios." data-copy-hybrid="Nombre, celular y correo. Te enviaremos un código para verificar tu cuenta. La fecha de nacimiento es opcional.">Nombre, celular y correo. Te enviaremos un código para verificar tu cuenta. La fecha de nacimiento es opcional.</p>
             </details>
             <details>
               <summary>¿Cómo obtengo cashback y sellos?<span aria-hidden="true"></span></summary>
@@ -364,8 +329,8 @@
         </div>
 
         <aside class="rewards-help__activation reveal reveal--late">
-          <h2>¿Aún no tienes cuenta?</h2>
-          <p>Regístrate con tu correo y empieza a acumular 5% de cashback y sellos.</p>
+          <h2>¿Necesitas ayuda?</h2>
+          <p>Si ya tienes tarjeta, conserva tu cuenta. Te ayudamos a recuperar el acceso.</p>
           <a
             class="button button--primary"
             href="https://wa.me/message/WQWEEODGY6H2P1"
@@ -374,7 +339,7 @@
             data-site-link="whatsappGeneral"
             data-event="click_rewards_activate"
             data-cta="faq-activar-cuenta"
-          >Pedir ayuda para registrarme</a>
+          >Hablar por WhatsApp</a>
         </aside>
       </section>
     </main>
@@ -393,6 +358,6 @@
     </footer>
 
     <script src="./rewards.js" defer></script>
-    <script src="/script.js?v=20260712-site-v2" defer></script>
+    <script src="/script.js?v=20261030-rewards" defer></script>
   </body>
 </html>
