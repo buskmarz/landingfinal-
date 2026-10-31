@@ -953,7 +953,7 @@ if (rewardsPortalRoot) {
   let verifiedEmailMode = false;
   let portalModeReady = false;
   const portalEndpoint = () => verifiedEmailMode
-    ? 'https://tareascontrol.netlify.app/api/loyalty-portal'
+    ? '/sistema/api/loyalty-portal'
     : `${API_BASE}/recompensas-consulta`;
 
   const sendPortalEvent = (eventName, cta = "rewards_portal") => {
@@ -1010,6 +1010,7 @@ if (rewardsPortalRoot) {
     portalSessionRevision += 1;
     currentPortalToken = "";
     window.localStorage.removeItem(PORTAL_STORAGE_KEY);
+    window.sessionStorage.removeItem(PORTAL_STORAGE_KEY);
     portalResults?.setAttribute("hidden", "hidden");
     portalReset?.setAttribute("hidden", "hidden");
     portalWallet?.setAttribute("hidden", "hidden");
@@ -1160,7 +1161,8 @@ if (rewardsPortalRoot) {
     portalReset?.removeAttribute("hidden");
     if (token) {
       currentPortalToken = token;
-      if (!verifiedEmailMode) window.localStorage.setItem(PORTAL_STORAGE_KEY, token);
+      if (verifiedEmailMode) window.sessionStorage.setItem(PORTAL_STORAGE_KEY, token);
+      else window.localStorage.setItem(PORTAL_STORAGE_KEY, token);
     }
     if (!options.skipScroll) {
       window.requestAnimationFrame(() => portalResults?.scrollIntoView({ block: "start", behavior: "auto" }));
@@ -1252,13 +1254,14 @@ if (rewardsPortalRoot) {
   });
 
   rewardsPortalRoot.addEventListener('enrollment:signout', clearPortalSession);
-  import('/recompensas/enrollment.js').then(({initEnrollment}) => initEnrollment({
+  import('/recompensas/enrollment.js?v=20261030-access').then(({initEnrollment}) => initEnrollment({
     root: rewardsPortalRoot, setStatus: setPortalStatus,
+    restoreSession: () => loadPortalSession(window.sessionStorage.getItem(PORTAL_STORAGE_KEY), {silent:true}),
     onSession: data => renderPortalCustomer(data, data.token),
     onMode: enabled => {
       verifiedEmailMode = enabled;
       portalModeReady = true;
-      if (enabled) { clearPortalSession(); return; }
+      if (enabled) { window.localStorage.removeItem(PORTAL_STORAGE_KEY); return; }
       const token = window.localStorage.getItem(PORTAL_STORAGE_KEY);
       if (token) loadPortalSession(token, {silent:true}).then(ok=>{
         if (ok) setPortalStatus('Recuperamos tu consulta activa.', 'success');

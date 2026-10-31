@@ -1,5 +1,5 @@
 .enrollment-form, .enrollment-form fieldset { display: grid; gap: 16px; min-width: 0; margin: 0; padding: 0; border: 0; }
-.enrollment-form [hidden], [data-enrollment-root][hidden], .enrollment-pending[hidden] { display: none !important; }
+[data-enrollment-root] [hidden], [data-enrollment-root][hidden] { display: none !important; }
 .enrollment-form .enrollment-modes { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .enrollment-modes label { min-height: 44px; display: flex; align-items: center; gap: 8px; font-size: 14px; }
 .enrollment-birthday { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 12px; }

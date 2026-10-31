@@ -13,15 +13,19 @@ for(const [name,engine] of Object.entries({chromium,webkit})){
     for(const [device,viewport] of Object.entries({desktop:{width:1440,height:1000},tablet:{width:820,height:1180},mobile:{width:390,height:844}})){
       const context=await browser.newContext({viewport}),page=await context.newPage();
       const calls=[],errors=[];
+      let pendingLink=false;
       page.on('pageerror',error=>errors.push(error.message));
       await page.route('**/*',async route=>{
         const request=route.request(),url=new URL(request.url());
         if(url.pathname.includes('loyalty-enrollment-auth')){
           if(request.method()==='GET')return route.fulfill({json:{emailVerificationRequired:true,registrationAvailable:true,hybridProgramActive:true}});
           const body=request.postDataJSON();calls.push(body);
+          if(body.action==='verify'&&body.code==='000000') return route.fulfill({status:401,json:{error:'Código inválido o vencido.'}});
+          if(body.action==='register'&&pendingLink) return route.fulfill({json:{status:'staff_link_required'}});
           const responses={request:{challengeId:'isolated-challenge'},verify:{emailProof:'isolated-proof'},register:{status:'ready'}};
           return route.fulfill({json:responses[body.action]});
         }
+        if(url.pathname.endsWith('/loyalty-portal')&&pendingLink) return route.fulfill({status:409,json:{code:'account_not_linked',error:'Activa tu acceso para continuar.'}});
         if(url.pathname.endsWith('/loyalty-portal'))return route.fulfill({json:{ok:true,token:'isolated-token',customer:{customer:{name:'Registro aislado'},profile:{loyaltyProgram:'hybrid',availableCashbackBalance:0,currentProgressVisits:0,visitsPerReward:6},wallet:{passes:[]}}}});
         if(url.hostname!=='bmood.test')return route.fulfill({status:204,body:''});
         const file=resolve(root,`.${decodeURIComponent(url.pathname.endsWith('/')?`${url.pathname}index.html`:url.pathname)}`);
@@ -35,6 +39,7 @@ for(const [name,engine] of Object.entries({chromium,webkit})){
       assert.equal(await page.locator('.rewards-how__steps article').nth(1).locator('p').textContent(),'Cada compra elegible genera 5% de cashback y un sello por cliente, día y sucursal.');
       assert.equal(await page.locator('[data-portal-form]').isVisible(),false);
       assert.equal(await form.locator('[name=marketingAccepted]').isChecked(),false);
+      await form.locator('[name=mode][value=register]').check();
       await form.locator('[name=name]').fill('Registro aislado');
       await form.locator('[name=phone]').fill('222 123 4567');
       await form.locator('[name=email]').fill('isolated@example.test');
@@ -54,6 +59,10 @@ for(const [name,engine] of Object.entries({chromium,webkit})){
       assert.equal(registration.enrollment.marketingAccepted,false);
       assert.equal(calls.filter(row=>row.action==='register').length,1);
       assert.equal(await page.evaluate(()=>localStorage.getItem('bmood_rewards_portal_token')),null);
+      await page.reload();
+      await page.locator('[data-portal-results]:not([hidden])').waitFor();
+      assert.equal(await form.isVisible(),false,'Verified consultation survives reload in the same tab');
+      assert.equal(calls.filter(row=>row.action==='request').length,1,'Reload does not send another code');
       await page.locator('[data-enrollment-signout]').click();
       await form.waitFor();
       assert.equal(await page.locator('[data-portal-results]').isVisible(),false);
@@ -62,11 +71,35 @@ for(const [name,engine] of Object.entries({chromium,webkit})){
       await form.locator('[name=mode][value=login]').check();
       assert.equal(await form.locator('[name=name]').isEnabled(),false);
       assert.equal(await form.locator('[name=privacyAccepted]').isEnabled(),false);
+      pendingLink=true;
+      await form.locator('[name=phone]').fill('222 123 4567');
+      await form.locator('[name=email]').fill('existing@example.test');
+      await form.locator('[data-enrollment-submit]').click();
+      await form.locator('[name=code]:enabled').waitFor();
+      await form.locator('[name=code]').fill('000000');
+      await form.locator('[data-enrollment-submit]').click();
+      await page.getByText('Código inválido o vencido.',{exact:true}).waitFor();
+      await form.locator('[name=code]').fill('123456');
+      await form.locator('[data-enrollment-submit]').click();
+      await page.locator('[data-enrollment-link]').click();
+      await form.locator('[name=name]').fill('Cuenta anterior');
+      await form.locator('[name=birthdayDay]').fill('10');
+      await form.locator('[name=birthdayMonth]').selectOption('10');
+      await form.locator('[name=privacyAccepted]').check();
+      await form.locator('[data-enrollment-submit]').click();
+      await page.locator('[data-enrollment-pending]:not([hidden])').waitFor();
+      assert.equal(await page.locator('[data-portal-results]').isVisible(),false,'Pending linkage never exposes balances');
+      assert.equal(calls.filter(row=>row.action==='request').length,2,'Activating an existing account reuses the verified code');
+      pendingLink=false;
+      await page.locator('[data-enrollment-check]').click();
+      await page.locator('[data-portal-results]:not([hidden])').waitFor();
+      await page.locator('[data-enrollment-signout]').click();
+      assert.equal(await page.evaluate(()=>sessionStorage.getItem('bmood_rewards_portal_token')),null,'Logout clears tab session');
       assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false);
       await form.screenshot({path:`${evidence}/${name}-${device}.png`});
       assert.deepEqual(errors,[]);
       await context.close();
-      console.log(`PASS ${name}/${device}: registration, birthday, separate consent, verified session, logout and login mode`);
+      console.log(`PASS ${name}/${device}: registration, birthday, separate consent, reload, invalid code, assisted linkage, logout and login mode`);
     }
   }finally{await browser.close();}
 }
