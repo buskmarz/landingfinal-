@@ -16,12 +16,13 @@ export async function initEnrollment({ root, setStatus, onSession, onMode, resto
   };
   applyProgramCopy(false);
   const request = async (endpoint, body) => {
-    const response = await fetch(`${LOYALTY_API}/${endpoint}`, {
+    let response;
+    try { response = await fetch(`${LOYALTY_API}/${endpoint}`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body), credentials: 'omit', referrerPolicy: 'no-referrer',
       signal: AbortSignal.timeout(20000)
-    });
-    const data = await response.json();
+    }); } catch { throw new Error('No pudimos conectar. Revisa tu conexión e intenta de nuevo; conservamos tus datos.'); }
+    const data = await response.json().catch(() => ({error:'El servicio no respondió correctamente. Intenta de nuevo.'}));
     if (!response.ok) {
       const error = new Error(data.error || 'No pudimos completar la solicitud. Intenta de nuevo.');
       error.code = data.code; error.status = response.status;
@@ -48,12 +49,12 @@ export async function initEnrollment({ root, setStatus, onSession, onMode, resto
   if (heading) heading.textContent = 'Tu cuenta Rewards';
   const headingText = heading?.parentElement.querySelector('p');
   if (headingText) headingText.textContent = 'Recibe un código en tu correo para continuar.';
-  const sheet = document.createElement('link'); sheet.rel = 'stylesheet'; sheet.href = '/recompensas/enrollment.css?v=20261030-rewards'; document.head.append(sheet);
+  const sheet = document.createElement('link'); sheet.rel = 'stylesheet'; sheet.href = '/recompensas/enrollment.css?v=20261102-selfserve'; document.head.append(sheet);
   mount.innerHTML = `
     <form class="enrollment-form" data-enrollment-form>
       <fieldset class="enrollment-modes"><legend class="enrollment-sr">Acceso a tu cuenta</legend>
-        <label><input type="radio" name="mode" value="register"><span>Únete</span></label>
-        <label><input type="radio" name="mode" value="login" checked><span>Inicia sesión</span></label>
+        <label><input type="radio" name="mode" value="register" checked><span>Únete</span></label>
+        <label><input type="radio" name="mode" value="login"><span>Ya tengo cuenta</span></label>
       </fieldset>
       <fieldset data-enrollment-fields>
         <label class="rewards-field" data-register-only><span>Nombre</span><input name="name" autocomplete="name" maxlength="100" required></label>
@@ -63,19 +64,26 @@ export async function initEnrollment({ root, setStatus, onSession, onMode, resto
           <label class="rewards-field" data-country-custom hidden><span>Código de país</span><input name="customCountryCode" type="tel" inputmode="tel" placeholder="Ej. +44" maxlength="4" disabled></label>
           <p class="enrollment-phone-note" id="phone-help">Escribe los 10 dígitos, sin +52.</p>
         </div>
-        <label class="rewards-field"><span>Correo electrónico</span><input name="email" type="email" autocomplete="email" maxlength="254" required></label>
-        <fieldset class="enrollment-birthday" data-register-only><legend>Fecha de nacimiento <span>(opcional)</span></legend>
+        <label class="rewards-field"><span>Correo electrónico</span><input name="email" type="email" autocomplete="email" autocapitalize="none" spellcheck="false" maxlength="254" required></label>
+        <details data-register-only data-birthday-details><summary>Añadir cumpleaños (opcional)</summary><fieldset class="enrollment-birthday"><legend class="enrollment-sr">Cumpleaños</legend>
           <label class="rewards-field"><span>Día</span><input name="birthdayDay" type="number" inputmode="numeric" min="1" max="31"></label>
           <label class="rewards-field"><span>Mes</span><select name="birthdayMonth"><option value="">Seleccionar</option>${['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'].map((name,index)=>`<option value="${index+1}">${name}</option>`).join('')}</select></label><p class="enrollment-birthday-note">Solo día y mes. Puedes dejarlos en blanco.</p>
-        </fieldset>
+        </fieldset></details>
         <label class="enrollment-check" data-register-only><input name="privacyAccepted" type="checkbox" required><span>Acepto el <a href="/aviso-privacidad.html" target="_blank" rel="noopener noreferrer">aviso de privacidad</a> para registrar mi cuenta.</span></label>
         <label class="enrollment-check" data-register-only><input name="marketingAccepted" type="checkbox"><span>Quiero recibir promociones por correo. Opcional.</span></label>
       </fieldset>
       <div data-code-fields hidden><label class="rewards-field"><span>Código de tu correo</span><input name="code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" disabled></label><p data-code-destination></p></div>
-      <div class="enrollment-actions"><button class="button button--primary" type="submit" data-enrollment-submit>Enviar código</button><button class="button button--outline" type="button" data-enrollment-restart hidden>Cambiar datos</button></div>
+      <div class="enrollment-actions"><button class="button button--primary" type="submit" data-enrollment-submit>Enviar código</button><button class="button button--outline" type="button" data-enrollment-restart hidden>Cambiar datos</button><button class="button button--outline" type="button" data-enrollment-resend hidden>Reenviar código</button></div>
     </form>
     <button class="button button--outline" type="button" data-enrollment-link hidden>Activar mi acceso</button>
-    <div class="enrollment-pending" data-enrollment-pending hidden><p>Ya tienes una cuenta. En caja confirmarán tu correo para conservar tu saldo y tu tarjeta.</p><button class="button button--primary" type="button" data-enrollment-check>Ya confirmaron mi correo</button><button class="button button--outline" type="button" data-enrollment-new>Volver a empezar</button></div>
+    <div class="enrollment-pending" data-enrollment-pending hidden>
+      <h3>Conserva tu tarjeta y saldo</h3>
+      <p>Para recuperar una tarjeta anterior, adjunta su archivo original de Apple Wallet (.pkpass). No sirve una captura, el QR ni el folio.</p>
+      <label class="rewards-field"><span>Tu tarjeta Apple Wallet</span><input type="file" accept=".pkpass,application/vnd.apple.pkpass" data-recovery-file></label>
+      <button class="button button--primary" type="button" data-recovery-submit>Recuperar mi cuenta</button>
+      <details><summary>No tengo el archivo</summary><p>Busca el archivo original en Archivos o en el correo con el que recibiste la tarjeta. Si ya verificaste un correo, vuelve a entrar con ese correo. Si no tienes ninguno, <a href="https://wa.me/message/WQWEEODGY6H2P1">solicita ayuda</a> para proteger tu saldo.</p><button class="button button--outline" type="button" data-enrollment-check>Revisar mi acceso</button></details>
+      <button class="button button--outline" type="button" data-enrollment-new>Volver a empezar</button>
+    </div>
     <button class="button button--outline" type="button" data-enrollment-signout hidden>Cerrar consulta</button>`;
   mount.hidden = false;
   const form = mount.querySelector('form');
@@ -85,6 +93,8 @@ export async function initEnrollment({ root, setStatus, onSession, onMode, resto
   const codeInput = form.elements.code;
   const submit = mount.querySelector('[data-enrollment-submit]');
   const restart = mount.querySelector('[data-enrollment-restart]');
+  const resend = mount.querySelector('[data-enrollment-resend]');
+  let resendAt = 0;
   const pending = mount.querySelector('[data-enrollment-pending]');
   const signout = mount.querySelector('[data-enrollment-signout]');
   const linkAccount = mount.querySelector('[data-enrollment-link]');
@@ -131,12 +141,13 @@ export async function initEnrollment({ root, setStatus, onSession, onMode, resto
       container.querySelectorAll('input,select').forEach(input=>input.disabled=mode!=='register');
     });
   };
-  const setBusy = value => { busy = value; submit.disabled = value; restart.disabled = value; pending.querySelectorAll('button').forEach(button=>button.disabled=value); };
+  const setBusy = value => { busy = value; form.setAttribute('aria-busy',String(value)); submit.disabled = value; restart.disabled = value; resend.disabled = value; pending.querySelectorAll('button').forEach(button=>button.disabled=value); };
   const reset = () => {
     challengeId = ''; emailProof = ''; enrollment = null;
+    resend.hidden = true; pending.querySelector('[data-recovery-file]').value = '';
     form.hidden = false; pending.hidden = true; signout.hidden = true;
     linkAccount.hidden = true;
-    fields.disabled = false; modeFields.disabled = false;
+    fields.disabled = false; fields.hidden = false; modeFields.disabled = false; modeFields.hidden = false;
     form.elements.phone.readOnly = false; form.elements.email.readOnly = false;
     country.disabled = false; customCountry.readOnly = false; applyCountry();
     codeFields.hidden = true; codeInput.disabled = true; codeInput.required = false; codeInput.value = '';
@@ -152,7 +163,7 @@ export async function initEnrollment({ root, setStatus, onSession, onMode, resto
   const complete = async () => {
     if (mode === 'register') {
       const result = await request('loyalty-enrollment-auth',{action:'register',emailProof,enrollment});
-      if (result.status === 'staff_link_required') { form.hidden = true; pending.hidden = false; setStatus('Vinculación pendiente de confirmación en sucursal.'); return; }
+      if (result.status === 'staff_link_required') { form.hidden = true; pending.hidden = false; setStatus('Tu saldo sigue protegido. Recupera el acceso con tu tarjeta.'); return; }
       if (result.status !== 'ready') throw new Error('El registro no quedó confirmado. Intenta nuevamente.');
     }
     await login();
@@ -171,7 +182,8 @@ export async function initEnrollment({ root, setStatus, onSession, onMode, resto
         enrollment = {name:String(data.get('name')||'').trim(),phone,email:String(data.get('email')||'').trim().toLowerCase(),...readBirthday(data),privacyAccepted:data.get('privacyAccepted')==='on',marketingAccepted:data.get('marketingAccepted')==='on'};
         const result = await request('loyalty-enrollment-auth',{action:'request',email:enrollment.email});
         if (!result.challengeId) throw new Error('No se confirmó el envío del código.');
-        challengeId = result.challengeId; fields.disabled = true; modeFields.disabled = true;
+        challengeId = result.challengeId; fields.disabled = true; fields.hidden = true; modeFields.disabled = true; modeFields.hidden = true;
+        resendAt = Date.now() + 60_000; resend.hidden = false;
         codeFields.hidden = false; codeInput.disabled = false; codeInput.required = true;
         mount.querySelector('[data-code-destination]').textContent = `Enviado a ${enrollment.email}. Vence en 10 minutos.`;
         restart.hidden = false; submit.textContent = 'Entrar a mi cuenta'; codeInput.focus();
@@ -199,6 +211,29 @@ export async function initEnrollment({ root, setStatus, onSession, onMode, resto
     finally { setBusy(false); }
   });
   restart.addEventListener('click',reset);
+  resend.addEventListener('click',async()=>{
+    if (busy || !enrollment) return;
+    if (Date.now()<resendAt) { setStatus(`Puedes reenviar en ${Math.ceil((resendAt-Date.now())/1000)} segundos.`); return; }
+    setBusy(true);
+    try {
+      const result=await request('loyalty-enrollment-auth',{action:'request',email:enrollment.email});
+      if (!result.challengeId) throw new Error('No se confirmó el envío del código.');
+      challengeId=result.challengeId; emailProof=''; codeInput.value=''; resendAt=Date.now()+60_000;
+      setStatus('Nuevo código enviado. Revisa tu correo.','success'); codeInput.focus();
+    } catch(error) {setStatus(error.message,'error');} finally {setBusy(false);}
+  });
+  pending.querySelector('[data-recovery-submit]').addEventListener('click',async()=>{
+    if (busy || !emailProof || !enrollment) return;
+    const file=pending.querySelector('[data-recovery-file]').files[0];
+    if (!file || !/\.pkpass$/i.test(file.name) || file.size>1_000_000) {setStatus('Elige tu archivo .pkpass original (máximo 1 MB).','error'); return;}
+    setBusy(true); setStatus('Verificando tu tarjeta...');
+    try {
+      const walletPass=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result).split(',')[1]);reader.onerror=()=>reject(new Error('No pudimos leer la tarjeta.'));reader.readAsDataURL(file);});
+      const result=await request('loyalty-enrollment-auth',{action:'recover_wallet',emailProof,enrollment,walletPass});
+      if(result.status!=='ready')throw new Error('No se confirmó el acceso.');
+      pending.querySelector('[data-recovery-file]').value=''; await login();
+    }catch(error){if(error.status===401)reset();setStatus(error.status===401?'Tu código venció. Solicita uno nuevo.':error.message,'error');}finally{setBusy(false);}
+  });
   mount.querySelector('[data-enrollment-new]').addEventListener('click',reset);
   mount.querySelector('[data-enrollment-check]').addEventListener('click',async()=>{
     if (busy) return; setBusy(true);
@@ -209,7 +244,7 @@ export async function initEnrollment({ root, setStatus, onSession, onMode, resto
   linkAccount.addEventListener('click', () => {
     linkAccount.hidden = true;
     form.elements.mode.value = 'register'; applyMode();
-    fields.disabled = false; modeFields.disabled = true;
+    fields.disabled = false; fields.hidden = false; modeFields.disabled = true;
     form.elements.phone.readOnly = true; form.elements.email.readOnly = true;
     country.disabled = true; customCountry.readOnly = true;
     codeFields.hidden = true; codeInput.required = false;

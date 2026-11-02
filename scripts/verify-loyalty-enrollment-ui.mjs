@@ -1,16 +1,19 @@
 import assert from 'node:assert/strict';
 import {readFile,mkdir} from 'node:fs/promises';
 import {resolve,extname} from 'node:path';
+import {tmpdir} from 'node:os';
 import {chromium,webkit} from 'playwright';
 
 // Automated regression fixture: all HTTP responses are isolated from production.
-const root=process.cwd(),evidence='/private/tmp/bmc-enrollment-flow';
+const root=process.cwd(),evidence=resolve(tmpdir(),'bmc-enrollment-flow');
 await mkdir(evidence,{recursive:true});
 const types={'.html':'text/html','.js':'text/javascript','.css':'text/css','.png':'image/png','.jpg':'image/jpeg','.webp':'image/webp','.svg':'image/svg+xml','.woff2':'font/woff2'};
 for(const [name,engine] of Object.entries({chromium,webkit})){
+  if(process.env.REWARDS_ENGINE && name!==process.env.REWARDS_ENGINE)continue;
   const browser=await engine.launch({headless:true});
   try{
     for(const [device,viewport] of Object.entries({desktop:{width:1440,height:1000},tablet:{width:820,height:1180},mobile:{width:390,height:844}})){
+      if(process.env.REWARDS_DEVICE && device!==process.env.REWARDS_DEVICE)continue;
       const context=await browser.newContext({viewport}),page=await context.newPage();
       const calls=[],errors=[];
       let pendingLink=false,walletFailure=true;
@@ -22,6 +25,7 @@ for(const [name,engine] of Object.entries({chromium,webkit})){
           const body=request.postDataJSON();calls.push(body);
           if(body.action==='verify'&&body.code==='000000') return route.fulfill({status:401,json:{error:'Código inválido o vencido.'}});
           if(body.action==='register'&&pendingLink) return route.fulfill({json:{status:'staff_link_required'}});
+          if(body.action==='recover_wallet') {assert.ok(body.walletPass);pendingLink=false;return route.fulfill({json:{status:'ready'}});}
           const responses={request:{challengeId:'isolated-challenge'},verify:{emailProof:'isolated-proof'},register:{status:'ready'}};
           return route.fulfill({json:responses[body.action]});
         }
@@ -48,6 +52,8 @@ for(const [name,engine] of Object.entries({chromium,webkit})){
       assert.equal(await page.locator('.rewards-how__steps article').nth(1).locator('p').textContent(),'Un sello por día y sucursal con compra elegible. Tú eliges de la selección vigente.');
       assert.equal(await page.locator('[data-portal-form]').isVisible(),false);
       assert.equal(await form.locator('[name=marketingAccepted]').isChecked(),false);
+      assert.equal(await form.locator('[name=mode][value=register]').isChecked(),true,'New visitors start in registration');
+      await form.screenshot({path:`${evidence}/${name}-${device}-join.png`});
       await form.locator('[name=mode][value=register]').check();
       await form.locator('[name=name]').fill('Registro aislado');
       assert.equal(await form.locator('[name=countryCode]').inputValue(),'52');
@@ -61,6 +67,7 @@ for(const [name,engine] of Object.entries({chromium,webkit})){
       await form.locator('[name=email]').fill('isolated@example.test');
       const withBirthday=device==='desktop';
       assert.equal(await form.locator('[name=birthdayDay]').getAttribute('required'),null);
+      await form.locator('[data-birthday-details] summary').click();
       if(withBirthday){
         await form.locator('[name=birthdayDay]').fill('29');
         await form.locator('[name=birthdayMonth]').selectOption('2');
@@ -76,9 +83,14 @@ for(const [name,engine] of Object.entries({chromium,webkit})){
       await form.locator('[name=privacyAccepted]').check();
       await form.locator('[data-enrollment-submit]').click();
       await form.locator('[name=code]:enabled').waitFor();
+      assert.equal(await form.locator('[data-enrollment-fields]').isVisible(),false,'Code step hides completed fields');
+      await form.screenshot({path:`${evidence}/${name}-${device}-code.png`});
+      await form.locator('[data-enrollment-resend]').click();
+      assert.equal(calls.filter(row=>row.action==='request').length,1,'Resend cooldown prevents extra delivery');
       await form.locator('[name=code]').fill('123456');
       await form.locator('[data-enrollment-submit]').click();
       await page.locator('[data-portal-results]:not([hidden])').waitFor();
+      await page.locator('[data-portal-results]').screenshot({path:`${evidence}/${name}-${device}-wallet.png`});
       const registration=calls.find(row=>row.action==='register');
       assert.equal(registration.enrollment.phone,expectedPhone);
       assert.equal(registration.enrollment.birthdayDay,withBirthday?29:undefined);
@@ -126,8 +138,9 @@ for(const [name,engine] of Object.entries({chromium,webkit})){
       await page.locator('[data-enrollment-pending]:not([hidden])').waitFor();
       assert.equal(await page.locator('[data-portal-results]').isVisible(),false,'Pending linkage never exposes balances');
       assert.equal(calls.filter(row=>row.action==='request').length,2,'Activating an existing account reuses the verified code');
-      pendingLink=false;
-      await page.locator('[data-enrollment-check]').click();
+      await page.locator('[data-enrollment-pending]').screenshot({path:`${evidence}/${name}-${device}-recovery.png`});
+      await page.locator('[data-recovery-file]').setInputFiles({name:'original.pkpass',mimeType:'application/vnd.apple.pkpass',buffer:Buffer.from('isolated fixture; server validation tested separately')});
+      await page.locator('[data-recovery-submit]').click();
       await page.locator('[data-portal-results]:not([hidden])').waitFor();
       await page.locator('[data-enrollment-signout]').click();
       assert.equal(await page.evaluate(()=>sessionStorage.getItem('bmood_rewards_portal_token')),null,'Logout clears tab session');
@@ -135,7 +148,7 @@ for(const [name,engine] of Object.entries({chromium,webkit})){
       await form.screenshot({path:`${evidence}/${name}-${device}.png`});
       assert.deepEqual(errors,[]);
       await context.close();
-      console.log(`PASS ${name}/${device}: registration, optional birthday, international phone, both Wallet actions, separate consent, reload, invalid code, assisted linkage, logout and login mode`);
+      console.log(`PASS ${name}/${device}: registration, optional birthday, international phone, both Wallet actions, separate consent, reload, invalid code, Wallet recovery, resend cooldown, logout and login mode`);
     }
   }finally{await browser.close();}
 }

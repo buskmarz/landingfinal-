@@ -1089,6 +1089,7 @@ if (rewardsPortalRoot) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action: target === "apple" ? "issue_apple_wallet" : "issue_google_wallet", token }),
+        credentials: "omit", referrerPolicy: "no-referrer", signal: AbortSignal.timeout(30000),
       });
       const data = await res.json().catch(() => ({}));
       if (revision !== portalSessionRevision || token !== currentPortalToken) return;
@@ -1102,7 +1103,8 @@ if (rewardsPortalRoot) {
     } catch (error) {
       if (revision !== portalSessionRevision || token !== currentPortalToken) return;
       sendPortalEvent("wallet_issue_error", target);
-      setPortalStatus(error.message || "No se pudo generar tu tarjeta digital.", "error");
+      const connectionError = ["TimeoutError", "AbortError", "TypeError"].includes(error.name);
+      setPortalStatus(connectionError ? "No pudimos conectar con Wallet. Intenta de nuevo; tu cuenta sigue guardada." : error.message || "No se pudo generar tu tarjeta digital.", "error");
     } finally {
       if (button) button.removeAttribute("disabled");
     }
@@ -1256,7 +1258,7 @@ if (rewardsPortalRoot) {
   });
 
   rewardsPortalRoot.addEventListener('enrollment:signout', clearPortalSession);
-  import('/recompensas/enrollment.js?v=20261030-rewards').then(({initEnrollment}) => initEnrollment({
+  import('/recompensas/enrollment.js?v=20261102-selfserve').then(({initEnrollment}) => initEnrollment({
     root: rewardsPortalRoot, setStatus: setPortalStatus,
     restoreSession: () => loadPortalSession(window.sessionStorage.getItem(PORTAL_STORAGE_KEY), {silent:true}),
     onSession: data => renderPortalCustomer(data, data.token),
