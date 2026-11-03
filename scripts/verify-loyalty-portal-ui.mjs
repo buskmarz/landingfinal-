@@ -1,11 +1,12 @@
 import assert from 'node:assert/strict';
 import {readFile,mkdir} from 'node:fs/promises';
 import {resolve,extname} from 'node:path';
+import {tmpdir} from 'node:os';
 import {chromium,webkit} from 'playwright';
 
 // Automated regression fixture: isolated routes never contact production.
 const root=process.cwd();
-const evidence='/private/tmp/bmc-hybrid-portal-ui';
+const evidence=resolve(tmpdir(),'bmc-hybrid-portal-ui');
 await mkdir(evidence,{recursive:true});
 const contentTypes={'.html':'text/html','.js':'text/javascript','.css':'text/css','.png':'image/png','.jpg':'image/jpeg','.webp':'image/webp','.svg':'image/svg+xml','.woff2':'font/woff2'};
 for(const [name,engine] of Object.entries({chromium,webkit})){

@@ -1,5 +1,13 @@
 # Coffee Lab dentro de LANDING BETTER
 
+## Rewards autoservicio · 2 noviembre 2026
+
+Cambio aislado de Rewards sobre main f95244a, sin cambios de Coffee Lab ni la
+portada. Registro por correo, cumpleaños plegado opcional y recuperación de
+tarjeta antigua mediante .pkpass autenticado por el backend. Ver
+`docs/REWARDS_SELF_SERVICE_2026-11-02.md` para límites, pruebas y publicación
+coordinada. No se agregan servicios de pago ni se amplían cuotas.
+
 ## Coffee Lab móvil y reto A/B · 23 octubre 2026
 
 Actualización autorizada para GitHub → Netlify, preparada sobre main `377a0db7ffedddec14de5646017d56ddb4d7007e` (21 octubre). Solo cambia Coffee Lab y esta documentación. Se conserva la portada pública «Tu pausa de café. Cerca de UPAEP.», junto con menú, FREAK, recompensas, encuesta, funciones y configuración. El árbol canónico iCloud contiene otro rediseño pendiente: no publicarlo incidentalmente. El desarrollo continúa exclusivamente en `apps/coffee-lab/` dentro de la landing canónica.

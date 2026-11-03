@@ -24,6 +24,11 @@
 .enrollment-check input { accent-color: var(--ink); }
 .enrollment-actions > [type=submit] { width: 100%; }
 .enrollment-pending { display: grid; gap: 16px; }
+.enrollment-pending h3 { margin: 0; font-size: 22px; }
+.enrollment-pending input[type=file] { max-width: 100%; font-size: 16px; padding: 12px 0; }
+.enrollment-pending summary { min-height: 44px; padding: 12px 0; cursor: pointer; }
+.enrollment-form summary { padding: 12px 0; min-height: 44px; box-sizing: border-box; cursor: pointer; font-size: 14px; }
+.enrollment-actions > [type=button] { flex: 1 1 140px; padding: 12px 16px; }
 
 .enrollment-phone { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.2fr); gap: 8px 12px; }
 .enrollment-phone-note { grid-column: 1 / -1; font-size: 12px !important; color: var(--muted); }
