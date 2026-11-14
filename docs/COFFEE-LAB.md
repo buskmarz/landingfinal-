@@ -1,5 +1,15 @@
 # Coffee Lab dentro de LANDING BETTER
 
+## Rewards alta simple · 13 noviembre 2026
+
+Cambio exclusivo de Rewards sobre main dc95ad5. Alta nueva con nombre, celular,
+privacidad y cumpleaños opcional, sin correo ni código. Requiere backend con
+`quickRegistrationAvailable`; conserva compatibilidad con el flujo anterior.
+No modifica Coffee Lab, menú ni portada. Recuperación de cuentas existentes sigue
+protegida. Prueba `node scripts/verify-rewards-quick.mjs`: Chromium/WebKit en
+375, 390, 820 y 1440 px, registro, destino Wallet aislado y rechazo de duplicados.
+No equivale a instalación física de Wallet. Publicación GitHub/main y Netlify.
+
 ## Rewards autoservicio · 2 noviembre 2026
 
 Cambio aislado de Rewards sobre main f95244a, sin cambios de Coffee Lab ni la

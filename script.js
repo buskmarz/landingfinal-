@@ -1258,7 +1258,7 @@ if (rewardsPortalRoot) {
   });
 
   rewardsPortalRoot.addEventListener('enrollment:signout', clearPortalSession);
-  import('/recompensas/enrollment.js?v=20261102-selfserve').then(({initEnrollment}) => initEnrollment({
+  import('/recompensas/enrollment.js?v=20261113-quick').then(({initEnrollment}) => initEnrollment({
     root: rewardsPortalRoot, setStatus: setPortalStatus,
     restoreSession: () => loadPortalSession(window.sessionStorage.getItem(PORTAL_STORAGE_KEY), {silent:true}),
     onSession: data => renderPortalCustomer(data, data.token),

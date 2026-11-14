@@ -7,6 +7,7 @@ export async function initEnrollment({ root, setStatus, onSession, onMode, resto
   if (!mount || !legacy) return;
   legacy.hidden = true;
   const page = root.ownerDocument || document;
+  let quickRegistration = false;
   const applyProgramCopy = active => {
     root.dataset.loyaltyProgram = active ? 'hybrid' : 'legacy';
     page.querySelectorAll('[data-program-copy]').forEach(node => {
@@ -38,11 +39,12 @@ export async function initEnrollment({ root, setStatus, onSession, onMode, resto
     if (response.status === 404 || response.status === 405) { applyProgramCopy(false); onMode(false); legacy.hidden = false; return; }
     if (!response.ok) throw new Error('No pudimos verificar la disponibilidad. Recarga para reintentar.');
     const status = await response.json();
+    quickRegistration = status.quickRegistrationAvailable === true;
     if (typeof status.emailVerificationRequired !== 'boolean') throw new Error('Servicio temporalmente no disponible.');
     applyProgramCopy(status.hybridProgramActive === true);
     onMode(status.emailVerificationRequired);
     if (!status.emailVerificationRequired) { legacy.hidden = false; return; }
-    if (!status.registrationAvailable) throw new Error('El acceso por correo no está disponible por ahora. Solicita apoyo en sucursal.');
+    if (!status.registrationAvailable && !quickRegistration) throw new Error('El acceso no está disponible por ahora. Intenta más tarde.');
   } catch (error) { setStatus(error.message || 'Servicio temporalmente no disponible.', 'error'); return; }
 
   const heading = root.querySelector('#lookup-title');
@@ -64,7 +66,7 @@ export async function initEnrollment({ root, setStatus, onSession, onMode, resto
           <label class="rewards-field" data-country-custom hidden><span>Código de país</span><input name="customCountryCode" type="tel" inputmode="tel" placeholder="Ej. +44" maxlength="4" disabled></label>
           <p class="enrollment-phone-note" id="phone-help">Escribe los 10 dígitos, sin +52.</p>
         </div>
-        <label class="rewards-field"><span>Correo electrónico</span><input name="email" type="email" autocomplete="email" autocapitalize="none" spellcheck="false" maxlength="254" required></label>
+        <label class="rewards-field" data-email-field><span>Correo electrónico</span><input name="email" type="email" autocomplete="email" autocapitalize="none" spellcheck="false" maxlength="254" required></label>
         <details data-register-only data-birthday-details><summary>Añadir cumpleaños (opcional)</summary><fieldset class="enrollment-birthday"><legend class="enrollment-sr">Cumpleaños</legend>
           <label class="rewards-field"><span>Día</span><input name="birthdayDay" type="number" inputmode="numeric" min="1" max="31"></label>
           <label class="rewards-field"><span>Mes</span><select name="birthdayMonth"><option value="">Seleccionar</option>${['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'].map((name,index)=>`<option value="${index+1}">${name}</option>`).join('')}</select></label><p class="enrollment-birthday-note">Solo día y mes. Puedes dejarlos en blanco.</p>
@@ -99,6 +101,12 @@ export async function initEnrollment({ root, setStatus, onSession, onMode, resto
   const signout = mount.querySelector('[data-enrollment-signout]');
   const linkAccount = mount.querySelector('[data-enrollment-link]');
   let busy = false, challengeId = '', emailProof = '', enrollment = null, mode = 'register';
+  let deviceKey = '';
+  try { deviceKey = sessionStorage.getItem('bmc-rewards-device') || ''; } catch {}
+  if (!/^[a-f0-9]{64}$/.test(deviceKey)) {
+    deviceKey = Array.from(crypto.getRandomValues(new Uint8Array(32)),value=>value.toString(16).padStart(2,'0')).join('');
+    try { sessionStorage.setItem('bmc-rewards-device',deviceKey); } catch {}
+  }
   const readBirthday = data => {
     const dayText = String(data.get('birthdayDay') || '').trim();
     const monthText = String(data.get('birthdayMonth') || '').trim();
@@ -140,6 +148,13 @@ export async function initEnrollment({ root, setStatus, onSession, onMode, resto
       container.hidden = mode !== 'register';
       container.querySelectorAll('input,select').forEach(input=>input.disabled=mode!=='register');
     });
+    const quick = quickRegistration && mode === 'register' && !emailProof;
+    mount.querySelector('[data-email-field]').hidden = quick;
+    form.elements.email.disabled = quick; form.elements.email.required = !quick;
+    form.elements.marketingAccepted.closest('label').hidden = quick || mode !== 'register';
+    form.elements.marketingAccepted.disabled = quick || mode !== 'register';
+    if (!challengeId) submit.textContent = quick ? 'Crear mi tarjeta' : 'Enviar código';
+    if (headingText) headingText.textContent = quick ? 'Tu nombre, celular y listo.' : 'Recibe un código en tu correo para continuar.';
   };
   const setBusy = value => { busy = value; form.setAttribute('aria-busy',String(value)); submit.disabled = value; restart.disabled = value; resend.disabled = value; pending.querySelectorAll('button').forEach(button=>button.disabled=value); };
   const reset = () => {
@@ -180,6 +195,20 @@ export async function initEnrollment({ root, setStatus, onSession, onMode, resto
         const data = new FormData(form);
         const phone = readPhone(data);
         enrollment = {name:String(data.get('name')||'').trim(),phone,email:String(data.get('email')||'').trim().toLowerCase(),...readBirthday(data),privacyAccepted:data.get('privacyAccepted')==='on',marketingAccepted:data.get('marketingAccepted')==='on'};
+        if (quickRegistration && mode === 'register') {
+          const result = await request('loyalty-enrollment-auth',{action:'register_quick',enrollment,deviceKey});
+          if (result.status === 'recovery_required') {
+            form.elements.mode.value = 'login'; applyMode();
+            setStatus('No pudimos crear una tarjeta nueva con estos datos. Si ya tienes cuenta, entra con tu correo verificado o recupera tu tarjeta.','error');
+            return;
+          }
+          if (result.status !== 'ready') throw new Error('No se confirmó el registro. Intenta nuevamente.');
+          const session = await request('loyalty-portal',{phone:enrollment.phone,deviceKey});
+          if (!session.ok || !session.token || !session.customer) throw new Error('No pudimos abrir tu tarjeta. Intenta nuevamente.');
+          form.hidden = true; pending.hidden = true; signout.hidden = false;
+          onSession(session); setStatus('Tu tarjeta está lista. Agrégala a Wallet.','success');
+          return;
+        }
         const result = await request('loyalty-enrollment-auth',{action:'request',email:enrollment.email});
         if (!result.challengeId) throw new Error('No se confirmó el envío del código.');
         challengeId = result.challengeId; fields.disabled = true; fields.hidden = true; modeFields.disabled = true; modeFields.hidden = true;
