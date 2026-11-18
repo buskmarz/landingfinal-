@@ -1,5 +1,20 @@
 # Coffee Lab dentro de LANDING BETTER
 
+## Descubrimiento de Coffee Lab · 18 de noviembre de 2026
+
+La ficha pública `/coffee-lab/acerca` incorpora su URL canónica, aparece en el
+sitemap y se enlaza desde la navegación y el pie de la portada. Ofrece el
+[App Store de México](https://apps.apple.com/mx/app/better-mood-coffee-lab/id6834851686)
+y la entrada web `/coffee-lab/`. Apple reportó la versión iOS 1.1.0. La ficha
+utiliza el build web estable de main, con el mismo bundle y el service worker
+limitado a `/coffee-lab/`. Las variantes locales de cuentas y sincronización
+requieren una publicación web separada.
+
+Verificación previa: compilación integral, SEO, 77 pruebas de Coffee Lab y tres
+de Barista Luna. Chromium y WebKit comprobaron los enlaces, la apertura del
+laboratorio y una cotización simulada. El titular «Tu pausa de café. Cerca de
+UPAEP.» se conserva en la portada pública.
+
 ## Rewards alta simple · 13 noviembre 2026
 
 Cambio exclusivo de Rewards sobre main dc95ad5. Alta nueva con nombre, celular,

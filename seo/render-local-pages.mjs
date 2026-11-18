@@ -14,6 +14,7 @@ const staticSitemapEntries = [
   "https://bmoodcoffee.com/recompensas/",
   "https://bmoodcoffee.com/ruleta/",
   "https://bmoodcoffee.com/eventos/",
+  "https://bmoodcoffee.com/coffee-lab/acerca",
   "https://bmoodcoffee.com/bienestar/",
   "https://bmoodcoffee.com/cbd-en-el-cafe/",
   "https://bmoodcoffee.com/arcade/",
