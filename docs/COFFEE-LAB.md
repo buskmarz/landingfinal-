@@ -1,5 +1,11 @@
 # Coffee Lab dentro de LANDING BETTER
 
+## Coffee Lab 1.2.0 · 21 de noviembre de 2026
+
+La guía puede narrar los vertidos y los tiempos. La preparación permite seleccionar una bolsa de Mis cafés y descuenta la dosis al guardar. El panel de Luna permanece en la app. Su función acepta los orígenes de Capacitor de iOS y Android para la consulta de disponibilidad y el envío del mensaje, con el presupuesto compartido existente. El texto y el resumen opcional de la receta llegan al proveedor únicamente al enviar la pregunta.
+
+Se reprodujo en producción el fallo del iPhone antes del cambio: la consulta de disponibilidad carecía del encabezado de origen y la petición previa al envío devolvía 405. El candidato pasó 102 pruebas del app y cuatro de la función. El build integral conserva los 236 archivos públicos de la landing autorizada. La prueba física de inventario usó una bolsa aislada de 200 g que quedó en 185 g tras guardar una taza de 15 g.
+
 ## Descubrimiento de Coffee Lab · 18 de noviembre de 2026
 
 La ficha pública `/coffee-lab/acerca` incorpora su URL canónica, aparece en el

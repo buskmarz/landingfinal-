@@ -1,8 +1,26 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { RECIPES,defaultConfig,targets,totalWater,configError,tick,saveBrew,remaining,emptyStore,EMPTY_EVAL,clock,configInputSchema } from '../lib/coffee/domain.ts';
+import { RECIPES,defaultConfig,targets,totalWater,configError,tick,saveBrew,remaining,brewBagIssue,emptyStore,EMPTY_EVAL,clock,configInputSchema,cupsThatFit,doseForWaterPerCup,scaleDoseForCups } from '../lib/coffee/domain.ts';
 const session=()=>({id:'qa-brew',config:{...defaultConfig(RECIPES[0]),bagId:'qa-bag'},startedAt:1000,stepStartedAt:1000,stepIndex:0,pausedAt:null,status:'brewing' as const,finishedAt:null,physicalSeconds:null,evaluation:{...EMPTY_EVAL}});
 test('18 g at 1:16 uses 288 g; step quantities reconcile despite rounding',()=>{const c=defaultConfig(RECIPES[0]);assert.equal(totalWater(c),288);assert.equal(targets(c).reduce((s,t)=>s+t.add,0),288);assert.equal(targets(c).at(-1)?.total,288)});
+test('V60 scales cup counts and pour targets without exceeding the method limits',()=>{
+ const single=defaultConfig(RECIPES[0]);
+ const three={...single,dose:scaleDoseForCups(single.dose,1,3)};
+ assert.equal(three.dose,54);
+ assert.equal(totalWater(three),864);
+ assert.equal(cupsThatFit(three,3),1);
+ assert.equal(scaleDoseForCups(three.dose,3,1),single.dose);
+ const smaller={...three,dose:doseForWaterPerCup(160,3,three.ratio)};
+ assert.equal(smaller.dose,30);
+ assert.equal(totalWater(smaller),480);
+ assert.equal(targets(smaller).at(-1)?.total,480);
+ assert.equal(cupsThatFit(smaller,3),3);
+ assert.equal(configError(smaller),null);
+ const two={...single,dose:doseForWaterPerCup(250,2,single.ratio)};
+ assert.equal(two.dose,31.25);
+ assert.equal(totalWater(two),500);
+ assert.equal(configError(two),null);
+});
 test('all pour and immersion recipes preserve water totals across dose range',()=>{for(const r of RECIPES.filter(r=>!['moka','espresso'].includes(r.id))){for(const dose of [r.minDose,r.dose,r.maxDose]){const c={...defaultConfig(r),dose};assert.equal(targets(c).reduce((s,t)=>s+t.add,0),totalWater(c))}}});
 test('invalid, NaN and over-capacity recipes are rejected',()=>{assert.ok(configError({...defaultConfig(RECIPES[0]),dose:-1}));assert.ok(configError({...defaultConfig(RECIPES[0]),ratio:NaN}));assert.ok(configError({...defaultConfig(RECIPES[1]),dose:22,ratio:17}));assert.equal(configInputSchema.safeParse({method:'v60',dose:-1}).success,false)});
 test('espresso ratio refers to output and has no water steps',()=>{const c=defaultConfig(RECIPES[6]);assert.equal(totalWater(c),36);assert.equal(targets(c)[0].add,0)});
@@ -10,6 +28,28 @@ test('timer catches up across multiple steps after a hidden tab',()=>{const a=ti
 test('pausing guide freezes step only, physical timestamp unchanged',()=>{const a={...session(),pausedAt:20000};assert.equal(tick(a,500000),a);assert.equal(a.startedAt,1000)});
 test('manual steps do not auto-advance beyond time target',()=>{const a={...session(),config:defaultConfig(RECIPES[5])};assert.equal(tick(a,1000000).stepIndex,0)});
 test('saving twice is idempotent; editing and deleting reconcile inventory',()=>{let s=emptyStore();const bag={id:'qa-bag',initialWeight:250} as any;const a={...session(),status:'review' as const,finishedAt:181000,physicalSeconds:180};s=saveBrew(s,a);s=saveBrew(s,a);assert.equal(s.brews.length,1);assert.equal(remaining(bag,s.brews),232);s.brews[0].config.dose=20;assert.equal(remaining(bag,s.brews),230);s.brews=[];assert.equal(remaining(bag,s.brews),250)});
+test('only the selected bag is charged when a cup is saved, with a fresh stock check',()=>{
+ const store=fixture();
+ store.brews=[];
+ const bag=store.bags[0];
+ bag.initialWeight=200;
+ const other={...bag,id:'other'};
+ store.bags.push(other);
+ const cup={...session(),config:{...session().config,dose:15},finishedAt:4000,physicalSeconds:3};
+ assert.equal(brewBagIssue(store,cup.config),null);
+ assert.equal(remaining(bag,store.brews,15),185);
+ assert.equal(remaining(bag,store.brews),200);
+ const saved=saveBrew(store,cup);
+ assert.equal(remaining(bag,saveBrew(saved,cup).brews),185);
+ assert.equal(remaining(other,saved.brews),200);
+ assert.equal(remaining(bag,saved.brews,15.25),169.75);
+ bag.initialWeight=20;
+ assert.match(brewBagIssue(saved,cup.config)!,/Quedan 5 g/);
+ assert.throws(()=>saveBrew(saved,{...cup,id:'another'}),/saldo/);
+ assert.equal(brewBagIssue(saved,{...cup.config,bagId:null}),null);
+ bag.archived=true;
+ assert.match(brewBagIssue(saved,cup.config)!,/disponible/);
+});
 test('snapshots do not mutate source recipes',()=>{const s=saveBrew(emptyStore(),{...session(),finishedAt:200000,physicalSeconds:199});s.brews[0].config.recipe.steps[0].title='Changed';assert.notEqual(RECIPES[0].steps[0].title,'Changed')});
 test('cold brew duration format survives long elapsed periods',()=>{assert.equal(clock(43200),'12:00:00');assert.equal(clock(-1),'0:00')});
 import { customRecipeError,compareBrews } from '../lib/coffee/domain.ts';
@@ -37,3 +77,13 @@ test('coach adjusts only ratio, validates capacity and leaves original intact',(
 test('espresso and moka are not automatically adjusted for intensity',()=>{for(const i of [5,6]){const b=fixture().brews[0];b.config=defaultConfig(RECIPES[i]);b.evaluation.tags=['Muy intenso'];assert.equal(coach(b).changed,false)}});
 test('astringency does not claim an agitation edit that is not applied',()=>{const b=fixture().brews[0];b.evaluation.tags=['Astringente'];assert.equal(coach(b).changed,false);assert.deepEqual(coach(b).config,b.config)});
 test('deep links validate doses and preserve method defaults',()=>{assert.equal(configFromHash('#method=v60&dose=20&ratio=16')?.dose,20);assert.throws(()=>configFromHash('#method=v60&dose=-1'));assert.equal(configFromHash('#method=unknown'),null)});
+
+test('a favorites-only backup reports new data once and preserves existing favorites',()=>{
+ const local=emptyStore();local.favorites=['v60'];
+ const payload=parseImport(JSON.stringify(backupFile({...emptyStore(),favorites:['v60','aeropress','aeropress']})));
+ const first=planImport(local,payload);
+ assert.equal(first.stats.favorites,1);
+ assert.deepEqual(first.next.favorites,['v60','aeropress']);
+ assert.deepEqual(local.favorites,['v60']);
+ assert.equal(planImport(first.next,payload).stats.favorites,0);
+});

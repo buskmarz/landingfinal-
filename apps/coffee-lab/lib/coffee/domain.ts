@@ -1,5 +1,6 @@
 import type { Duel } from './duel.ts';
 import type { CuppingSession } from './cupping.ts';
+import type { RecipeLibrarySync } from './recipe-library-merge.ts';
 import { z } from 'zod';
 export const BRAND={name:'Better Mood Coffee Lab',short:'Better Mood',tagline:'Bienestar real en taza'};
 export type MethodId='v60'|'aeropress'|'french'|'chemex'|'kalita'|'moka'|'espresso'|'cold';
@@ -18,8 +19,20 @@ export const RECIPES:Recipe[]=[
 export type Config={recipe:Recipe;dose:number;ratio:number;temperature:number;grind:string;bagId:string|null};
 export function defaultConfig(r:Recipe):Config{return {recipe:structuredClone(r),dose:r.dose,ratio:r.ratio,temperature:r.temperature,grind:r.grind,bagId:null}}
 export function totalWater(c:Config){return Math.round(c.dose*c.ratio)}
+export function scaleDoseForCups(dose:number,currentCups:number,nextCups:number){
+ return Number((dose*nextCups/currentCups).toFixed(2));
+}
+export function doseForWaterPerCup(water:number,cups:number,ratio:number){
+ return Number((water*cups/ratio).toFixed(2));
+}
 export function targets(c:Config){let cumulative=0;const total=totalWater(c);return c.recipe.steps.map(s=>{const before=Math.round(cumulative*total);cumulative+=(s.fraction||0);const after=Math.round(cumulative*total);return {add:after-before,total:after}})}
 export function configError(c:Config){const r=c.recipe;if(!Number.isFinite(c.dose)||c.dose<r.minDose||c.dose>r.maxDose)return `La dosis debe estar entre ${r.minDose} y ${r.maxDose} g.`;if(!Number.isFinite(c.ratio)||c.ratio<r.minRatio||c.ratio>r.maxRatio)return 'Revisa el ratio para este método.';if(r.id!=='moka'&&totalWater(c)>r.capacity)return `Esta receta excede la capacidad orientativa de ${r.capacity} g. Reduce la dosis o el ratio.`;return null}
+export function cupsThatFit(c:Config,requested:number){
+ for(let cups=requested;cups>0;cups--){
+  if(!configError({...c,dose:scaleDoseForCups(c.dose,requested,cups)}))return cups;
+ }
+ return 0;
+}
 export type Evaluation={rating:number;again:boolean;tags:string[];notes:string;sweet:number;acid:number;bitter:number;body:number;astringency:number;output:number|null};
 export const EMPTY_EVAL:Evaluation={rating:0,again:true,tags:[],notes:'',sweet:3,acid:3,bitter:3,body:3,astringency:1,output:null};
 export type BrewEvent={stepIndex:number;startedAt:number;endedAt:number;completed:boolean;actualTotal?:number;waterChoice?:'recipe'|'target'};
@@ -27,13 +40,26 @@ export type Rhythm={mode?:'guided'|'paced';events?:BrewEvent[]};
 export type Active=Rhythm & {stepPhysicalStartedAt?:number;id:string;config:Config;startedAt:number;stepStartedAt:number;stepIndex:number;pausedAt:number|null;status:'brewing'|'review';finishedAt:number|null;physicalSeconds:number|null;waterChoice?:{stepIndex:number;strategy:'recipe'|'target'};evaluation:Evaluation};
 export type Brew=Rhythm & {id:string;config:Config;startedAt:number;finishedAt:number;physicalSeconds:number;evaluation:Evaluation};
 export type Bag={id:string;name:string;roaster:string;country:string;region:string;producer:string;variety:string;process:string;roast:string;roastedAt:string;openedAt:string;initialWeight:number;price:number|null;currency:string;notes:string;photo:string|null;archived:boolean};
-export type Preferences={advanced:boolean;theme:'dark'|'light';sound:boolean;unit:'C'|'F';experience:string;scale:boolean;grinder:boolean;flavor:string;methods:string[];reduceMotion:boolean};
+export type Preferences={advanced:boolean;theme:'dark'|'light';sound:boolean;voice?:boolean;unit:'C'|'F';experience:string;scale:boolean;grinder:boolean;flavor:string;methods:string[];reduceMotion:boolean};
 export type SavedRecipe={id:string;title:string;config:Config;createdAt:number};
-export type Store={duels?:Duel[];cuppings?:CuppingSession[];activeCupping?:CuppingSession|null;recipes?:SavedRecipe[];version:1;preferences:Preferences;bags:Bag[];brews:Brew[];favorites:string[];active:Active|null;activeBagId:string|null};
-export function emptyStore():Store{return {version:1,preferences:{advanced:false,theme:'dark',sound:false,unit:'C',experience:'Explorando',scale:true,grinder:true,flavor:'Equilibrado',methods:[],reduceMotion:false},bags:[],brews:[],favorites:[],active:null,activeBagId:null}}
-export function remaining(b:Bag,brews:Brew[]){return +(b.initialWeight-brews.filter(x=>x.config.bagId===b.id).reduce((s,x)=>s+x.config.dose,0)).toFixed(1)}
+export type Store={bar?:[Active|null,Active|null];duels?:Duel[];cuppings?:CuppingSession[];activeCupping?:CuppingSession|null;recipes?:SavedRecipe[];recipeLibrarySync?:RecipeLibrarySync;version:1;preferences:Preferences;bags:Bag[];brews:Brew[];favorites:string[];active:Active|null;activeBagId:string|null};
+export function emptyStore():Store{return {version:1,preferences:{advanced:false,theme:'dark',sound:true,voice:true,unit:'C',experience:'Explorando',scale:true,grinder:true,flavor:'Equilibrado',methods:[],reduceMotion:false},bags:[],brews:[],favorites:[],active:null,activeBagId:null}}
+export function remaining(bag:Bag,brews:Brew[],doseToUse=0){
+ const used=brews.reduce((sum,brew)=>brew.config.bagId===bag.id?sum+brew.config.dose:sum,0);
+ return Number((bag.initialWeight-used-doseToUse).toFixed(2));
+}
+export function brewBagIssue(store:Pick<Store,'bags'|'brews'>,config:Config){
+ if(!config.bagId)return null;
+ const bag=store.bags.find(b=>b.id===config.bagId&&!b.archived);
+ if(!bag)return 'Esa bolsa ya no está disponible. Elige otro café.';
+ const left=remaining(bag,store.brews);
+ return config.dose>left?`Quedan ${left} g en esta bolsa. Reduce la dosis o elige otro café.`:null;
+}
 export function tick(a:Active,now:number):Active{if(a.mode==='paced'||a.pausedAt!==null||a.status!=='brewing')return a;let i=a.stepIndex,at=a.stepStartedAt;while(i<a.config.recipe.steps.length-1&&!a.config.recipe.steps[i].manual&&now-at>=a.config.recipe.steps[i].seconds*1000){at+=a.config.recipe.steps[i].seconds*1000;i++}return i===a.stepIndex?a:{...a,stepIndex:i,stepStartedAt:at}}
-export function saveBrew(s:Store,a:Active):Store{if(s.brews.some(b=>b.id===a.id))return {...s,active:null};if(a.finishedAt===null||a.physicalSeconds===null)throw new Error('Finaliza la preparación antes de guardar.');return {...s,active:null,brews:[{id:a.id,config:structuredClone(a.config),startedAt:a.startedAt,finishedAt:a.finishedAt,physicalSeconds:a.physicalSeconds,evaluation:structuredClone(a.evaluation),...(a.mode?{mode:a.mode}:{}),...(a.events?{events:structuredClone(a.events)}:{})},...s.brews]}}
+export function saveBrew(s:Store,a:Active):Store{if(s.brews.some(b=>b.id===a.id))return {...s,active:null};if(a.finishedAt===null||a.physicalSeconds===null)throw new Error('Finaliza la preparación antes de guardar.');
+ const bag=s.bags.find(b=>b.id===a.config.bagId);
+ if(bag&&remaining(bag,s.brews)<a.config.dose)throw new Error('Revisa el saldo de la bolsa antes de guardar la preparación.');
+ return {...s,active:null,brews:[{id:a.id,config:structuredClone(a.config),startedAt:a.startedAt,finishedAt:a.finishedAt,physicalSeconds:a.physicalSeconds,evaluation:structuredClone(a.evaluation),...(a.mode?{mode:a.mode}:{}),...(a.events?{events:structuredClone(a.events)}:{})},...s.brews]}}
 export function clock(seconds:number){seconds=Math.max(0,Math.floor(seconds));return seconds>=3600?`${Math.floor(seconds/3600)}:${String(Math.floor(seconds/60)%60).padStart(2,'0')}:${String(seconds%60).padStart(2,'0')}`:`${Math.floor(seconds/60)}:${String(seconds%60).padStart(2,'0')}`}
 export function minutes(r:Recipe){const sec=r.steps.reduce((s,x)=>s+x.seconds,0);return sec>=3600?`${+(sec/3600).toFixed(1)} h`:sec<60?`${sec} s`:`${Math.floor(sec/60)}${sec%60?':'+String(sec%60).padStart(2,'0'):''} min`}
 export function temperature(c:number,unit:'C'|'F'){return `${unit==='F'?Math.round(c*9/5+32):c} °${unit}`}
