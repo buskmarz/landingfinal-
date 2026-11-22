@@ -227,3 +227,14 @@
 
   .intent-mobile-cta a:first-child { background: var(--sun); }
 }
+
+.intent-hero, .intent-split, .intent-visit { min-height: 0; }
+.intent-hero__copy, .intent-split, .intent-visit, .intent-list, .intent-facts { padding-block: clamp(32px,5vw,72px); }
+.intent-hero__media { min-height: clamp(300px,35vw,520px); }
+.intent-facts h2, .intent-split h2, .intent-list h2, .intent-visit h2 { font-size: clamp(2rem,4.2vw,3.7rem); line-height: 1.04; }
+.intent-facts__grid, .intent-list__rows { margin-top: clamp(18px,3vw,36px); }
+.intent-split--sun { background: #f1ecdf; }
+@media (max-width:680px) {
+ .intent-hero__media:not(.intent-hero__media--duo) { min-height: 0; height: clamp(210px,65vw,340px); }
+ .intent-split { gap: 20px; }
+}

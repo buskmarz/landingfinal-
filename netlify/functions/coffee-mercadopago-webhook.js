@@ -15,13 +15,16 @@ exports.handler = async (event) => {
   const body = parseBody(event);
   if (!body) return json(200, { received: true, ignored: "invalid_json" });
 
-  const incomingPaymentId = getProviderPaymentId(body);
+  const signature = verifyMercadoPagoSignature(event);
+  if (!signature.ok) return json(401, { error: "Invalid signature" });
+
+  const signedPaymentId = event.queryStringParameters?.["data.id"];
+  const incomingPaymentId = signedPaymentId || getProviderPaymentId(body);
   const eventId = String(body.id || `${body.action || body.type || body.topic || "event"}-${incomingPaymentId || "unknown"}-${Date.now()}`);
   const eventKey = `webhook_events/coffee-mercadopago/${eventId}.json`;
   const existingEvent = await getJSON("webhook_events", eventKey);
   if (existingEvent?.processed) return json(200, { received: true, duplicate: true });
 
-  const signature = verifyMercadoPagoSignature(event);
   const webhookEvent = {
     id: eventId,
     provider: "mercado_pago",
@@ -38,12 +41,6 @@ exports.handler = async (event) => {
     createdAt: new Date().toISOString(),
   };
   await setJSON("webhook_events", eventKey, webhookEvent);
-
-  if (!signature.ok) {
-    webhookEvent.error = "invalid_signature";
-    await setJSON("webhook_events", eventKey, webhookEvent);
-    return json(401, { error: "Invalid signature" });
-  }
 
   const isPaymentEvent = body.type === "payment" || body.topic === "payment";
   if (!isPaymentEvent || !incomingPaymentId) {
@@ -63,6 +60,14 @@ exports.handler = async (event) => {
 
     const order = await getJSON("coffee_orders", `orders/${orderId}.json`);
     if (!order) throw new Error("order_not_found");
+    // A delayed update from another attempt must not undo an approved order.
+    if (order.status === "paid" && providerPayment.status !== "approved") {
+      webhookEvent.processed = true;
+      webhookEvent.processedAt = new Date().toISOString();
+      await setJSON("webhook_events", eventKey, webhookEvent);
+      return json(200, { received: true, ignored: "order_already_paid" });
+    }
+
     const paymentId = order.paymentId || providerPayment.metadata?.paymentId || providerPayment.metadata?.payment_id || String(providerPayment.id);
     const existingPayment = await getJSON("coffee_payments", `payments/${paymentId}.json`);
     const now = new Date().toISOString();
@@ -144,6 +149,7 @@ async function fetchMercadoPagoPayment(providerPaymentId) {
   if (!token) throw new Error("missing_mercadopago_access_token");
   const response = await fetch(`https://api.mercadopago.com/v1/payments/${encodeURIComponent(providerPaymentId)}`, {
     headers: { Authorization: `Bearer ${token}` },
+    signal: AbortSignal.timeout(8000),
   });
   const payload = await response.json().catch(() => ({}));
   if (!response.ok) throw new Error(payload.message || "mercadopago_payment_lookup_failed");

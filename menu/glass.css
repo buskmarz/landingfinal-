@@ -1,0 +1,353 @@
+/* UPAEP menu. The shared menu stylesheet also serves Cholula and local guides. */
+.menu-app {
+  --paper: #fbf8ef;
+  --ink: #231f20;
+  --yellow: #ffde00;
+  --menu-width: min(1192px, 100% - clamp(32px, 7vw, 96px));
+  --menu-glass: rgba(255, 253, 246, .87);
+  --menu-border: rgba(35, 31, 32, .14);
+  --menu-reflection: inset 0 1px 0 rgba(255, 255, 255, .9);
+  --menu-shadow: var(--menu-reflection), 0 8px 24px rgba(43, 30, 18, .09);
+  overflow-x: clip;
+  background: radial-gradient(ellipse at 96% 440px, #fff3d1 0, transparent 400px), var(--paper);
+}
+
+.menu-app .app-header {
+  position: sticky;
+  z-index: 40;
+  top: 0;
+  height: 72px;
+  gap: 12px;
+  padding: 8px max(16px, (100% - 1192px) / 2);
+  background: var(--menu-glass);
+  border-bottom: 1px solid var(--menu-border);
+  box-shadow: var(--menu-reflection);
+}
+.menu-app .app-brand img { width: 62px; height: auto; }
+.menu-app .branch-link, .menu-app .header-cart {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 4px 12px;
+  border: 1px solid var(--menu-border);
+  border-radius: var(--radius-pill);
+  background: var(--menu-glass);
+  box-shadow: var(--menu-reflection);
+  text-decoration: none;
+}
+.menu-app .header-cart { gap: 7px; }
+.menu-app .header-cart span { border-radius: 50%; }
+
+.menu-app .menu-cover {
+  height: clamp(278px, 30vw, 390px);
+  max-height: none;
+  color: #fff9ee;
+}
+.menu-app .menu-cover picture img { object-position: 64% 48%; }
+.menu-app .menu-cover::before { background: linear-gradient(90deg, #17100eea 0%, #17100e95 47%, #17100e16 81%); }
+.menu-app .cover-copy { width: var(--menu-width); margin: 0 auto; padding: 25px 0; }
+.menu-app .cover-copy .eyebrow { color: #fff5db; margin-bottom: 10px; font-size: .73rem; letter-spacing: .1em; }
+.menu-app .cover-copy h1 {
+  max-width: 12ch;
+  margin: 0 0 19px;
+  font-size: clamp(2.7rem, 6.3vw, 5.6rem);
+  line-height: .99;
+  letter-spacing: -.063em;
+  text-wrap: balance;
+}
+.menu-app .cover-cta {
+  min-height: 48px;
+  border: 1px solid #fff5dd88;
+  border-radius: var(--radius-pill);
+  background: #fff5ddf2;
+  box-shadow: var(--menu-shadow);
+  padding: 0 19px;
+}
+.menu-app .cover-cta:hover { background: #fffaf0; }
+
+.menu-app .table-context {
+  width: var(--menu-width);
+  min-height: 0;
+  margin: 13px auto 0;
+  padding: 5px 10px 5px 13px;
+  gap: 9px;
+  color: var(--ink);
+  border: 1px solid var(--menu-border);
+  border-radius: 17px;
+  background: var(--menu-glass);
+  box-shadow: var(--menu-reflection);
+  font-size: .85rem;
+}
+.menu-app .table-context.is-active { padding-block: 12px; background: #ffefb9; }
+.menu-app .table-context:not(.is-active) .context-dot { display: none; }
+.menu-app .table-context button {
+  flex: 0 0 auto;
+  padding: 4px 10px;
+  min-height: 44px;
+  border: 1px solid var(--menu-border);
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, .64);
+  color: var(--ink);
+  text-align: center;
+  font-size: .78rem;
+}
+
+.menu-app .menu-workspace { width: var(--menu-width); padding: 22px 0 28px; scroll-margin-top: 0; }
+.menu-app .workspace-heading { align-items: center; gap: 12px; margin-bottom: 13px; }
+.menu-app .workspace-heading h2 {
+  max-width: none;
+  font-size: clamp(2rem, 4.35vw, 3.5rem);
+  letter-spacing: -.057em;
+  line-height: 1;
+}
+.menu-app .pick-toggle, .menu-app #budget-filter, .menu-app .category-nav button {
+  min-height: 44px;
+  padding: 7px 13px;
+  border: 1px solid var(--menu-border);
+  border-radius: var(--radius-pill);
+  background: var(--menu-glass);
+  box-shadow: var(--menu-reflection);
+  color: var(--ink);
+  font-size: .86rem;
+  font-weight: 750;
+  text-decoration: none;
+}
+.menu-app .search-row { gap: 8px; margin-bottom: 10px; }
+.menu-app .search-box {
+  min-width: 0;
+  border: 1px solid var(--menu-border);
+  border-radius: var(--radius-pill);
+  background: var(--menu-glass);
+  box-shadow: var(--menu-shadow);
+}
+.menu-app .search-box input { min-height: 46px; font-size: 16px; }
+.menu-app .search-box input::placeholder { color: #655e54; opacity: 1; }
+.menu-app .category-nav {
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  overflow: visible;
+  scroll-margin-top: 0;
+}
+.menu-app .category-nav button { flex: 0 0 auto; }
+.menu-app .category-nav button[aria-pressed="true"]::after { content: none; }
+.menu-app :is(#budget-filter, .category-nav button)[aria-pressed="true"] {
+  border-color: #c09600;
+  background: #ffdf38;
+  color: var(--ink);
+}
+.menu-app .filter-meta { padding: 8px 0; min-height: 44px; }
+.menu-app .filter-meta p { color: var(--muted); font-size: .83rem; }
+.menu-app #clear-filters { min-height: 44px; font-size: .83rem; }
+.menu-app .taste-picker { margin: 0 0 12px; }
+.menu-app .taste-options button { min-height: 112px; border-radius: var(--radius-field); }
+.menu-app .taste-options button[aria-pressed="true"] { outline: 2px solid #9b7100; outline-offset: 2px; }
+.menu-app .taste-options button img, .menu-app .taste-doodle { min-height: 72px; height: 72px; }
+.menu-app .taste-options button > span:last-child { padding: 9px; font-size: .86rem; }
+
+.menu-app .catalog-section { margin: 0 0 23px; }
+.menu-app .catalog-section > h2 {
+  color: var(--ink);
+  margin: 0 0 5px;
+  font-size: clamp(1.25rem, 2.3vw, 1.8rem);
+  font-weight: 800;
+  letter-spacing: -.04em;
+  line-height: 1.15;
+  text-transform: none;
+}
+.menu-app .dish-grid { gap: 0 clamp(17px, 3vw, 38px); }
+.menu-app .dish {
+  display: grid;
+  align-content: center;
+  min-height: 87px;
+  padding: 12px 52px 12px 0;
+  border-color: var(--menu-border);
+}
+.menu-app .dish-top { gap: 8px; }
+.menu-app .dish h3, .menu-app .dish-price { font-size: 1rem; }
+.menu-app .dish-price { font-variant-numeric: tabular-nums; flex: 0 0 auto; }
+.menu-app .dish-size { margin: 3px 0; color: var(--muted); font-size: .71rem; }
+.menu-app .dish-description { font-size: .84rem; line-height: 1.44; }
+.menu-app .dish-description:empty, .menu-app .dish-size:empty { display: none; }
+.menu-app .dish-detail {
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  height: auto;
+  min-height: 44px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  box-shadow: none;
+}
+.menu-app .dish-detail span {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--menu-border);
+  background: var(--menu-glass);
+  box-shadow: var(--menu-shadow);
+}
+.menu-app .dish.in-cart .dish-detail { background: transparent; }
+.menu-app .dish.in-cart .dish-detail span { background: #ffdf38; border-color: #c09600; }
+.menu-app .dish-detail:is(:hover, :active) { transform: none; background: transparent; }
+@media (hover: hover) {
+  .menu-app .dish-detail:hover span { background: #ffefad; transform: scale(1.08); }
+  .menu-app :is(.pick-toggle, .category-nav button):hover:not([aria-pressed="true"]) { background: #fff8de; }
+}
+.menu-app .menu-disclaimer, .menu-app .functional-note { font-size: .83rem; line-height: 1.5; }
+
+.menu-app .how-to-order, .menu-app .menu-visit {
+  width: var(--menu-width);
+  margin: 0 auto 16px;
+  padding: clamp(16px, 3.2vw, 32px);
+  border: 1px solid var(--menu-border);
+  border-radius: var(--radius-sheet);
+  background: var(--menu-glass);
+  box-shadow: var(--menu-shadow);
+  color: var(--ink);
+}
+.menu-app .how-to-order {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.8fr);
+  align-items: baseline;
+  gap: 7px 20px;
+}
+.menu-app .how-to-order h2, .menu-app .menu-visit h2 {
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  letter-spacing: -.052em;
+  line-height: 1.1;
+}
+.menu-app .how-to-order p, .menu-app .menu-visit p:not(.eyebrow) {
+  color: var(--muted);
+  font-size: .94rem;
+  line-height: 1.5;
+}
+.menu-app .menu-visit { gap: 16px 28px; }
+.menu-app .menu-visit p:not(.eyebrow) { margin: 7px 0 0; }
+.menu-app .menu-visit > img { border-radius: 23px; height: clamp(155px, 26vw, 260px); }
+.menu-app .menu-visit .button { min-height: 46px; margin-top: 13px; border-radius: var(--radius-pill); }
+.menu-hours {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  margin: 12px 0 0;
+  padding: 0;
+  font-size: .86rem;
+  line-height: 1.48;
+}
+.menu-hours dt { font-weight: 800; }
+.menu-hours dd { margin: 0; color: var(--muted); white-space: nowrap; }
+.menu-app .menu-footer { width: var(--menu-width); padding: 14px 0 20px; font-size: .8rem; }
+
+.menu-app .menu-sheet {
+  border-radius: var(--radius-sheet);
+  border: 1px solid var(--menu-border);
+  background: #fffaf0f8;
+  box-shadow: var(--menu-reflection), 0 22px 80px #1c140f4d;
+}
+.menu-app .menu-sheet::backdrop { background: #21160f67; backdrop-filter: blur(6px); }
+.menu-app .menu-sheet :is(textarea, select) { border-radius: var(--radius-field); font-size: 16px !important; }
+.menu-app .pending-resolution { border-radius: var(--radius-field); }
+.menu-app :is(.dialog-close, .solid-button, .quantity-stepper, .cart-dock, .menu-toast) { border-radius: var(--radius-pill); }
+.menu-app .dialog-close { background: var(--menu-glass); min-width: 44px; min-height: 44px; }
+.menu-app .quantity-stepper button { width: 44px; }
+.menu-app .cart-dock { border-color: #ffeb9780; background: #29211bed; box-shadow: 0 7px 27px #291c1938; }
+.menu-app .menu-toast { background: #29211bf7; }
+.menu-app :is(button, a, input, textarea, select):focus-visible { outline: 2px solid #947100; outline-offset: 3px; }
+.menu-app .cover-cta:focus-visible { outline-color: #fff6d0; }
+
+@supports (backdrop-filter: blur(12px)) or (-webkit-backdrop-filter: blur(12px)) {
+  .menu-app :is(.app-header, .cart-dock, .menu-sheet) {
+    -webkit-backdrop-filter: blur(15px) saturate(140%);
+    backdrop-filter: blur(15px) saturate(140%);
+  }
+  .menu-app .app-header { background: #fbf8efd4; }
+  .menu-app .menu-sheet { background: #fffaf0f5; }
+}
+
+@media (max-width: 580px) {
+  .menu-app .app-header { height: 62px; }
+  .menu-app .app-brand img { width: 53px; }
+  .menu-app .menu-cover { height: 212px; }
+  .menu-app .menu-cover::before { background: linear-gradient(90deg, #17100ee8, #17100e74 72%, #17100e37); }
+  .menu-app .menu-cover picture img { object-position: 63% 50%; }
+  .menu-app .table-context { font-size: .78rem; }
+  .menu-app .table-context button { max-width: 46%; }
+  .menu-app .menu-workspace { padding-top: 17px; }
+  .menu-app .category-nav button { padding-inline: 10px; }
+  .menu-app .how-to-order, .menu-app .menu-visit { grid-template-columns: minmax(0, 1fr); border-radius: 22px; }
+  .menu-app .menu-visit > img { border-radius: 16px; }
+  .menu-app .menu-sheet { border-radius: 25px 25px 0 0; }
+}
+
+@media print {
+  .menu-app .menu-visit, .menu-app .menu-tools, .menu-app .menu-footer { display: none !important; }
+}
+
+.cart-bill {
+  display: grid;
+  justify-items: start;
+  gap: 8px;
+  margin-block: 14px;
+  padding-block: 13px;
+  border-block: 1px solid rgba(35, 31, 32, .16);
+}
+.cart-bill[hidden] { display: none; }
+.cart-bill h3 { margin: 0; font-size: 1rem; }
+.cart-bill p { margin: 0; line-height: 1.45; }
+.cart-bill button { min-height: 44px; }
+
+.order-channel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-block: 10px;
+}
+.order-channel button {
+  min-height: 44px;
+  padding-inline: 14px;
+  border: 1px solid var(--menu-border);
+  border-radius: var(--radius-pill);
+  text-decoration: none;
+}
+.order-channel [aria-pressed="true"] { background: var(--yellow); }
+.pickup-form { margin-block: 14px; }
+.pickup-form h3, .pickup-form p { margin-block: 4px; }
+.pickup-fields {
+  display: grid;
+  gap: 10px;
+  border: 0;
+  margin: 10px 0 0;
+  padding: 0;
+  min-inline-size: 0;
+}
+.pickup-fields label { display: grid; gap: 4px; font-weight: 700; }
+.pickup-fields input {
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 12px;
+  color: inherit;
+  font: inherit;
+  font-size: 16px;
+  border: 1px solid var(--menu-border);
+  border-radius: var(--radius-field);
+  background: var(--menu-glass);
+}
+.pickup-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.pickup-actions a { display: inline-flex; align-items: center; min-height: 44px; }
+.menu-app :is(.order-channel, .pickup-form, .pickup-fields, .pickup-actions a)[hidden] { display: none; }
+.menu-app .cart-sheet:has(:is(.pickup-form, .pickup-receipt):not([hidden])) { background: #fffaf0; }
+
+@media (max-width: 580px) {
+  .cart-bill .solid-button { justify-self: stretch; }
+}

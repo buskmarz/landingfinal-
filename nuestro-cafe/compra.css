@@ -1,0 +1,61 @@
+.natural-checkout__fields {
+  display: grid;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  gap: 16px;
+}
+
+#buy-coffee-title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.05;
+  letter-spacing: -.045em;
+  text-wrap: balance;
+}
+
+.natural-order {
+  max-width: 640px;
+  padding-block: clamp(24px, 5vw, 48px);
+}
+
+.natural-order__intro {
+  margin-bottom: 18px;
+}
+
+.natural-order__intro > a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: #524b45;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-size: .88rem;
+}
+.natural-order__intro h1 { margin: 6px 0 8px; }
+.natural-order__intro p { margin: 0; }
+.natural-checkout { padding: clamp(16px, 4vw, 28px); border-radius: 20px; }
+.natural-checkout__fields[hidden], .natural-checkout__delivery-fee[hidden] { display: none; }
+.natural-checkout__selection { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+.natural-checkout :is(input, select) { font-size: 16px; min-width: 0; }
+.natural-checkout select { min-height: 44px; padding-inline: 9px; }
+.natural-checkout .coffee-checkout__check { font-weight: 550; }
+.natural-checkout__delivery-fee { margin: -8px 0 0; color: #524b45; font-size: .85rem; }
+.natural-checkout .coffee-checkout__total { color: #231f20; background: #f5ebd7; }
+.natural-checkout .coffee-checkout__total strong { color: inherit; }
+.natural-checkout [type="submit"] { width: 100%; }
+.natural-checkout [role="status"]:empty { display: none; }
+
+@media (max-width: 420px) {
+  .natural-checkout__selection { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (min-width: 360px) and (max-width: 420px) {
+  .natural-checkout__selection--fulfillment { grid-template-columns: minmax(88px, .45fr) minmax(0, 1fr); }
+}
+
+.staff-coffee { max-width: 680px; padding-block: clamp(22px, 6vw, 64px); }
+.staff-coffee h1 { margin-block: 10px 18px; }
+.staff-coffee .natural-checkout { margin-block: 14px; }
+.staff-coffee .natural-checkout p { margin-block: 6px; }
+.staff-coffee [hidden] { display: none; }

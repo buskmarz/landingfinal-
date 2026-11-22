@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="es-MX">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex,follow" />
+    <title>Comprar café natural | Better Mood Coffee</title>
+    <link rel="stylesheet" href="/styles.css?v=cafe-natural" />
+    <link rel="stylesheet" href="/nuestro-cafe/compra.css?v=2" />
+    <link rel="icon" href="/assets/logo-better-mood.png" />
+  </head>
+  <body class="coffee-product-page">
+    <header class="header">
+      <div class="container header__inner">
+        <a class="logo" href="/" aria-label="Better Mood Coffee"><img src="/assets/logo-better-mood.png" alt="Better Mood Coffee" /></a>
+        <nav class="nav is-static" aria-label="Navegación de compra"><a href="/nuestro-cafe/">Nuestro café</a><a href="/menu/">Menú</a></nav>
+      </div>
+    </header>
+    <main id="main">
+      <section class="natural-order container" aria-labelledby="buy-coffee-title">
+        <div class="natural-order__intro">
+          <a href="/nuestro-cafe/">Volver a Nuestro café</a>
+          <h1 id="buy-coffee-title">Café natural Finca Santa Cruz</h1>
+          <p data-product-price>Próximamente</p>
+        </div>
+
+        <form class="coffee-checkout natural-checkout" data-natural-checkout>
+          <fieldset class="natural-checkout__fields" data-order-fields hidden disabled>
+            <div class="natural-checkout__selection natural-checkout__selection--fulfillment">
+              <label>
+                Cantidad
+                <select name="quantity" required>
+                  <option value="1">1 bolsa</option>
+                  <option value="2">2 bolsas</option>
+                  <option value="3">3 bolsas</option>
+                  <option value="4">4 bolsas</option>
+                </select>
+              </label>
+              <label>
+                Cómo lo recibes
+                <select name="fulfillmentMethod">
+                  <option value="pickup">Recoger en La Paz</option>
+                  <option value="delivery">Entrega en Puebla</option>
+                </select>
+              </label>
+            </div>
+            <p class="natural-checkout__delivery-fee" data-delivery-fee-label hidden></p>
+
+            <div class="natural-checkout__selection">
+              <label>
+                Nombre
+                <input type="text" name="name" autocomplete="name" required />
+              </label>
+              <label>
+                WhatsApp
+                <input type="tel" name="phone" autocomplete="tel" inputmode="tel" required />
+              </label>
+            </div>
+
+            <div class="coffee-checkout__delivery" data-delivery-fields hidden>
+              <label>
+                Calle y número
+                <input type="text" name="deliveryStreet" autocomplete="street-address" />
+              </label>
+              <label>
+                Colonia
+                <input type="text" name="deliveryNeighborhood" autocomplete="address-level3" />
+              </label>
+            </div>
+
+            <label class="coffee-checkout__check">
+              <input type="checkbox" name="acceptsTerms" required />
+              <span>Confirmo los datos de mi pedido.</span>
+            </label>
+            <div class="coffee-checkout__total" aria-live="polite">
+              <span>Total</span>
+              <strong data-coffee-total>—</strong>
+            </div>
+            <button class="btn btn--primary" type="submit" data-event="click_start_coffee_checkout">Ir a Mercado Pago</button>
+          </fieldset>
+          <p class="coffee-checkout__status" data-coffee-checkout-status role="status">La compra en línea se abrirá cuando el café esté disponible.</p>
+        </form>
+      </section>
+    </main>
+    <script src="/nuestro-cafe/compra.js?v=orden" defer></script>
+  </body>
+</html>

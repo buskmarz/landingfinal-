@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex,nofollow" />
+  <meta name="referrer" content="no-referrer" />
+  <title>Pedidos de café | Better Mood Coffee</title>
+  <link rel="stylesheet" href="/styles.css?v=cafe-natural" />
+  <link rel="stylesheet" href="/nuestro-cafe/compra.css?v=orden" />
+</head>
+<body class="coffee-product-page">
+  <main class="container staff-coffee">
+    <a href="/nuestro-cafe/">Nuestro café</a>
+    <h1>Pedidos de café natural</h1>
+    <form id="staff-coffee-access" class="coffee-checkout natural-checkout">
+      <label>Clave del equipo <input id="staff-coffee-key" type="password" required autocomplete="current-password" /></label>
+      <button class="btn btn--primary" type="submit">Ver pedidos</button>
+    </form>
+    <button class="btn btn--primary" type="button" id="staff-coffee-refresh" hidden>Actualizar</button>
+    <p id="staff-coffee-status" role="status"></p>
+    <div id="staff-coffee-orders"></div>
+  </main>
+  <script src="/nuestro-cafe/pedidos.js?v=orden" defer></script>
+</body>
+</html>

@@ -47,7 +47,7 @@ export function LocalHero(page) {
             <p class="hero__text">${page.heroText}</p>
             <div class="hero__actions">
               <a class="btn btn--primary" href="${business.menuUrl}" target="_blank" rel="noopener">Ver menú</a>
-              <a class="btn btn--secondary" href="/#sucursales">Pedir ahora</a>
+              <a class="btn btn--secondary" href="/#pedidos">Pedir ahora</a>
             </div>
           </div>
 
@@ -213,7 +213,7 @@ function pageSchemas(page) {
       sameAs: [business.instagramUrl, business.facebookUrl],
       potentialAction: [
         {
-          "@type": "ReserveAction",
+          "@type": "CommunicateAction",
           target: business.whatsappUrl,
           name: "Escribir por WhatsApp"
         },
@@ -275,7 +275,7 @@ function renderFooter() {
         </div>
         <div class="footer__links">
           <h3>Navegación</h3>
-          <a href="/#sucursales">Menú</a>
+          <a href="/menu/">Menú</a>
           <a href="/recompensas/">Recompensas</a>
           <a href="/bienestar/">Bienestar</a>
           <a href="/eventos/">Eventos</a>
@@ -288,7 +288,7 @@ function renderFooter() {
           <a href="/origen-cafe/">Origen del café</a>
           <a href="/recorrido-cafe/">Recorrido del café</a>
           <a href="/como-preparar-cafe-en-casa/">Preparar café en casa</a>
-          <a href="/talleres-de-cafe-puebla/">Talleres de café Puebla</a>
+          <a href="/coffee-lab/">Coffee Lab</a>
         </div>
         <div class="footer__links footer__links--guides">
           <h3>Guías locales</h3>
@@ -387,11 +387,11 @@ export function LocalSeoPage(page) {
         </button>
 
         <nav class="nav" id="primary-nav">
-          <a href="/#sucursales">Menú</a>
+          <a href="/menu/">Menú</a>
           <a href="/recompensas/">Recompensas</a>
           <a href="/bienestar/">Bienestar</a>
           <a href="/#sucursales">Ubicación</a>
-          <a class="btn btn--sm btn--primary" href="/#sucursales">Pedir ahora</a>
+          <a class="btn btn--sm btn--primary" href="/#pedidos">Pedir ahora</a>
         </nav>
       </div>
     </header>

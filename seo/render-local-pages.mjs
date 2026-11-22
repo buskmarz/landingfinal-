@@ -23,6 +23,7 @@ const staticSitemapEntries = [
   "https://bmoodcoffee.com/recomendador/",
   "https://bmoodcoffee.com/calendario-futbolero/",
   "https://bmoodcoffee.com/cafe-lavado/",
+  "https://bmoodcoffee.com/nuestro-cafe/",
   "https://bmoodcoffee.com/origen-cafe/",
   "https://bmoodcoffee.com/recorrido-cafe/",
   "https://bmoodcoffee.com/cafe-de-especialidad-puebla/",

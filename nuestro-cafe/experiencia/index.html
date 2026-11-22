@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta name="robots" content="noindex,follow">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Better Mood Coffee - Finca Santa Cruz</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .btn-iniciar {
+      background-color: #FFD74B;
+      color: #004F4F;
+      border: none;
+      border-radius: 30px;
+      padding: 1.2rem 2.5rem;
+      font-size: 1.3rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      transform: translateY(20px);
+      opacity: 0;
+      animation: fadeSlideIn 1s ease forwards;
+      animation-delay: 0.5s;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .numero-paso {
+      background-color: #FFD74B;
+      color: #000000;
+      font-weight: bold;
+      font-size: 1.1rem;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    }
+
+    .btn-iniciar:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+    }
+
+    @keyframes fadeSlideIn {
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+    @import url('https://fonts.googleapis.com/css2?family=Metropolis&display=swap');
+    body {
+      margin: 0;
+      font-family: 'Metropolis', sans-serif;
+      background-color: #FFF8E7;
+      color: #FFFFFF;
+      font-size: 18px;
+      line-height: 1.8;
+      letter-spacing: 0.3px;
+    }
+    .hero {
+      background-color: #000000;
+      height: 65vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: #FFD74B;
+      padding: 2rem;
+    }
+    .hero h1 {
+      background-color: transparent;
+      padding: 0;
+      font-size: 2.5rem;
+      border-radius: 0;
+      font-weight: 600;
+    }
+    .section {
+      max-width: 960px;
+      margin: 4rem auto;
+      padding: 0 1.5rem;
+      background-color: #FFF8E7;
+      color: #4B4B4B;
+    }
+    .section p {
+      text-align: center;
+      color: #4B4B4B;
+    }
+    .section-alt {
+      background-color: #FFF8E7;
+      color: #4B4B4B;
+    }
+    .section-alt p, .section-alt h2 {
+      color: #4B4B4B;
+    }
+    .section-alt p {
+      text-align: center;
+    }
+    .section-alt p strong, .section-alt p span.highlight {
+      color: #FFD74B;
+    }
+    .section-beige {
+      background-color: #FFF8E7;
+      color: #4B4B4B;
+    }
+    .section-beige p, .section-beige h2 {
+      color: #4B4B4B;
+    }
+    .section-beige p {
+      text-align: center;
+    }
+    .section-cafe-especialidad {
+      background-color: #FFF8E7;
+      color: #4B4B4B;
+      background-image: none;
+    }
+    .section-cafe-especialidad p {
+      text-align: center;
+      color: #4B4B4B;
+    }
+    .section-finca-casa {
+      background-color: #FFF8E7;
+      color: #4B4B4B;
+    }
+    .section-finca-casa p {
+      text-align: center;
+      color: #4B4B4B;
+    }
+    .section-cta {
+      background-color: #000000;
+      color: #FFFFFF;
+      text-align: center;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+      justify-content: center;
+      align-items: stretch;
+    }
+    .card {
+      background-color: #FFFFFF;
+      border-radius: 10px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      border: 1px solid #FFD74B;
+      color: #000000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .card p {
+      margin-top: 1rem;
+      margin-bottom: 0;
+      font-family: 'Metropolis', sans-serif;
+      font-size: 1rem;
+      line-height: 1.6;
+      text-align: center;
+      color: #000000;
+    }
+    .card-icon {
+      font-size: 2rem;
+      color: #FFD74B;
+      margin-bottom: 1rem;
+    }
+    h2 {
+      font-family: 'Metropolis', sans-serif;
+      font-size: 2.6rem;
+      margin-bottom: 2rem;
+      text-align: center;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .hero h2, .section-cta h2 {
+      color: #FFD74B;
+    }
+    .section h2, .section-beige h2, .section-alt h2, .section-cafe-especialidad h2, .section-finca-casa h2 {
+      color: #000000;
+      font-size: 2.6rem;
+    }
+    p {
+      font-family: 'Metropolis', sans-serif;
+      font-size: 18px;
+      line-height: 1.8;
+      color: #4B4B4B;
+      margin-bottom: 1.2rem;
+      letter-spacing: 0.3px;
+      text-align: center;
+    }
+    .steps {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .step {
+      background-color: #FFFFFF;
+      border-radius: 10px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      border: 1px solid #FFD74B;
+      color: #000000;
+      font-family: 'Metropolis', sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 220px;
+      height: 240px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 1s ease;
+    }
+
+    .step.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .step-icon {
+      font-size: 2.5rem;
+      color: #FFD74B;
+      margin-bottom: 1rem;
+    }
+    .step p {
+      font-family: 'Metropolis', sans-serif;
+      font-size: 1rem;
+      line-height: 1.6;
+      text-align: center;
+      color: #000000;
+      margin-top: 1rem;
+      margin-bottom: 0;
+    }
+    .cta-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+    .cta-buttons a {
+      padding: 0.9rem 2.5rem;
+      border-radius: 40px;
+      font-weight: 700;
+      text-decoration: none;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      display: inline-block;
+      cursor: pointer;
+      border: 2px solid #FFD74B;
+    }
+    .cta-buttons a.discover {
+      background-color: #FFD74B;
+      color: #000000;
+    }
+    .cta-buttons a.buy {
+      background-color: transparent;
+      color: #FFD74B;
+    }
+    .cta-buttons a:hover {
+      transform: scale(1.05);
+      opacity: 0.9;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #FFD74B;
+      margin: 3rem 0;
+    }
+    .text-center {
+      text-align: center;
+    }
+    .viaje-better-mood {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 10px;
+      background: none;
+      color: inherit;
+    }
+
+    .paso {
+      text-align: center;
+      margin-top: 6px;
+      margin-bottom: 6px;
+      opacity: 0;
+      transform: translateY(40px) scale(0.98);
+      transition: all 1.2s ease-out;
+      color: inherit;
+    }
+
+    .paso h3 {
+      margin-bottom: 0.2rem;
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+
+    .paso p {
+      margin-top: 0.2rem;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    .paso.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .imagen-paso {
+      width: 100%;
+      max-width: 240px;
+      height: auto;
+      margin: 0 auto 20px;
+      display: block;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .contenido-paso {
+      max-width: 280px;
+      width: 100%;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .especial-ultimo-paso {
+      max-width: 360px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      padding: 1rem;
+      border-radius: 12px;
+      background-color: #FFFFFF;
+    }
+
+    .especial-ultimo-paso h3 {
+      font-size: 1.5rem;
+    }
+    .conector {
+      width: 4px;
+      height: 20px;
+      background: linear-gradient(to bottom, #FFD74B 0%, #FFD74B 100%);
+      border-radius: 2px;
+      margin-bottom: 12px;
+      align-self: center;
+    }
+    .section-finca-casa h2 {
+      margin-top: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .historia-texto {
+      max-width: 800px;
+      margin: 0 auto 2rem auto;
+      text-align: center;
+      color: #4B4B4B;
+    }
+
+    /* --- OPTIMIZACIÓN MÓVIL ULTRA PREMIUM --- */
+    @media (max-width: 768px) {
+      .imagen-paso {
+        width: 90%;
+        max-width: 240px;
+      }
+
+      .paso h3 {
+        font-size: 1.2rem;
+      }
+
+      .paso p {
+        font-size: 0.9rem;
+      }
+
+      .viaje-better-mood {
+        padding: 10px 5px;
+      }
+
+      .hero img {
+        width: 160px;
+      }
+
+      .section h2, .section-alt h2, .section-beige h2, .section-cafe-especialidad h2, .section-finca-casa h2 {
+        font-size: 2rem;
+      }
+
+      .hero h1 {
+        font-size: 2rem;
+      }
+
+      p {
+        font-size: 16px;
+        line-height: 1.6;
+      }
+
+      /* Cambios para la cuadrícula de tarjetas en móvil */
+      .cards {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        padding: 0 1rem;
+      }
+      .card-icon {
+        font-size: 1.5rem;
+      }
+      .card {
+        padding: 1.2rem 1rem;
+      }
+
+      /* Steps grid layout for mobile */
+      .steps {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        padding: 0 1rem;
+        /* Remove or reduce margin-top for mobile */
+        margin-top: 0;
+      }
+      .step {
+        padding: 1.2rem 1rem;
+        height: auto;
+        width: auto;
+      }
+      .step-icon {
+        font-size: 1.5rem;
+        margin-bottom: 0.8rem;
+      }
+      .step p {
+        font-size: 0.95rem;
+        line-height: 1.4;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <audio id="bg-music" src="/assets/landing-lavado/musica.mp3" autoplay loop></audio>
+  <div id="pantalla-inicial" style="height: 100vh; background-size: cover; background-position: center; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2rem;">
+    <p style="color: #FFD74B; font-size: 1.2rem; font-weight: 500; margin-bottom: 2rem;">Un aroma que abraza, un sabor que recuerda…</p>
+    <button id="iniciar-musica" class="btn-iniciar">
+      <i class="fas fa-music"></i> Descubre el amor detrás del sabor
+    </button>
+  </div>
+  <div id="contenido-principal" style="display:none;">
+    <section class="section text-center">
+    <img src="/assets/landing-lavado/better-mood-logo-r.png" alt="Logo Better Mood Coffee" style="width: 200px; margin: 0.2rem auto 0.3rem auto;">
+  </section>
+
+  <section class="section-finca-casa">
+    <h2 style="margin: 0.5rem auto;">Un recorrido por el corazón del café</h2>
+    <div class="steps">
+      <div class="step fade-in">
+        <div class="numero-paso">1</div>
+        <img src="/assets/landing-lavado/01-finca.png" class="imagen-paso">
+        <p><strong>Finca Santa Cruz</strong><br>El origen fértil.</p>
+      </div>
+      <div class="step fade-in">
+        <div class="numero-paso">2</div>
+        <img src="/assets/landing-lavado/02-cosecha.png" class="imagen-paso">
+        <p><strong>Cosecha Manual</strong><br>Selección cuidadosa.</p>
+      </div>
+      <div class="step fade-in">
+        <div class="numero-paso">3</div>
+        <img src="/assets/landing-lavado/03-lavado.png" class="imagen-paso">
+        <p><strong>Lavado Artesanal</strong><br>Pureza en el proceso.</p>
+      </div>
+      <div class="step fade-in">
+        <div class="numero-paso">4</div>
+        <img src="/assets/landing-lavado/04-secado.png" class="imagen-paso">
+        <p><strong>Secado Natural</strong><br>Tiempo y sol.</p>
+      </div>
+      <div class="step fade-in">
+        <div class="numero-paso">5</div>
+        <img src="/assets/landing-lavado/05-tueste.png" class="imagen-paso">
+        <p><strong>Tueste Perfecto</strong><br>Revela la esencia.</p>
+      </div>
+      <div class="step fade-in">
+        <div class="numero-paso">6</div>
+        <img src="/assets/landing-lavado/06-empaque.png" class="imagen-paso">
+        <p><strong>Empaque Premium</strong><br>Sello de frescura.</p>
+      </div>
+      <div class="step fade-in">
+        <div class="numero-paso">7</div>
+        <img src="/assets/landing-lavado/07-hogar.png" class="imagen-paso">
+        <p><strong>En tu Hogar</strong><br>La experiencia final.</p>
+      </div>
+      <div class="step fade-in">
+        <div class="numero-paso">8</div>
+        <img src="/assets/landing-lavado/08-droppy-cafe.png" class="imagen-paso">
+        <p><strong>Momento Better Mood</strong><br>Droppy saborea el resultado.</p>
+      </div>
+    </div>
+    <div class="text-center" style="margin-top: 2rem; display: flex; justify-content: center;">
+      <button onclick="mostrarRecorridoCompleto()" class="btn-iniciar"><i class="fas fa-mug-hot"></i> Ver recorrido completo</button>
+    </div>
+  </section>
+
+  <section class="section-cafe-especialidad section-beige text-center">
+    <h2>¿Qué es café de especialidad?</h2>
+    <p style="font-size: 20px; color: #4B4B4B; margin-bottom: 3rem; font-family: 'Metropolis', sans-serif; text-align: center;">De la tierra a tus sentidos: un viaje tejido por manos sabias, dedicación y un amor incondicional al café.</p>
+
+    <div class="steps">
+      <div class="step fade-in">
+        <div class="step-icon">🌱</div>
+        <p><strong>Cultivo de origen</strong><br>Crece en tierras únicas, en armonía con la naturaleza.</p>
+      </div>
+      <div class="step fade-in">
+        <div class="step-icon">🤲</div>
+        <p><strong>Cosecha selectiva</strong><br>Cada cereza madura es elegida a mano con dedicación.</p>
+      </div>
+      <div class="step fade-in">
+        <div class="step-icon">💧</div>
+        <p><strong>Procesamiento artesanal</strong><br>Técnicas cuidadosas que conservan la esencia del grano.</p>
+      </div>
+      <div class="step fade-in">
+        <div class="step-icon">🔥</div>
+        <p><strong>Tueste de precisión</strong><br>Un arte que realza cada nota y matiz de sabor.</p>
+      </div>
+      <div class="step fade-in">
+        <div class="step-icon">☕</div>
+        <p><strong>Evaluación sensorial</strong><br>Certificado por expertos SCA, debe superar los 80 puntos de calidad.</p>
+      </div>
+      <div class="step fade-in">
+        <div class="step-icon">🧭</div>
+        <p><strong>Trazabilidad completa</strong><br>Sabes quién cultivó tu café y cómo fue producido.</p>
+      </div>
+      <div class="step fade-in">
+        <div class="step-icon">🌍</div>
+        <p><strong>Compromiso ético</strong><br>Respeto por la tierra, las personas y el futuro.</p>
+      </div>
+      <div class="step fade-in">
+        <div class="step-icon">✨</div>
+        <p><strong>Experiencia en taza</strong><br>Un café que conecta sentidos y emociones, dejando una huella en tu memoria.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-alt">
+    <h2>Historia de la Finca</h2>
+    <div class="text-center">
+      <img src="/assets/landing-lavado/Josearguello-densocafe-fincasantacruz.jpg" alt="José Argüello - Productor" style="width: 280px; border-radius: 10px; margin-bottom: 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+    </div>
+    <div class="historia-texto">
+      <p>En las montañas de La Concordia, Chiapas, donde la niebla acaricia las hojas y el sol despierta los aromas de la tierra, se encuentra <span class="highlight" style="color:#FFD74B;">Finca Santa Cruz</span>.</p>
+    </div>
+
+    <div class="historia-texto">
+      <p>Más que una finca, es un legado familiar forjado por la pasión y el compromiso de <span class="highlight" style="color:#FFD74B;">José Argüello</span> y su familia, dedicados a cultivar un café excepcional.</p>
+    </div>
+
+    <div class="historia-texto">
+      <p>Este compromiso ha sido reconocido internacionalmente: Finca Santa Cruz fue galardonada con el primer lugar en la <span class="highlight" style="color:#FFD74B;">"Cup of the World 2022"</span>, organizada por la Alliance for Coffee Excellence.</p>
+    </div>
+
+    <div class="historia-texto">
+      <p>Además, ha sido tricampeona nacional en la Taza de la Excelencia en México, alcanzando <span class="highlight" style="color:#FFD74B;">93 puntos</span> por evaluación Q Grader.</p>
+    </div>
+
+    <div class="historia-texto">
+      <p>Cada grano que nace en Finca Santa Cruz refleja el alma de la tierra y la meticulosa dedicación de sus productores, contando una historia de tradición y excelencia.</p>
+    </div>
+  </section>
+
+  <section class="section-beige">
+    <h2>Información Técnica</h2>
+    <div class="cards">
+      <div class="card">
+        <div class="card-icon">🏡</div>
+        <p><strong>Finca:</strong><br>Santa Cruz</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">👨‍🌾</div>
+        <p><strong>Productor:</strong><br>José Argüello</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🗻</div>
+        <p><strong>Altitud:</strong><br>1,680 msnm</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🌱</div>
+        <p><strong>Varietal:</strong><br>Típica, bourbon y marsellesa</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">💧</div>
+        <p><strong>Proceso:</strong><br>Natural</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">☕</div>
+        <p><strong>Notas:</strong><br>Arandano, cereza, moras azules, nibs de cacao</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🏅</div>
+        <p><strong>Puntaje SCA:</strong><br>86.5</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">📅</div>
+        <p><strong>Fecha de Tostado:</strong><br>Ver empaque.</p>
+      </div>
+    </div>
+  </section>
+
+
+  <script>
+    const pasos = document.querySelectorAll('.paso');
+    const steps = document.querySelectorAll('.step');
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, {
+      threshold: 0.1
+    });
+
+    pasos.forEach(paso => {
+      observer.observe(paso);
+    });
+    steps.forEach(step => {
+      observer.observe(step);
+    });
+  </script>
+
+  <section style="text-align: center; padding: 4rem 1rem; background-color: #FFF8E7;">
+    <p style="font-size: 1.4rem; font-style: italic; max-width: 700px; margin: 0 auto; font-family: 'Metropolis', sans-serif; color: #4B4B4B;">
+      "Cada taza, un homenaje a la paciencia y la tierra. Better Mood Coffee."
+    </p>
+  </section>
+
+  <footer style="background-color: #000000; padding: 2rem 1rem; text-align: center; color: #FFFFFF; font-size: 0.9rem; font-family: 'Metropolis', sans-serif;">
+    © 2025 Better Mood Coffee. Todos los derechos reservados.
+  </footer>
+  </div>
+
+  <script>
+    document.getElementById('iniciar-musica').addEventListener('click', function () {
+      const audio = document.getElementById('bg-music');
+      audio.volume = 0;
+      audio.play();
+      document.getElementById('pantalla-inicial').style.display = 'none';
+      document.getElementById('contenido-principal').style.display = 'block';
+      let vol = 0;
+      const fade = setInterval(() => {
+        if (vol < 0.5) {
+          vol += 0.05;
+          audio.volume = vol;
+        } else {
+          clearInterval(fade);
+        }
+      }, 200);
+    });
+  </script>
+  <script>
+    function mostrarRecorridoCompleto() {
+      localStorage.setItem('iniciarMusicaRecorrido', 'true');
+      window.location.href = "recorrido.html";
+    }
+  </script>
+
+  <button id="toggle-music" style="
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #FFD74B;
+    border: none;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    cursor: pointer;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  ">
+    <i id="music-icon" class="fas fa-volume-up" style="color: #000; font-size: 1.2rem;"></i>
+  </button>
+
+  <script>
+    const music = document.getElementById('bg-music');
+    const toggleBtn = document.getElementById('toggle-music');
+    const icon = document.getElementById('music-icon');
+
+    toggleBtn.addEventListener('click', () => {
+      if (music.paused) {
+        music.play();
+        icon.classList.remove('fa-volume-mute');
+        icon.classList.add('fa-volume-up');
+      } else {
+        music.pause();
+        icon.classList.remove('fa-volume-up');
+        icon.classList.add('fa-volume-mute');
+      }
+    });
+  </script>
+</body>
+
+</html>

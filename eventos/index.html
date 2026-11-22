@@ -19,8 +19,7 @@
     <meta property="og:image" content="https://bmoodcoffee.com/assets/home/event-coffee-service.jpg" />
     <link rel="icon" href="/assets/bettermood_logo-10.png" />
     <link rel="stylesheet" href="/home.css?v=20260713-events-motion-v2" />
-    <link rel="stylesheet" href="/eventos/eventos.css" />
-    <link rel="stylesheet" href="/eventos/oferta.css" />
+    <link rel="stylesheet" href="/eventos/oferta.css?v=cotizar" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -34,7 +33,7 @@
       }
     </script>
   </head>
-  <body data-page-view-event="external_event_service_page_view" data-page-view-cta="external-event-service-page">
+  <body class="event-page" data-page-view-event="external_event_service_page_view" data-page-view-cta="external-event-service-page">
     <a class="skip-link" href="#contenido">Saltar al contenido</a>
 
     <header class="site-header" data-header>
@@ -46,157 +45,63 @@
         <span class="sr-only">Abrir menú</span>
       </button>
       <nav class="main-nav" id="main-nav" aria-label="Navegación principal" data-nav>
-        <a href="/como-preparar-cafe-en-casa/">Guías</a>
-        <a href="/talleres-de-cafe-puebla/">Agenda en UPAEP</a>
+        <a href="/menu/">Menú</a>
+        <a href="/coffee-lab/acerca">Coffee Lab</a>
+        <a href="/nuestro-cafe/">Nuestro café</a>
         <a href="/#sucursales">Ubicación</a>
       </nav>
-      <a class="button button--primary header-cta" href="#solicitud">Cotizar evento</a>
+      <a class="button button--primary header-cta" href="#solicitud">Pedir cotización</a>
     </header>
 
-    <main id="contenido" data-event-inquiry>
+    <main id="contenido">
       <section class="event-hero section" aria-labelledby="event-title">
         <div class="event-hero__copy reveal">
           <p class="eyebrow">Puebla · Hasta 20 personas</p>
           <h1 id="event-title">Barra de café para eventos.</h1>
-          <p>Llevamos café de especialidad a tu reunión. Elige espresso al momento o una mesa de café filtrado.</p>
-          <a class="button button--primary" href="#solicitud">Solicitar cotización</a>
+          <p>Espresso preparado al momento o café filtrado listo para servir.</p>
+          <div class="event-hero__actions">
+            <a class="button button--primary" href="#solicitud">Pedir cotización</a>
+          </div>
         </div>
         <figure class="event-hero__media reveal reveal--late">
           <picture>
             <source
               type="image/avif"
               srcset="/assets/home/event-coffee-service-720.avif 720w, /assets/home/event-coffee-service-1440.avif 1440w"
-              sizes="(max-width: 680px) 100vw, 58vw"
+              sizes="(max-width: 680px) calc(100vw - 36px), (max-width: 1500px) 49vw, 720px"
             />
             <img src="/assets/home/event-coffee-service.jpg" alt="Barra de café con máquina de espresso y estación de café filtrado" width="1800" height="1350" fetchpriority="high" />
           </picture>
         </figure>
       </section>
 
-      <section class="event-formats section" aria-labelledby="formats-title">
-        <h2 id="formats-title">Elige cómo servir el café.</h2>
-        <div class="event-formats__grid">
-          <article>
-            <h3>Barra de espresso</h3>
-            <p>Preparamos cada bebida al momento. Una opción para recepciones y celebraciones pequeñas.</p>
-          </article>
-          <article>
-            <h3>Mesa de café filtrado</h3>
-            <p>Café de precoladora, listo para servir. Una opción para el coffee break de un taller o una reunión de trabajo.</p>
-          </article>
-        </div>
-      </section>
-
       <section class="event-request section" id="solicitud" aria-labelledby="request-title">
-        <header class="event-request__intro reveal">
-          <h2 id="request-title">Cotiza tu evento.</h2>
-          <p>Con tu fecha, ubicación y número de invitados revisamos cobertura, disponibilidad y precio.</p>
-          <p><a class="text-link" href="https://wa.me/522221252321?text=Hola%2C%20quiero%20cotizar%20caf%C3%A9%20para%20un%20evento%20en%20Puebla." target="_blank" rel="noopener noreferrer" data-event="event_whatsapp_click" data-cta="event-whatsapp-question">Preguntar por WhatsApp</a></p>
+        <header class="event-request__intro">
+          <h2 id="request-title">Pide una cotización.</h2>
+          <p>Escríbenos por WhatsApp y afinamos los detalles contigo.</p>
         </header>
-
-        <form
-          class="event-form reveal reveal--late"
-          name="cafe-eventos"
-          method="POST"
-          data-netlify="true"
-          netlify-honeypot="website"
-          data-event-form
-          novalidate
-        >
-          <input type="hidden" name="form-name" value="cafe-eventos" />
-          <input type="hidden" name="folio" value="" data-event-folio />
-          <fieldset class="event-form__group" data-event-step="service">
-            <legend>Formato</legend>
-            <div class="setup-options">
-              <label>
-                <input type="radio" name="setup" value="espresso" required data-event-setup />
-                <span><strong>Barra de espresso</strong><small>Preparado al momento.</small></span>
-              </label>
-              <label>
-                <input type="radio" name="setup" value="precoladora" required data-event-setup />
-                <span><strong>Mesa de café filtrado</strong><small>Listo para servir.</small></span>
-              </label>
-              <label>
-                <input type="radio" name="setup" value="unsure" required data-event-setup />
-                <span><strong>Ayúdame a elegir</strong><small>Lo vemos contigo.</small></span>
-              </label>
-            </div>
-          </fieldset>
-
-          <div class="event-form__grid" data-event-step="contact">
-            <label>
-              Fecha
-              <input type="date" name="date" required />
-            </label>
-            <label>
-              Hora aproximada
-              <input type="time" name="time" required />
-            </label>
-            <label>
-              Personas
-              <input type="number" name="guests" min="1" max="20" inputmode="numeric" required placeholder="Hasta 20" />
-            </label>
-            <label>
-              Lugar o colonia
-              <input type="text" name="venue" maxlength="100" required placeholder="Ej. La Paz, Puebla" />
-            </label>
-            <label>
-              Nombre
-              <input type="text" name="name" autocomplete="name" maxlength="60" required />
-            </label>
-            <label>
-              WhatsApp
-              <input type="tel" name="phone" autocomplete="tel" inputmode="tel" maxlength="24" placeholder="222..." />
-            </label>
-            <label class="event-form__wide">
-              Correo
-              <input type="email" name="email" autocomplete="email" maxlength="120" />
-            </label>
-          </div>
-
-          <fieldset class="event-form__group event-form__contact">
-            <legend>¿Dónde respondemos?</legend>
-            <label><input type="radio" name="preferredContact" value="whatsapp" checked /> WhatsApp</label>
-            <label><input type="radio" name="preferredContact" value="email" /> Correo</label>
-          </fieldset>
-
-          <label class="event-form__details">
-            Algo más <span>(opcional)</span>
-            <textarea name="details" rows="3" maxlength="600" placeholder="Tipo de reunión y duración aproximada"></textarea>
+        <div class="event-request__card">
+          <label class="event-request__format">
+            <span>Formato <span>(opcional)</span></span>
+            <select data-event-setup>
+              <option value="">Aún no lo sé</option>
+              <option value="espresso">Barra de espresso</option>
+              <option value="precoladora">Mesa de café filtrado</option>
+            </select>
           </label>
-
-          <input class="event-form__honeypot" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" />
-
-          <label class="event-form__privacy">
-            <input type="checkbox" name="privacyAccepted" required />
-            <span>Acepto el <a href="/aviso-privacidad.html" target="_blank">aviso de privacidad</a>.</span>
-          </label>
-
-          <button class="button button--primary" type="submit" data-event-submit>Guardar y abrir WhatsApp</button>
-          <p class="event-form__note" data-event-status role="status">Esto no reserva ni confirma disponibilidad.</p>
-        </form>
-
-        <section class="event-success" data-event-success hidden aria-live="polite">
-          <p class="eyebrow">Solicitud guardada</p>
-          <h2>Solicitud lista.</h2>
-          <p>Folio <strong data-event-request-id></strong></p>
-          <div class="event-success__actions">
-            <a class="button button--primary" href="#" target="_blank" rel="noopener noreferrer" data-event-whatsapp>Continuar por WhatsApp</a>
-            <a class="button button--outline" href="#" data-event-email>Continuar por correo</a>
-            <button class="text-link" type="button" data-event-copy-id>Copiar folio</button>
-          </div>
-          <button class="event-success__reset" type="button" data-event-reset>Nueva solicitud</button>
-        </section>
+          <a class="button button--primary" href="https://wa.me/522221252321?text=Hola%2C%20me%20gustar%C3%ADa%20cotizar%20caf%C3%A9%20para%20un%20evento%20en%20Puebla." target="_blank" rel="noopener noreferrer" data-event-whatsapp data-event="event_whatsapp_click" data-cta="event-whatsapp">Cotizar por WhatsApp</a>
+          <a class="event-request__email" href="mailto:bettermoodcoffee@gmail.com?subject=Cotizaci%C3%B3n%20de%20caf%C3%A9%20para%20eventos&amp;body=Hola%2C%20me%20gustar%C3%ADa%20cotizar%20caf%C3%A9%20para%20un%20evento%20en%20Puebla." data-event-email data-event="event_email_click" data-cta="event-email">Prefiero escribir por correo</a>
+        </div>
       </section>
     </main>
 
-    <footer class="site-footer">
+    <footer class="site-footer event-footer">
       <a class="brand brand--footer" href="/" aria-label="Better Mood Coffee, inicio">
         <img src="/assets/home/bettermood-logo-180.png" alt="Better Mood Coffee" width="180" height="147" loading="lazy" />
       </a>
       <div class="footer-links">
-        <a href="/como-preparar-cafe-en-casa/">Guías</a>
-        <a href="/talleres-de-cafe-puebla/">Agenda en UPAEP</a>
+        <a href="/coffee-lab/acerca">Coffee Lab</a>
+        <a href="/menu/">Menú</a>
         <a href="/recompensas/">Recompensas</a>
         <a href="/aviso-privacidad.html">Privacidad</a>
       </div>
@@ -204,6 +109,6 @@
     </footer>
 
     <script src="/home.js?v=20260713-events-motion-v2" defer></script>
-    <script src="/eventos/eventos.js" defer></script>
+    <script src="/eventos/eventos.js?v=cotizar" defer></script>
   </body>
 </html>

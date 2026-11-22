@@ -3,7 +3,8 @@ const {
   DELIVERY_FEE,
   DELIVERY_LABEL,
   PAYMENT_MODE,
-  PRODUCT,
+  getCoffeeProduct,
+  naturalCheckoutAvailable,
   SITE_URL,
   checkRateLimit,
   createOrderId,
@@ -17,19 +18,29 @@ const {
   sanitizeText,
   setJSON,
 } = require("./coffee-commerce-shared");
+const { createProviderOrder, ordersConfig } = require("../lib/coffee-mercadopago-orders.cjs");
 
 exports.handler = async (event) => {
-  initNetlifyBlobs(event);
   if (event.httpMethod !== "POST") return json(405, { error: "Method not allowed" }, { Allow: "POST" });
-  if (!process.env.MERCADOPAGO_ACCESS_TOKEN) {
+  const body = parseBody(event);
+  if (!body) return json(400, { error: "JSON inválido." });
+  const product = getCoffeeProduct(body.product);
+  if (!product) return json(404, { error: "Café no encontrado." });
+  const natural = body.product === "natural";
+  const config = natural ? ordersConfig() : null;
+  if (config?.mode === "production") {
+    return json(409, { error: "Abre la página de Nuestro café para continuar con la compra." });
+  }
+  if (natural && !naturalCheckoutAvailable(product, config)) {
+    return json(503, { error: "La compra de café natural aún no está disponible." });
+  }
+  if (!natural && !process.env.MERCADOPAGO_ACCESS_TOKEN) {
     return json(500, { error: "MERCADOPAGO_ACCESS_TOKEN no configurado en Netlify." });
   }
 
+  initNetlifyBlobs(event);
   const rate = await checkRateLimit("coffee-checkout", event, 10, 60_000);
   if (!rate.allowed) return json(429, { error: "Demasiados intentos. Intenta de nuevo en un minuto." });
-
-  const body = parseBody(event);
-  if (!body) return json(400, { error: "JSON inválido." });
 
   const name = sanitizeText(body.name, 120);
   const phone = normalizePhone(body.phone);
@@ -47,28 +58,32 @@ exports.handler = async (event) => {
 
   if (!name) return json(400, { error: "Ingresa tu nombre." });
   if (!phone || phone.length < 8) return json(400, { error: "Ingresa un WhatsApp válido." });
-  if (!email || !isValidEmail(email)) return json(400, { error: "Ingresa un email válido." });
+  if ((!natural || email) && !isValidEmail(email)) return json(400, { error: "Ingresa un email válido." });
   if (!acceptsTerms) return json(400, { error: "Acepta las condiciones de compra." });
   if (fulfillmentMethod === "delivery" && (!deliveryAddress.street || !deliveryAddress.neighborhood)) {
     return json(400, { error: "Ingresa calle y colonia para entrega a domicilio." });
   }
-  if (!Number.isFinite(PRODUCT.unitPrice) || PRODUCT.unitPrice <= 0) return json(500, { error: "Precio del producto no configurado." });
+  if (!Number.isFinite(product.unitPrice) || product.unitPrice <= 0) return json(500, { error: "Precio del producto no configurado." });
 
   const now = new Date().toISOString();
   const orderId = createOrderId();
   const paymentId = createPaymentId();
   const shippingFee = fulfillmentMethod === "delivery" ? DELIVERY_FEE : 0;
-  const totalAmount = (PRODUCT.unitPrice * quantity) + shippingFee;
+  const totalAmount = Number((product.unitPrice * quantity + shippingFee).toFixed(2));
+
+  if (natural && body.expectedTotal !== undefined && body.expectedTotal !== totalAmount) {
+    return json(409, { error: "Cambió el importe. Revisa el total antes de continuar." });
+  }
 
   const order = {
     id: orderId,
     status: "pending_payment",
     paymentStatus: "pending",
     pickupStatus: "not_ready",
-    source: "cafe_lavado_page",
-    product: PRODUCT,
+    source: natural ? "cafe_natural_page" : "cafe_lavado_page",
+    product,
     quantity,
-    unitPrice: PRODUCT.unitPrice,
+    unitPrice: product.unitPrice,
     shippingFee,
     totalAmount,
     currency: CURRENCY,
@@ -78,7 +93,7 @@ exports.handler = async (event) => {
       address: "13 Poniente 2302/F, Col. La Paz, Puebla",
       deliveryAddress: fulfillmentMethod === "delivery" ? deliveryAddress : null,
     },
-    customer: { name, phone, email },
+    customer: { name, phone, ...(email ? { email } : {}) },
     notes,
     paymentId,
     createdAt: now,
@@ -86,14 +101,25 @@ exports.handler = async (event) => {
     paidAt: null,
   };
 
+  if (natural) {
+    let provider;
+    try {
+      provider = await createProviderOrder(order, config);
+    } catch {
+      return json(502, { error: "No fue posible iniciar el pago. Intenta de nuevo." });
+    }
+    await setJSON(config.orderStore, `orders/${orderId}.json`, { ...order, providerOrderId: provider.providerOrderId });
+    return json(200, { orderId, paymentId, checkoutUrl: provider.checkoutUrl });
+  }
+
   const preferenceBody = {
     items: [
       {
-        id: PRODUCT.sku,
-        title: PRODUCT.title,
-        description: PRODUCT.description,
+        id: product.sku,
+        title: product.title,
+        description: product.description,
         quantity,
-        unit_price: PRODUCT.unitPrice,
+        unit_price: product.unitPrice,
         currency_id: CURRENCY,
       },
     ],
@@ -104,7 +130,7 @@ exports.handler = async (event) => {
       paymentId,
       source: "better_mood_cafe_lavado",
       product: "cafe_lavado",
-      sku: PRODUCT.sku,
+      sku: product.sku,
       quantity,
     },
     back_urls: {
@@ -137,21 +163,25 @@ exports.handler = async (event) => {
     ? preference.sandbox_init_point || preference.init_point
     : preference.init_point || preference.sandbox_init_point;
 
+  return saveCheckout(order, { preferenceId: preference.id, rawProviderResponse: preference }, checkoutUrl);
+};
+
+async function saveCheckout(order, providerRecord, checkoutUrl) {
+  const { id: orderId, paymentId, createdAt: now } = order;
   const payment = {
     id: paymentId,
     orderId,
-    amount: totalAmount,
-    currency: CURRENCY,
+    amount: order.totalAmount,
+    currency: order.currency,
     provider: "mercado_pago",
-    preferenceId: preference.id,
     providerPaymentId: null,
     checkoutUrl,
     externalReference: orderId,
     status: "pending",
-    rawProviderResponse: preference,
     createdAt: now,
     updatedAt: now,
     paidAt: null,
+    ...providerRecord,
   };
 
   await Promise.all([
@@ -159,5 +189,8 @@ exports.handler = async (event) => {
     setJSON("coffee_payments", `payments/${paymentId}.json`, payment),
   ]);
 
-  return json(200, { orderId, paymentId, checkoutUrl, init_point: checkoutUrl, preferenceId: preference.id });
-};
+  return json(200, {
+    orderId, paymentId, checkoutUrl, init_point: checkoutUrl,
+    ...(providerRecord.preferenceId ? { preferenceId: providerRecord.preferenceId } : {}),
+  });
+}

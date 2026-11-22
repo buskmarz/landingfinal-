@@ -208,3 +208,12 @@
 @media (prefers-reduced-motion: reduce) {
   .business-lead__intro { position: static; }
 }
+
+.business-hero { min-height: 0; }
+.business-hero__copy, .business-fit, .business-process, .business-lead { padding-block: clamp(32px, 5vw, 74px); }
+.business-hero h1 { font-size: clamp(2.7rem, 5vw, 5rem); line-height: 1.03; }
+.business-hero__media { min-height: clamp(300px, 38vw, 540px); }
+.business-hero__actions, .business-hero__proof { margin-top: 20px; }
+@media (max-width: 680px) {
+  .business-hero__media { min-height: 0; height: clamp(210px, 63vw, 340px); }
+}
