@@ -1,5 +1,5 @@
 const crypto = require("crypto");
-const { connectLambda, getStore } = require("@netlify/blobs");
+const { ordersConfig } = require("../lib/coffee-mercadopago-orders.cjs");
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || process.env.URL || "https://bmoodcoffee.com";
 const PAYMENT_MODE = process.env.PAYMENT_MODE || "sandbox";
@@ -17,8 +17,28 @@ const PRODUCT = Object.freeze({
 const DELIVERY_FEE = Number.parseInt(process.env.COFFEE_DELIVERY_FEE || "60", 10);
 const DELIVERY_LABEL = process.env.COFFEE_DELIVERY_LABEL || "Entrega a domicilio en Puebla";
 
+function getCoffeeProduct(id) {
+  if (id === undefined || id === "lavado") return PRODUCT;
+  if (id !== "natural") return null;
+  const price = (process.env.COFFEE_NATURAL_PRICE || "350").trim();
+  const weight = (process.env.COFFEE_NATURAL_WEIGHT || "250 g").trim();
+  return {
+    sku: "BMC-NATURAL",
+    title: "Café natural Finca Santa Cruz",
+    description: weight ? `Café natural de Finca Santa Cruz. Bolsa de ${weight}.` : "Café natural de Finca Santa Cruz.",
+    unitPrice: /^\d+(?:\.\d{1,2})?$/.test(price) && Number.isFinite(Number(price)) ? Number(price) : null,
+    currency: CURRENCY,
+    weight,
+  };
+}
+
+function naturalCheckoutAvailable(product, config = ordersConfig()) {
+  return product?.unitPrice > 0 && Number.isFinite(DELIVERY_FEE) && DELIVERY_FEE >= 0 && Boolean(product.weight && config &&
+    (config.mode === "sandbox" || (process.env.COFFEE_NATURAL_SALES_ENABLED === "true" && (process.env.ADMIN_SECRET || process.env.ADMIN_PASSWORD))));
+}
+
 function initNetlifyBlobs(event) {
-  connectLambda(event);
+  require("@netlify/blobs").connectLambda(event);
 }
 
 function json(statusCode, body, extraHeaders = {}) {
@@ -31,6 +51,10 @@ function json(statusCode, body, extraHeaders = {}) {
     },
     body: JSON.stringify(body),
   };
+}
+
+function orderResponse(status, body, headers = {}) {
+  return Response.json(body, { status, headers: { "Cache-Control": "no-store", ...headers } });
 }
 
 function parseBody(event) {
@@ -58,15 +82,15 @@ function isValidEmail(email) {
 }
 
 function store(name) {
-  return getStore(name);
+  return require("@netlify/blobs").getStore(name);
 }
 
-async function getJSON(storeName, key) {
-  return store(storeName).get(key, { type: "json" });
+async function getJSON(storeName, key, options) {
+  return store(storeName).get(key, { type: "json", ...options });
 }
 
-async function setJSON(storeName, key, value) {
-  await store(storeName).setJSON(key, value);
+async function setJSON(storeName, key, value, options) {
+  return store(storeName).setJSON(key, value, options);
 }
 
 async function listJSON(storeName, prefix = "") {
@@ -138,11 +162,11 @@ function verifyMercadoPagoSignature(event) {
   const dataId = event.queryStringParameters?.["data.id"] || body.data?.id || "";
   const ts = signature.match(/ts=([^,]+)/)?.[1];
   const v1 = signature.match(/v1=([^,]+)/)?.[1];
-  if (!ts || !v1 || !requestId || !dataId) return { ok: false, error: "missing_signature_parts" };
+  if (!ts || !/^[a-f0-9]{64}$/.test(v1 || "") || !requestId || !dataId) return { ok: false, error: "missing_signature_parts" };
   const manifest = `id:${dataId};request-id:${requestId};ts:${ts};`;
   const expected = crypto.createHmac("sha256", secret).update(manifest).digest("hex");
   return {
-    ok: expected.length === v1.length && crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(v1)),
+    ok: crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(v1)),
   };
 }
 
@@ -153,14 +177,14 @@ function publicOrder(order, payment = null) {
     status: order.status,
     paymentStatus: payment?.status || order.paymentStatus || null,
     pickupStatus: order.pickupStatus || null,
+    checkoutClosed: order.checkoutClosed === true,
     product: order.product,
     quantity: order.quantity,
     unitPrice: order.unitPrice,
     shippingFee: order.shippingFee || 0,
     totalAmount: order.totalAmount,
     currency: order.currency,
-    fulfillment: order.fulfillment,
-    customerName: order.customer?.name || null,
+    fulfillment: order.fulfillment ? { method: order.fulfillment.method } : null,
     createdAt: order.createdAt,
     paidAt: order.paidAt || null,
   };
@@ -177,12 +201,15 @@ module.exports = {
   createOrderId,
   createPaymentId,
   getJSON,
+  getCoffeeProduct,
+  naturalCheckoutAvailable,
   initNetlifyBlobs,
   isValidEmail,
   json,
   listJSON,
   normalizeEmail,
   normalizePhone,
+  orderResponse,
   parseBody,
   publicOrder,
   requireAdmin,

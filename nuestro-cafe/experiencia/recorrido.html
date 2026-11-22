@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta name="robots" content="noindex,follow">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Recorrido Completo - Better Mood Coffee</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    body {
+      background-color: #FFF8E7;
+      font-family: 'Montserrat', sans-serif;
+      color: #4B4B4B;
+      margin: 0;
+      padding: 2rem 1rem;
+      text-align: center;
+    }
+    .viaje-better-mood {
+      max-width: 800px;
+      margin: auto;
+    }
+    .paso {
+      margin-bottom: 2rem;
+    }
+    .imagen-paso {
+      width: 100%;
+      max-width: 260px;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+    }
+    .conector {
+      width: 4px;
+      height: 20px;
+      background: #FFD74B;
+      margin: 1rem auto;
+      border-radius: 2px;
+    }
+    .especial-ultimo-paso {
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      padding: 1rem;
+      max-width: 300px;
+      margin: auto;
+    }
+    .numero-paso {
+      background-color: #FFD74B;
+      color: #000000;
+      font-weight: bold;
+      font-size: 1.1rem;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 auto 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    }
+  </style>
+</head>
+<body>
+  <section class="viaje-better-mood">
+    <div class="paso">
+      <div class="numero-paso">1</div>
+      <img src="/assets/landing-lavado/01-finca.png" alt="Finca Santa Cruz" class="imagen-paso" />
+      <h3>Finca Santa Cruz</h3>
+      <p>El origen fértil donde todo comienza.</p>
+    </div>
+
+    <div class="paso">
+      <div class="numero-paso">2</div>
+      <img src="/assets/landing-lavado/02-cosecha.png" alt="Cosecha Manual" class="imagen-paso" />
+      <h3>Cosecha Manual</h3>
+      <p>Cada grano seleccionado a mano con dedicación.</p>
+    </div>
+
+    <div class="paso">
+      <div class="numero-paso">3</div>
+      <img src="/assets/landing-lavado/03-lavado.png" alt="Lavado Artesanal" class="imagen-paso" />
+      <h3>Lavado Artesanal</h3>
+      <p>Purificando el alma de cada grano.</p>
+    </div>
+
+    <div class="paso">
+      <div class="numero-paso">4</div>
+      <img src="/assets/landing-lavado/04-secado.png" alt="Secado Natural" class="imagen-paso" />
+      <h3>Secado Natural</h3>
+      <p>Paciencia y sol para perfeccionar cada detalle.</p>
+    </div>
+
+    <div class="paso">
+      <div class="numero-paso">5</div>
+      <img src="/assets/landing-lavado/05-tueste.png" alt="Tueste Perfecto" class="imagen-paso" />
+      <h3>Tueste Perfecto</h3>
+      <p>Maestría en pequeños lotes para revelar magia.</p>
+    </div>
+
+    <div class="paso">
+      <div class="numero-paso">6</div>
+      <img src="/assets/landing-lavado/06-empaque.png" alt="Empaque Premium" class="imagen-paso" />
+      <h3>Empaque Premium</h3>
+      <p>Frescura y calidad selladas con amor.</p>
+    </div>
+
+    <div class="paso">
+      <div class="numero-paso">7</div>
+      <img src="/assets/landing-lavado/07-hogar.png" alt="Better Mood en tu Hogar" class="imagen-paso" />
+      <h3>Better Mood en tu Hogar</h3>
+      <p>El viaje termina donde el café cobra vida.</p>
+    </div>
+
+    <div class="paso especial-ultimo-paso">
+      <div class="numero-paso">8</div>
+      <img src="/assets/landing-lavado/08-droppy-cafe.png" alt="Momento Better Mood" class="imagen-paso" />
+      <h3>Momento Better Mood</h3>
+      <p>Droppy saborea el resultado de todo el viaje.</p>
+    </div>
+  </section>
+</audio>
+
+<audio id="audio-recorrido" autoplay loop>
+  <source src="/assets/landing-lavado/musica-recorrido.mp3" type="audio/mpeg">
+  Tu navegador no soporta audio HTML5.
+</audio>
+
+<script>
+  window.addEventListener('load', function() {
+    const audio = document.getElementById('audio-recorrido');
+    const playMusic = localStorage.getItem('iniciarMusicaRecorrido') === 'true';
+
+    if (playMusic) {
+      const playPromise = audio.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          document.body.addEventListener('click', () => {
+            audio.play();
+          }, { once: true });
+        });
+      }
+      localStorage.removeItem('iniciarMusicaRecorrido');
+    }
+  });
+</script>
+
+  <section class="section text-center" style="margin-top: 3rem;">
+    <h2 style="font-size: 1.8rem; color: #000;">Gracias por acompañarnos</h2>
+    <p style="font-size: 1.1rem; max-width: 600px; margin: 1rem auto; color: #4B4B4B;">
+      Miles de manos, una sola taza. Cada paso es un acto de amor por el café.
+      <strong>Ahora es tu turno de darle vida a esta historia.</strong>
+    </p>
+  </section>
+
+  <footer style="margin-top: 2rem; font-size: 0.9rem; color: #666;">
+    © 2025 Better Mood Coffee. Todos los derechos reservados.
+  </footer>
+
+  <button id="toggle-audio" style="
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background-color: #FFD74B;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    cursor: pointer;
+    z-index: 1000;
+  ">
+    <span id="audio-icon" style="font-size: 24px;">🔊</span>
+  </button>
+
+  <script>
+    const audioBtn = document.getElementById('toggle-audio');
+    const audioIcon = document.getElementById('audio-icon');
+    const audio = document.getElementById('audio-recorrido');
+
+    function updateIcon() {
+      audioIcon.textContent = audio.paused ? '🔇' : '🔊';
+    }
+
+    audioBtn.addEventListener('click', () => {
+      if (audio.paused) {
+        audio.play();
+      } else {
+        audio.pause();
+      }
+      updateIcon();
+    });
+
+    updateIcon();
+  </script>
+</body>
+</html>

@@ -4,7 +4,7 @@
   if (!root) return;
   const $ = selector => document.querySelector(selector);
   const $$ = selector => [...document.querySelectorAll(selector)];
-  const money = number => '$' + Number(number).toLocaleString('es-MX', {maximumFractionDigits: 2});
+  const money = (number, minimumFractionDigits = 0) => '$' + Number(number).toLocaleString('es-MX', {minimumFractionDigits, maximumFractionDigits: 2});
   const normalize = value => String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
   const dishes = $$('.dish');
   const sections = $$('[data-section]');
@@ -18,21 +18,27 @@
   const tastes = {clasico: ['cortado', 'flat-white', 'cappuccino', 'latte'], frio: ['cold-brew', 'cold-brew-tonic', 'espresso-tonic', 'kombucha'], dulce: ['affogato', 'croissant-de-nutella', 'waffles-frutos-rojos', 'brownie', 'enjambre', 'trufas'], comer: ['chilaquiles', 'molletes', 'avo-toast', 'el-iberico', 'golden', 'club-sandwich']};
   const STORAGE_KEY = 'bm-table-cart-v1';
   const API = '/api/table-order';
-  let category = 'cafe', taste = '', budget = false, activeDish = null, detailQuantity = 1;
+  let category = 'all', taste = '', budget = false, activeDish = null, detailQuantity = 1;
   let posCatalog = new Map(), catalogLoaded = false, session = null, catalogPromise = null;
   let tableEntry = typeof window.__bmTableEntry === 'string' ? window.__bmTableEntry : '';
   delete window.__bmTableEntry;
   let cart = [], pending = null, receipt = null, sending = false, sessionChecking = false;
+  let bill = null, paymentBusy = false, paymentResult = null, paymentMessage = '';
+  const paymentReference = new URLSearchParams(location.search).get('pago') || '';
+  let returningFromPayment = /^BMM-[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/.test(paymentReference);
+  const pickupParam = new URLSearchParams(location.search).get('recoger') || '';
+  let pickupReference = /^BMP-\d{8}-[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/.test(pickupParam) ? pickupParam : '';
+  let pickup = null, pickupMode = '', pickupUrl = '', pickupChecking = false, pickupTimer;
   let toastTimer, pollTimer, modalOpener, previousOverflow = '', sourceChoice = '', variantChoice = '';
   let modifierChoices = new Set();
 
   // The QR capability is exchanged once for a HttpOnly cookie. Never store it or
   // include it in URLs, sharing links, analytics, cart persistence, or errors.
-  async function api(action, body) {
+  async function api(action, body, query = {}) {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 18000);
     try {
-      const response = await fetch(body ? API : API + '?action=' + encodeURIComponent(action), {
+      const response = await fetch(body ? API : API + '?' + new URLSearchParams({action, ...query}), {
         method: body ? 'POST' : 'GET', credentials: 'same-origin', cache: 'no-store', signal: controller.signal,
         headers: body ? {'Content-Type': 'application/json'} : {'Accept': 'application/json'},
         ...(body ? {body: JSON.stringify({action, ...body})} : {})
@@ -213,18 +219,34 @@
     receipt = null; persist(); renderCart(); renderMenu(); dishDialog.close(); toast(activeDish.name + ' agregado');
   });
   function activeSession() { return !!session && Date.parse(session.expiresAt) > Date.now(); }
+  function orderForPickup() { return pickup?.enabled && (pickupMode === 'pickup' || !activeSession()); }
+  function checkoutHref(value) {
+    const url = new URL(value);
+    if (url.origin !== 'https://www.mercadopago.com.mx' || url.pathname !== '/checkout/v1/redirect' || url.username || url.password ||
+      !/^ORD[A-Z0-9]{16,64}$/.test(url.searchParams.get('order_id') || '')) throw new Error('Invalid Checkout Pro URL');
+    return url.href;
+  }
+  function orderItems() {
+    return cart.map(line => ({
+      productId:line.productId, quantity:line.quantity, unitPrice:line.unitPrice, notes:line.notes,
+      ...(line.variantId ? {variantId:line.variantId} : {}),
+      ...(line.modifierIds?.length ? {modifierIds:line.modifierIds} : {})
+    }));
+  }
   function cartTotal() { return cart.reduce((total, line) => total + line.quantity * line.unitPrice, 0); }
   function lineAvailable(line) { const source = catalogOption(line.productId); return !!source && validChoices(source, line.variantId, line.modifierIds || []); }
   function cartReady() { return activeSession() && catalogLoaded && cart.length > 0 && cart.length <= 12 && cartTotal() <= 3000 && cart.every(lineAvailable); }
   function setCartStatus(message) { $('#cart-status').textContent = message; }
   function renderSession() {
     const active = activeSession();
+    const collect = orderForPickup();
     $('#table-context').classList.toggle('is-active', active);
-    $('#table-context-text').textContent = active ? session.tableLabel + ' · Tu acceso está listo para pedir.' : tableEntry ? 'Comprobando el acceso de tu mesa…' : 'Explora la carta. Arma tu pedido a tu gusto.';
+    $('#table-context-text').textContent = tableEntry ? 'Comprobando el acceso de tu mesa…' :
+      collect ? 'Pide para recoger en Better Mood UPAEP.' : active ? session.tableLabel + ' · Tu acceso está listo para pedir.' : 'Arma tu pedido desde el menú.';
     $('#table-help').hidden = active;
-    $('#table-help').textContent = tableEntry ? 'Reintentar acceso' : '¿Ya estás aquí?';
-    $('#cart-table-label').textContent = active ? session.tableLabel + ' · UPAEP' : 'TU PAUSA, A TU GUSTO';
-    $('#cart-session-help').hidden = active;
+    $('#table-help').textContent = tableEntry ? 'Reintentar acceso' : collect ? 'Para recoger' : 'Cómo pedir en mesa';
+    $('#cart-table-label').textContent = collect ? 'Para recoger · UPAEP' : active ? session.tableLabel + ' · UPAEP' : 'UPAEP';
+    $('#cart-session-help').hidden = active || collect || Boolean(pickupReference);
     renderCart();
   }
   function changeCart(index, delta) {
@@ -236,13 +258,14 @@
   function renderCart() {
     const count = cart.reduce((sum, line) => sum + line.quantity, 0);
     $$('[data-cart-count]').forEach(el => { el.textContent = String(count); });
-    $('.cart-dock').hidden = !count && !receipt;
+    $('.cart-dock').hidden = !count && !receipt && !returningFromPayment && !bill?.payment && !pickupReference;
     $('.header-cart').hidden = false;
-    $('#dock-total').textContent = receipt && !count ? 'Ver estado' : money(cartTotal());
+    $('#dock-total').textContent = !count ? 'Ver estado' : money(cartTotal());
     $('#cart-total').textContent = money(cartTotal());
-    $('#cart-total-row>span').textContent = activeSession() && cart.every(lineAvailable) ? 'Total' : 'Total estimado';
-    $('#cart-empty').hidden = count > 0 || !!receipt;
-    $('#cart-total-row').hidden = !count; $('.cart-payment').hidden = !count;
+    const collect = orderForPickup();
+    $('#cart-total-row>span').textContent = (activeSession() || collect) && catalogLoaded && cart.every(lineAvailable) ? 'Total' : 'Total estimado';
+    $('#cart-empty').hidden = count > 0 || !!receipt || !!bill || returningFromPayment || Boolean(pickupReference);
+    $('#cart-total-row').hidden = !count; $('.cart-payment').hidden = !count || collect;
     $('#cart-items').replaceChildren();
     cart.forEach((line, index) => {
       const row = document.createElement('article'); row.className = 'cart-line';
@@ -261,19 +284,183 @@
     const submit = $('#submit-order');
     const differentSession = pending?.sessionId && pending.sessionId !== session?.id;
     $('#resolve-pending').hidden = !pending || (activeSession() && !differentSession);
-    submit.disabled = sending || (!pending && !cartReady()) || !activeSession() || !!differentSession;
-    submit.hidden = !count;
+    const billLocked = !!bill?.payment && bill.payment.status !== 'canceled';
+    submit.disabled = sending || billLocked || (!pending && !cartReady()) || !activeSession() || !!differentSession;
+    submit.hidden = !count || collect || Boolean(pickupReference);
     submit.textContent = sending ? 'Confirmando tu pedido…' : differentSession ? 'Confirma el envío anterior con el equipo' : !activeSession() ? 'Necesitas el acceso de tu mesa' : pending ? 'Reintentar este mismo pedido' : cartTotal() > 3000 ? 'El pedido supera el límite por envío' : !catalogLoaded ? 'Comprobando disponibilidad…' : !cart.every(lineAvailable) ? 'Revisa las opciones de tu pedido' : 'Enviar a la cafetería · ' + money(cartTotal());
     renderReceipt();
+    renderBill();
+    $('#order-channel').hidden = !pickup?.enabled || !activeSession() || !!pending || returningFromPayment || Boolean(pickupReference);
+    $('#order-in-table').setAttribute('aria-pressed',String(!collect));
+    $('#order-for-pickup').setAttribute('aria-pressed',String(collect));
+    $('#pickup-form').hidden = !collect || !count || !!pending || Boolean(pickupReference);
+    $('#pickup-closed').hidden = !!pickup?.open;
+    $('#pickup-fields').hidden = !pickup?.open;
+    $('#pickup-fields').disabled = !pickup?.open || sending;
+    $('#pickup-pay').disabled = !catalogLoaded || !cart.every(lineAvailable) || cartTotal() > 3000 || cart.length > 12;
+    $('#pickup-pay').textContent = sending ? 'Preparando el pago…' : 'Pagar con Mercado Pago · ' + money(cartTotal(),2);
+    $('#pickup-receipt').hidden = !pickupReference;
   }
+
+  const paymentLabels = {
+    ready: 'Caja habilitó el pago en línea.',
+    creating: 'Preparando el enlace de pago.',
+    pending: 'Esperando confirmación de Mercado Pago.',
+    rejected: 'El pago no se aprobó. Puedes reintentar con el mismo enlace.',
+    paid: 'Pago acreditado. El equipo lo registrará en caja.',
+    canceled: 'Este enlace de pago ya no está disponible.',
+    review: 'Consulta el estado del pago con el equipo.'
+  };
+  function renderBill() {
+    const active = activeSession();
+    const payment = bill?.payment;
+    const shown = returningFromPayment
+      ? (paymentResult || (payment?.reference === paymentReference ? payment : null))
+      : payment;
+    const start = $('#start-bill-payment');
+    const ask = $('#request-table-bill');
+    const check = $('#check-bill-payment');
+    $('#cart-bill').hidden = !returningFromPayment && (orderForPickup() || Boolean(pickupReference) || !(active && (bill || receipt)));
+    $('#bill-status').textContent = paymentMessage || (shown
+      ? (!returningFromPayment && shown.status === 'ready' ? '' : money(shown.amount, 2) + ' MXN · ') +
+        (paymentLabels[shown.status] || 'Consulta con caja.')
+      : returningFromPayment ? 'Consultando el estado de tu pago…'
+        : bill?.pending ? 'Tenemos pedidos por confirmar antes de cerrar la cuenta.'
+          : session?.billRequestedAt ? 'El equipo recibió tu solicitud de cuenta.'
+            : 'Puedes pedir tu cuenta desde aquí.');
+    const payable = ['ready','creating','pending','rejected'];
+    start.hidden = !active || !payment || bill.pending || !payable.includes(payment.status) ||
+      (returningFromPayment && (payment.reference !== paymentReference || !payable.includes(shown?.status)));
+    start.disabled = paymentBusy;
+    if (!start.hidden) start.textContent = 'Pagar con Mercado Pago · ' + money(payment.amount, 2);
+    check.hidden = !returningFromPayment;
+    check.disabled = paymentBusy;
+    ask.hidden = returningFromPayment || !active || Boolean(session?.billRequestedAt) || (!bill && !receipt) || Boolean(payment && payment.status !== 'canceled');
+    ask.disabled = paymentBusy;
+  }
+  async function checkPayment() {
+    if (!returningFromPayment || paymentBusy) return;
+    paymentBusy = true;
+    paymentMessage = '';
+    renderBill();
+    try {
+      const {payment} = await api('payment_status', undefined, {reference: paymentReference});
+      if (returningFromPayment) paymentResult = payment;
+    } catch (_) {
+      if (returningFromPayment) paymentMessage = 'No pudimos confirmar el estado. Verifica de nuevo o consulta con caja.';
+    } finally { paymentBusy = false; renderBill(); }
+  }
+  $('#start-bill-payment').addEventListener('click', async () => {
+    if (paymentBusy || !activeSession() || !bill?.payment || bill.pending) return;
+    paymentBusy = true; paymentMessage = ''; renderBill();
+    try {
+      const data = await api('start_payment', {reference: bill.payment.reference});
+      location.assign(checkoutHref(data.checkoutUrl));
+    } catch (_) {
+      paymentMessage = 'No pudimos abrir Mercado Pago. Reintenta el mismo pago o consulta con caja.';
+      paymentBusy = false; renderBill();
+    }
+  });
+  $('#check-bill-payment').addEventListener('click', checkPayment);
+  const pickupCopy = {
+    paid:{new:'Pago confirmado. El equipo recibió tu pedido.',preparing:'Estamos preparando tu pedido.',ready:'Tu pedido está listo en Better Mood UPAEP.',delivered:'Pedido entregado.'},
+    rejected:'El pago fue rechazado. Puedes reintentar con el mismo pedido.',
+    canceled:'El enlace de pago ya no está disponible.',
+    review:'Consulta con el equipo el estado de tu pedido.'
+  };
+  function showPickup(data) {
+    const {order} = data;
+    if (order.reference !== pickupReference) return;
+    const paid = order.status === 'paid';
+    const message = paid ? pickupCopy.paid[order.fulfillment] : pickupCopy[order.status] || 'Esperando confirmación de Mercado Pago.';
+    $('#pickup-message').textContent = message + ' · ' + money(order.amount,2) + ' MXN';
+    $('#pickup-code').hidden = !paid;
+    $('#pickup-code').textContent = 'Código de recogida: ' + order.code;
+    $('#pickup-directions').hidden = !paid || order.fulfillment === 'delivered';
+    pickupUrl = data.checkoutUrl ? checkoutHref(data.checkoutUrl) : '';
+    $('#pickup-retry').hidden = !pickupUrl;
+    $('#pickup-new').hidden = !paid && !['canceled','review'].includes(order.status);
+    if (['creating','pending'].includes(order.status) || paid && ['new','preparing'].includes(order.fulfillment)) {
+      pickupTimer = setTimeout(checkPickup, 12000);
+    }
+  }
+  async function checkPickup(verify = false) {
+    if (!pickupReference || pickupChecking) return;
+    clearTimeout(pickupTimer);
+    pickupChecking = true;
+    $('#pickup-verify').disabled = true;
+    try {
+      showPickup(await api('pickup_status',undefined,{reference:pickupReference,...(verify?{verify:'1'}:{})}));
+    } catch (_) {
+      $('#pickup-message').textContent = 'No pudimos confirmar el pedido. Actualiza el estado en unos segundos.';
+    } finally {
+      pickupChecking = false;
+      $('#pickup-verify').disabled = false;
+    }
+  }
+  $('#pickup-verify').addEventListener('click',()=>checkPickup(true));
+  $('#pickup-retry').addEventListener('click',() => { if (pickupUrl) location.assign(pickupUrl); });
+  $('#pickup-new').addEventListener('click',() => {
+    clearTimeout(pickupTimer);
+    pickupReference = ''; pickupUrl = '';
+    history.replaceState(null,'',location.pathname);
+    renderSession();
+  });
+  $('#order-in-table').addEventListener('click',() => { pickupMode = 'table'; setCartStatus(''); renderSession(); });
+  $('#order-for-pickup').addEventListener('click',() => { pickupMode = 'pickup'; setCartStatus(''); renderSession(); });
+  $('#pickup-form').addEventListener('submit',async event => {
+    event.preventDefault();
+    if (!orderForPickup() || !pickup.open || pickupReference || sending || pending || !cart.length) return;
+    const {name,phone} = Object.fromEntries(new FormData(event.currentTarget));
+    const fields = {name:name.trim(),phone,items:orderItems(),date:pickup.date};
+    sending = true;
+    setCartStatus('');
+    renderCart();
+    try {
+      if (await loadCatalog() || !pickup.open || !cart.every(lineAvailable)) {
+        setCartStatus('Revisa el importe y la disponibilidad antes de pagar.');
+        return;
+      }
+      const key = STORAGE_KEY + ':pickup';
+      const hash = await crypto.subtle.digest('SHA-256',new TextEncoder().encode(JSON.stringify(fields)));
+      const fingerprint = Array.from(new Uint8Array(hash),byte => byte.toString(16).padStart(2,'0')).join('');
+      let draft;
+      try { draft = JSON.parse(sessionStorage.getItem(key)); } catch (_) { /* Browser storage may be disabled. */ }
+      if (draft?.fingerprint !== fingerprint) draft = {fingerprint,requestId:crypto.randomUUID()};
+      try { sessionStorage.setItem(key,JSON.stringify(draft)); } catch (_) { /* Browser storage may be disabled. */ }
+      const data = await api('pickup_checkout',{...fields,requestId:draft.requestId});
+      const href = data.checkoutUrl ? checkoutHref(data.checkoutUrl) : '';
+      if (!data.order?.reference) throw new Error('Missing pickup confirmation');
+      pickupReference = data.order.reference;
+      history.replaceState(null,'',location.pathname + '?recoger=' + encodeURIComponent(pickupReference));
+      cart = []; persist(); renderMenu();
+      event.target.reset();
+      if (href) { location.assign(href); return; }
+      showPickup(data);
+    } catch (error) {
+      setCartStatus(error.data?.error || 'No pudimos iniciar el pago. Reintenta el mismo pedido.');
+    } finally {
+      sending = false;
+      renderSession();
+    }
+  });
+  $('#request-table-bill').addEventListener('click', async () => {
+    if (paymentBusy || !activeSession()) return;
+    paymentBusy = true; paymentMessage = ''; renderBill();
+    try {
+      const data = await api('request_bill', {});
+      session = data.session;
+    } catch (_) { paymentMessage = 'No se pudo pedir la cuenta. Reintenta o avisa al equipo.'; }
+    finally { paymentBusy = false; renderBill(); }
+  });
   const statusLabels = {received: 'Pedido recibido en la cafetería', accepted: 'Tu pedido está en preparación', preparing: 'Tu pedido está en preparación', ready: 'Tu pedido está listo', served: 'Pedido entregado', delivered: 'Pedido entregado', cancelled: 'Pedido cancelado', rejected: 'El equipo necesita revisar tu pedido', paid: 'Pedido pagado', closed: 'Pedido cerrado'};
   function renderReceipt() {
-    const target = $('#cart-receipt'); target.replaceChildren(); target.hidden = !receipt;
+    const target = $('#cart-receipt'); target.replaceChildren(); target.hidden = !receipt || orderForPickup() || Boolean(pickupReference);
     if (!receipt) return;
     const mark = document.createElement('div'); mark.className = 'receipt-mark'; mark.textContent = receipt.status === 'cancelled' ? '—' : '✓';
     const title = document.createElement('p'); title.className = 'receipt-title'; title.textContent = statusLabels[receipt.status] || 'Pedido recibido en la cafetería';
     const number = document.createElement('p'); number.className = 'receipt-number'; number.textContent = 'Pedido ' + (receipt.number || receipt.id.slice(-8));
-    const copy = document.createElement('p'); copy.className = 'receipt-copy'; copy.textContent = 'Puedes seguir explorando la carta. El pago se realiza en la cafetería.';
+    const copy = document.createElement('p'); copy.className = 'receipt-copy'; copy.textContent = 'Puedes seguir explorando la carta o pedir tu cuenta.';
     target.append(mark, title, number);
     if (Array.isArray(receipt.items)) { const list = document.createElement('ul'); list.className = 'receipt-items'; receipt.items.forEach(item => { const li = document.createElement('li'); li.textContent = (item.quantity || 1) + ' × ' + (item.name || 'Producto'); list.append(li); }); target.append(list); }
     if (Number.isFinite(receipt.total)) { const total = document.createElement('p'); total.className = 'receipt-number'; total.textContent = 'Total: ' + money(receipt.total); target.append(total); }
@@ -282,12 +469,20 @@
   $$('[data-open-cart]').forEach(button => button.addEventListener('click', () => { renderCart(); showModal(cartDialog, button); if (pending) setCartStatus('El envío anterior está por confirmar. Reintenta el mismo pedido; no se duplicará.'); }));
   $('#pending-reviewed').addEventListener('change', () => { $('#start-new-order').disabled = !$('#pending-reviewed').checked; });
   $('#start-new-order').addEventListener('click', () => { if (!$('#pending-reviewed').checked || sending) return; pending = null; cart = []; receipt = null; $('#pending-reviewed').checked = false; $('#start-new-order').disabled = true; persist(); setCartStatus('Puedes armar un pedido nuevo. Necesitas un acceso de mesa activo para enviarlo.'); renderMenu(); renderCart(); });
+  cartDialog.addEventListener('close', () => {
+    if (!returningFromPayment) return;
+    returningFromPayment = false;
+    paymentMessage = '';
+    history.replaceState(null, '', location.pathname);
+    renderCart();
+  });
   $('#continue-menu').addEventListener('click', () => { if (!sending) cartDialog.close(); });
   $('#table-help').addEventListener('click', () => { if (tableEntry) { refreshSession(true); } else { renderCart(); showModal(cartDialog, $('#table-help')); } });
   async function loadCatalog() {
     if (catalogPromise) return catalogPromise;
     catalogPromise = api('catalog').then(data => {
       if (!Array.isArray(data.items)) throw new Error('Invalid catalog');
+      pickup = data.pickup || null;
       const next = new Map();
       for (const source of data.items) {
         if (!byWebId.has(source.webId) || typeof source.productId !== 'string' || !Number.isFinite(source.price) || source.price < 0 || source.available === false) continue;
@@ -309,7 +504,7 @@
         if (source && !pending) { const current = selectedPrice(source, line.variantId, line.modifierIds || [], line.unitPrice); if (Math.abs(current - line.unitPrice) > .001) pricesChanged = true; line.unitPrice = current; }
       }
       if (activeDish && dishDialog.open) { const options = next.get(activeDish.id) || []; if (!sourceChoice && options.length === 1) sourceChoice = options[0].productId; renderChoices(); updateDetail(); }
-      persist(); renderMenu(); renderCart(); return pricesChanged;
+      persist(); renderMenu(); renderSession(); return pricesChanged;
     }).finally(() => { catalogPromise = null; });
     return catalogPromise;
   }
@@ -320,12 +515,13 @@
       const data = await api('session', handshake && tableEntry ? {token: tableEntry} : undefined);
       if (!data.session || !data.session.tableLabel || !data.session.expiresAt) throw new Error('Invalid table session');
       session = data.session; tableEntry = '';
+      bill = data.bill || null;
       if (pending && Array.isArray(data.orders)) { const confirmed = data.orders.find(order => order.requestId === pending.idempotencyKey && typeof order.id === 'string'); if (confirmed) { receipt = confirmed; pending = null; cart = []; persist(); setCartStatus(''); } }
       if (receipt && Array.isArray(data.orders)) { const latest = data.orders.find(order => order.id === receipt.id); if (latest) { receipt = latest; persist(); } }
-      if (!activeSession()) { session = null; setCartStatus('El acceso de esta mesa terminó. Pide un nuevo acceso al equipo.'); }
+      if (!activeSession()) { session = null; bill = null; setCartStatus('El acceso de esta mesa terminó. Pide un nuevo acceso al equipo.'); }
       clearTimeout(pollTimer); if (session) pollTimer = setTimeout(() => refreshSession(), 10000);
     } catch (error) {
-      if ([401, 403, 410].includes(error.status)) { session = null; tableEntry = ''; clearTimeout(pollTimer); if (handshake || cartDialog.open) setCartStatus(pending ? 'El acceso terminó y el envío anterior sigue sin confirmarse. Consulta al equipo antes de volver a pedir.' : 'Este acceso ya no está activo. Pide al equipo el acceso de tu mesa.'); }
+      if ([401, 403, 410].includes(error.status)) { const wasAtTable = !!session; session = null; bill = null; tableEntry = ''; clearTimeout(pollTimer); if (handshake || wasAtTable && cartDialog.open && !returningFromPayment && !pickupReference) setCartStatus(pending ? 'El acceso terminó y el envío anterior sigue sin confirmarse. Consulta al equipo antes de volver a pedir.' : 'Este acceso ya no está activo. Pide al equipo el acceso de tu mesa.'); }
       else { if (handshake) setCartStatus('No pudimos abrir tu mesa. Reintenta cuando tengas conexión.'); if (session) pollTimer = setTimeout(() => refreshSession(), 12000); }
     } finally { sessionChecking = false; renderSession(); }
   }
@@ -346,7 +542,7 @@
         const pricesChanged = await loadCatalog();
         if (pricesChanged) { setCartStatus('Actualizamos el total con los precios de la cafetería. Revísalo y vuelve a confirmar.'); return; }
         if (!cartReady()) { setCartStatus('Una opción cambió. Revisa tu pedido antes de enviarlo.'); return; }
-        pending = {sessionId: session.id, idempotencyKey: crypto.randomUUID(), items: cart.map(line => ({productId: line.productId, quantity: line.quantity, unitPrice: line.unitPrice, notes: line.notes, ...(line.variantId ? {variantId: line.variantId} : {}), ...(line.modifierIds?.length ? {modifierIds: line.modifierIds} : {})}))}; persist();
+        pending = {sessionId: session.id, idempotencyKey: crypto.randomUUID(), items: orderItems()}; persist();
       }
       const data = await api('submit', {idempotencyKey: pending.idempotencyKey, items: pending.items});
       if (!data.order || typeof data.order.id !== 'string') throw new Error('Order confirmation missing');
@@ -377,4 +573,6 @@
   if (byWebId.has(requested)) { const item = byWebId.get(requested); category = item.category; renderMenu(); openDish(item, item.el.querySelector('button')); }
   loadCatalog().catch(() => { if (activeSession()) setCartStatus('No se pudo consultar la disponibilidad. Reintenta cuando tengas conexión.'); });
   refreshSession(!!tableEntry);
+  if (returningFromPayment) { showModal(cartDialog, $('.header-cart')); checkPayment(); }
+  else if (pickupReference) { $('#pickup-message').textContent = 'Consultando tu pedido…'; showModal(cartDialog, $('.header-cart')); checkPickup(); }
 })();

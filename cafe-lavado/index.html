@@ -35,8 +35,7 @@
           "@type": "Offer",
           "url": "https://bmoodcoffee.com/cafe-lavado/",
           "priceCurrency": "MXN",
-          "price": "280",
-          "availability": "https://schema.org/InStock"
+          "price": "280"
         }
       }
     </script>
@@ -53,7 +52,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="../styles.css?v=finca-santa-cruz" />
     <link rel="icon" href="../assets/logo-better-mood.png" />
   </head>
   <body class="coffee-product-page">
@@ -70,7 +69,7 @@
         </button>
         <nav class="nav" id="primary-nav" aria-label="Navegación principal">
           <a href="/">Inicio</a>
-          <a href="/#sucursales">Menú</a>
+          <a href="/menu/">Menú</a>
           <a href="/como-preparar-cafe-en-casa/">Métodos</a>
           <a href="/#sucursales">Ubicación</a>
           <a class="btn btn--sm btn--primary" href="#comprar" data-event="click_buy_coffee">Comprar café</a>
@@ -83,22 +82,48 @@
         <div class="container coffee-shop-hero__grid">
           <div class="coffee-shop-hero__copy">
             <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Inicio</a><span>/</span><span aria-current="page">Café lavado</span></nav>
-            <p class="eyebrow">Finca Santa Cruz · origen</p>
-            <h1 id="coffee-shop-title">Antes de la taza,<br />hay una historia.</h1>
-            <p class="coffee-shop-hero__lead">Este café lavado comienza en la finca y continúa en cada preparación.</p>
+            <p class="eyebrow">La Concordia, Chiapas</p>
+            <h1 id="coffee-shop-title">Café lavado<br />Finca Santa Cruz.</h1>
+            <p class="coffee-shop-hero__lead">El café de José Argüello vuelve a Better Mood.</p>
             <div class="coffee-shop-hero__facts" aria-label="Ficha rápida del café">
               <span>Proceso lavado</span>
               <span>250 g</span>
               <span>Café de especialidad</span>
             </div>
             <div class="hero__actions">
-              <a class="btn btn--primary" href="#recorrido">Conocer el recorrido</a>
+              <a class="btn btn--primary" href="#ficha-tecnica">Ver ficha técnica</a>
               <a class="btn btn--secondary" href="#comprar" data-event="click_buy_coffee">Comprar café</a>
             </div>
           </div>
           <figure class="coffee-shop-hero__media">
-            <img src="../assets/landing-lavado/Josearguello-densocafe-fincasantacruz.jpg" alt="Productor entre plantas de café en Finca Santa Cruz" loading="eager" decoding="async" width="960" height="1080" />
-            <figcaption>Finca Santa Cruz. Aquí comienza nuestro café lavado.</figcaption>
+            <picture>
+              <source type="image/avif" srcset="/assets/home/finca-santa-cruz-720.avif 720w, /assets/home/finca-santa-cruz-1200.avif 1200w" sizes="(max-width: 860px) calc(100vw - 48px), 46vw" />
+              <img src="/assets/landing-lavado/Josearguello-densocafe-fincasantacruz.jpg" alt="José Argüello recoge cerezas de café en Finca Santa Cruz" fetchpriority="high" decoding="async" width="1280" height="1280" />
+            </picture>
+            <figcaption>José Argüello · Finca Santa Cruz</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="coffee-shop-profile" id="ficha-tecnica" aria-labelledby="coffee-profile-title">
+        <div class="container coffee-shop-profile__grid">
+          <div>
+            <h2 id="coffee-profile-title">Ficha del café</h2>
+            <dl class="coffee-shop-profile__specs">
+              <div><dt>Finca</dt><dd>Santa Cruz</dd></div>
+              <div><dt>Productor</dt><dd>José Argüello</dd></div>
+              <div><dt>Origen</dt><dd>La Concordia, Chiapas</dd></div>
+              <div><dt>Altitud</dt><dd>1,680 msnm</dd></div>
+              <div><dt>Variedades</dt><dd>Typica y Bourbon</dd></div>
+              <div><dt>Proceso</dt><dd>Lavado</dd></div>
+              <div><dt>Notas en taza</dt><dd>Chocolate, mantequilla y caramelo</dd></div>
+              <div><dt>Puntaje en etiqueta</dt><dd>84.5</dd></div>
+            </dl>
+            <p class="coffee-shop-profile__note">Datos de la edición anterior de 250 g. El perfil del nuevo lote está por confirmar.</p>
+          </div>
+          <figure class="coffee-shop-profile__label">
+            <img src="/assets/landing-lavado/etiqueta-cafe-lavado-original.webp" alt="Etiqueta histórica de Finca Santa Cruz con Droppy entre cafetos y la ficha de la edición de 250 g" width="900" height="600" loading="lazy" decoding="async" />
+            <figcaption>Etiqueta original de Better Mood</figcaption>
           </figure>
         </div>
       </section>
@@ -107,14 +132,14 @@
         <div class="container coffee-origin-story__grid">
           <div class="coffee-origin-story__intro">
             <p class="eyebrow">De origen a taza</p>
-            <h2 id="origin-story-title">Cada paso cuida el café.</h2>
-            <p>En la finca comienza el trabajo. Después, la fruta se retira y el grano se lava antes del secado. En Better Mood, esa historia llega a tu mesa.</p>
+            <h2 id="origin-story-title">De la finca a tu taza.</h2>
+            <p>El recorrido ilustrado de Droppy muestra cómo pasa el café de la cosecha al lavado y llega a tu taza.</p>
             <a class="btn btn--secondary" href="/recorrido-cafe/">Ver el recorrido completo</a>
           </div>
           <ol class="coffee-origin-steps">
-            <li><span>01</span><div><strong>La finca</strong><p>Aquí empieza el café.</p></div></li>
-            <li><span>02</span><div><strong>Proceso lavado</strong><p>La fruta se retira y el grano se lava.</p></div></li>
-            <li><span>03</span><div><strong>Tu taza</strong><p>V60, AeroPress o Chemex.</p></div></li>
+            <li><img src="/assets/landing-lavado/01-finca-360.webp" alt="" width="360" height="240" loading="lazy" decoding="async" /><div><strong>La finca</strong><p>Las cerezas crecen y maduran en el cafeto.</p></div></li>
+            <li><img src="/assets/landing-lavado/03-lavado-360.webp" alt="" width="360" height="240" loading="lazy" decoding="async" /><div><strong>Proceso lavado</strong><p>Se retira la fruta y se lava el grano antes de secarlo.</p></div></li>
+            <li><img src="/assets/landing-lavado/08-droppy-cafe-360.webp" alt="" width="360" height="240" loading="lazy" decoding="async" /><div><strong>Tu taza</strong><p>Prepáralo en V60, AeroPress o Chemex.</p></div></li>
           </ol>
         </div>
       </section>

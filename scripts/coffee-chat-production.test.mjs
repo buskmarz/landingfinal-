@@ -46,3 +46,40 @@ test('iOS and Android can preflight and use the same budget as the website',asyn
  assert.equal(db.prepare('SELECT reserved_cents FROM coffee_lab_ai_budget').get().reserved_cents,100);
  db.close();
 });
+
+test('landing guide uses the menu and cafe facts while Coffee Lab keeps its brewing instructions', async () => {
+  const {db, database} = fixture();
+  const prompts = [];
+  const handler = createHandler({database, env, fetcher: async (_url, options) => {
+    prompts.push(JSON.parse(options.body).instructions);
+    return Response.json({output:[{content:[{type:'output_text', text:'Respuesta de prueba'}]}]});
+  }});
+  const base = request();
+  const guide = new Request(base.url, {method:'POST', headers:base.headers, body:JSON.stringify({
+    surface:'landing', messages:[{role:'user',content:'¿Qué lleva el Latte Calm?'}]
+  })});
+  assert.equal((await handler(guide)).status, 200);
+  assert.equal((await handler(base)).status, 200);
+  assert.match(prompts[0], /Latte Calm · 10 oz · \$95/);
+  assert.match(prompts[0], /13 Poniente 2302\/F/);
+  assert.match(prompts[1], /Carta UPAEP/);
+  assert.match(prompts[1], /preinfusión/);
+  db.close();
+});
+
+test('la guía reconoce precios, recetas y preguntas de la casa en la portada y en Coffee Lab', async () => {
+  const {fromSite} = await import('../data/guia-respuestas.mjs');
+  const {default:menu} = await import('../menu/catalog.json', {with:{type:'json'}});
+  const {default:topics} = await import('../data/guia-better-mood.json', {with:{type:'json'}});
+  const lookup = question => fromSite(question, topics, menu.items);
+  for (const item of menu.items) {
+    const answer = lookup('¿Cuánto cuesta ' + item.name + '?');
+    assert.ok(answer.text.includes('$' + item.price + ' MXN'));
+    assert.ok(answer.text.includes(item.description));
+    assert.equal(answer.href, '/menu/?producto=' + item.id);
+  }
+  for (const topic of topics) assert.equal(lookup(topic.question).href, topic.href);
+  assert.match(lookup('¿Qué bebidas llevan CBD?').text, /Cold Berry Days/);
+  assert.equal(lookup('¿Qué dosis de CBD debo tomar?'), undefined);
+  assert.equal(lookup('¿Tienen disponible un Latte Calm ahora?'), undefined);
+});

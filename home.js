@@ -39,10 +39,11 @@
     /^\/cafe-para-negocios-puebla(?:\/|$)/,
     /^\/trabaja-con-nosotros(?:\/|$)/,
     /^\/recompensas(?:\/|$)/,
-    /^\/cafe-lavado(?:\/|$)/
+    /^\/cafe-lavado(?:\/|$)/,
+    /^\/nuestro-cafe(?:\/|$)/
   ].some(function (pattern) { return pattern.test(window.location.pathname); });
 
-  if (!deliveryDockBlocked && !document.querySelector('.delivery-dock')) {
+  if (!deliveryDockBlocked && !document.body.hasAttribute('data-inline-delivery') && !document.querySelector('.delivery-dock')) {
     const dock = document.createElement('details');
     dock.className = 'delivery-dock';
     const toggle = document.createElement('summary');

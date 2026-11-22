@@ -1,0 +1,10 @@
+@font-face { font-family: Metropolis; src: url("./brand/Metropolis-Regular.woff") format("woff"); font-display: swap; }
+@font-face { font-family: Metropolis; src: url("./brand/Metropolis-SemiBold.woff") format("woff"); font-weight: 600 900; font-display: swap; }
+html { color-scheme: light; }
+body { background: #fbf8ef; color: #231f20; font-family: Metropolis, system-ui, sans-serif; padding: clamp(20px,5vw,70px); }
+main { max-width: 42rem; }
+h1 { font-size: clamp(2.4rem,6vw,4rem); line-height: 1.04; letter-spacing: -.055em; margin-block: .5em; }
+h2 { margin-block: 1.5em .4em; letter-spacing: -.035em; }
+p { margin-block: .6em; }
+a { color: inherit; text-underline-offset: 3px; }
+.open-app .web-button { background: #ffde00; font-weight: 700; }

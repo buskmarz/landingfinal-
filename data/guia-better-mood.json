@@ -1,0 +1,117 @@
+[
+  {
+    "topic": "Horario y dirección",
+    "question": "¿Dónde están y a qué hora abren?",
+    "text": "Estamos en 13 Poniente 2302/F, La Paz, Puebla, cerca de UPAEP. Abrimos de lunes a viernes de 8:00 a 21:00, sábados de 9:00 a 20:00 y domingos de 10:00 a 18:00.",
+    "href": "/#sucursales",
+    "link": "Ver ubicación y horario"
+  },
+  {
+    "topic": "Adaptógenos",
+    "question": "¿Qué bebidas tienen adaptógenos?",
+    "text": "Prueba el Cappuccino Focus con melena de león, el Enrgy Flat con cordyceps o el Latte Calm con lavanda y ashwagandha. Puedes confirmar los ingredientes en barra.",
+    "href": "/adaptogenos-en-bebidas-puebla/",
+    "link": "Explorar ingredientes"
+  },
+  {
+    "topic": "CBD",
+    "question": "¿Qué significa CBD?",
+    "text": "CBD significa cannabidiol. La guía de Better Mood explica el ingrediente y la carta identifica las bebidas que lo incluyen. Para consultar una preparación concreta, pregunta en barra.",
+    "href": "/cbd-en-el-cafe/",
+    "link": "Leer la guía de CBD"
+  },
+  {
+    "topic": "Menú",
+    "question": "¿Dónde veo el menú con precios?",
+    "text": "En la carta de UPAEP puedes consultar cafés, desayunos, bebidas de la casa y extras, con ingredientes y precios en pesos mexicanos.",
+    "href": "/menu/",
+    "link": "Ver menú y precios"
+  },
+  {
+    "topic": "Eventos",
+    "question": "¿Llevan café a eventos?",
+    "text": "En Puebla ofrecemos barra de espresso al momento o mesa de café filtrado para eventos de hasta 20 personas. La cotización confirma precio y disponibilidad.",
+    "href": "/eventos/",
+    "link": "Cotizar café para un evento"
+  },
+  {
+    "topic": "Recompensas",
+    "question": "¿Cómo funciona Rewards?",
+    "text": "Con el programa de sellos, cada compra elegible acumula 5% de saldo y un sello por cliente y día de operación en la sucursal. Al completar seis sellos puedes elegir una bebida de la selección vigente. Consulta en tu cuenta qué beneficios aplican.",
+    "href": "/recompensas/",
+    "link": "Ver mis recompensas",
+    "aliases": [
+      "como funcionan las recompensas",
+      "tienen programa de lealtad"
+    ]
+  },
+  {
+    "topic": "Visita",
+    "question": "¿Tienen Wi-Fi?",
+    "text": "En nuestra cafetería de La Paz, cerca de UPAEP, hay Wi-Fi y enchufes. Puedes venir a estudiar o trabajar.",
+    "href": "/cafeteria-para-trabajar-puebla/",
+    "link": "Conocer el espacio",
+    "aliases": [
+      "puedo trabajar ahi",
+      "hay enchufes",
+      "hay wifi",
+      "tienen wifi"
+    ]
+  },
+  {
+    "topic": "Pedidos",
+    "question": "¿Cómo pido a domicilio?",
+    "text": "En la portada tienes los accesos a Uber Eats, Rappi y WhatsApp. Consulta la cobertura y el total en la plataforma que elijas.",
+    "href": "/#pedidos",
+    "link": "Ver opciones de pedido",
+    "aliases": [
+      "tienen delivery",
+      "como puedo pedir a domicilio"
+    ]
+  },
+  {
+    "topic": "Coffee Lab",
+    "question": "¿Qué es Coffee Lab?",
+    "text": "Es nuestra app para preparar café paso a paso, guardar recetas y comparar dos tazas. Puedes usarla en la web o descargarla en el App Store.",
+    "href": "/coffee-lab/acerca",
+    "link": "Conocer Coffee Lab",
+    "aliases": [
+      "como descargo la app"
+    ]
+  },
+  {
+    "topic": "Talleres",
+    "question": "¿Cuándo hay talleres?",
+    "text": "Por ahora no hay talleres programados. Puedes practicar métodos de preparación a tu ritmo en Coffee Lab.",
+    "href": "/talleres-de-cafe-puebla/",
+    "link": "Consultar talleres",
+    "aliases": [
+      "hay talleres",
+      "tienen talleres"
+    ]
+  },
+  {
+    "topic": "La cafetería",
+    "question": "¿Qué es Better Mood Coffee?",
+    "text": "Somos una cafetería de especialidad en La Paz, Puebla, cerca de UPAEP. Servimos espresso y filtrados, desayunos y bebidas de la casa. Puedes venir a la barra, pedir a domicilio o practicar métodos con nuestra app Coffee Lab.",
+    "href": "/cafeteria-en-la-paz-puebla/",
+    "link": "Conocer la cafetería",
+    "aliases": [
+      "quienes son",
+      "cuentame de better mood",
+      "que venden",
+      "que tipo de cafe venden"
+    ]
+  },
+  {
+    "topic": "Café para negocios",
+    "question": "¿Venden café para mi negocio?",
+    "text": "Tenemos una página para negocios que buscan servir café Better Mood. Ahí puedes indicar qué tipo de negocio tienes y solicitar una propuesta. El equipo confirma condiciones y precio.",
+    "href": "/cafe-para-negocios-puebla/",
+    "link": "Solicitar propuesta",
+    "aliases": [
+      "venden cafe para negocios",
+      "quiero cafe para mi oficina"
+    ]
+  }
+]

@@ -5,6 +5,123 @@
 La guía puede narrar los vertidos y los tiempos. La preparación permite seleccionar una bolsa de Mis cafés y descuenta la dosis al guardar. El panel de Luna permanece en la app. Su función acepta los orígenes de Capacitor de iOS y Android para la consulta de disponibilidad y el envío del mensaje, con el presupuesto compartido existente. El texto y el resumen opcional de la receta llegan al proveedor únicamente al enviar la pregunta.
 
 Se reprodujo en producción el fallo del iPhone antes del cambio: la consulta de disponibilidad carecía del encabezado de origen y la petición previa al envío devolvía 405. El candidato pasó 102 pruebas del app y cuatro de la función. El build integral conserva los 236 archivos públicos de la landing autorizada. La prueba física de inventario usó una bolsa aislada de 200 g que quedó en 185 g tras guardar una taza de 15 g.
+## Ajustes de la portada horizontal · 18 de noviembre de 2026 · Vista local
+
+El arte de lanzamiento se recompuso en horizontal a partir del póster original.
+Se sirve como un fondo continuo en WebP. El titular, el distintivo de App Store
+y el enlace a la aplicación web siguen siendo elementos de HTML. La ficha
+`/coffee-lab/acerca` permanece accesible desde el pie.
+
+Se incorporaron las formas de marca de Uber Eats, Rappi y WhatsApp a los enlaces
+existentes. Las referencias son la [guía de Uber Eats](https://merchants.ubereats.com/us/en/resources/learning-center/co-marketing-tools/),
+el [kit de Rappi para aliados](https://images.rappi.com/web/Aliados/123/REDESALIADOS/materiales-redes-links1.pdf)
+y el [kit de WhatsApp de Meta](https://www.meta.com/brand/resources/whatsapp/whatsapp-brand/).
+La galería muestra sus tres fotos en una sola pasada al entrar en vista y
+termina en la fachada. Con movimiento reducido muestra la fachada de inmediato.
+Los horarios se presentan por grupos de días y los enlaces públicos revisados
+prescinden de flechas decorativas.
+
+## Pago de mesa desde el menú · 21 de noviembre de 2026 · Vista local
+
+`/menu/` muestra Mercado Pago en **Mi pedido** cuando caja de UPAEP habilita el
+cobro sobre una cuenta presentada. `/api/table-order` usa el POS como fuente del
+importe y del estado. El retorno de Checkout Pro pide al servidor el estado de
+la misma referencia y caja registra el pago en la cuenta original.
+
+El lanzamiento abarca la landing y el POS. Las credenciales y el webhook de
+Mercado Pago para el menú se configuran en Functions del POS. La activación
+requiere una prueba integral en un sandbox propio de pedidos de mesa.
+
+## Venta de café y pedidos para recoger · Vista local
+
+- El menú permite pagar para recoger en UPAEP sin QR. Al entrar con un QR se
+  puede elegir entre **En mesa** y **Para recoger**. El POS habilita pedidos
+  durante el horario publicado y con caja abierta, hasta 30 minutos antes
+  del cierre. El retorno muestra el estado y código de recogida verificables.
+- La bandeja del POS muestra solo pedidos pagados o con un pago en revisión.
+  **Registrar y preparar** guarda la venta con su precio confirmado y descuenta
+  inventario una vez. **Marcar listo** y **Marcar entregado** actualizan el estado.
+- El café natural de Finca Santa Cruz tiene precio base de MXN 350 por 250 g.
+  `/api/coffee-natural-checkout` guarda la orden antes de abrir Mercado Pago y
+  conserva la identidad en reintentos. La compra conserva recogida en La Paz y
+  entrega en Puebla. El equipo opera desde `/nuestro-cafe/pedidos/` con su clave.
+- En Functions del POS configura `MENU_MP_PICKUP_ENABLED=true` junto con
+  `MENU_MP_MODE`, `MENU_MP_ORIGIN`, `MENU_MP_APP_ID`, `MENU_MP_ACCESS_TOKEN`
+  y `MENU_MP_WEBHOOK_SECRET`. El evento Order de Mercado Pago va al webhook
+  `/.netlify/functions/table-payment-webhook` del POS.
+- En Functions de la landing configura las variables de Orders descritas en
+  «Nuestro café», `COFFEE_NATURAL_SALES_ENABLED=true` y `ADMIN_SECRET` para la
+  bandeja. Usa la aplicación de Mercado Pago de café natural y su webhook
+  `/.netlify/functions/coffee-mercadopago-orders-webhook`.
+- Antes de abrir cobros reales, verifica disponibilidad de bolsas, acceso del
+  equipo, correspondencia de los dos webhooks y un ciclo completo de pago,
+  preparación y entrega en sandbox. Los dos cambios de código se publican
+  en la landing y en el POS siguiendo sus rutas de lanzamiento.
+
+El 21 de noviembre se ejecutó Checkout Pro para un pedido de recogida de
+MXN 45 sin sesión de mesa en el sandbox de Better Mood. El proceso usó
+`startPickup` y `reconcilePickup` con catálogo y datos aislados. Mercado Pago
+acreditó el pedido de prueba `EA0857F8`. Reenviar el mismo intento devolvió
+el mismo pedido pagado sin abrir un segundo checkout. El sandbox conservó
+disponible la compra del café natural de MXN 350 en el deploy
+`6b0254c6830e212e922a2eba`. Este ensayo verificó el retorno y la consulta del
+estado a Mercado Pago. La bandeja y el webhook del menú se verificaron con
+pruebas locales. La activación de credenciales de producción de Better Mood
+Coffee Web requiere la aceptación del titular en Mercado Pago.
+
+El titular activó Better Mood Coffee Web. Se guardó el Access Token de café
+natural como secreto exclusivo de Functions en producción de la landing y
+Mercado Pago respondió correctamente a una consulta de medios de pago. Los
+orígenes y modos del café y del menú quedaron registrados en producción de
+sus respectivos sitios. Better Mood Coffee Web tiene el webhook de café
+configurado para `Order (Mercado Pago)` y su firma guardada como secreto de
+Functions en producción de la landing. Se creó Better Mood Menu UPAEP con
+Checkout Pro mediante Orders y se registró su identificador en el POS. El
+titular activó producción. La consulta de medios de pago confirmó el Access
+Token del menú y se guardó junto con su firma exclusivamente en Functions
+de producción del POS. El webhook del menú quedó guardado para el evento
+`Order (Mercado Pago)`. En escritorio y WebKit móvil se verificó el formulario
+para recoger sin mesa, el importe, el código y la recarga con datos aislados.
+
+## Lanzamiento de Coffee Lab en portada · 18 de noviembre de 2026 · Vista local
+
+La propuesta de lanzamiento pone Coffee Lab y la imagen promocional del usuario
+en el primer bloque. El recorte muestra el teléfono y conserva intacto el archivo
+original. El distintivo oficial de App Store México y la entrada web tienen
+eventos de clic independientes. La ficha `/coffee-lab/acerca` describe la app
+con datos estructurados y conserva un enlace secundario a «Métodos de
+preparación». La aplicación abre sus propios métodos desde su inicio.
+
+La portada presenta Uber Eats, Rappi y WhatsApp en una fila seguida de la
+sección de visita a UPAEP. La galería de latte, barista y entrada se activa al
+entrar en vista y tiene controles de avance, retroceso y pausa. Los productos
+destacados abren sus fichas vigentes en el menú. Eventos conserva la captura
+auxiliar en Netlify Forms, el folio y la ruta `/api/catering`. La prueba de
+cotización intercepta esas solicitudes localmente.
+
+Pasaron la compilación, la validación SEO y 77 pruebas de Coffee Lab. Chromium
+y WebKit verificaron los enlaces, los tres productos y los dos canales de
+cotización. Se comprobó la reproducción, la pausa y el movimiento reducido.
+
+La vista de lanzamiento se compila con `npm run build` en una copia local y se
+sirve en el puerto 5204. Corresponde a la iteración previa a publicación. El
+sitio público conserva la portada de UPAEP.
+
+## Café en casa y Coffee Lab · 18 de noviembre de 2026 · Vista local
+
+La portada enlaza directamente a `/como-preparar-cafe-en-casa/`. V60,
+AeroPress y Chemex conservan sus instrucciones y abren el ajuste correspondiente
+en `/coffee-lab/#method=…`. El laboratorio y su ficha enlazan de vuelta a la
+guía. Se unificó el nombre Coffee Lab y se añadió a su ficha el distintivo
+negro oficial de Apple para español de México, enlazado a la app publicada.
+
+La propuesta de portada usa la foto existente del latte. Se conserva el
+titular autorizado y la guía de adaptógenos se enlaza desde su propia sección.
+La compilación integral, SEO y 77 pruebas del laboratorio pasaron. Chromium
+y WebKit verificaron navegación, los tres métodos, el regreso, el distintivo y
+el ancho entre 320 y 1440 px. El service worker y las páginas de menú, eventos y
+recompensas coinciden con el build anterior. Vista local en el puerto 5204.
+Sin publicación.
 
 ## Descubrimiento de Coffee Lab · 18 de noviembre de 2026
 
@@ -259,3 +376,125 @@ Pruebas: build integral, SEO, 77 pruebas Coffee Lab, regresión FREAK y tres pru
 
 ## Rewards · 30 octubre 2026
 Publicación coordinada con TAREASCONTROL PR84: acceso por correo, cumpleaños opcional, selector internacional y Wallet. Portada aprobada conservada; solo se retira promoción FREAK finalizada y se nombra Rewards. No cambia Coffee Lab ni se incluyen diseños pendientes del checkout iCloud. Build integral a dist, SEO y flujos aislados Chromium/WebKit; ver docs/RECOMPENSAS-ACCESO.md.
+
+## Vista local · Guía Better Mood y movimiento · 18 noviembre 2026
+
+La portada mantiene Coffee Lab primero. La galería de visita rota cada seis segundos mientras es visible; movimiento reducido muestra la fachada. Menú, ingredientes y guía usan entradas progresivas. La guía está en /#guia y en Explorar. Las consultas frecuentes usan data/guia-better-mood.json y los productos, menu/catalog.json. Las preguntas abiertas envían el contexto temporal al endpoint coffee-chat con surface=landing. El servidor incorpora la ficha del negocio y la carta al contexto, con el mismo límite de entrada y presupuesto compartido de Barista Luna. Coffee Lab mantiene sus instrucciones previas. En localhost solo se consultan las fuentes locales.
+
+Verificados build, SEO, cuatro pruebas de la función con proveedor simulado, respuesta y error de presupuesto desde navegador, ciclo completo y FAQ en Chromium y WebKit, 320–1440 px. El endpoint existente respondió HTTP 200 a GET; esto no comprueba saldo ni generación en producción. Revisión local antes de publicar.
+
+## Revisión local de sitio y guía de la casa · 18 noviembre 2026
+
+La guía de portada y Coffee Lab consultan menu/catalog.json (51 artículos) y data/guia-better-mood.json (12 temas); data/guia-respuestas.mjs resuelve consultas concretas en ambas interfaces antes de contactar al proveedor. El app empaqueta estos datos con su módulo de chat. Preguntas de recetas abiertas conservan las instrucciones de preparación y reciben también el contexto de Better Mood. El servidor recorta parejas antiguas de la conversación si hace falta para respetar 12 KB. No guarda historial ni cambia el presupuesto. Para capacitar a Luna, actualizar la carta o la ficha temática y agregar la pregunta real y el resultado esperado a scripts/coffee-chat-production.test.mjs.
+
+En la vista local se revisaron 52 rutas de cliente con Chromium y WebKit. Se compactaron Recompensas, páginas locales, negocios y ubicación; el recomendador y las páginas informativas de Coffee Lab usan los colores y controles de la portada. Los enlaces rotulados Menú abren la carta y Pedir lleva a los canales de pedido. Los juegos conservan su identidad. Se verificaron fuentes, recursos internos, navegación, carrusel y productos, 77 pruebas del app y 5 de la guía/función, además de los recorridos de registro rápido y portal Rewards con datos simulados. La validación de la API generativa utilizó un proveedor simulado. Sin despliegue ni transacciones reales.
+
+## Finca Santa Cruz · Vista local
+
+La portada recupera Finca Santa Cruz entre el menú y el V60. La sección enlaza
+a `/cafe-lavado/` y usa la foto de José Argüello conservada en el repositorio.
+El historial `4292e3a` conserva el diseño anterior y su recorrido ilustrado.
+La ficha y la reproducción de la etiqueta se basan en `etiqueta cafe lavado.png`
+del archivo Better Mood. El puntaje y las notas corresponden a la edición
+anterior. El perfil y la disponibilidad del lote de regreso quedan por confirmar.
+La compra existente conserva sus rutas. La vista previa usa datos simulados.
+
+Verificados la compilación, SEO, enlaces e imágenes de portada y ficha en
+Chromium y WebKit, incluyendo una pantalla de 320 px. Sin publicación.
+
+## Nuestro café · Finca Santa Cruz natural · Vista local
+
+La ruta `/nuestro-cafe/` integra la introducción, ficha y recorrido originales
+de [Natural Better](https://naturalbetter.netlify.app/) dentro del encabezado y
+pie de la web. Se reutilizan los archivos de imagen y audio idénticos del
+repositorio. El fondo del inicio referencia un archivo ausente en el original.
+La integración conserva el fondo liso que se ve en la página publicada.
+La publicación original conserva sus enlaces y sus QR.
+
+El checkout `/nuestro-cafe/comprar/` usa Checkout Pro con la API de Orders
+para `product=natural` y el SKU `BMC-NATURAL`. El flujo anterior de café lavado
+conserva sus preferencias de pago, configuración y rutas de retorno.
+La página `/nuestro-cafe/pago/` consulta el estado guardado por el servidor.
+
+La compra pide nombre, WhatsApp, cantidad y modalidad, con dirección para
+entrega. El servidor valida el total mostrado. Crea una orden en la aplicación
+Better Mood Coffee Web y verifica la aplicación, moneda, importe y entorno
+antes de redirigir. La entrega en Puebla se añade como un ítem de la orden.
+
+Configuración del natural en Netlify Functions:
+
+- `COFFEE_NATURAL_PRICE=350` y `COFFEE_NATURAL_WEIGHT=250 g` fijan el precio y
+  el peso. `MERCADOPAGO_ORDERS_APP_ID` debe coincidir con
+  `integration_data.application_id` de la orden. En el ensayo separado,
+  la API devuelve `5035738452605691` para la app `3491657351828631` del panel.
+- `COFFEE_NATURAL_PAYMENT_MODE=sandbox` está guardado para Deploy Previews.
+  El entorno de ensayo requiere `COFFEE_NATURAL_SITE_URL` con su origen HTTPS.
+- `MERCADOPAGO_ORDERS_ACCESS_TOKEN` y `MERCADOPAGO_ORDERS_WEBHOOK_SECRET`
+  deben corresponder al entorno seleccionado. Configurarlos como secretos
+  exclusivos de Functions con los valores apropiados para cada contexto.
+- En Mercado Pago, configurar las notificaciones de órdenes hacia
+  `/.netlify/functions/coffee-mercadopago-orders-webhook` en el origen de
+  cada entorno. El ensayo guarda pedidos en `coffee_orders_sandbox`.
+  El webhook exige firma, vuelve a consultar Orders y confirma únicamente
+  la referencia y el monto acreditados. El entorno productivo requiere
+  `COFFEE_NATURAL_PAYMENT_MODE=production` y el origen `https://bmoodcoffee.com`.
+
+Se verificó en local la preferencia previa de café lavado y el flujo nuevo
+con Mercado Pago simulado, incluyendo recogida de $350, entrega de $410,
+notificaciones de aprobación y rechazo, y actualización concurrente del
+pedido.
+
+Con autorización se desplegó el checkout de prueba por separado en
+`https://better-mood-coffee-checkout-test.netlify.app` (sitio Netlify
+`907140af-82bb-4e7d-b2e4-062b955c1889`). Incluye únicamente compra, retorno
+y sus funciones. El Access Token y la firma del webhook de prueba se
+guardaron como secretos de Functions exclusivamente en ese sitio. Mercado
+Pago notificó un pago acreditado de $350 y otro rechazado de $410 ($350 de
+café y $60 de entrega). El retorno y la API de estado mostraron ambos resultados.
+El rechazo puede llegar como orden `action_required` con `waiting_retry` y
+un intento fallido. Las lecturas consistentes de Netlify Blobs usan el
+formato de Functions basado en `Request` y `Response`. El checkout solicita
+WhatsApp como dato de contacto. El resultado del pago se muestra en la página
+de retorno. Falta configurar y validar el entorno para cobros reales.
+
+Antes de habilitar la venta, el botón de «Nuestro café» y el inicio de la
+compra muestran «Próximamente». La API de disponibilidad mantiene el
+formulario cerrado hasta tener precio, peso y configuración válida de Orders.
+La vista recuperada vive en el worktree `codex/landing-preview-recovered`
+y se construye con `npm run build`. La revisión es local.
+
+La revisión móvil integró el contenido de Finca Santa Cruz directamente en
+`/nuestro-cafe/`. Abre en «Un recorrido por el corazón del café» y muestra
+la foto del productor, el perfil en taza y la ficha técnica. Los pasos usan
+variantes WebP ligeras de los materiales originales. Las rutas antiguas de
+la integración redirigen en Netlify al recorrido nuevo. El sitio original
+de Natural Better y su QR siguen disponibles.
+
+## Café para eventos · Vista local
+
+`/eventos/` comparte la paleta y controles de la portada. La tarjeta de
+cotización describe los dos formatos, agrupa los datos del evento y muestra
+el campo del canal de respuesta elegido. Conserva el registro `/api/catering`
+y la notificación de Netlify Forms `cafe-eventos`. Tras guardar, el folio y
+el enlace para continuar quedan en la página, sin apertura automática.
+Verificados ambos canales, validación, error de envío y reinicio con datos
+de prueba en Chromium y WebKit, incluidos 390 y 320 px. Sin publicación ni
+solicitudes reales.
+
+La siguiente iteración redujo la cotización a un formato opcional y un
+botón que abre WhatsApp con un mensaje preparado. También se puede abrir
+un correo. El visitante inicia la conversación desde su aplicación y los
+pormenores se reúnen ahí. Esta vista no crea folios ni usa el registro ni
+la notificación anteriores. La API `/api/catering` sigue disponible para
+quien ya la utilice. Se comprobó la vista local y el mensaje preparado para
+cada formato sin enviar mensajes ni publicar cambios.
+
+## Menú UPAEP · Vista local
+
+`/menu/` abre con la carta completa y usa `menu/glass.css` para los controles
+translúcidos, la ficha de producto y el pedido. La guía de mesa se resume en
+un párrafo sin numeración. El catálogo, precios base, enlaces de cada
+producto y la API de pedidos siguen conectados a las fuentes existentes.
+La hoja nueva se incluye en la compilación de la landing y se carga solo en
+la carta UPAEP. Pruebas en escritorio y iPhone emulado con catálogo y pedido
+simulados, sin publicar.

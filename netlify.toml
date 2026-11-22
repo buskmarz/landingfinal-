@@ -187,6 +187,29 @@
   force = true
 
 [[redirects]]
+  from = "/nuestro-cafe"
+  to = "/nuestro-cafe/"
+  status = 301
+
+[[redirects]]
+  from = "/nuestro-cafe/experiencia/"
+  to = "/nuestro-cafe/"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "/nuestro-cafe/experiencia/index.html"
+  to = "/nuestro-cafe/"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "/nuestro-cafe/experiencia/recorrido.html"
+  to = "/nuestro-cafe/#recorrido"
+  status = 302
+  force = true
+
+[[redirects]]
   from = "/cafe-lavado"
   to = "/cafe-lavado/"
   status = 301

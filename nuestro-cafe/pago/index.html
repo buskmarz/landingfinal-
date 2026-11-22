@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="es-MX">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex,follow" />
+    <title>Estado del pedido | Better Mood Coffee</title>
+    <link rel="stylesheet" href="/styles.css?v=cafe-natural" />
+    <link rel="stylesheet" href="/nuestro-cafe/compra.css" />
+    <link rel="icon" href="/assets/logo-better-mood.png" />
+  </head>
+  <body class="coffee-product-page">
+    <header class="header">
+      <div class="container header__inner">
+        <a class="logo" href="/" aria-label="Better Mood Coffee"><img src="/assets/logo-better-mood.png" alt="Better Mood Coffee" /></a>
+        <nav class="nav is-static" aria-label="Navegación de compra"><a href="/nuestro-cafe/">Nuestro café</a><a href="/menu/">Menú</a></nav>
+      </div>
+    </header>
+    <main id="main">
+      <section class="coffee-return" aria-labelledby="return-title">
+        <div class="container coffee-return__card">
+          <p class="eyebrow">Café natural · Finca Santa Cruz</p>
+          <h1 id="return-title">Estado de tu pedido</h1>
+          <p class="coffee-return__status" data-order-status role="status">Consultando estado del pedido…</p>
+          <div class="hero__actions">
+            <button class="btn btn--primary" type="button" data-refresh-order>Verificar estado</button>
+            <a class="btn btn--secondary" href="/nuestro-cafe/">Volver a Nuestro café</a>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script src="/nuestro-cafe/pago.js?v=orden" defer></script>
+  </body>
+</html>
