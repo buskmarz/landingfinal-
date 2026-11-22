@@ -1,14 +1,25 @@
 import {getDatabase} from '@netlify/database';
 import {MODEL,PROMPT,validateMessages,RESERVE_CENTS} from '../lib/coffee-chat-policy.mjs';
 export const RESERVE_SQL=`UPDATE coffee_lab_ai_budget SET reserved_cents=reserved_cents+$1, attempts=attempts+1 WHERE id='launch-20261028' AND enabled=true AND reserved_cents+$1<=cap_cents RETURNING reserved_cents`;
-const json=(status,data)=>new Response(JSON.stringify(data),{status,headers:{'Content-Type':'application/json','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'}});
+// Keep Capacitor's existing storage origins on iOS and Android.
+const nativeOrigins=new Set(['capacitor://localhost','https://localhost']);
 export function createHandler({database,fetcher=fetch,env=process.env}={}){
  return async(req)=>{
+  const origin=req.headers.get('origin');
+  const native=nativeOrigins.has(origin);
+  const headers={'Cache-Control':'no-store','X-Content-Type-Options':'nosniff',Vary:'Origin'};
+  if(native)headers['Access-Control-Allow-Origin']=origin;
+  const json=(status,data)=>Response.json(data,{status,headers});
+  if(req.method==='OPTIONS'&&native&&req.headers.get('access-control-request-method')==='POST'){
+   return new Response(null,{status:204,headers:{
+    ...headers,'Access-Control-Allow-Methods':'POST','Access-Control-Allow-Headers':'Content-Type'
+   }});
+  }
   if(!['GET','POST'].includes(req.method))return json(405,{error:'Método no permitido.'});
   // Preview deployments never spend against production's global budget.
   if((env.CONTEXT&&env.CONTEXT!=='production')||!env.COFFEE_LAB_OPENAI_KEY)return json(503,{error:'El barista no está disponible en esta vista previa.'});
   if(req.method==='GET')return json(200,{model:MODEL,reservedCents:0}); // no database wakeup from opening the chat
-  if(req.headers.get('origin')!=='https://bmoodcoffee.com'||!req.headers.get('content-type')?.startsWith('application/json'))return json(403,{error:'Origen no permitido.'});
+  if((origin!=='https://bmoodcoffee.com'&&!native)||!req.headers.get('content-type')?.startsWith('application/json'))return json(403,{error:'Origen no permitido.'});
   if(Number(req.headers.get('content-length')||0)>18000)return json(413,{error:'Pregunta demasiado larga.'});
   let messages;
   try{const reader=req.body?.getReader();if(!reader)return json(400,{error:'Falta tu pregunta.'});const parts=[];let size=0;while(true){const {done,value}=await reader.read();if(done)break;size+=value.byteLength;if(size>18000){await reader.cancel();return json(413,{error:'Pregunta demasiado larga.'});}parts.push(value);}messages=validateMessages(JSON.parse(Buffer.concat(parts).toString('utf8')));}catch{return json(400,{error:'Revisa tu pregunta o inicia una nueva charla.'});}

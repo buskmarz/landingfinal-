@@ -1,0 +1,9 @@
+
+# Private local account service; never ship to Netlify.
+.local-accounts/
+.env.accounts.local
+native-www/
+ios/App/App/public/
+ios/App/App/capacitor.config.json
+supabase/.temp/
+.env.supabase.local

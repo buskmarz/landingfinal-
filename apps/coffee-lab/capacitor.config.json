@@ -1,0 +1,9 @@
+{
+ "appId": "com.bmoodcoffee.lab.preview",
+ "appName": "Coffee Lab",
+ "webDir": "native-www",
+ "server": {"appStartPath": "/coffee-lab/"},
+ "ios": {"contentInset": "never", "backgroundColor": "#231F20"},
+ "android": {"backgroundColor": "#231F20"},
+ "plugins": {"SystemBars": {"insetsHandling": "native"}}
+}
